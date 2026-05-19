@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>家庭碳足跡計算 | Household Calculator</title>
+<meta name="description" content="台灣家庭年度碳足跡估算工具。Estimate your annual household carbon footprint in Taiwan.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --accent: #1D9E75;
+    --accent-dark: #157a59;
+    --accent-tint: rgba(29, 158, 117, 0.1);
+    --bg: #ffffff;
+    --bg-card: #ffffff;
+    --bg-subtle: #f7f8f7;
+    --text: #1a1a1a;
+    --text-muted: #6b7280;
+    --border: #e5e7eb;
+    --warn: #d97706;
+    --warn-tint: rgba(217, 119, 6, 0.1);
+    --shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0e1410;
+      --bg-card: #161d18;
+      --bg-subtle: #1a2220;
+      --text: #f0f2f0;
+      --text-muted: #9ca3af;
+      --border: #2a3530;
+      --accent-tint: rgba(29, 158, 117, 0.15);
+      --warn: #f59e0b;
+      --warn-tint: rgba(245, 158, 11, 0.15);
+      --shadow: 0 1px 2px rgba(0,0,0,0.3);
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+  header {
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 10;
+    backdrop-filter: blur(8px);
+  }
+  .header-inner { display: flex; justify-content: space-between; align-items: center; }
+  .logo { font-weight: 700; font-size: 17px; color: var(--accent); text-decoration: none; }
+  .back-link {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 13px;
+    margin-right: 12px;
+  }
+  .back-link:hover { color: var(--accent); }
+  .header-right { display: flex; align-items: center; gap: 12px; }
+  .lang-toggle {
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-family: inherit;
+    font-size: 13px;
+    color: var(--text);
+    cursor: pointer;
+  }
+  .lang-toggle:hover { border-color: var(--accent); }
+  .page-title { padding: 40px 0 24px; }
+  .page-title h1 {
+    font-size: clamp(26px, 4vw, 36px);
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+  .page-title p { color: var(--text-muted); font-size: 15px; }
+  .layout {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 24px;
+    padding-bottom: 60px;
+  }
+  @media (max-width: 880px) {
+    .layout { grid-template-columns: 1fr; }
+  }
+  .form-card, .result-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+  }
+  .result-card {
+    position: sticky;
+    top: 80px;
+    align-self: start;
+  }
+  @media (max-width: 880px) {
+    .result-card { position: static; }
+  }
+  .form-section { margin-bottom: 28px; }
+  .form-section:last-child { margin-bottom: 0; }
+  .form-section-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 12px;
+  }
+  .slider-row { margin-bottom: 22px; }
+  .slider-row:last-child { margin-bottom: 0; }
+  .slider-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 8px;
+  }
+  .slider-label .name { font-weight: 500; font-size: 15px; }
+  .slider-label .value {
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    color: var(--accent);
+    font-size: 15px;
+  }
+  .slider-hint { font-size: 12px; color: var(--text-muted); margin-bottom: 8px; }
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    outline: none;
+    cursor: pointer;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: var(--accent);
+    border-radius: 50%;
+    cursor: pointer;
+    border: 3px solid var(--bg-card);
+    box-shadow: 0 0 0 1px var(--accent);
+  }
+  input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: var(--accent);
+    border-radius: 50%;
+    cursor: pointer;
+    border: 3px solid var(--bg-card);
+    box-shadow: 0 0 0 1px var(--accent);
+  }
+  select {
+    width: 100%;
+    padding: 10px 12px;
+    font-family: inherit;
+    font-size: 14px;
+    background: var(--bg-subtle);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .total-block { text-align: center; padding: 12px 0 20px; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
+  .total-label { font-size: 13px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
+  .total-value {
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+  }
+  .total-unit { font-size: 14px; color: var(--text-muted); margin-top: 4px; }
+  .breakdown-title { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.06em; }
+  .breakdown-row { margin-bottom: 12px; }
+  .breakdown-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; font-size: 14px; }
+  .breakdown-head .name { font-weight: 500; }
+  .breakdown-head .val { font-variant-numeric: tabular-nums; color: var(--text-muted); font-size: 13px; }
+  .breakdown-bar {
+    height: 6px;
+    background: var(--bg-subtle);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .breakdown-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 3px;
+    transition: width 0.3s;
+  }
+  .breakdown-row.top .breakdown-head .name::after {
+    content: " ★";
+    color: var(--accent);
+    font-size: 12px;
+  }
+  .compare-block { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
+  .compare-title { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.06em; }
+  .compare-row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 14px; }
+  .compare-row .name { color: var(--text-muted); }
+  .compare-row .val { font-variant-numeric: tabular-nums; font-weight: 500; }
+  .compare-row.you .name { color: var(--accent); font-weight: 600; }
+  .compare-row.you .val { color: var(--accent); font-weight: 600; }
+  .recs {
+    margin-top: 32px;
+    padding: 24px;
+    background: var(--accent-tint);
+    border-radius: 12px;
+  }
+  .recs-title { font-size: 14px; font-weight: 600; margin-bottom: 12px; color: var(--accent); }
+  .recs-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 14px; }
+  .rec-item {
+    padding: 10px 0;
+    border-top: 1px solid var(--border);
+    font-size: 14px;
+    display: flex;
+    gap: 12px;
+  }
+  .rec-item:first-of-type { border-top: none; padding-top: 4px; }
+  .rec-num {
+    flex-shrink: 0;
+    width: 22px; height: 22px;
+    background: var(--accent);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .info-banner {
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 24px;
+  }
+  footer {
+    padding: 24px 0;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 12px;
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="container header-inner">
+    <a href="index.html" class="logo">Taiwan Carbon Tools</a>
+    <div class="header-right">
+      <a href="index.html" class="back-link" data-zh="← 返回首頁" data-en="← Home">← 返回首頁</a>
+      <button class="lang-toggle" id="langToggle">English</button>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <section class="page-title">
+    <h1 data-zh="家庭碳足跡計算" data-en="Household Carbon Calculator">家庭碳足跡計算</h1>
+    <p data-zh="輸入每月帳單與生活習慣，即時估算年度排放量。所有計算皆於本機完成。" data-en="Enter monthly bills and lifestyle inputs for a real-time annual estimate. Calculated locally in your browser.">輸入每月帳單與生活習慣，即時估算年度排放量。所有計算皆於本機完成。</p>
+  </section>
+
+  <div class="info-banner" data-zh="提示：滑桿值會即時更新右側結果。預設參考價格為電費 NT$2.8/度、瓦斯 NT$18/m³、油費 NT$30/公升。" data-en="Tip: sliders update results live. Reference prices: NT$2.8/kWh electricity, NT$18/m³ gas, NT$30/L gasoline.">提示：滑桿值會即時更新右側結果。預設參考價格為電費 NT$2.8/度、瓦斯 NT$18/m³、油費 NT$30/公升。</div>
+
+  <div class="layout">
+    <div class="form-card">
+      <div class="form-section">
+        <div class="form-section-title" data-zh="居家能源" data-en="Home energy">居家能源</div>
+        <div class="slider-row">
+          <div class="slider-label">
+            <span class="name" data-zh="每月電費" data-en="Monthly electricity bill">每月電費</span>
+            <span class="value" id="v-electricity">NT$1,500</span>
+          </div>
+          <div class="slider-hint" data-zh="約等於 535 度/月" data-en="≈ 535 kWh/month" id="hint-electricity">約等於 535 度/月</div>
+          <input type="range" id="electricity" min="0" max="6000" value="1500" step="50">
+        </div>
+        <div class="slider-row">
+          <div class="slider-label">
+            <span class="name" data-zh="每月瓦斯費" data-en="Monthly gas bill">每月瓦斯費</span>
+            <span class="value" id="v-gas">NT$500</span>
+          </div>
+          <div class="slider-hint" data-zh="約等於 27.8 m³/月" data-en="≈ 27.8 m³/month" id="hint-gas">約等於 27.8 m³/月</div>
+          <input type="range" id="gas" min="0" max="2000" value="500" step="25">
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title" data-zh="交通" data-en="Transport">交通</div>
+        <div class="slider-row">
+          <div class="slider-label">
+            <span class="name" data-zh="每週機車油錢" data-en="Weekly scooter fuel">每週機車油錢</span>
+            <span class="value" id="v-scooter">NT$200</span>
+          </div>
+          <div class="slider-hint" data-zh="約等於 6.7 公升/週" data-en="≈ 6.7 L/week" id="hint-scooter">約等於 6.7 公升/週</div>
+          <input type="range" id="scooter" min="0" max="800" value="200" step="10">
+        </div>
+        <div class="slider-row">
+          <div class="slider-label">
+            <span class="name" data-zh="每週汽車油錢" data-en="Weekly car fuel">每週汽車油錢</span>
+            <span class="value" id="v-car">NT$600</span>
+          </div>
+          <div class="slider-hint" data-zh="約等於 20 公升/週" data-en="≈ 20 L/week" id="hint-car">約等於 20 公升/週</div>
+          <input type="range" id="car" min="0" max="3000" value="600" step="50">
+        </div>
+        <div class="slider-row">
+          <div class="slider-label">
+            <span class="name" data-zh="每年國際航班次數" data-en="International flights / year">每年國際航班次數</span>
+            <span class="value" id="v-flights">1</span>
+          </div>
+          <div class="slider-hint" data-zh="單趟長程往返計為 1 次（含轉機）" data-en="One long-haul round trip = 1">單趟長程往返計為 1 次（含轉機）</div>
+          <input type="range" id="flights" min="0" max="10" value="1" step="1">
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title" data-zh="飲食" data-en="Diet">飲食</div>
+        <div class="slider-row">
+          <div class="slider-label">
+            <span class="name" data-zh="飲食類型" data-en="Diet type">飲食類型</span>
+          </div>
+          <select id="diet">
+            <option value="2.5" data-zh="重肉食（每天牛肉/紅肉）" data-en="Heavy meat (daily beef/red meat)">重肉食（每天牛肉/紅肉）</option>
+            <option value="1.7" selected data-zh="一般葷食" data-en="Moderate omnivore">一般葷食</option>
+            <option value="1.2" data-zh="少肉（以雞、魚為主）" data-en="Light meat (mostly chicken/fish)">少肉（以雞、魚為主）</option>
+            <option value="0.9" data-zh="蛋奶素" data-en="Vegetarian">蛋奶素</option>
+            <option value="0.7" data-zh="全素 Vegan" data-en="Vegan">全素 Vegan</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="result-card">
+      <div class="total-block">
+        <div class="total-label" data-zh="年度碳足跡" data-en="Annual footprint">年度碳足跡</div>
+        <div class="total-value" id="total">5.42</div>
+        <div class="total-unit" data-zh="公噸 CO₂e / 年" data-en="tonnes CO₂e / year">公噸 CO₂e / 年</div>
+      </div>
+
+      <div class="breakdown-title" data-zh="分類細項" data-en="Breakdown">分類細項</div>
+      <div id="breakdown"></div>
+
+      <div class="compare-block">
+        <div class="compare-title" data-zh="比較" data-en="Comparison">比較</div>
+        <div class="compare-row you">
+          <span class="name" data-zh="你" data-en="You">你</span>
+          <span class="val"><span id="cmp-you">5.42</span> <span data-zh="噸" data-en="t">噸</span></span>
+        </div>
+        <div class="compare-row">
+          <span class="name" data-zh="台灣平均" data-en="Taiwan average">台灣平均</span>
+          <span class="val">10.96 <span data-zh="噸" data-en="t">噸</span></span>
+        </div>
+        <div class="compare-row">
+          <span class="name" data-zh="全球平均" data-en="Global average">全球平均</span>
+          <span class="val">4.66 <span data-zh="噸" data-en="t">噸</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="recs" id="recsBlock">
+    <div class="recs-title"><span data-zh="個人化建議" data-en="Personalised recommendations">個人化建議</span> · <span id="recs-cat-label">電力</span></div>
+    <div class="recs-sub" data-zh="以下針對你目前最高的排放來源提供具體可行的減碳行動。" data-en="Concrete actions targeting your largest emission source.">以下針對你目前最高的排放來源提供具體可行的減碳行動。</div>
+    <div id="recs"></div>
+  </section>
+</main>
+
+<footer>
+  <div class="container">
+    <span data-zh="排放係數來源：經濟部能源署 113 年度電力排碳係數 0.474 kg/kWh · 環境部排放係數管理表 v7.0.4" data-en="Factors: MOEA 2024 grid 0.474 kg/kWh · MOENV emission factor database v7.0.4">排放係數來源：經濟部能源署 113 年度電力排碳係數 0.474 kg/kWh · 環境部排放係數管理表 v7.0.4</span>
+  </div>
+</footer>
+
+<script>
+  // Emission factors (kg CO2e per unit)
+  const EF = {
+    electricity: 0.474,   // per kWh
+    gas: 2.13,            // per m³
+    gasoline: 2.263,      // per L
+    flight: 1500          // per trip
+  };
+  // Reference prices (NT$ per unit)
+  const PRICE = {
+    electricity: 2.8,
+    gas: 18,
+    gasoline: 30
+  };
+
+  // Category metadata
+  const CATEGORIES = [
+    { key: 'electricity', zh: '電力', en: 'Electricity' },
+    { key: 'gas',         zh: '瓦斯', en: 'Gas' },
+    { key: 'transport',   zh: '交通', en: 'Transport' },
+    { key: 'flights',     zh: '航班', en: 'Flights' },
+    { key: 'food',        zh: '飲食', en: 'Food' }
+  ];
+
+  // Recommendations per category (3 each)
+  const RECS = {
+    electricity: [
+      { zh: '冷氣設定 26–28°C，搭配電風扇可省 10–20% 用電', en: 'Set AC to 26–28°C with a fan — saves 10–20% on cooling' },
+      { zh: '汰換 10 年以上冰箱與冷氣，選 1 級能效標章', en: 'Replace fridges & AC over 10 years old with Class-1 energy-label models' },
+      { zh: '考慮申請台電「綠電購買」或社區共購太陽能', en: 'Apply for Taipower green energy purchase or join community solar' }
+    ],
+    gas: [
+      { zh: '熱水器加裝保溫管路，或改用熱泵熱水器', en: 'Insulate hot-water pipes or switch to a heat-pump water heater' },
+      { zh: '烹飪時蓋上鍋蓋，可縮短 30% 加熱時間', en: 'Cook with a lid on — cuts heating time by ~30%' },
+      { zh: '檢查瓦斯接頭與管線，避免逸散排放', en: 'Inspect gas fittings and pipes for fugitive leaks' }
+    ],
+    transport: [
+      { zh: '通勤改搭捷運、公車或台鐵，每月可省下大量排放', en: 'Switch commutes to MRT, bus, or TRA for major savings' },
+      { zh: '考慮電動機車（搭配綠電充電效益最佳）', en: 'Consider an e-scooter (charged with green power for max benefit)' },
+      { zh: '短程 3 公里內改騎自行車或步行', en: 'Bike or walk for trips under 3 km' }
+    ],
+    flights: [
+      { zh: '減少非必要長途飛行，是個人最有效的單一減碳行動', en: 'Cutting unnecessary long-haul flights is the single highest-impact action' },
+      { zh: '國內出差改搭高鐵，碳排約為飛機的 1/6', en: 'Take HSR for domestic travel — ~1/6 the emissions of flying' },
+      { zh: '商務會議改視訊，每年可避開數噸排放', en: 'Replace business trips with video calls — avoids tonnes annually' }
+    ],
+    food: [
+      { zh: '減少牛肉與羊肉，改吃雞、豬、魚或植物性蛋白', en: 'Cut beef & lamb — choose chicken, pork, fish, or plant protein' },
+      { zh: '每週一天素食（Meatless Monday）即可顯著降低排放', en: 'A weekly meat-free day (Meatless Monday) makes a real dent' },
+      { zh: '選購在地、當季食材，減少食物里程與冷鏈耗能', en: 'Buy local, seasonal produce — fewer food miles, less cold-chain energy' }
+    ]
+  };
+
+  // State
+  const ids = ['electricity', 'gas', 'scooter', 'car', 'flights', 'diet'];
+  const inputs = {};
+  ids.forEach(id => inputs[id] = document.getElementById(id));
+
+  let currentLang = 'zh';
+
+  // Helpers
+  function fmtNT(n) { return 'NT$' + Math.round(n).toLocaleString(); }
+  function fmtNum(n, d) { return n.toLocaleString(undefined, { minimumFractionDigits: d, maximumFractionDigits: d }); }
+
+  function calc() {
+    const elecBill = +inputs.electricity.value;
+    const gasBill = +inputs.gas.value;
+    const scooterFuel = +inputs.scooter.value;
+    const carFuel = +inputs.car.value;
+    const flightCount = +inputs.flights.value;
+    const dietDaily = +inputs.diet.value;
+
+    // Derived units
+    const kWhMonth = elecBill / PRICE.electricity;
+    const m3Month = gasBill / PRICE.gas;
+    const scootLwk = scooterFuel / PRICE.gasoline;
+    const carLwk = carFuel / PRICE.gasoline;
+
+    // Annual emissions (kg)
+    const eElec = kWhMonth * 12 * EF.electricity;
+    const eGas = m3Month * 12 * EF.gas;
+    const eScoot = scootLwk * 52 * EF.gasoline;
+    const eCar = carLwk * 52 * EF.gasoline;
+    const eTransport = eScoot + eCar;
+    const eFlights = flightCount * EF.flight;
+    const eFood = dietDaily * 365;
+
+    const breakdown = {
+      electricity: eElec,
+      gas: eGas,
+      transport: eTransport,
+      flights: eFlights,
+      food: eFood
+    };
+    const totalKg = Object.values(breakdown).reduce((a, b) => a + b, 0);
+    const totalT = totalKg / 1000;
+
+    // Update slider hints (derived units)
+    setHint('electricity', kWhMonth, currentLang === 'zh' ? '度/月' : 'kWh/month');
+    setHint('gas', m3Month, 'm³/' + (currentLang === 'zh' ? '月' : 'month'));
+    setHint('scooter', scootLwk, currentLang === 'zh' ? '公升/週' : 'L/week');
+    setHint('car', carLwk, currentLang === 'zh' ? '公升/週' : 'L/week');
+
+    // Update slider value labels
+    document.getElementById('v-electricity').textContent = fmtNT(elecBill);
+    document.getElementById('v-gas').textContent = fmtNT(gasBill);
+    document.getElementById('v-scooter').textContent = fmtNT(scooterFuel);
+    document.getElementById('v-car').textContent = fmtNT(carFuel);
+    document.getElementById('v-flights').textContent = String(flightCount);
+
+    // Total
+    document.getElementById('total').textContent = fmtNum(totalT, 2);
+    document.getElementById('cmp-you').textContent = fmtNum(totalT, 2);
+
+    // Breakdown — find max
+    let maxKey = 'electricity', maxVal = -1;
+    for (const k of Object.keys(breakdown)) {
+      if (breakdown[k] > maxVal) { maxVal = breakdown[k]; maxKey = k; }
+    }
+
+    const bd = document.getElementById('breakdown');
+    bd.innerHTML = '';
+    for (const cat of CATEGORIES) {
+      const v = breakdown[cat.key];
+      const pct = totalKg > 0 ? (v / totalKg * 100) : 0;
+      const row = document.createElement('div');
+      row.className = 'breakdown-row' + (cat.key === maxKey ? ' top' : '');
+      row.innerHTML = `
+        <div class="breakdown-head">
+          <span class="name">${currentLang === 'zh' ? cat.zh : cat.en}</span>
+          <span class="val">${fmtNum(v / 1000, 2)} ${currentLang === 'zh' ? '噸' : 't'} · ${pct.toFixed(0)}%</span>
+        </div>
+        <div class="breakdown-bar"><div class="breakdown-fill" style="width:${pct.toFixed(1)}%"></div></div>
+      `;
+      bd.appendChild(row);
+    }
+
+    // Recommendations
+    const topCat = CATEGORIES.find(c => c.key === maxKey);
+    document.getElementById('recs-cat-label').textContent =
+      currentLang === 'zh' ? topCat.zh : topCat.en;
+    const recsEl = document.getElementById('recs');
+    recsEl.innerHTML = '';
+    RECS[maxKey].forEach((rec, i) => {
+      const item = document.createElement('div');
+      item.className = 'rec-item';
+      item.innerHTML = `<div class="rec-num">${i + 1}</div><div>${currentLang === 'zh' ? rec.zh : rec.en}</div>`;
+      recsEl.appendChild(item);
+    });
+  }
+
+  function setHint(id, val, unit) {
+    document.getElementById('hint-' + id).textContent =
+      (currentLang === 'zh' ? '約等於 ' : '≈ ') + fmtNum(val, 1) + ' ' + unit;
+  }
+
+  // Language toggle
+  const STORAGE_KEY = 'tct_lang';
+  const langBtn = document.getElementById('langToggle');
+
+  function applyLang(lang) {
+    currentLang = lang;
+    document.documentElement.lang = lang === 'zh' ? 'zh-Hant' : 'en';
+    document.querySelectorAll('[data-zh]').forEach(el => {
+      const val = el.dataset[lang];
+      if (val !== undefined) {
+        if (el.tagName === 'OPTION') el.textContent = val;
+        else el.textContent = val;
+      }
+    });
+    langBtn.textContent = lang === 'zh' ? 'English' : '中文';
+    try { localStorage.setItem(STORAGE_KEY, lang); } catch (e) {}
+    calc();
+  }
+
+  let initial = 'zh';
+  try {
+    const s = localStorage.getItem(STORAGE_KEY);
+    if (s === 'zh' || s === 'en') initial = s;
+  } catch (e) {}
+
+  langBtn.addEventListener('click', () => applyLang(currentLang === 'zh' ? 'en' : 'zh'));
+
+  // Wire inputs
+  ids.forEach(id => inputs[id].addEventListener('input', calc));
+
+  applyLang(initial);
+</script>
+</body>
+</html>

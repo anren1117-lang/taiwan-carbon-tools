@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>企業碳盤查估算 | SME Carbon Inventory</title>
+<meta name="description" content="台灣中小企業碳盤查估算工具，涵蓋範疇一、二、三，內建碳費試算。Carbon inventory estimator for Taiwan SMEs, with carbon fee simulator.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --accent: #1D9E75;
+    --accent-dark: #157a59;
+    --accent-tint: rgba(29, 158, 117, 0.1);
+    --bg: #ffffff;
+    --bg-card: #ffffff;
+    --bg-subtle: #f7f8f7;
+    --text: #1a1a1a;
+    --text-muted: #6b7280;
+    --border: #e5e7eb;
+    --warn: #b45309;
+    --warn-bg: #fef3c7;
+    --warn-border: #fde68a;
+    --s1: #d97706;
+    --s2: #2563eb;
+    --s3: #7c3aed;
+    --shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0e1410;
+      --bg-card: #161d18;
+      --bg-subtle: #1a2220;
+      --text: #f0f2f0;
+      --text-muted: #9ca3af;
+      --border: #2a3530;
+      --accent-tint: rgba(29, 158, 117, 0.15);
+      --warn: #fbbf24;
+      --warn-bg: rgba(251, 191, 36, 0.08);
+      --warn-border: rgba(251, 191, 36, 0.25);
+      --s1: #f59e0b;
+      --s2: #60a5fa;
+      --s3: #a78bfa;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3);
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+  header {
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 10;
+    backdrop-filter: blur(8px);
+  }
+  .header-inner { display: flex; justify-content: space-between; align-items: center; }
+  .logo { font-weight: 700; font-size: 17px; color: var(--accent); text-decoration: none; }
+  .header-right { display: flex; align-items: center; gap: 12px; }
+  .back-link { color: var(--text-muted); text-decoration: none; font-size: 13px; }
+  .back-link:hover { color: var(--accent); }
+  .lang-toggle {
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-family: inherit;
+    font-size: 13px;
+    color: var(--text);
+    cursor: pointer;
+  }
+  .lang-toggle:hover { border-color: var(--accent); }
+  .page-title { padding: 40px 0 16px; }
+  .page-title h1 {
+    font-size: clamp(26px, 4vw, 36px);
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+  .page-title p { color: var(--text-muted); font-size: 15px; }
+  .warning {
+    background: var(--warn-bg);
+    border: 1px solid var(--warn-border);
+    color: var(--warn);
+    padding: 12px 16px;
+    border-radius: 10px;
+    margin-bottom: 24px;
+    font-size: 13px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .warning::before { content: "⚠"; flex-shrink: 0; font-size: 16px; }
+  .layout {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 24px;
+    padding-bottom: 60px;
+  }
+  @media (max-width: 940px) {
+    .layout { grid-template-columns: 1fr; }
+  }
+  .form-card, .result-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+  }
+  .result-card {
+    position: sticky;
+    top: 80px;
+    align-self: start;
+  }
+  @media (max-width: 940px) {
+    .result-card { position: static; }
+  }
+  .form-section { margin-bottom: 28px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+  .form-section:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+  .form-section-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 14px;
+    letter-spacing: 0.01em;
+  }
+  .scope-tag {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+  .scope-tag.s1 { background: rgba(217, 119, 6, 0.12); color: var(--s1); }
+  .scope-tag.s2 { background: rgba(37, 99, 235, 0.12); color: var(--s2); }
+  .scope-tag.s3 { background: rgba(124, 58, 237, 0.12); color: var(--s3); }
+  .scope-tag.profile { background: var(--accent-tint); color: var(--accent); }
+  .form-section-desc { font-size: 12px; color: var(--text-muted); margin-bottom: 14px; margin-top: -8px; }
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  @media (max-width: 480px) {
+    .form-grid { grid-template-columns: 1fr; }
+  }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .field .unit { color: var(--text-muted); font-weight: 400; font-size: 12px; }
+  .field input, .field select {
+    padding: 9px 12px;
+    font-family: inherit;
+    font-size: 14px;
+    background: var(--bg-subtle);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    width: 100%;
+    font-variant-numeric: tabular-nums;
+  }
+  .field input:focus, .field select:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+  }
+  .field input[type="number"] { -moz-appearance: textfield; }
+  .field input::-webkit-outer-spin-button,
+  .field input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+  .total-block { text-align: center; padding: 12px 0 20px; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
+  .total-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+  .total-value {
+    font-size: 44px;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+  }
+  .total-unit { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+
+  .stacked-bar { display: flex; height: 12px; border-radius: 6px; overflow: hidden; margin-bottom: 16px; background: var(--bg-subtle); }
+  .stacked-bar > div { height: 100%; }
+  .stack-s1 { background: var(--s1); }
+  .stack-s2 { background: var(--s2); }
+  .stack-s3 { background: var(--s3); }
+
+  .scope-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+  .scope-row:last-child { border-bottom: none; }
+  .scope-row .label { display: flex; align-items: center; gap: 8px; }
+  .scope-dot { width: 10px; height: 10px; border-radius: 2px; }
+  .dot-s1 { background: var(--s1); }
+  .dot-s2 { background: var(--s2); }
+  .dot-s3 { background: var(--s3); }
+  .scope-row .val { font-variant-numeric: tabular-nums; font-weight: 500; }
+  .scope-row .pct { color: var(--text-muted); font-size: 12px; margin-left: 6px; }
+
+  .panel {
+    margin-top: 28px;
+    padding: 20px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--bg-card);
+  }
+  .panel-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 12px;
+  }
+
+  .fee-row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 14px; }
+  .fee-row .name { color: var(--text-muted); font-size: 13px; }
+  .fee-row .val { font-variant-numeric: tabular-nums; font-weight: 500; }
+  .fee-note { font-size: 12px; color: var(--text-muted); margin-top: 8px; line-height: 1.5; }
+  .fee-skip { font-size: 13px; color: var(--text-muted); padding: 4px 0; }
+
+  .bench-block { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+  .bench-block .your { font-size: 22px; font-weight: 600; color: var(--accent); font-variant-numeric: tabular-nums; }
+  .bench-block .vs { font-size: 13px; color: var(--text-muted); }
+  .bench-bar-wrap { position: relative; height: 8px; background: var(--bg-subtle); border-radius: 4px; overflow: hidden; }
+  .bench-fill { height: 100%; background: var(--accent); border-radius: 4px; transition: width 0.3s; }
+  .bench-fill.over { background: var(--s1); }
+  .bench-mark {
+    position: absolute; top: -4px; bottom: -4px; width: 2px; background: var(--text-muted); opacity: 0.5;
+  }
+  .bench-legend { display: flex; justify-content: space-between; margin-top: 6px; font-size: 11px; color: var(--text-muted); }
+
+  .recs {
+    margin-top: 28px;
+    padding: 24px;
+    background: var(--accent-tint);
+    border-radius: 12px;
+  }
+  .recs-title { font-size: 14px; font-weight: 600; margin-bottom: 6px; color: var(--accent); }
+  .recs-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 14px; }
+  .rec-item {
+    padding: 12px 0;
+    border-top: 1px solid var(--border);
+    font-size: 14px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .rec-item:first-of-type { border-top: none; padding-top: 4px; }
+  .rec-icon {
+    flex-shrink: 0;
+    width: 24px; height: 24px;
+    background: var(--accent);
+    color: white;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .rec-body strong { display: block; margin-bottom: 2px; }
+  .rec-body span { color: var(--text-muted); font-size: 13px; }
+
+  footer {
+    padding: 24px 0;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 12px;
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="container header-inner">
+    <a href="index.html" class="logo">Taiwan Carbon Tools</a>
+    <div class="header-right">
+      <a href="index.html" class="back-link" data-zh="← 返回首頁" data-en="← Home">← 返回首頁</a>
+      <button class="lang-toggle" id="langToggle">English</button>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <section class="page-title">
+    <h1 data-zh="企業碳盤查估算" data-en="SME Carbon Inventory Estimator">企業碳盤查估算</h1>
+    <p data-zh="為中小企業設計的快速碳盤查工具，涵蓋範疇一、二、三，內建 2026 碳費試算（製造業）。" data-en="A quick carbon inventory tool for SMEs covering Scopes 1, 2, 3 with Taiwan's 2026 carbon fee simulator (manufacturing).">為中小企業設計的快速碳盤查工具，涵蓋範疇一、二、三，內建 2026 碳費試算（製造業）。</p>
+  </section>
+
+  <div class="warning" data-zh="本工具為教育用途的初步估算，不能取代依 ISO 14064-1 進行的正式組織型溫室氣體盤查、查證或政府申報。實務上仍需依法委由查驗機構執行。" data-en="This is an educational estimator only. It is not a substitute for a formal ISO 14064-1 organisational GHG inventory, verification, or regulatory reporting. Engage an accredited verification body for compliance.">本工具為教育用途的初步估算，不能取代依 ISO 14064-1 進行的正式組織型溫室氣體盤查、查證或政府申報。實務上仍需依法委由查驗機構執行。</div>
+
+  <div class="layout">
+    <div class="form-card">
+      <!-- Company profile -->
+      <div class="form-section">
+        <div class="form-section-title">
+          <span class="scope-tag profile" data-zh="公司資料" data-en="Profile">公司資料</span>
+        </div>
+        <div class="form-grid">
+          <div class="field">
+            <label data-zh="產業別" data-en="Industry">產業別</label>
+            <select id="industry">
+              <option value="manufacturing" data-zh="製造業" data-en="Manufacturing">製造業</option>
+              <option value="services" data-zh="服務業" data-en="Services">服務業</option>
+              <option value="retail" data-zh="零售批發" data-en="Retail & Wholesale">零售批發</option>
+              <option value="logistics" data-zh="運輸物流" data-en="Logistics & Transport">運輸物流</option>
+              <option value="construction" data-zh="營造業" data-en="Construction">營造業</option>
+            </select>
+          </div>
+          <div class="field">
+            <label data-zh="員工人數" data-en="Employees">員工人數</label>
+            <input type="number" id="employees" value="50" min="0" step="1">
+          </div>
+          <div class="field">
+            <label>
+              <span data-zh="年營業額" data-en="Annual revenue">年營業額</span>
+              <span class="unit" data-zh="（百萬 NT$）" data-en="(NT$ million)">（百萬 NT$）</span>
+            </label>
+            <input type="number" id="revenue" value="100" min="0" step="1">
+          </div>
+        </div>
+      </div>
+
+      <!-- Scope 1 -->
+      <div class="form-section">
+        <div class="form-section-title">
+          <span class="scope-tag s1">SCOPE 1</span>
+          <span data-zh="直接排放（自有設備燃燒與逸散）" data-en="Direct emissions (owned combustion & fugitive)">直接排放（自有設備燃燒與逸散）</span>
+        </div>
+        <div class="form-grid">
+          <div class="field">
+            <label>
+              <span data-zh="天然氣使用量" data-en="Natural gas">天然氣使用量</span>
+              <span class="unit">(m³)</span>
+            </label>
+            <input type="number" id="ng" value="0" min="0" step="10">
+          </div>
+          <div class="field">
+            <label>
+              <span data-zh="柴油使用量" data-en="Diesel">柴油使用量</span>
+              <span class="unit">(L)</span>
+            </label>
+            <input type="number" id="diesel" value="0" min="0" step="10">
+          </div>
+          <div class="field">
+            <label>
+              <span data-zh="汽油使用量" data-en="Gasoline">汽油使用量</span>
+              <span class="unit">(L)</span>
+            </label>
+            <input type="number" id="gasoline" value="0" min="0" step="10">
+          </div>
+          <div class="field">
+            <label>
+              <span data-zh="冷媒 R-410A 補充量" data-en="Refrigerant R-410A refill">冷媒 R-410A 補充量</span>
+              <span class="unit">(kg)</span>
+            </label>
+            <input type="number" id="r410a" value="0" min="0" step="0.1">
+          </div>
+        </div>
+      </div>
+
+      <!-- Scope 2 -->
+      <div class="form-section">
+        <div class="form-section-title">
+          <span class="scope-tag s2">SCOPE 2</span>
+          <span data-zh="能源間接排放（外購電力）" data-en="Energy indirect emissions (purchased electricity)">能源間接排放（外購電力）</span>
+        </div>
+        <div class="form-grid">
+          <div class="field">
+            <label>
+              <span data-zh="年度用電量" data-en="Annual electricity">年度用電量</span>
+              <span class="unit">(kWh)</span>
+            </label>
+            <input type="number" id="electricity" value="200000" min="0" step="100">
+          </div>
+          <div class="field">
+            <label>
+              <span data-zh="綠電 / T-REC 採購" data-en="Green power / T-REC">綠電 / T-REC 採購</span>
+              <span class="unit">(kWh)</span>
+            </label>
+            <input type="number" id="green" value="0" min="0" step="100">
+          </div>
+        </div>
+      </div>
+
+      <!-- Scope 3 -->
+      <div class="form-section">
+        <div class="form-section-title">
+          <span class="scope-tag s3">SCOPE 3</span>
+          <span data-zh="其他間接排放（供應鏈、通勤、商務旅行）" data-en="Other indirect (supply chain, commute, business travel)">其他間接排放（供應鏈、通勤、商務旅行）</span>
+        </div>
+        <div class="form-section-desc" data-zh="採用 EEIO 經濟投入產出法估算採購排放，僅作為粗略指引。" data-en="Procurement is estimated via EEIO (economic input-output) method — directional only.">採用 EEIO 經濟投入產出法估算採購排放，僅作為粗略指引。</div>
+        <div class="form-grid">
+          <div class="field">
+            <label>
+              <span data-zh="年度採購金額" data-en="Annual procurement">年度採購金額</span>
+              <span class="unit" data-zh="（百萬 NT$）" data-en="(NT$ million)">（百萬 NT$）</span>
+            </label>
+            <input type="number" id="procurement" value="40" min="0" step="1">
+          </div>
+          <div class="field">
+            <label>
+              <span data-zh="員工平均通勤距離" data-en="Avg commute distance">員工平均通勤距離</span>
+              <span class="unit" data-zh="（公里/單程）" data-en="(km, one-way)">（公里/單程）</span>
+            </label>
+            <input type="number" id="commute" value="12" min="0" step="0.5">
+          </div>
+          <div class="field">
+            <label>
+              <span data-zh="年度商務航班總次數" data-en="Business flights / year">年度商務航班總次數</span>
+            </label>
+            <input type="number" id="flights" value="10" min="0" step="1">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Results -->
+    <div class="result-card">
+      <div class="total-block">
+        <div class="total-label" data-zh="年度總排放" data-en="Annual total">年度總排放</div>
+        <div class="total-value" id="total">—</div>
+        <div class="total-unit" data-zh="公噸 CO₂e / 年" data-en="tonnes CO₂e / year">公噸 CO₂e / 年</div>
+      </div>
+
+      <div class="stacked-bar" id="stacked"></div>
+
+      <div id="scopes"></div>
+
+      <!-- Carbon fee -->
+      <div class="panel" id="feePanel">
+        <div class="panel-title" data-zh="2026 台灣碳費試算" data-en="Taiwan 2026 carbon fee">2026 台灣碳費試算</div>
+        <div id="feeBody"></div>
+      </div>
+
+      <!-- Industry benchmark -->
+      <div class="panel" id="benchPanel">
+        <div class="panel-title" data-zh="產業別碳強度比較" data-en="Industry intensity benchmark">產業別碳強度比較</div>
+        <div class="bench-block">
+          <div>
+            <div class="your" id="benchYour">—</div>
+            <div class="vs" data-zh="噸 CO₂e / 百萬營收" data-en="t CO₂e per NT$M revenue">噸 CO₂e / 百萬營收</div>
+          </div>
+          <div class="vs"><span data-zh="產業均值：" data-en="Industry avg: ">產業均值：</span><span id="benchAvg">—</span></div>
+        </div>
+        <div class="bench-bar-wrap">
+          <div class="bench-fill" id="benchFill" style="width:0%"></div>
+          <div class="bench-mark" id="benchMark" style="left:50%"></div>
+        </div>
+        <div class="bench-legend">
+          <span>0</span>
+          <span id="benchScale">—</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Smart recommendations -->
+  <section class="recs">
+    <div class="recs-title" data-zh="智慧減碳建議" data-en="Smart recommendations">智慧減碳建議</div>
+    <div class="recs-sub" data-zh="依據你的排放結構，列出最具影響力的減碳行動。" data-en="Highest-impact actions based on your emission profile.">依據你的排放結構，列出最具影響力的減碳行動。</div>
+    <div id="recs"></div>
+  </section>
+</main>
+
+<footer>
+  <div class="container">
+    <span data-zh="排放係數來源：經濟部能源署、環境部排放係數管理表。EEIO 採購係數採 0.4 kg CO₂e/NT$ 之概略值。" data-en="Factors: MOEA Energy Administration, MOENV emission factor database. EEIO procurement factor: 0.4 kg CO₂e/NT$ (approximate).">排放係數來源：經濟部能源署、環境部排放係數管理表。EEIO 採購係數採 0.4 kg CO₂e/NT$ 之概略值。</span>
+  </div>
+</footer>
+
+<script>
+  // === Emission factors (kg CO2e per unit) ===
+  const EF = {
+    electricity: 0.474,   // per kWh
+    ng: 1.879,            // per m³ natural gas
+    diesel: 2.606,        // per L
+    gasoline: 2.263,      // per L
+    r410a: 2088,          // per kg
+    procurementPerNT: 0.0004,  // kg CO2e per NT$
+    commutePerKm: 0.36,
+    workingDays: 250,
+    flight: 1500
+  };
+
+  // === Carbon fee ===
+  const FEE = {
+    threshold: 25000,     // tonnes Scope 1+2
+    normal: 300,          // NT$/tonne
+    planA: 50,
+    planB: 100
+  };
+
+  // === Industry benchmarks (t CO2e / NT$M revenue) ===
+  const BENCHMARK = {
+    manufacturing: 3.5,
+    services: 0.8,
+    retail: 1.2,
+    logistics: 4.2,
+    construction: 2.8
+  };
+
+  const INDUSTRY_LABELS = {
+    manufacturing: { zh: '製造業', en: 'Manufacturing' },
+    services:      { zh: '服務業', en: 'Services' },
+    retail:        { zh: '零售批發', en: 'Retail & Wholesale' },
+    logistics:     { zh: '運輸物流', en: 'Logistics & Transport' },
+    construction:  { zh: '營造業', en: 'Construction' }
+  };
+
+  // === Smart recommendation rules ===
+  // Each rule: { test(profile) → bool, rec: {zh, en, hint:{zh,en}} }
+  const RULES = [
+    {
+      test: p => p.shareScope2 > 0.40,
+      rec: {
+        zh: { title: '採購綠電 / T-REC 憑證', hint: '範疇二佔比偏高，購買綠電是降低總排放最快的槓桿。' },
+        en: { title: 'Buy green power or T-RECs', hint: 'Scope 2 dominates — green power is the fastest lever.' }
+      }
+    },
+    {
+      test: p => p.eDiesel > 0 && p.eDiesel / p.totalKg > 0.15,
+      rec: {
+        zh: { title: '評估電動車隊（含堆高機）', hint: '柴油排放比重高，車隊電動化＋綠電充電效益最大。' },
+        en: { title: 'Electrify your fleet (including forklifts)', hint: 'Diesel is a major share — EV fleet with green-power charging compounds savings.' }
+      }
+    },
+    {
+      test: p => p.eProcurement > 0 && p.eProcurement / p.totalKg > 0.30,
+      rec: {
+        zh: { title: '推動供應商減碳計畫', hint: '採購（範疇三上游）佔比超過 30%，需要 CDP 供應鏈計畫或永續採購條款。' },
+        en: { title: 'Launch a supplier engagement programme', hint: 'Upstream procurement exceeds 30% — adopt CDP Supply Chain or sustainable sourcing clauses.' }
+      }
+    },
+    {
+      test: p => p.eR410a > 0 && p.eR410a / p.totalKg > 0.05,
+      rec: {
+        zh: { title: '冷媒管理與洩漏修補', hint: '冷媒 GWP 極高（R-410A = 2088）。建立定期洩漏檢測，並逐步替換為 R-32 或 R-454B。' },
+        en: { title: 'Refrigerant management & leak repair', hint: 'R-410A has GWP 2088. Set up leak inspection routines and phase in R-32 / R-454B.' }
+      }
+    },
+    {
+      test: p => p.eCommute > 0 && p.eCommute / p.totalKg > 0.15,
+      rec: {
+        zh: { title: '導入混合辦公與通勤車', hint: '通勤排放佔比高，週 1–2 天遠距＋公司通勤車可大幅降低。' },
+        en: { title: 'Hybrid work & employee shuttles', hint: 'Commute share is significant — 1–2 remote days/week + shuttles cut substantially.' }
+      }
+    },
+    {
+      test: p => p.eFlights > 0 && p.eFlights / p.totalKg > 0.10,
+      rec: {
+        zh: { title: '差旅政策：優先視訊與高鐵', hint: '商務航班佔比超過 10%，制定政策強制視訊優先、國內出差搭高鐵。' },
+        en: { title: 'Travel policy: video & HSR first', hint: 'Business flights exceed 10% — mandate video-first and HSR for domestic trips.' }
+      }
+    },
+    {
+      test: p => p.eNG > 0 && p.eNG / p.totalKg > 0.15,
+      rec: {
+        zh: { title: '製程熱能效率與廢熱回收', hint: '天然氣排放佔比高，評估蒸汽系統保溫、廢熱回收、熱泵替代鍋爐。' },
+        en: { title: 'Process heat efficiency & waste-heat recovery', hint: 'Natural gas is a top emitter — insulate steam systems, recover waste heat, consider heat-pump replacement.' }
+      }
+    },
+    {
+      test: p => p.industry === 'manufacturing' && (p.scope1Kg + p.scope2Kg) / 1000 > FEE.threshold,
+      rec: {
+        zh: { title: '提出自主減量計畫申請優惠費率', hint: '範疇一二排放已超過 25,000 噸碳費門檻；提交自主減量計畫可降至 NT$50–100/噸。' },
+        en: { title: 'Submit a voluntary reduction plan for discounted fee rate', hint: 'Scope 1+2 exceeds the 25,000 t carbon fee threshold — an approved reduction plan cuts the rate to NT$50–100/t.' }
+      }
+    },
+    {
+      test: p => p.revenue > 0 && (p.totalKg / 1000) / p.revenue > (BENCHMARK[p.industry] || 1) * 1.2,
+      rec: {
+        zh: { title: '委託合格查驗機構完成 ISO 14064-1 盤查', hint: '碳強度高於產業均值 20%，建議進入正式盤查與第三方查證流程。' },
+        en: { title: 'Engage a verifier for a formal ISO 14064-1 inventory', hint: 'Intensity is 20% above industry average — graduate to formal inventory & third-party verification.' }
+      }
+    },
+    {
+      test: p => p.green > 0 && p.green >= p.electricity * 0.5,
+      rec: {
+        zh: { title: '邁向 RE100 與淨零承諾', hint: '綠電比例已達 50%＋，可考慮加入 RE100、設定 SBTi 科學基礎減量目標。' },
+        en: { title: 'Pursue RE100 & set SBTi targets', hint: 'Green power already ≥ 50% — consider joining RE100 and setting science-based targets.' }
+      }
+    },
+    {
+      test: p => p.totalKg === 0,
+      rec: {
+        zh: { title: '請輸入活動數據開始盤查', hint: '由能源（電費、瓦斯）與車隊資料開始，最容易取得。' },
+        en: { title: 'Enter activity data to begin', hint: 'Start with energy bills and fleet data — usually the easiest to retrieve.' }
+      }
+    }
+  ];
+
+  // === State ===
+  const fieldIds = ['industry','employees','revenue','ng','diesel','gasoline','r410a','electricity','green','procurement','commute','flights'];
+  const f = {};
+  fieldIds.forEach(id => f[id] = document.getElementById(id));
+
+  let currentLang = 'zh';
+
+  function fmtT(kg) { return (kg / 1000).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+  function fmtMoney(nt) { return 'NT$' + Math.round(nt).toLocaleString(); }
+  function fmtNum(n, d) { return n.toLocaleString(undefined, { minimumFractionDigits: d, maximumFractionDigits: d }); }
+  function t(zh, en) { return currentLang === 'zh' ? zh : en; }
+
+  function calc() {
+    const industry = f.industry.value;
+    const employees = +f.employees.value || 0;
+    const revenue = +f.revenue.value || 0;
+    const ng = +f.ng.value || 0;
+    const diesel = +f.diesel.value || 0;
+    const gasoline = +f.gasoline.value || 0;
+    const r410a = +f.r410a.value || 0;
+    const electricity = +f.electricity.value || 0;
+    const green = Math.min(+f.green.value || 0, electricity);
+    const procurement = +f.procurement.value || 0;
+    const commute = +f.commute.value || 0;
+    const flights = +f.flights.value || 0;
+
+    // Scope 1
+    const eNG = ng * EF.ng;
+    const eDiesel = diesel * EF.diesel;
+    const eGasoline = gasoline * EF.gasoline;
+    const eR410a = r410a * EF.r410a;
+    const scope1Kg = eNG + eDiesel + eGasoline + eR410a;
+
+    // Scope 2
+    const scope2Kg = Math.max(0, electricity - green) * EF.electricity;
+
+    // Scope 3
+    const eProcurement = procurement * 1_000_000 * EF.procurementPerNT;
+    const eCommute = employees * commute * EF.commutePerKm * EF.workingDays * 2;
+    const eFlights = flights * EF.flight;
+    const scope3Kg = eProcurement + eCommute + eFlights;
+
+    const totalKg = scope1Kg + scope2Kg + scope3Kg;
+
+    // Totals UI
+    document.getElementById('total').textContent = totalKg > 0 ? fmtT(totalKg) : '0.00';
+
+    // Stacked bar
+    const stacked = document.getElementById('stacked');
+    if (totalKg > 0) {
+      const p1 = (scope1Kg / totalKg * 100).toFixed(2);
+      const p2 = (scope2Kg / totalKg * 100).toFixed(2);
+      const p3 = (scope3Kg / totalKg * 100).toFixed(2);
+      stacked.innerHTML =
+        `<div class="stack-s1" style="width:${p1}%"></div>` +
+        `<div class="stack-s2" style="width:${p2}%"></div>` +
+        `<div class="stack-s3" style="width:${p3}%"></div>`;
+    } else {
+      stacked.innerHTML = '';
+    }
+
+    // Scope rows
+    const scopesEl = document.getElementById('scopes');
+    const pct = (v) => totalKg > 0 ? ((v / totalKg) * 100).toFixed(0) + '%' : '—';
+    scopesEl.innerHTML = `
+      <div class="scope-row">
+        <div class="label"><span class="scope-dot dot-s1"></span> ${t('範疇一 直接排放', 'Scope 1 Direct')}</div>
+        <div class="val">${fmtT(scope1Kg)} ${t('噸','t')}<span class="pct">${pct(scope1Kg)}</span></div>
+      </div>
+      <div class="scope-row">
+        <div class="label"><span class="scope-dot dot-s2"></span> ${t('範疇二 能源間接', 'Scope 2 Energy')}</div>
+        <div class="val">${fmtT(scope2Kg)} ${t('噸','t')}<span class="pct">${pct(scope2Kg)}</span></div>
+      </div>
+      <div class="scope-row">
+        <div class="label"><span class="scope-dot dot-s3"></span> ${t('範疇三 其他間接', 'Scope 3 Other')}</div>
+        <div class="val">${fmtT(scope3Kg)} ${t('噸','t')}<span class="pct">${pct(scope3Kg)}</span></div>
+      </div>
+    `;
+
+    // Carbon fee
+    const feeBody = document.getElementById('feeBody');
+    if (industry !== 'manufacturing') {
+      feeBody.innerHTML = `<div class="fee-skip">${t('碳費目前僅適用於製造業排放大戶（範疇一二合計 ≥ 25,000 噸）。', 'Taiwan\'s carbon fee currently applies only to manufacturing emitters with Scope 1+2 ≥ 25,000 t/y.')}</div>`;
+    } else {
+      const s12T = (scope1Kg + scope2Kg) / 1000;
+      const chargeable = Math.max(0, s12T - FEE.threshold);
+      const feeNormal = chargeable * FEE.normal;
+      const feeA = chargeable * FEE.planA;
+      const feeB = chargeable * FEE.planB;
+      if (s12T < FEE.threshold) {
+        feeBody.innerHTML = `
+          <div class="fee-row">
+            <span class="name">${t('範疇一二合計', 'Scope 1+2 total')}</span>
+            <span class="val">${fmtNum(s12T, 2)} ${t('噸','t')}</span>
+          </div>
+          <div class="fee-row">
+            <span class="name">${t('門檻', 'Threshold')}</span>
+            <span class="val">25,000 ${t('噸','t')}</span>
+          </div>
+          <div class="fee-note">${t('未達 25,000 噸門檻，目前不需繳交碳費。仍建議自主管理，為 2030 年起可能擴大課徵範圍做準備。', 'Below 25,000 t threshold — no fee owed. Still recommended to self-manage in anticipation of expanded coverage from 2030.')}</div>
+        `;
+      } else {
+        feeBody.innerHTML = `
+          <div class="fee-row">
+            <span class="name">${t('應稅排放（超過門檻）', 'Chargeable emissions (above threshold)')}</span>
+            <span class="val">${fmtNum(chargeable, 0)} ${t('噸','t')}</span>
+          </div>
+          <div class="fee-row">
+            <span class="name">${t('一般費率 NT$300/噸', 'Normal rate NT$300/t')}</span>
+            <span class="val">${fmtMoney(feeNormal)}</span>
+          </div>
+          <div class="fee-row">
+            <span class="name">${t('優惠 A：自主減量計畫 NT$50/噸', 'Discount A: reduction plan NT$50/t')}</span>
+            <span class="val">${fmtMoney(feeA)}</span>
+          </div>
+          <div class="fee-row">
+            <span class="name">${t('優惠 B：行業別 NT$100/噸', 'Discount B: sector-specific NT$100/t')}</span>
+            <span class="val">${fmtMoney(feeB)}</span>
+          </div>
+          <div class="fee-note">${t('優惠費率須依環境部規定提出自主減量計畫並經核可後始可適用。', 'Discounted rates require an approved voluntary reduction plan per MOENV regulations.')}</div>
+        `;
+      }
+    }
+
+    // Benchmark
+    const benchAvg = BENCHMARK[industry];
+    const yourIntensity = revenue > 0 ? (totalKg / 1000) / revenue : 0;
+    document.getElementById('benchYour').textContent = revenue > 0 ? fmtNum(yourIntensity, 2) : '—';
+    document.getElementById('benchAvg').textContent = fmtNum(benchAvg, 2);
+    const scaleMax = Math.max(benchAvg * 2, yourIntensity * 1.1, 0.1);
+    document.getElementById('benchScale').textContent = fmtNum(scaleMax, 1);
+    const fillPct = Math.min(100, (yourIntensity / scaleMax) * 100);
+    const fillEl = document.getElementById('benchFill');
+    fillEl.style.width = fillPct + '%';
+    fillEl.classList.toggle('over', yourIntensity > benchAvg);
+    document.getElementById('benchMark').style.left = ((benchAvg / scaleMax) * 100) + '%';
+
+    // Recommendations
+    const profile = {
+      industry, revenue, totalKg,
+      scope1Kg, scope2Kg, scope3Kg,
+      shareScope2: totalKg > 0 ? scope2Kg / totalKg : 0,
+      eNG, eDiesel, eGasoline, eR410a,
+      eProcurement, eCommute, eFlights,
+      green, electricity
+    };
+    const matched = RULES.filter(r => r.test(profile));
+    const recsEl = document.getElementById('recs');
+    recsEl.innerHTML = '';
+    const toShow = matched.slice(0, 4);
+    if (toShow.length === 0) {
+      // Always show something useful — fallback
+      toShow.push({
+        rec: {
+          zh: { title: '排放結構平均，持續監測為主', hint: '目前未出現單一過高項目。建議建立每月活動數據追蹤表，並設定年度減量目標。' },
+          en: { title: 'Balanced profile — focus on monitoring', hint: 'No single hotspot detected. Set up monthly activity tracking and an annual reduction target.' }
+        }
+      });
+    }
+    toShow.forEach((r, i) => {
+      const item = document.createElement('div');
+      item.className = 'rec-item';
+      const txt = currentLang === 'zh' ? r.rec.zh : r.rec.en;
+      item.innerHTML = `
+        <div class="rec-icon">${i + 1}</div>
+        <div class="rec-body">
+          <strong>${txt.title}</strong>
+          <span>${txt.hint}</span>
+        </div>
+      `;
+      recsEl.appendChild(item);
+    });
+  }
+
+  // === Language toggle ===
+  const STORAGE_KEY = 'tct_lang';
+  const langBtn = document.getElementById('langToggle');
+
+  function applyLang(lang) {
+    currentLang = lang;
+    document.documentElement.lang = lang === 'zh' ? 'zh-Hant' : 'en';
+    document.querySelectorAll('[data-zh]').forEach(el => {
+      const val = el.dataset[lang];
+      if (val !== undefined) el.textContent = val;
+    });
+    langBtn.textContent = lang === 'zh' ? 'English' : '中文';
+    try { localStorage.setItem(STORAGE_KEY, lang); } catch (e) {}
+    calc();
+  }
+
+  let initial = 'zh';
+  try {
+    const s = localStorage.getItem(STORAGE_KEY);
+    if (s === 'zh' || s === 'en') initial = s;
+  } catch (e) {}
+
+  langBtn.addEventListener('click', () => applyLang(currentLang === 'zh' ? 'en' : 'zh'));
+
+  // Wire inputs
+  fieldIds.forEach(id => {
+    f[id].addEventListener('input', calc);
+    f[id].addEventListener('change', calc);
+  });
+
+  applyLang(initial);
+</script>
+</body>
+</html>

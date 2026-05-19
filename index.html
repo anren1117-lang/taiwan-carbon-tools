@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Taiwan Carbon Tools | 台灣碳排工具</title>
+<meta name="description" content="台灣家庭與中小企業碳排放計算工具，採用經濟部能源署與環境部官方排放係數。Free carbon footprint tools for Taiwan households and SMEs.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --accent: #1D9E75;
+    --accent-dark: #157a59;
+    --accent-tint: rgba(29, 158, 117, 0.1);
+    --bg: #ffffff;
+    --bg-card: #ffffff;
+    --bg-subtle: #f7f8f7;
+    --text: #1a1a1a;
+    --text-muted: #6b7280;
+    --border: #e5e7eb;
+    --shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0e1410;
+      --bg-card: #161d18;
+      --bg-subtle: #1a2220;
+      --text: #f0f2f0;
+      --text-muted: #9ca3af;
+      --border: #2a3530;
+      --accent-tint: rgba(29, 158, 117, 0.15);
+      --shadow: 0 1px 2px rgba(0,0,0,0.3);
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+  header {
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 10;
+    backdrop-filter: blur(8px);
+  }
+  .header-inner { display: flex; justify-content: space-between; align-items: center; }
+  .logo { font-weight: 700; font-size: 17px; color: var(--accent); text-decoration: none; }
+  .lang-toggle {
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-family: inherit;
+    font-size: 13px;
+    color: var(--text);
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .lang-toggle:hover { border-color: var(--accent); }
+  .hero { padding: 80px 0 40px; text-align: center; }
+  .hero h1 {
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 700;
+    margin-bottom: 20px;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+  .hero h1 .accent { color: var(--accent); }
+  .hero p {
+    font-size: 18px;
+    color: var(--text-muted);
+    max-width: 640px;
+    margin: 0 auto 24px;
+  }
+  .author {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    padding: 8px 16px;
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .author-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+  .tools {
+    padding: 40px 0 80px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+  }
+  .tool-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+    display: block;
+  }
+  .tool-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent);
+    box-shadow: 0 12px 28px rgba(29, 158, 117, 0.10);
+  }
+  .tool-icon {
+    width: 52px; height: 52px;
+    background: var(--accent-tint);
+    color: var(--accent);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    margin-bottom: 20px;
+    font-weight: 600;
+  }
+  .tool-card h3 { font-size: 22px; margin-bottom: 8px; font-weight: 600; }
+  .tool-card .subtitle { color: var(--text-muted); font-size: 13px; margin-bottom: 12px; }
+  .tool-card p { color: var(--text-muted); font-size: 14px; margin-bottom: 20px; line-height: 1.6; }
+  .tool-card .arrow {
+    color: var(--accent);
+    font-weight: 500;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .tool-card:hover .arrow { gap: 8px; transition: gap 0.2s; }
+  .section { padding: 60px 0; }
+  .section.subtle { background: var(--bg-subtle); }
+  .section-inner { max-width: 760px; margin: 0 auto; }
+  .section h2 { font-size: 28px; margin-bottom: 20px; font-weight: 600; letter-spacing: -0.01em; }
+  .section p { color: var(--text-muted); margin-bottom: 16px; }
+  .section ul { margin: 16px 0 16px 24px; color: var(--text-muted); }
+  .section li { margin-bottom: 8px; }
+  .badge-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  .badge {
+    padding: 6px 12px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .contact-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    text-align: center;
+    margin-top: 24px;
+  }
+  .contact-card a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 18px;
+  }
+  .contact-card a:hover { text-decoration: underline; }
+  footer {
+    padding: 32px 0;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+  footer p { margin-bottom: 6px; }
+  footer .sources { font-size: 12px; margin-top: 8px; opacity: 0.8; }
+  @media (max-width: 640px) {
+    .hero { padding: 60px 0 32px; }
+    .hero h1 { font-size: 32px; }
+    .hero p { font-size: 16px; }
+    .tool-card { padding: 24px; }
+    .section { padding: 48px 0; }
+    .section h2 { font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="container header-inner">
+    <a href="index.html" class="logo">Taiwan Carbon Tools</a>
+    <button class="lang-toggle" id="langToggle" aria-label="Toggle language">English</button>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="container">
+      <h1>
+        <span data-zh="了解你的" data-en="Understand your">了解你的</span>
+        <span class="accent" data-zh="碳足跡" data-en="carbon footprint">碳足跡</span>
+      </h1>
+      <p data-zh="採用台灣官方排放係數，免費、教育用途。讓減碳從理解開始。" data-en="Free educational tools built with Taiwan's official emission factors. Action starts with understanding.">採用台灣官方排放係數，免費、教育用途。讓減碳從理解開始。</p>
+      <div class="author">
+        <span class="author-dot"></span>
+        <span data-zh="由 何安仁 An-Ren Ho（18，台灣）獨立開發" data-en="Built independently by An-Ren Ho 何安仁, 18, Taiwan">由 何安仁 An-Ren Ho（18，台灣）獨立開發</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="container">
+    <div class="tools">
+      <a href="household.html" class="tool-card">
+        <div class="tool-icon">家</div>
+        <h3 data-zh="家庭碳足跡計算" data-en="Household Calculator">家庭碳足跡計算</h3>
+        <div class="subtitle" data-zh="Household Carbon Footprint" data-en="家庭碳足跡">Household Carbon Footprint</div>
+        <p data-zh="輸入每月電費、瓦斯費、交通油費、飲食習慣，估算你一年的碳排放量，並與台灣與全球平均比較。" data-en="Enter monthly bills, fuel costs, and diet to estimate your annual emissions, compared against Taiwan and global averages.">輸入每月電費、瓦斯費、交通油費、飲食習慣，估算你一年的碳排放量，並與台灣與全球平均比較。</p>
+        <span class="arrow"><span data-zh="開始計算" data-en="Start calculating">開始計算</span> →</span>
+      </a>
+      <a href="business.html" class="tool-card">
+        <div class="tool-icon">企</div>
+        <h3 data-zh="企業碳盤查估算" data-en="SME Carbon Inventory">企業碳盤查估算</h3>
+        <div class="subtitle" data-zh="SME Carbon Inventory Estimator" data-en="中小企業碳盤查">SME Carbon Inventory Estimator</div>
+        <p data-zh="為中小企業設計，涵蓋範疇一、二、三排放，內建台灣 2026 碳費試算（製造業）與產業別 benchmark 比較。" data-en="Built for SMEs. Covers Scopes 1, 2, 3 with Taiwan's 2026 carbon fee simulator (manufacturing) and industry benchmarks.">為中小企業設計，涵蓋範疇一、二、三排放，內建台灣 2026 碳費試算（製造業）與產業別 benchmark 比較。</p>
+        <span class="arrow"><span data-zh="開始盤查" data-en="Start inventory">開始盤查</span> →</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="section subtle">
+    <div class="container section-inner">
+      <h2 data-zh="關於這個專案" data-en="About this project">關於這個專案</h2>
+      <p data-zh="這是一個獨立教育專案。我們相信減碳行動的第一步，是讓每個人都能用自己的母語、用自己熟悉的單位（NT$、kWh、公升），看見自己生活與工作的碳成本。" data-en="This is an independent educational project. We believe the first step toward climate action is letting people see the carbon cost of their lives and work — in their own language, with units they recognise (NT$, kWh, litres).">這是一個獨立教育專案。我們相信減碳行動的第一步，是讓每個人都能用自己的母語、用自己熟悉的單位（NT$、kWh、公升），看見自己生活與工作的碳成本。</p>
+      <p data-zh="所有排放係數均來自台灣政府公開資料：經濟部能源署 113 年度電力排碳係數，以及環境部公告的燃料燃燒排放係數。本工具不收集任何使用者資料、不使用 cookie、不串接後端 API，所有計算都在你的瀏覽器中完成。" data-en="All emission factors come from Taiwan government data: Ministry of Economic Affairs Energy Administration 2024 grid electricity factor, and Ministry of Environment fuel combustion factors. No data is collected, no cookies are set, no backend API is called — every calculation runs in your browser.">所有排放係數均來自台灣政府公開資料：經濟部能源署 113 年度電力排碳係數，以及環境部公告的燃料燃燒排放係數。本工具不收集任何使用者資料、不使用 cookie、不串接後端 API，所有計算都在你的瀏覽器中完成。</p>
+      <p data-zh="本工具僅供教育與初步估算用途，不能取代正式的 ISO 14064 組織型溫室氣體盤查，也不構成任何法定申報之依據。" data-en="This tool is for education and rough estimation only. It is not a substitute for a formal ISO 14064 organisational GHG inventory, nor a basis for regulatory reporting.">本工具僅供教育與初步估算用途，不能取代正式的 ISO 14064 組織型溫室氣體盤查，也不構成任何法定申報之依據。</p>
+      <div class="badge-row">
+        <span class="badge" data-zh="開放原始碼精神" data-en="Open by spirit">開放原始碼精神</span>
+        <span class="badge" data-zh="零資料蒐集" data-en="Zero data collection">零資料蒐集</span>
+        <span class="badge" data-zh="完全免費" data-en="Completely free">完全免費</span>
+        <span class="badge" data-zh="台灣在地" data-en="Made in Taiwan">台灣在地</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container section-inner">
+      <h2 data-zh="聯絡作者" data-en="Contact">聯絡作者</h2>
+      <p data-zh="有建議、發現錯誤、或想合作把這個工具帶進你的學校或公司？歡迎來信。" data-en="Have suggestions, spotted a bug, or want to bring this into your school or organisation? Get in touch.">有建議、發現錯誤、或想合作把這個工具帶進你的學校或公司？歡迎來信。</p>
+      <div class="contact-card">
+        <a href="mailto:anren.carbon@gmail.com">anren.carbon@gmail.com</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container">
+    <p data-zh="© 2026 何安仁 An-Ren Ho · 教育用途專案" data-en="© 2026 An-Ren Ho 何安仁 · Educational project">© 2026 何安仁 An-Ren Ho · 教育用途專案</p>
+    <p class="sources" data-zh="資料來源：經濟部能源署 113 年度電力排碳係數 · 環境部溫室氣體排放係數管理表 7.0.4" data-en="Sources: MOEA Energy Administration 2024 grid factor · MOENV GHG emission factor database v7.0.4">資料來源：經濟部能源署 113 年度電力排碳係數 · 環境部溫室氣體排放係數管理表 7.0.4</p>
+  </div>
+</footer>
+
+<script>
+  const STORAGE_KEY = 'tct_lang';
+  const btn = document.getElementById('langToggle');
+
+  function apply(lang) {
+    document.documentElement.lang = lang === 'zh' ? 'zh-Hant' : 'en';
+    document.querySelectorAll('[data-zh]').forEach(el => {
+      const val = el.dataset[lang];
+      if (val !== undefined) el.textContent = val;
+    });
+    btn.textContent = lang === 'zh' ? 'English' : '中文';
+    try { localStorage.setItem(STORAGE_KEY, lang); } catch (e) {}
+  }
+
+  let current = 'zh';
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved === 'zh' || saved === 'en') current = saved;
+  } catch (e) {}
+  apply(current);
+
+  btn.addEventListener('click', () => {
+    current = current === 'zh' ? 'en' : 'zh';
+    apply(current);
+  });
+</script>
+</body>
+</html>
