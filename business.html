@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script defer data-domain="anren1117-lang.github.io/taiwan-carbon-tools" src="https://plausible.io/js/script.js"></script>
 <style>
   :root {
     --accent: #1D9E75;
@@ -280,6 +281,22 @@
     color: var(--text-muted);
     font-size: 12px;
   }
+  .share-btn {
+    width: 100%;
+    padding: 10px 16px;
+    margin-top: 20px;
+    font-family: inherit;
+    font-size: 14px;
+    background: var(--bg-subtle);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: border-color 0.15s, color 0.15s, background 0.15s;
+  }
+  .share-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .share-btn.copied { background: var(--accent-tint); color: var(--accent); border-color: var(--accent); }
 </style>
 </head>
 <body>
@@ -464,6 +481,8 @@
           <span id="benchScale">—</span>
         </div>
       </div>
+
+      <button class="share-btn" id="shareBtn" data-zh="分享結果" data-en="Share result">分享結果</button>
     </div>
   </div>
 
@@ -477,6 +496,7 @@
 
 <footer>
   <div class="container">
+    <p style="margin-bottom: 10px;"><a href="https://tally.so/r/PLACEHOLDER" target="_blank" rel="noopener" style="color: var(--accent); text-decoration: none; font-weight: 500;" data-zh="有建議或發現錯誤？告訴我 →" data-en="Found a bug or have feedback? Let me know →">有建議或發現錯誤？告訴我 →</a></p>
     <span data-zh="排放係數來源：經濟部能源署、環境部排放係數管理表。EEIO 採購係數採 0.4 kg CO₂e/NT$ 之概略值。" data-en="Factors: MOEA Energy Administration, MOENV emission factor database. EEIO procurement factor: 0.4 kg CO₂e/NT$ (approximate).">排放係數來源：經濟部能源署、環境部排放係數管理表。EEIO 採購係數採 0.4 kg CO₂e/NT$ 之概略值。</span>
   </div>
 </footer>
@@ -805,6 +825,34 @@
     f[id].addEventListener('input', calc);
     f[id].addEventListener('change', calc);
   });
+
+  // Share functionality
+  const shareBtn = document.getElementById('shareBtn');
+  let copyTimer = null;
+  async function handleShare() {
+    const total = document.getElementById('total').textContent;
+    const url = window.location.href;
+    const text = currentLang === 'zh'
+      ? `我用台灣碳排計算器算了一下我們公司的年度碳排：${total} 公噸 CO2e。你也來試試：`
+      : `I calculated our company's annual carbon footprint with Taiwan Carbon Tools: ${total} tonnes CO2e. Try yours:`;
+    if (navigator.share) {
+      try { await navigator.share({ text, url }); } catch (e) { /* user cancelled */ }
+    } else {
+      try {
+        await navigator.clipboard.writeText(text + ' ' + url);
+        shareBtn.classList.add('copied');
+        shareBtn.textContent = currentLang === 'zh' ? '已複製到剪貼簿！' : 'Copied to clipboard!';
+        clearTimeout(copyTimer);
+        copyTimer = setTimeout(() => {
+          shareBtn.classList.remove('copied');
+          shareBtn.textContent = shareBtn.dataset[currentLang];
+        }, 2000);
+      } catch (e) {
+        alert(currentLang === 'zh' ? '複製失敗，請手動複製連結。' : 'Copy failed — please copy the link manually.');
+      }
+    }
+  }
+  shareBtn.addEventListener('click', handleShare);
 
   applyLang(initial);
 </script>
