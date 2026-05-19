@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>分享的結果 | Shared Result · Taiwan Carbon Tools</title>
+<meta name="description" content="View a shared carbon footprint result. 檢視分享的碳足跡結果。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script defer data-domain="anren1117-lang.github.io/taiwan-carbon-tools" src="https://plausible.io/js/script.js"></script>
+<style>
+  :root {
+    --accent: #1D9E75;
+    --accent-dark: #157a59;
+    --accent-tint: rgba(29, 158, 117, 0.1);
+    --bg: #ffffff;
+    --bg-card: #ffffff;
+    --bg-subtle: #f7f8f7;
+    --text: #1a1a1a;
+    --text-muted: #6b7280;
+    --border: #e5e7eb;
+    --s1: #d97706;
+    --s2: #2563eb;
+    --s3: #7c3aed;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0e1410;
+      --bg-card: #161d18;
+      --bg-subtle: #1a2220;
+      --text: #f0f2f0;
+      --text-muted: #9ca3af;
+      --border: #2a3530;
+      --accent-tint: rgba(29, 158, 117, 0.15);
+      --s1: #f59e0b;
+      --s2: #60a5fa;
+      --s3: #a78bfa;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 820px; margin: 0 auto; padding: 0 20px; }
+  header {
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 10;
+    backdrop-filter: blur(8px);
+  }
+  .header-inner { display: flex; justify-content: space-between; align-items: center; }
+  .logo { font-weight: 700; font-size: 17px; color: var(--accent); text-decoration: none; }
+  .header-right { display: flex; align-items: center; gap: 12px; }
+  .back-link { color: var(--text-muted); text-decoration: none; font-size: 13px; }
+  .back-link:hover { color: var(--accent); }
+  .lang-toggle {
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-family: inherit;
+    font-size: 13px;
+    color: var(--text);
+    cursor: pointer;
+  }
+  .lang-toggle:hover { border-color: var(--accent); }
+
+  .state-block { padding: 80px 0 40px; text-align: center; }
+  .spinner {
+    display: inline-block;
+    width: 28px; height: 28px;
+    border: 3px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-bottom: 16px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .state-block p { color: var(--text-muted); font-size: 14px; }
+  .state-block.error h1 { font-size: 28px; margin-bottom: 12px; }
+  .state-block.error p { font-size: 15px; margin-bottom: 20px; }
+  .state-block .cta-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background: var(--accent);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 14px;
+  }
+  .state-block .cta-btn:hover { background: var(--accent-dark); }
+
+  .result-header {
+    padding: 48px 0 32px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .breadcrumb {
+    display: inline-block;
+    padding: 4px 12px;
+    background: var(--accent-tint);
+    color: var(--accent);
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 16px;
+  }
+  .total-value {
+    font-size: clamp(40px, 8vw, 64px);
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+  }
+  .total-unit { font-size: 14px; color: var(--text-muted); margin-top: 6px; }
+  .saved-meta { font-size: 12px; color: var(--text-muted); margin-top: 16px; }
+
+  section.card {
+    margin: 32px 0;
+    padding: 24px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+  }
+  section.card h2 {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 16px;
+  }
+  .kv-list { display: grid; grid-template-columns: 1fr; gap: 8px; }
+  @media (min-width: 520px) {
+    .kv-list { grid-template-columns: 1fr 1fr; gap: 8px 24px; }
+  }
+  .kv-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+  .kv-row .k { color: var(--text-muted); }
+  .kv-row .v { font-weight: 500; font-variant-numeric: tabular-nums; }
+
+  .breakdown-row { margin-bottom: 12px; }
+  .breakdown-row:last-child { margin-bottom: 0; }
+  .breakdown-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; font-size: 14px; }
+  .breakdown-head .name { font-weight: 500; }
+  .breakdown-head .val { font-variant-numeric: tabular-nums; color: var(--text-muted); font-size: 13px; }
+  .breakdown-bar { height: 6px; background: var(--bg-subtle); border-radius: 3px; overflow: hidden; }
+  .breakdown-fill { height: 100%; background: var(--accent); border-radius: 3px; }
+
+  .compare-row { display: flex; justify-content: space-between; padding: 8px 0; font-size: 14px; border-bottom: 1px solid var(--border); }
+  .compare-row:last-child { border-bottom: none; }
+  .compare-row .name { color: var(--text-muted); }
+  .compare-row .val { font-variant-numeric: tabular-nums; font-weight: 500; }
+  .compare-row.you .name, .compare-row.you .val { color: var(--accent); font-weight: 600; }
+
+  .stacked-bar { display: flex; height: 12px; border-radius: 6px; overflow: hidden; margin-bottom: 16px; background: var(--bg-subtle); }
+  .stack-s1 { background: var(--s1); height: 100%; }
+  .stack-s2 { background: var(--s2); height: 100%; }
+  .stack-s3 { background: var(--s3); height: 100%; }
+  .scope-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+  .scope-row:last-child { border-bottom: none; }
+  .scope-row .label { display: flex; align-items: center; gap: 8px; }
+  .scope-dot { width: 10px; height: 10px; border-radius: 2px; }
+  .dot-s1 { background: var(--s1); }
+  .dot-s2 { background: var(--s2); }
+  .dot-s3 { background: var(--s3); }
+  .scope-row .val { font-variant-numeric: tabular-nums; font-weight: 500; }
+  .scope-row .pct { color: var(--text-muted); font-size: 12px; margin-left: 6px; }
+
+  .fee-row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 14px; }
+  .fee-row .name { color: var(--text-muted); font-size: 13px; }
+  .fee-row .val { font-variant-numeric: tabular-nums; font-weight: 500; }
+  .fee-note { font-size: 12px; color: var(--text-muted); margin-top: 8px; line-height: 1.5; }
+
+  .cta-section { text-align: center; padding: 32px 0 16px; }
+  .cta-section .cta-btn {
+    display: inline-block;
+    padding: 12px 28px;
+    background: var(--accent);
+    color: white;
+    text-decoration: none;
+    border-radius: 999px;
+    font-weight: 500;
+    font-size: 15px;
+    transition: background 0.15s;
+  }
+  .cta-section .cta-btn:hover { background: var(--accent-dark); }
+  .cta-sub { color: var(--text-muted); font-size: 13px; margin-top: 12px; }
+
+  footer {
+    padding: 24px 0;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 12px;
+    margin-top: 40px;
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="container header-inner">
+    <a href="index.html" class="logo">Taiwan Carbon Tools</a>
+    <div class="header-right">
+      <a href="index.html" class="back-link" data-zh="← 返回首頁" data-en="← Home">← 返回首頁</a>
+      <button class="lang-toggle" id="langToggle">English</button>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <!-- Loading -->
+  <div class="state-block" id="stateLoading">
+    <div class="spinner"></div>
+    <p data-zh="正在載入結果…" data-en="Loading result…">正在載入結果…</p>
+  </div>
+
+  <!-- Not found / error -->
+  <div class="state-block error" id="stateNotFound" hidden>
+    <h1 data-zh="找不到此結果" data-en="Result not found">找不到此結果</h1>
+    <p id="notFoundMsg" data-zh="這個分享連結可能已失效，或網址有誤。" data-en="This share link may be invalid or expired.">這個分享連結可能已失效，或網址有誤。</p>
+    <a href="index.html" class="cta-btn" data-zh="回首頁" data-en="Back to home">回首頁</a>
+  </div>
+
+  <!-- Result content gets injected here -->
+  <div id="resultContent" hidden></div>
+</main>
+
+<footer>
+  <div class="container">
+    <span data-zh="© 何安仁 An-Ren Ho · Taiwan Carbon Tools · 教育用途" data-en="© An-Ren Ho 何安仁 · Taiwan Carbon Tools · Educational use">© 何安仁 An-Ren Ho · Taiwan Carbon Tools · 教育用途</span>
+  </div>
+</footer>
+
+<script type="module">
+  import { loadResult } from './supabase-client.js';
+
+  // === Display metadata ===
+  const HOUSEHOLD_CATEGORIES = [
+    { key: 'electricity', zh: '電力', en: 'Electricity' },
+    { key: 'gas',         zh: '瓦斯', en: 'Gas' },
+    { key: 'transport',   zh: '交通', en: 'Transport' },
+    { key: 'flights',     zh: '航班', en: 'Flights' },
+    { key: 'food',        zh: '飲食', en: 'Food' }
+  ];
+
+  const DIET_LABELS = {
+    '2.5': { zh: '重肉食', en: 'Heavy meat' },
+    '1.7': { zh: '一般葷食', en: 'Moderate omnivore' },
+    '1.2': { zh: '少肉', en: 'Light meat' },
+    '0.9': { zh: '蛋奶素', en: 'Vegetarian' },
+    '0.7': { zh: '全素', en: 'Vegan' }
+  };
+
+  const INDUSTRY_LABELS = {
+    manufacturing: { zh: '製造業', en: 'Manufacturing' },
+    services:      { zh: '服務業', en: 'Services' },
+    retail:        { zh: '零售批發', en: 'Retail & Wholesale' },
+    logistics:     { zh: '運輸物流', en: 'Logistics & Transport' },
+    construction:  { zh: '營造業', en: 'Construction' }
+  };
+
+  const FEE = { threshold: 25000, normal: 300, planA: 50, planB: 100 };
+
+  // === State ===
+  let currentLang = 'zh';
+  let loadedRow = null;
+
+  // === Helpers ===
+  function fmtT(kg) { return (kg / 1000).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+  function fmtNum(n, d) {
+    if (typeof n !== 'number' || !isFinite(n)) return '—';
+    return n.toLocaleString(undefined, { minimumFractionDigits: d, maximumFractionDigits: d });
+  }
+  function fmtNT(n) { return 'NT$' + Math.round(n).toLocaleString(); }
+  function fmtMoney(nt) { return 'NT$' + Math.round(nt).toLocaleString(); }
+  function fmtDate(ts) {
+    if (!ts) return '';
+    const d = new Date(ts);
+    if (isNaN(d.getTime())) return '';
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${y}-${m}-${day}`;
+  }
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+  function t(zh, en) { return currentLang === 'zh' ? zh : en; }
+
+  // === Renderers ===
+  function renderHousehold(row) {
+    const inputs = row.data?.inputs || {};
+    const breakdown = row.data?.breakdown_kg || {};
+    const totalT = Number(row.total_co2e) || 0;
+    const totalKg = totalT * 1000;
+    const dietLabel = DIET_LABELS[String(inputs.diet)] || { zh: '—', en: '—' };
+
+    // Find max category
+    let maxKey = null, maxVal = -1;
+    for (const k of Object.keys(breakdown)) {
+      if (breakdown[k] > maxVal) { maxVal = breakdown[k]; maxKey = k; }
+    }
+
+    const breakdownHtml = HOUSEHOLD_CATEGORIES.map(cat => {
+      const v = Number(breakdown[cat.key]) || 0;
+      const pct = totalKg > 0 ? (v / totalKg * 100) : 0;
+      const star = cat.key === maxKey ? ' ★' : '';
+      return `
+        <div class="breakdown-row">
+          <div class="breakdown-head">
+            <span class="name">${t(cat.zh, cat.en)}${star}</span>
+            <span class="val">${fmtNum(v / 1000, 2)} ${t('噸','t')} · ${pct.toFixed(0)}%</span>
+          </div>
+          <div class="breakdown-bar"><div class="breakdown-fill" style="width:${pct.toFixed(1)}%"></div></div>
+        </div>
+      `;
+    }).join('');
+
+    return `
+      <section class="result-header">
+        <div class="breadcrumb">${t('家庭碳足跡', 'Household Footprint')}</div>
+        <div class="total-value">${fmtNum(totalT, 2)}</div>
+        <div class="total-unit">${t('公噸 CO₂e / 年', 'tonnes CO₂e / year')}</div>
+        <div class="saved-meta">${t('儲存於', 'Saved')} ${fmtDate(row.created_at)} · ID: ${esc(row.id)}</div>
+      </section>
+
+      <section class="card">
+        <h2>${t('輸入資料', 'Inputs')}</h2>
+        <div class="kv-list">
+          <div class="kv-row"><span class="k">${t('每月電費', 'Monthly electricity')}</span><span class="v">${fmtNT(inputs.electricity || 0)}</span></div>
+          <div class="kv-row"><span class="k">${t('每月瓦斯費', 'Monthly gas')}</span><span class="v">${fmtNT(inputs.gas || 0)}</span></div>
+          <div class="kv-row"><span class="k">${t('每週機車油錢', 'Weekly scooter fuel')}</span><span class="v">${fmtNT(inputs.scooter || 0)}</span></div>
+          <div class="kv-row"><span class="k">${t('每週汽車油錢', 'Weekly car fuel')}</span><span class="v">${fmtNT(inputs.car || 0)}</span></div>
+          <div class="kv-row"><span class="k">${t('每年國際航班', 'Annual flights')}</span><span class="v">${inputs.flights ?? 0}</span></div>
+          <div class="kv-row"><span class="k">${t('飲食類型', 'Diet')}</span><span class="v">${t(dietLabel.zh, dietLabel.en)}</span></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>${t('分類細項', 'Breakdown')}</h2>
+        ${breakdownHtml}
+      </section>
+
+      <section class="card">
+        <h2>${t('與平均比較', 'Comparison')}</h2>
+        <div class="compare-row you">
+          <span class="name">${t('這份結果', 'This result')}</span>
+          <span class="val">${fmtNum(totalT, 2)} ${t('噸','t')}</span>
+        </div>
+        <div class="compare-row">
+          <span class="name">${t('台灣平均', 'Taiwan average')}</span>
+          <span class="val">10.96 ${t('噸','t')}</span>
+        </div>
+        <div class="compare-row">
+          <span class="name">${t('全球平均', 'Global average')}</span>
+          <span class="val">4.66 ${t('噸','t')}</span>
+        </div>
+      </section>
+
+      <section class="cta-section">
+        <a href="index.html" class="cta-btn">${t('算你自己的 →', 'Calculate your own →')}</a>
+        <div class="cta-sub">${t('結果僅供教育用途，採用台灣官方排放係數。', 'Educational estimate using Taiwan official emission factors.')}</div>
+      </section>
+    `;
+  }
+
+  function renderBusiness(row) {
+    const inputs = row.data?.inputs || {};
+    const scopes = row.data?.scope_kg || {};
+    const totalT = Number(row.total_co2e) || 0;
+    const totalKg = totalT * 1000;
+    const s1 = Number(scopes.scope1) || 0;
+    const s2 = Number(scopes.scope2) || 0;
+    const s3 = Number(scopes.scope3) || 0;
+    const industryLabel = INDUSTRY_LABELS[inputs.industry] || { zh: '—', en: '—' };
+    const pct = v => totalKg > 0 ? ((v / totalKg) * 100).toFixed(0) + '%' : '—';
+
+    // Stacked bar widths
+    const p1 = totalKg > 0 ? (s1 / totalKg * 100).toFixed(2) : 0;
+    const p2 = totalKg > 0 ? (s2 / totalKg * 100).toFixed(2) : 0;
+    const p3 = totalKg > 0 ? (s3 / totalKg * 100).toFixed(2) : 0;
+
+    // Fee panel (manufacturing only)
+    let feeHtml = '';
+    if (inputs.industry === 'manufacturing') {
+      const s12T = (s1 + s2) / 1000;
+      if (s12T < FEE.threshold) {
+        feeHtml = `
+          <section class="card">
+            <h2>${t('2026 台灣碳費試算', 'Taiwan 2026 carbon fee')}</h2>
+            <div class="fee-row">
+              <span class="name">${t('範疇一二合計', 'Scope 1+2 total')}</span>
+              <span class="val">${fmtNum(s12T, 2)} ${t('噸','t')}</span>
+            </div>
+            <div class="fee-row">
+              <span class="name">${t('門檻', 'Threshold')}</span>
+              <span class="val">25,000 ${t('噸','t')}</span>
+            </div>
+            <div class="fee-note">${t('未達 25,000 噸門檻，目前不需繳交碳費。', 'Below 25,000 t threshold — no fee owed.')}</div>
+          </section>
+        `;
+      } else {
+        const chargeable = s12T - FEE.threshold;
+        feeHtml = `
+          <section class="card">
+            <h2>${t('2026 台灣碳費試算', 'Taiwan 2026 carbon fee')}</h2>
+            <div class="fee-row"><span class="name">${t('應稅排放（超過門檻）', 'Chargeable emissions (above threshold)')}</span><span class="val">${fmtNum(chargeable, 0)} ${t('噸','t')}</span></div>
+            <div class="fee-row"><span class="name">${t('一般費率 NT$300/噸', 'Normal rate NT$300/t')}</span><span class="val">${fmtMoney(chargeable * FEE.normal)}</span></div>
+            <div class="fee-row"><span class="name">${t('優惠 A：NT$50/噸', 'Discount A: NT$50/t')}</span><span class="val">${fmtMoney(chargeable * FEE.planA)}</span></div>
+            <div class="fee-row"><span class="name">${t('優惠 B：NT$100/噸', 'Discount B: NT$100/t')}</span><span class="val">${fmtMoney(chargeable * FEE.planB)}</span></div>
+            <div class="fee-note">${t('優惠費率須依環境部規定申請自主減量計畫並經核可。', 'Discounted rates require an approved voluntary reduction plan per MOENV.')}</div>
+          </section>
+        `;
+      }
+    }
+
+    return `
+      <section class="result-header">
+        <div class="breadcrumb">${t('企業碳盤查', 'SME Carbon Inventory')}</div>
+        <div class="total-value">${fmtNum(totalT, 2)}</div>
+        <div class="total-unit">${t('公噸 CO₂e / 年', 'tonnes CO₂e / year')}</div>
+        <div class="saved-meta">${t('儲存於', 'Saved')} ${fmtDate(row.created_at)} · ID: ${esc(row.id)}</div>
+      </section>
+
+      <section class="card">
+        <h2>${t('公司資料', 'Company profile')}</h2>
+        <div class="kv-list">
+          <div class="kv-row"><span class="k">${t('產業別', 'Industry')}</span><span class="v">${t(industryLabel.zh, industryLabel.en)}</span></div>
+          <div class="kv-row"><span class="k">${t('員工人數', 'Employees')}</span><span class="v">${inputs.employees ?? 0}</span></div>
+          <div class="kv-row"><span class="k">${t('年營業額', 'Revenue')}</span><span class="v">NT$${(inputs.revenue || 0).toLocaleString()} ${t('百萬', 'million')}</span></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>${t('範疇別排放', 'Emissions by Scope')}</h2>
+        <div class="stacked-bar">
+          <div class="stack-s1" style="width:${p1}%"></div>
+          <div class="stack-s2" style="width:${p2}%"></div>
+          <div class="stack-s3" style="width:${p3}%"></div>
+        </div>
+        <div class="scope-row">
+          <div class="label"><span class="scope-dot dot-s1"></span> ${t('範疇一 直接排放', 'Scope 1 Direct')}</div>
+          <div class="val">${fmtT(s1)} ${t('噸','t')}<span class="pct">${pct(s1)}</span></div>
+        </div>
+        <div class="scope-row">
+          <div class="label"><span class="scope-dot dot-s2"></span> ${t('範疇二 能源間接', 'Scope 2 Energy')}</div>
+          <div class="val">${fmtT(s2)} ${t('噸','t')}<span class="pct">${pct(s2)}</span></div>
+        </div>
+        <div class="scope-row">
+          <div class="label"><span class="scope-dot dot-s3"></span> ${t('範疇三 其他間接', 'Scope 3 Other')}</div>
+          <div class="val">${fmtT(s3)} ${t('噸','t')}<span class="pct">${pct(s3)}</span></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>${t('活動數據', 'Activity data')}</h2>
+        <div class="kv-list">
+          <div class="kv-row"><span class="k">${t('天然氣', 'Natural gas')}</span><span class="v">${(inputs.ng || 0).toLocaleString()} m³</span></div>
+          <div class="kv-row"><span class="k">${t('柴油', 'Diesel')}</span><span class="v">${(inputs.diesel || 0).toLocaleString()} L</span></div>
+          <div class="kv-row"><span class="k">${t('汽油', 'Gasoline')}</span><span class="v">${(inputs.gasoline || 0).toLocaleString()} L</span></div>
+          <div class="kv-row"><span class="k">${t('冷媒 R-410A', 'R-410A')}</span><span class="v">${(inputs.r410a || 0).toLocaleString()} kg</span></div>
+          <div class="kv-row"><span class="k">${t('用電量', 'Electricity')}</span><span class="v">${(inputs.electricity || 0).toLocaleString()} kWh</span></div>
+          <div class="kv-row"><span class="k">${t('綠電/T-REC', 'Green / T-REC')}</span><span class="v">${(inputs.green || 0).toLocaleString()} kWh</span></div>
+          <div class="kv-row"><span class="k">${t('採購金額', 'Procurement')}</span><span class="v">NT$${(inputs.procurement || 0).toLocaleString()} ${t('百萬', 'million')}</span></div>
+          <div class="kv-row"><span class="k">${t('通勤距離(單程)', 'Commute (one-way)')}</span><span class="v">${inputs.commute ?? 0} km</span></div>
+          <div class="kv-row"><span class="k">${t('商務航班', 'Business flights')}</span><span class="v">${inputs.flights ?? 0}</span></div>
+        </div>
+      </section>
+
+      ${feeHtml}
+
+      <section class="cta-section">
+        <a href="index.html" class="cta-btn">${t('算你自己的 →', 'Calculate your own →')}</a>
+        <div class="cta-sub">${t('結果僅供教育用途，不能取代正式 ISO 14064 盤查。', 'Educational estimate — not a substitute for formal ISO 14064 inventory.')}</div>
+      </section>
+    `;
+  }
+
+  function showState(which, errorMsg) {
+    document.getElementById('stateLoading').hidden = which !== 'loading';
+    document.getElementById('stateNotFound').hidden = which !== 'notfound';
+    document.getElementById('resultContent').hidden = which !== 'content';
+    if (which === 'notfound' && errorMsg) {
+      const p = document.getElementById('notFoundMsg');
+      p.dataset.zh = errorMsg.zh;
+      p.dataset.en = errorMsg.en;
+      p.textContent = currentLang === 'zh' ? errorMsg.zh : errorMsg.en;
+    }
+  }
+
+  function render() {
+    if (!loadedRow) return;
+    const container = document.getElementById('resultContent');
+    container.innerHTML = loadedRow.calculator_type === 'business'
+      ? renderBusiness(loadedRow)
+      : renderHousehold(loadedRow);
+  }
+
+  // === Language toggle ===
+  const STORAGE_KEY = 'tct_lang';
+  const langBtn = document.getElementById('langToggle');
+
+  function applyLang(lang) {
+    currentLang = lang;
+    document.documentElement.lang = lang === 'zh' ? 'zh-Hant' : 'en';
+    document.querySelectorAll('[data-zh]').forEach(el => {
+      const val = el.dataset[lang];
+      if (val !== undefined) el.textContent = val;
+    });
+    langBtn.textContent = lang === 'zh' ? 'English' : '中文';
+    try { localStorage.setItem(STORAGE_KEY, lang); } catch (e) {}
+    if (loadedRow) render();
+  }
+
+  let initial = 'zh';
+  try {
+    const s = localStorage.getItem(STORAGE_KEY);
+    if (s === 'zh' || s === 'en') initial = s;
+  } catch (e) {}
+  langBtn.addEventListener('click', () => applyLang(currentLang === 'zh' ? 'en' : 'zh'));
+  applyLang(initial);
+
+  // === Load result ===
+  async function init() {
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+    if (!id) {
+      showState('notfound', {
+        zh: '網址缺少 ID 參數，請從分享連結進入。',
+        en: 'No ID provided. Open this page from a share link.'
+      });
+      return;
+    }
+    try {
+      const row = await loadResult(id);
+      if (!row) {
+        showState('notfound');
+        return;
+      }
+      loadedRow = row;
+      render();
+      showState('content');
+    } catch (e) {
+      showState('notfound', {
+        zh: '無法連線到資料庫：' + (e.message || '請稍後再試'),
+        en: 'Could not reach the database: ' + (e.message || 'please try again')
+      });
+    }
+  }
+
+  init();
+</script>
+</body>
+</html>

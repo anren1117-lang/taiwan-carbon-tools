@@ -297,6 +297,65 @@
   }
   .share-btn:hover { border-color: var(--accent); color: var(--accent); }
   .share-btn.copied { background: var(--accent-tint); color: var(--accent); border-color: var(--accent); }
+  .save-share-btn {
+    width: 100%;
+    padding: 11px 16px;
+    margin-top: 20px;
+    font-family: inherit;
+    font-size: 14px;
+    background: var(--accent);
+    color: white;
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .save-share-btn:hover { background: var(--accent-dark); border-color: var(--accent-dark); }
+  .save-share-btn:disabled { opacity: 0.65; cursor: wait; }
+  .share-panel {
+    margin-top: 12px;
+    padding: 14px;
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+  }
+  .share-panel-label { color: var(--text-muted); font-size: 12px; margin-bottom: 6px; }
+  .share-panel-url {
+    word-break: break-all;
+    padding: 8px 10px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 12px;
+    margin-bottom: 8px;
+    color: var(--text);
+    min-height: 16px;
+  }
+  .copy-btn {
+    width: 100%;
+    padding: 8px;
+    font-family: inherit;
+    font-size: 13px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background 0.15s;
+  }
+  .copy-btn:hover { background: var(--accent-dark); }
+  .copy-btn.copied { background: #15803d; }
+  .share-panel-error {
+    color: #dc2626;
+    font-size: 13px;
+    padding: 6px 0 0;
+  }
+  @media (prefers-color-scheme: dark) {
+    .share-panel-error { color: #fca5a5; }
+  }
 </style>
 </head>
 <body>
@@ -482,7 +541,14 @@
         </div>
       </div>
 
+      <button class="save-share-btn" id="saveShareBtn" data-zh="儲存並分享 ↗" data-en="Save & Share ↗">儲存並分享 ↗</button>
       <button class="share-btn" id="shareBtn" data-zh="分享結果" data-en="Share result">分享結果</button>
+      <div class="share-panel" id="sharePanel" hidden>
+        <div class="share-panel-label" data-zh="你的分享連結：" data-en="Your shareable link:">你的分享連結：</div>
+        <div class="share-panel-url" id="shareUrlText"></div>
+        <button class="copy-btn" id="copyUrlBtn" data-zh="複製連結" data-en="Copy URL">複製連結</button>
+        <div class="share-panel-error" id="shareErrorText" hidden></div>
+      </div>
     </div>
   </div>
 
@@ -855,6 +921,118 @@
   shareBtn.addEventListener('click', handleShare);
 
   applyLang(initial);
+</script>
+
+<script type="module">
+  import { saveResult } from './supabase-client.js';
+
+  const SITE_BASE = 'https://anren1117-lang.github.io/taiwan-carbon-tools/r.html';
+
+  // KEEP IN SYNC with the main business script's EF constants above.
+  const EF = {
+    electricity: 0.474,
+    ng: 1.879,
+    diesel: 2.606,
+    gasoline: 2.263,
+    r410a: 2088,
+    procurementPerNT: 0.0004,
+    commutePerKm: 0.36,
+    workingDays: 250,
+    flight: 1500
+  };
+
+  const saveBtn = document.getElementById('saveShareBtn');
+  const sharePanel = document.getElementById('sharePanel');
+  const shareUrlText = document.getElementById('shareUrlText');
+  const copyUrlBtn = document.getElementById('copyUrlBtn');
+  const shareErrorText = document.getElementById('shareErrorText');
+
+  function curLang() {
+    return document.documentElement.lang === 'en' ? 'en' : 'zh';
+  }
+
+  function gatherData() {
+    const industry = document.getElementById('industry').value;
+    const employees = +document.getElementById('employees').value || 0;
+    const revenue = +document.getElementById('revenue').value || 0;
+    const ng = +document.getElementById('ng').value || 0;
+    const diesel = +document.getElementById('diesel').value || 0;
+    const gasoline = +document.getElementById('gasoline').value || 0;
+    const r410a = +document.getElementById('r410a').value || 0;
+    const electricity = +document.getElementById('electricity').value || 0;
+    const green = Math.min(+document.getElementById('green').value || 0, electricity);
+    const procurement = +document.getElementById('procurement').value || 0;
+    const commute = +document.getElementById('commute').value || 0;
+    const flights = +document.getElementById('flights').value || 0;
+
+    const scope1Kg = ng * EF.ng + diesel * EF.diesel + gasoline * EF.gasoline + r410a * EF.r410a;
+    const scope2Kg = Math.max(0, electricity - green) * EF.electricity;
+    const scope3Kg =
+      procurement * 1000000 * EF.procurementPerNT +
+      employees * commute * EF.commutePerKm * EF.workingDays * 2 +
+      flights * EF.flight;
+    const totalKg = scope1Kg + scope2Kg + scope3Kg;
+
+    return {
+      data: {
+        inputs: {
+          industry, employees, revenue,
+          ng, diesel, gasoline, r410a,
+          electricity, green,
+          procurement, commute, flights
+        },
+        scope_kg: {
+          scope1: scope1Kg,
+          scope2: scope2Kg,
+          scope3: scope3Kg
+        }
+      },
+      totalT: totalKg / 1000
+    };
+  }
+
+  saveBtn.addEventListener('click', async () => {
+    saveBtn.disabled = true;
+    saveBtn.textContent = curLang() === 'zh' ? '儲存中…' : 'Saving…';
+    shareErrorText.hidden = true;
+    shareErrorText.textContent = '';
+    shareUrlText.textContent = '';
+    sharePanel.hidden = true;
+
+    try {
+      const { data, totalT } = gatherData();
+      const id = await saveResult('business', data, totalT);
+      const url = SITE_BASE + '?id=' + id;
+      shareUrlText.textContent = url;
+      sharePanel.hidden = false;
+    } catch (e) {
+      sharePanel.hidden = false;
+      shareUrlText.textContent = '';
+      shareErrorText.hidden = false;
+      shareErrorText.textContent = curLang() === 'zh'
+        ? '儲存失敗：' + (e.message || '請稍後再試')
+        : 'Save failed: ' + (e.message || 'please try again');
+    } finally {
+      saveBtn.disabled = false;
+      saveBtn.textContent = saveBtn.dataset[curLang()];
+    }
+  });
+
+  copyUrlBtn.addEventListener('click', async () => {
+    const url = shareUrlText.textContent;
+    if (!url) return;
+    try {
+      await navigator.clipboard.writeText(url);
+      copyUrlBtn.classList.add('copied');
+      copyUrlBtn.textContent = curLang() === 'zh' ? '已複製！' : 'Copied!';
+      setTimeout(() => {
+        copyUrlBtn.classList.remove('copied');
+        copyUrlBtn.textContent = copyUrlBtn.dataset[curLang()];
+      }, 1500);
+    } catch (e) {
+      alert(curLang() === 'zh' ? '複製失敗，請手動複製連結。' : 'Copy failed — please copy manually.');
+    }
+  });
 </script>
 </body>
 </html>
