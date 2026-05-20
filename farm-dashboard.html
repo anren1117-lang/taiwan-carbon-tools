@@ -650,6 +650,178 @@
     border-top: 1px solid var(--border);
   }
 
+  /* ── Financial summary cards ──────────────────────────── */
+  .money-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+  @media (max-width: 900px) { .money-row { grid-template-columns: 1fr; } }
+  .money-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 22px;
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+  }
+  .money-card.cost::before, .money-card.income::before, .money-card.intensity::before {
+    content: "";
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  }
+  .money-card.cost::before      { background: linear-gradient(90deg, #d97706, #f59e0b); }
+  .money-card.income::before    { background: linear-gradient(90deg, #1D9E75, #34d399); }
+  .money-card.intensity::before { background: linear-gradient(90deg, #2563eb, #7c3aed); }
+  .money-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+  .money-value {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    font-variant-numeric: tabular-nums;
+  }
+  .money-value.income    { color: var(--accent); }
+  .money-value.intensity { color: var(--s2); }
+  .money-unit { font-size: 12px; color: var(--text-muted); margin-top: 6px; }
+  .money-breakdown {
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--border);
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+  .money-breakdown .mb-row {
+    display: flex; justify-content: space-between; gap: 8px;
+  }
+  .money-breakdown .mb-row strong {
+    color: var(--text); font-variant-numeric: tabular-nums; font-weight: 600;
+  }
+  .money-tag {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 2px 9px;
+    font-size: 11px;
+    border-radius: 999px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+  .money-tag.good   { background: rgba(29,158,117,0.12); color: var(--accent); }
+  .money-tag.warn   { background: rgba(180,83,9,0.12);   color: var(--pending); }
+  .money-tag.neutral{ background: var(--bg-subtle); color: var(--text-muted); }
+
+  /* ── Per-kg yield intensity panel ─────────────────────── */
+  .yield-chart {
+    margin-top: 14px;
+    padding: 16px;
+    background: var(--bg-subtle);
+    border-radius: 10px;
+  }
+  .yield-row {
+    display: grid;
+    grid-template-columns: 130px 1fr auto;
+    gap: 14px;
+    align-items: center;
+    padding: 6px 0;
+    font-size: 13px;
+  }
+  .yield-row .yr-label { font-size: 12px; color: var(--text-muted); }
+  .yield-row .yr-track {
+    height: 8px;
+    background: var(--bg-card);
+    border-radius: 999px;
+    overflow: hidden;
+    position: relative;
+  }
+  .yield-row .yr-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: var(--s2);
+  }
+  .yield-row.you .yr-fill { background: var(--accent); }
+  .yield-row .yr-val { font-weight: 600; font-variant-numeric: tabular-nums; min-width: 88px; text-align: right; }
+  .yield-row.you .yr-val { color: var(--accent); }
+  .yield-row.you .yr-label { color: var(--text); font-weight: 600; }
+  .yield-tier-tag {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .yield-tier-tag.premium  { background: rgba(29,158,117,0.15); color: var(--accent-dark); }
+  .yield-tier-tag.top      { background: rgba(29,158,117,0.10); color: var(--ok); }
+  .yield-tier-tag.average  { background: var(--bg-subtle); color: var(--text-muted); }
+  .yield-tier-tag.below    { background: rgba(180,83,9,0.10); color: var(--pending); }
+
+  /* ── Subsidies & carbon income panel ──────────────────── */
+  .sub-card {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 14px;
+    padding: 14px 16px;
+    background: var(--bg-subtle);
+    border-radius: 10px;
+    align-items: center;
+    margin-bottom: 8px;
+    border: 1px solid var(--border);
+  }
+  .sub-card.eligible { border-color: rgba(29,158,117,0.35); background: rgba(29,158,117,0.05); }
+  .sub-card.partial { opacity: 0.7; }
+  .sub-card .sc-name { font-size: 14px; font-weight: 600; }
+  .sub-card .sc-agency {
+    display: inline-block; margin-left: 6px;
+    font-size: 11px; color: var(--text-muted); font-weight: 400;
+  }
+  .sub-card .sc-note { font-size: 12px; color: var(--text-muted); margin-top: 4px; line-height: 1.55; }
+  .sub-card .sc-amount { text-align: right; white-space: nowrap; }
+  .sub-card .sc-amount strong {
+    display: block;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+  .sub-card.partial .sc-amount strong { color: var(--text-muted); }
+  .sub-card .sc-amount span { font-size: 11px; color: var(--text-muted); }
+  .sub-card .sc-status {
+    display: inline-block;
+    padding: 2px 8px;
+    margin-bottom: 4px;
+    font-size: 10.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-radius: 999px;
+  }
+  .sub-card .sc-status.eligible { background: rgba(29,158,117,0.18); color: var(--accent-dark); }
+  .sub-card .sc-status.partial  { background: rgba(180,83,9,0.12); color: var(--pending); }
+  .credit-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px;
+    margin-top: 4px;
+  }
+  .credit-tier {
+    padding: 12px 14px;
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+  }
+  .credit-tier .ct-name { font-size: 12px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
+  .credit-tier .ct-price { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+  .credit-tier .ct-value { font-size: 22px; font-weight: 700; color: var(--accent); margin-top: 6px; font-variant-numeric: tabular-nums; }
+
   /* ── Data sources panel ─────────────────────────────────── */
   .ds-row {
     padding: 14px 0;
@@ -757,6 +929,28 @@
     </div>
   </section>
 
+  <!-- ── Financial summary ─────────────────────────────────── -->
+  <section class="money-row">
+    <div class="money-card cost">
+      <div class="money-label" data-zh="排放年成本" data-en="Annual emission cost">排放年成本</div>
+      <div class="money-value" id="moneyCost">NT$ —</div>
+      <div class="money-unit" data-zh="燃料 / 電力 / 投入物 帳單總和" data-en="Sum of fuel / power / input bills">燃料 / 電力 / 投入物 帳單總和</div>
+      <div class="money-breakdown" id="moneyCostBreakdown"></div>
+    </div>
+    <div class="money-card income">
+      <div class="money-label" data-zh="潛在年收益" data-en="Potential annual upside">潛在年收益</div>
+      <div class="money-value income" id="moneyIncome">NT$ —</div>
+      <div class="money-unit" data-zh="補助 + 碳匯價值 + 節能潛力" data-en="Subsidies + carbon credit + savings">補助 + 碳匯價值 + 節能潛力</div>
+      <div class="money-breakdown" id="moneyIncomeBreakdown"></div>
+    </div>
+    <div class="money-card intensity">
+      <div class="money-label" data-zh="每公斤產品碳強度" data-en="Per-kg product intensity">每公斤產品碳強度</div>
+      <div class="money-value intensity" id="moneyIntensity">— kg</div>
+      <div class="money-unit" id="moneyIntensityUnit" data-zh="kg CO₂e / kg 產品" data-en="kg CO₂e / kg product">kg CO₂e / kg 產品</div>
+      <div class="money-breakdown" id="moneyIntensityContext"></div>
+    </div>
+  </section>
+
   <!-- ── KPI cards ─────────────────────────────────────────── -->
   <section class="kpis">
     <div class="kpi">
@@ -805,6 +999,13 @@
     </div>
     <svg class="chart-svg" id="electricityChart" preserveAspectRatio="none"></svg>
     <div class="chart-summary" id="chartSummary"></div>
+  </section>
+
+  <!-- ── Per-kg product intensity panel ───────────────────── -->
+  <section class="panel" id="yieldPanel">
+    <div class="panel-title" data-zh="每公斤產品碳強度（買方視角）" data-en="Per-kg carbon intensity (buyer view)">每公斤產品碳強度（買方視角）</div>
+    <div class="panel-sub" data-zh="買方（外銷、量販、餐飲、ESG 採購）比較的是「每公斤產品的碳成本」，而非「每公頃排放」。 此數值決定能否進入溢價通路。" data-en="Buyers (export, large retail, F&B, ESG procurement) compare carbon per kg of product, not per hectare. This metric gates access to premium channels.">買方（外銷、量販、餐飲、ESG 採購）比較的是「每公斤產品的碳成本」，而非「每公頃排放」。 此數值決定能否進入溢價通路。</div>
+    <div class="yield-chart" id="yieldChart"></div>
   </section>
 
   <!-- ── Data sources & sensor connections ────────────────── -->
@@ -881,6 +1082,18 @@
     </div>
   </section>
 
+  <!-- ── Subsidies & carbon income ────────────────────────── -->
+  <section class="panel">
+    <div class="panel-title" data-zh="補助與碳匯收益" data-en="Subsidies & carbon income">補助與碳匯收益</div>
+    <div class="panel-sub" data-zh="依目前耕作管理與感測器部署狀況評估的台灣補助計畫資格；土壤碳匯增量則依不同市場價格估算潛在價值。本表為諮詢起點，實際資格與金額以主管機關公告為準。" data-en="Eligible Taiwan subsidy programs based on current practices and sensor deployment. Soil sink growth valued at multiple market prices. Indicative — confirm with the relevant agency before applying.">依目前耕作管理與感測器部署狀況評估的台灣補助計畫資格；土壤碳匯增量則依不同市場價格估算潛在價值。本表為諮詢起點，實際資格與金額以主管機關公告為準。</div>
+    <div id="subsidyList"></div>
+    <div style="margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border);">
+      <div class="panel-title" style="font-size: 13px; margin-bottom: 4px;" data-zh="碳匯市場價值（依目前年度匯量）" data-en="Carbon credit value (at current annual sink)">碳匯市場價值（依目前年度匯量）</div>
+      <div class="panel-sub" style="margin-bottom: 12px;" data-zh="不同碳市場的潛在年收入。實際申請需具備可驗證的方法學（如 VM0042）與第三方查驗，目前多為大型聚合者主導。" data-en="Potential annual income across carbon markets. Real issuance requires a verifiable methodology (e.g. VM0042) and third-party verification — currently dominated by large aggregators.">不同碳市場的潛在年收入。實際申請需具備可驗證的方法學（如 VM0042）與第三方查驗，目前多為大型聚合者主導。</div>
+      <div class="credit-grid" id="creditGrid"></div>
+    </div>
+  </section>
+
   <!-- ── Reduction roadmap ────────────────────────────────── -->
   <section class="panel">
     <div class="panel-title" data-zh="減量路徑：前三優先" data-en="Reduction roadmap: top 3">減量路徑：前三優先</div>
@@ -905,6 +1118,19 @@
               <option value="fruit" data-zh="果樹 / 經濟作物" data-en="Fruit / orchard">果樹 / 經濟作物</option>
               <option value="mixed" data-zh="混合作物" data-en="Mixed crops">混合作物</option>
               <option value="livestock" data-zh="畜牧為主" data-en="Livestock-led">畜牧為主</option>
+            </select>
+          </div>
+          <div><label data-zh="年產量 (kg)" data-en="Annual yield (kg)">年產量 <span class="u">(kg)</span></label><input type="number" id="annualYieldKg" min="0" step="100"></div>
+          <div>
+            <label data-zh="產品類別（用於 per-kg 對比）" data-en="Product category (for per-kg benchmark)">產品類別 <span class="u">(per-kg)</span></label>
+            <select id="productCategory">
+              <option value="vegetables_leaf"  data-zh="葉菜類"     en="Leafy vegetables">葉菜類</option>
+              <option value="vegetables_root"  data-zh="根莖類蔬菜"  data-en="Root vegetables">根莖類蔬菜</option>
+              <option value="rice"             data-zh="稻米"       data-en="Rice">稻米</option>
+              <option value="fruit"            data-zh="果樹"       data-en="Fruit">果樹</option>
+              <option value="livestock_dairy"  data-zh="乳製品"     data-en="Dairy">乳製品</option>
+              <option value="livestock_meat"   data-zh="肉品"       data-en="Meat">肉品</option>
+              <option value="mixed"            data-zh="綜合作物"   data-en="Mixed">綜合作物</option>
             </select>
           </div>
         </div>
@@ -1043,7 +1269,10 @@
       // Sinks
       biochar: 0,
       trees: 30,
-      practices: { coverCrop: true, noTill: false, compost: true, residue: true }
+      practices: { coverCrop: true, noTill: false, compost: true, residue: true },
+      // Yield (for per-kg intensity & buyer-facing benchmarks)
+      annualYieldKg: 50000,
+      productCategory: "vegetables_leaf"
     },
 
     // Renewables / alternative systems on the farm
@@ -1140,6 +1369,98 @@
     waste: 0.6            // per kg     (mixed organic/inorganic avg)
   };
   const MANURE_MULT = { none: 1.0, composted: 1.0, daily: 1.1, lagoon: 1.3 };
+
+  // ── Per-kg product intensity benchmarks (kg CO₂e per kg product) ─
+  // Indicative figures from a mix of sources (FAO LCA, Carbon Trust,
+  // Taiwan academic LCA). Real per-product LCA varies widely.
+  const PRODUCT_BENCHMARKS = {
+    vegetables_leaf:  { name: { zh: "葉菜類", en: "Leafy vegetables" },     taiwan_avg: 0.35, eu_avg: 0.50, top_quartile: 0.20, premium: 0.10 },
+    vegetables_root:  { name: { zh: "根莖類蔬菜", en: "Root vegetables" }, taiwan_avg: 0.30, eu_avg: 0.40, top_quartile: 0.18, premium: 0.09 },
+    rice:             { name: { zh: "稻米", en: "Rice" },                    taiwan_avg: 2.50, eu_avg: 2.80, top_quartile: 1.80, premium: 1.20 },
+    fruit:            { name: { zh: "果樹", en: "Fruit" },                   taiwan_avg: 0.40, eu_avg: 0.60, top_quartile: 0.25, premium: 0.15 },
+    livestock_dairy:  { name: { zh: "乳製品", en: "Dairy" },                 taiwan_avg: 1.20, eu_avg: 1.40, top_quartile: 0.90, premium: 0.70 },
+    livestock_meat:   { name: { zh: "肉品", en: "Meat" },                     taiwan_avg: 8.00, eu_avg: 12.0, top_quartile: 6.00, premium: 4.50 },
+    mixed:            { name: { zh: "綜合作物", en: "Mixed produce" },        taiwan_avg: 0.40, eu_avg: 0.55, top_quartile: 0.22, premium: 0.12 }
+  };
+
+  // ── Carbon market prices (NT$ per t CO₂e) — INDICATIVE ──────────
+  // Taiwan voluntary mechanism (自願減量機制) is launching with
+  // unsettled pricing. Voluntary global market ranges widely. Premium
+  // nature-based (e.g. VM0042 soil) commands the top end.
+  const CARBON_MARKET_PRICES = {
+    taiwan_voluntary:     500,  // 自願減量機制 launching
+    global_voluntary:     600,  // ~USD 20/t typical
+    nature_based_premium: 1800  // VM0042 / regenerative premium
+  };
+
+  // ── Taiwan subsidy programs ─────────────────────────────────────
+  // Eligibility rules below are STRUCTURAL ESTIMATES based on common
+  // criteria for each program — actual rules at agency level differ.
+  // Treat as a consulting starting point, not authoritative.
+  const SUBSIDY_PROGRAMS = [
+    {
+      id: "friendly-farming",
+      name:    { zh: "友善耕作補助", en: "Friendly Farming Subsidy" },
+      agency:  { zh: "農業部", en: "Ministry of Agriculture" },
+      rateNTPerHa: 30000,
+      eligibility: (inp) =>
+        inp.practices.coverCrop &&
+        (inp.practices.compost || inp.practices.residue) &&
+        inp.chemicals < 50 * Math.max(inp.farmSize, 0.1),
+      note: { zh: "覆蓋作物 + 堆肥/殘體還田 + 低化學品使用",
+              en: "Cover crop + compost/residue + low chemical use" }
+    },
+    {
+      id: "green-payment",
+      name:    { zh: "綠色友善環境給付", en: "Green Environment Payment" },
+      agency:  { zh: "農業部", en: "MOA" },
+      rateNTPerHa: 45000,
+      eligibility: (inp) =>
+        ['coverCrop', 'noTill', 'compost', 'residue'].filter(p => inp.practices[p]).length >= 3,
+      note: { zh: "三項以上土地管理（覆蓋作物 / 免耕 / 堆肥 / 殘體還田）",
+              en: "≥3 land practices (cover crop / no-till / compost / residue)" }
+    },
+    {
+      id: "carbon-pilot",
+      name:    { zh: "碳匯先行區域試辦", en: "Soil Carbon Pilot Program" },
+      agency:  { zh: "農業部", en: "MOA" },
+      rateNTPerHa: 20000,
+      eligibility: (inp, r) =>
+        r.sinkTotal > 1000 &&
+        CLIENT_CONFIG.soilTest && CLIENT_CONFIG.soilTest.socPercent != null,
+      note: { zh: "需有土壤採樣基準 + 可量測 SOC 累積",
+              en: "Requires baseline soil test + measurable SOC accumulation" }
+    },
+    {
+      id: "smart-ag",
+      name:    { zh: "智慧農業計畫", en: "Smart Agriculture Grants" },
+      agency:  { zh: "農業部", en: "MOA" },
+      flatRate: 50000,
+      eligibility: () =>
+        CLIENT_CONFIG.dataSources &&
+        CLIENT_CONFIG.dataSources.some(d => d.method === 'sensor'),
+      note: { zh: "已部署 IoT 感測器（如即時電表）符合智慧化方向",
+              en: "Active IoT sensor(s) align with smart-ag direction" }
+    },
+    {
+      id: "electric-machinery",
+      name:    { zh: "農機具電動化補助", en: "Electric Farm Equipment Grant" },
+      agency:  { zh: "農業部 + 經濟部", en: "MOA + MOEA" },
+      flatRate: 100000,
+      eligibility: (inp) => inp.diesel > 300 || inp.gasoline > 50,
+      note: { zh: "現有柴油/汽油機具符合電動化轉換評估",
+              en: "Existing diesel/gasoline equipment qualifies for electrification review" }
+    },
+    {
+      id: "organic-cert",
+      name:    { zh: "有機驗證輔導", en: "Organic Certification Support" },
+      agency:  { zh: "農業部", en: "MOA" },
+      rateNTPerHa: 15000,
+      eligibility: (inp) => inp.chemicals === 0 && inp.nFert <= 80 * Math.max(inp.farmSize, 0.1),
+      note: { zh: "零化學農藥/複肥 + 低合成氮肥 → 申請有機驗證輔導",
+              en: "Zero chemicals + low synthetic N → organic certification support" }
+    }
+  ];
   const SINK = {
     coverCrop: 1100, noTill: 500, compost: 800, residue: 400,
     biochar: 3.0, treePerYear: 22
@@ -1404,7 +1725,9 @@
         noTill:    document.getElementById('p-noTill').checked,
         compost:   document.getElementById('p-compost').checked,
         residue:   document.getElementById('p-residue').checked
-      }
+      },
+      annualYieldKg:   num('annualYieldKg'),
+      productCategory: document.getElementById('productCategory').value
     };
   }
 
@@ -1425,6 +1748,8 @@
     Object.keys(i.practices).forEach(k => {
       document.getElementById('p-' + k).checked = i.practices[k];
     });
+    if (i.annualYieldKg != null) set('annualYieldKg', i.annualYieldKg);
+    if (i.productCategory) document.getElementById('productCategory').value = i.productCategory;
   }
 
   // ── Scenario state ───────────────────────────────────────────────
@@ -1689,6 +2014,204 @@
     } else {
       sn.style.display = 'none';
     }
+  }
+
+  // ── Financial summary ────────────────────────────────────────────
+  // Sum up all known annual bill amounts from dataSources entries.
+  function computeAnnualCost() {
+    const ds = CLIENT_CONFIG.dataSources || [];
+    let total = 0;
+    const lines = [];
+    ds.forEach(d => {
+      if (d.billAmount && d.billRate) {
+        const annual = d.billPeriod === 'month' ? d.billAmount * 12 : d.billAmount;
+        total += annual;
+        lines.push({ id: d.id, amount: annual });
+      }
+    });
+    return { total, lines };
+  }
+
+  // Estimate savings potential — conservative 15-20% reductions on
+  // each major emission source's bill cost.
+  function computeSavingsPotential(costLines) {
+    // Diesel, gasoline, LPG, electricity → typically 15% achievable
+    // through efficiency / behavior / partial electrification
+    const savingsRate = 0.15;
+    let total = 0;
+    costLines.forEach(l => { total += l.amount * savingsRate; });
+    return total;
+  }
+
+  function computeSubsidyTotal(inp, r) {
+    let total = 0;
+    const eligible = [];
+    SUBSIDY_PROGRAMS.forEach(p => {
+      try {
+        if (p.eligibility(inp, r)) {
+          const amt = p.rateNTPerHa
+            ? p.rateNTPerHa * Math.max(inp.farmSize, 0)
+            : (p.flatRate || 0);
+          total += amt;
+          eligible.push({ program: p, amount: amt });
+        }
+      } catch (e) {}
+    });
+    return { total, eligible };
+  }
+
+  function computeCarbonCreditValue(r, market) {
+    // sink is in kg; market price is per t
+    const sinkT = r.sinkTotal / 1000;
+    return sinkT * (CARBON_MARKET_PRICES[market] || 0);
+  }
+
+  function renderMoneyHero(inp, r) {
+    const cost = computeAnnualCost();
+    const subsidies = computeSubsidyTotal(inp, r);
+    const savings = computeSavingsPotential(cost.lines);
+    const creditTaiwan = computeCarbonCreditValue(r, 'taiwan_voluntary');
+    const totalIncome = subsidies.total + savings + creditTaiwan;
+
+    // Cost card
+    document.getElementById('moneyCost').textContent = 'NT$ ' + fmt0(cost.total);
+    const costBreak = cost.lines
+      .sort((a, b) => b.amount - a.amount)
+      .slice(0, 4)
+      .map(l => {
+        const label = trObj(T.dsName[l.id] || { zh: l.id, en: l.id });
+        return `<div class="mb-row"><span>${label}</span><strong>NT$ ${fmt0(l.amount)}</strong></div>`;
+      });
+    document.getElementById('moneyCostBreakdown').innerHTML = costBreak.join('') ||
+      `<div style="color:var(--text-muted)">${tr('未匯入任何帳單金額', 'No bill amounts entered')}</div>`;
+
+    // Income card
+    document.getElementById('moneyIncome').textContent = 'NT$ ' + fmt0(totalIncome);
+    const incomeRows = [
+      { label: tr('補助計畫合計', 'Subsidies total'),       amount: subsidies.total, badge: subsidies.eligible.length ? `${subsidies.eligible.length}${tr(' 項符合', ' eligible')}` : null },
+      { label: tr('15% 節能潛力', '15% efficiency savings'), amount: savings, badge: null },
+      { label: tr('碳匯市場價值（台灣自願）', 'Carbon sink (TW voluntary)'), amount: creditTaiwan, badge: null }
+    ];
+    document.getElementById('moneyIncomeBreakdown').innerHTML = incomeRows
+      .map(row => `<div class="mb-row"><span>${row.label}${row.badge ? ' <span style="color:var(--accent);font-weight:600">(' + row.badge + ')</span>' : ''}</span><strong>NT$ ${fmt0(row.amount)}</strong></div>`)
+      .join('');
+
+    // Intensity card
+    const yieldKg = Math.max(inp.annualYieldKg || 0, 0);
+    const intensityCard = document.getElementById('moneyIntensity');
+    const ctx = document.getElementById('moneyIntensityContext');
+    if (yieldKg > 0) {
+      const intensity = r.gross / yieldKg; // kg CO2e per kg product
+      intensityCard.textContent = fmt(intensity, 3) + ' kg';
+      const bench = PRODUCT_BENCHMARKS[inp.productCategory] || PRODUCT_BENCHMARKS.mixed;
+      let tier, tierLabel;
+      if (intensity <= bench.premium)       { tier = 'good'; tierLabel = tr('溢價／高端品質', 'Premium tier'); }
+      else if (intensity <= bench.top_quartile) { tier = 'good'; tierLabel = tr('前 25% 表現', 'Top quartile'); }
+      else if (intensity <= bench.taiwan_avg)   { tier = 'neutral'; tierLabel = tr('優於台灣平均', 'Above TW avg'); }
+      else if (intensity <= bench.eu_avg)       { tier = 'warn'; tierLabel = tr('低於台灣平均', 'Below TW avg'); }
+      else                                       { tier = 'warn'; tierLabel = tr('需顯著改善', 'Needs improvement'); }
+
+      ctx.innerHTML = `
+        <div class="mb-row"><span>${tr('台灣平均', 'TW avg')}</span><strong>${fmt(bench.taiwan_avg, 3)} kg</strong></div>
+        <div class="mb-row"><span>${tr('前 25% 表現', 'Top quartile')}</span><strong>${fmt(bench.top_quartile, 3)} kg</strong></div>
+        <div class="money-tag ${tier}">${tierLabel}</div>`;
+    } else {
+      intensityCard.textContent = '—';
+      ctx.innerHTML = `<div style="color:var(--text-muted)">${tr('編輯客戶資料中的「年產量」即可顯示', 'Enter annual yield in the editor drawer to compute')}</div>`;
+    }
+  }
+
+  // ── Per-kg yield intensity panel ─────────────────────────────────
+  function renderYieldIntensity(inp, r) {
+    const panel = document.getElementById('yieldPanel');
+    const yieldKg = Math.max(inp.annualYieldKg || 0, 0);
+    if (yieldKg === 0) { panel.style.display = 'none'; return; }
+    panel.style.display = '';
+
+    const bench = PRODUCT_BENCHMARKS[inp.productCategory] || PRODUCT_BENCHMARKS.mixed;
+    const intensity = r.gross / yieldKg;
+
+    const series = [
+      { key: 'you',       label: tr('本農場', 'Your farm'), v: intensity },
+      { key: 'premium',   label: tr('溢價／高端', 'Premium / regenerative'), v: bench.premium },
+      { key: 'top',       label: tr('前 25% 表現', 'Top quartile'),         v: bench.top_quartile },
+      { key: 'taiwan',    label: tr('台灣平均', 'Taiwan avg'),               v: bench.taiwan_avg },
+      { key: 'eu',        label: tr('歐盟平均', 'EU avg'),                   v: bench.eu_avg }
+    ];
+    const max = Math.max(...series.map(s => s.v), 0.01);
+    const rowsHtml = series.map(s => `
+      <div class="yield-row ${s.key === 'you' ? 'you' : ''}">
+        <div class="yr-label">${s.label}</div>
+        <div class="yr-track"><div class="yr-fill" style="width:${(s.v / max * 100).toFixed(1)}%"></div></div>
+        <div class="yr-val">${fmt(s.v, 3)} kg/kg</div>
+      </div>`).join('');
+
+    // What this gates
+    let access;
+    if (intensity <= bench.premium) {
+      access = tr('✓ 符合溢價有機 / 再生農業認證的碳強度範圍 — 適合進入有機通路、外銷高端市場。',
+                  '✓ Within premium / regenerative range — eligible for organic premium channels and high-end export.');
+    } else if (intensity <= bench.top_quartile) {
+      access = tr('✓ 已達前 25% 表現 — 適合進入 ESG 採購、量販通路的低碳產品線。',
+                  '✓ Top-quartile performance — suitable for ESG procurement and retail low-carbon lines.');
+    } else if (intensity <= bench.taiwan_avg) {
+      access = tr('• 優於台灣平均 — 可作為產銷履歷的低碳訴求基礎。',
+                  '• Above Taiwan avg — usable as low-carbon claim on traceability labels.');
+    } else {
+      access = tr('• 仍高於台灣平均 — 進入溢價通路前需先降強度（先處理最大排放源）。',
+                  '• Above Taiwan avg — reduce intensity (start with biggest source) before targeting premium channels.');
+    }
+
+    document.getElementById('yieldChart').innerHTML = rowsHtml +
+      `<div class="yield-tier-tag ${intensity <= bench.premium ? 'premium' : intensity <= bench.top_quartile ? 'top' : intensity <= bench.taiwan_avg ? 'average' : 'below'}">${access}</div>` +
+      `<div style="margin-top: 10px; font-size: 11.5px; color: var(--text-muted); line-height: 1.6;">${tr(
+        '年產量 ' + fmt0(yieldKg) + ' kg × 強度 ' + fmt(intensity, 3) + ' = ' + fmt(r.gross / 1000, 2) + ' 公噸 CO₂e ／ 對應 ' + trObj(bench.name) + ' 類別。',
+        'Annual yield ' + fmt0(yieldKg) + ' kg × intensity ' + fmt(intensity, 3) + ' = ' + fmt(r.gross / 1000, 2) + ' t CO₂e ／ ' + trObj(bench.name) + ' category.'
+      )}</div>`;
+  }
+
+  // ── Subsidies & carbon income panel ──────────────────────────────
+  function renderSubsidies(inp, r) {
+    const subsidyHtml = SUBSIDY_PROGRAMS.map(p => {
+      let eligible = false;
+      try { eligible = p.eligibility(inp, r); } catch (e) {}
+      const amount = p.rateNTPerHa
+        ? p.rateNTPerHa * Math.max(inp.farmSize, 0)
+        : (p.flatRate || 0);
+      const amountLabel = p.rateNTPerHa
+        ? `NT$ ${fmt0(p.rateNTPerHa)} / ha`
+        : tr('一次性 / 案件審查', 'one-time / case-by-case');
+      return `
+        <div class="sub-card ${eligible ? 'eligible' : 'partial'}">
+          <div>
+            <span class="sc-status ${eligible ? 'eligible' : 'partial'}">${eligible ? tr('符合', 'eligible') : tr('條件未滿足', 'criteria unmet')}</span>
+            <div class="sc-name">${trObj(p.name)}<span class="sc-agency">· ${trObj(p.agency)}</span></div>
+            <div class="sc-note">${trObj(p.note)}</div>
+          </div>
+          <div class="sc-amount">
+            <strong>${eligible ? 'NT$ ' + fmt0(amount) : '—'}</strong>
+            <span>${amountLabel}</span>
+          </div>
+        </div>`;
+    }).join('');
+    document.getElementById('subsidyList').innerHTML = subsidyHtml;
+
+    // Carbon credit value cards
+    const sinkT = r.sinkTotal / 1000;
+    const creditRows = [
+      { id: 'taiwan_voluntary',     name: { zh: "台灣自願減量", en: "Taiwan voluntary" },     priceLabel: tr('NT$500 / 公噸（估）', 'NT$500/t (est.)') },
+      { id: 'global_voluntary',     name: { zh: "國際自願市場", en: "Global voluntary VCM" }, priceLabel: tr('NT$600 / 公噸（USD~20）', 'NT$600/t (~USD 20)') },
+      { id: 'nature_based_premium', name: { zh: "自然方案溢價", en: "Nature-based premium" }, priceLabel: tr('NT$1,800 / 公噸（USD~60）', 'NT$1,800/t (~USD 60)') }
+    ];
+    document.getElementById('creditGrid').innerHTML = creditRows.map(c => {
+      const val = sinkT * CARBON_MARKET_PRICES[c.id];
+      return `
+        <div class="credit-tier">
+          <div class="ct-name">${trObj(c.name)}</div>
+          <div class="ct-price">${c.priceLabel}</div>
+          <div class="ct-value">NT$ ${fmt0(val)}</div>
+        </div>`;
+    }).join('');
   }
 
   // ── Data sources panel ───────────────────────────────────────────
@@ -2093,9 +2616,11 @@
     const inp = readInputs();
     const r = calcFromInputs(inp);
     renderClientBanner(inp);
+    renderMoneyHero(inp, r);
     renderKPIs(inp, r);
     renderNarrative(inp, r);
     renderElectricityChart();
+    renderYieldIntensity(inp, r);
     renderDataSources(inp, r);
     renderScopeBreakdown(r);
     renderSinks(r);
@@ -2103,6 +2628,7 @@
     renderScope3Bars(r);
     renderRenewables();
     renderScenarios(inp, r);
+    renderSubsidies(inp, r);
     renderRoadmap(inp, r);
   }
 
@@ -2123,7 +2649,7 @@
   applyConfigToDom();
 
   const liveInputs = [
-    'farmSize', 'cropType',
+    'farmSize', 'cropType', 'annualYieldKg', 'productCategory',
     'diesel', 'gasoline', 'lpg', 'heatingOil',
     'nFert', 'cattle', 'pigs', 'poultry', 'manure',
     'irrigation', 'coldStorage', 'otherElec',
