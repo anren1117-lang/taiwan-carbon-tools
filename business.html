@@ -81,6 +81,25 @@
   .header-right { display: flex; align-items: center; gap: 12px; }
   .back-link { color: var(--text-muted); text-decoration: none; font-size: 13px; }
   .back-link:hover { color: var(--accent); }
+  .tool-nav { display: flex; gap: 4px; align-items: center; }
+  .tool-nav a {
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 12.5px;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s;
+  }
+  .tool-nav a:hover { color: var(--accent); background: var(--bg-subtle); }
+  .tool-nav a.current {
+    color: var(--accent);
+    background: var(--accent-tint);
+    font-weight: 600;
+    cursor: default;
+  }
+  @media (max-width: 540px) {
+    .tool-nav a { padding: 4px 9px; font-size: 11.5px; }
+  }
   .lang-toggle {
     background: var(--bg-subtle);
     border: 1px solid var(--border);
@@ -375,7 +394,11 @@
   <div class="container header-inner">
     <a href="index.html" class="logo">Taiwan Carbon Tools</a>
     <div class="header-right">
-      <a href="index.html" class="back-link" data-zh="← 返回首頁" data-en="← Home">← 返回首頁</a>
+      <nav class="tool-nav">
+        <a href="household.html" data-zh="家庭" data-en="Household">家庭</a>
+        <a href="business.html" class="current" data-zh="企業" data-en="SME">企業</a>
+        <a href="farm.html" data-zh="農場" data-en="Farm">農場</a>
+      </nav>
       <button class="lang-toggle" id="langToggle">English</button>
     </div>
   </div>

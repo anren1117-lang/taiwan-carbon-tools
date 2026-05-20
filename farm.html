@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>農場碳盤查與碳匯估算 · Farm Carbon & Sink Estimator</title>
+<meta name="description" content="台灣農場碳盤查與土壤碳匯估算工具。範疇一、二、三排放估算，並依耕作管理估算土壤有機碳變化。免費教育用途。">
+<link rel="canonical" href="https://anren1117-lang.github.io/taiwan-carbon-tools/farm.html">
+<meta name="theme-color" content="#1D9E75">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:site_name" content="Taiwan Carbon Tools">
+<meta property="og:title" content="農場碳盤查與碳匯估算 · Farm Carbon & Sink Estimator">
+<meta property="og:description" content="台灣農場碳盤查與土壤碳匯估算工具。範疇一、二、三排放估算，並依耕作管理估算土壤有機碳變化。免費教育用途。">
+<meta property="og:url" content="https://anren1117-lang.github.io/taiwan-carbon-tools/farm.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="農場碳盤查與碳匯估算 · Farm Carbon & Sink Estimator">
+<meta name="twitter:description" content="台灣農場碳盤查與土壤碳匯估算工具。範疇一、二、三排放估算，並依耕作管理估算土壤有機碳變化。免費教育用途。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script defer data-domain="anren1117-lang.github.io/taiwan-carbon-tools" src="https://plausible.io/js/script.js"></script>
+<style>
+  :root {
+    --accent: #1D9E75;
+    --accent-dark: #157a59;
+    --accent-tint: rgba(29, 158, 117, 0.1);
+    --bg: #ffffff;
+    --bg-card: #ffffff;
+    --bg-subtle: #f7f8f7;
+    --text: #1a1a1a;
+    --text-muted: #6b7280;
+    --border: #e5e7eb;
+    --warn: #b45309;
+    --warn-bg: #fef3c7;
+    --warn-border: #fde68a;
+    --s1: #d97706;
+    --s2: #2563eb;
+    --s3: #7c3aed;
+    --sink: #1D9E75;
+    --shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0e1410;
+      --bg-card: #161d18;
+      --bg-subtle: #1a2220;
+      --text: #f0f2f0;
+      --text-muted: #9ca3af;
+      --border: #2a3530;
+      --accent-tint: rgba(29, 158, 117, 0.15);
+      --warn: #fbbf24;
+      --warn-bg: rgba(251, 191, 36, 0.08);
+      --warn-border: rgba(251, 191, 36, 0.25);
+      --s1: #f59e0b;
+      --s2: #60a5fa;
+      --s3: #a78bfa;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3);
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+  header {
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 10;
+    backdrop-filter: blur(8px);
+  }
+  .header-inner { display: flex; justify-content: space-between; align-items: center; }
+  .logo { font-weight: 700; font-size: 17px; color: var(--accent); text-decoration: none; }
+  .header-right { display: flex; align-items: center; gap: 12px; }
+  .back-link { color: var(--text-muted); text-decoration: none; font-size: 13px; }
+  .back-link:hover { color: var(--accent); }
+  .tool-nav { display: flex; gap: 4px; align-items: center; }
+  .tool-nav a {
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 12.5px;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s;
+  }
+  .tool-nav a:hover { color: var(--accent); background: var(--bg-subtle); }
+  .tool-nav a.current {
+    color: var(--accent);
+    background: var(--accent-tint);
+    font-weight: 600;
+    cursor: default;
+  }
+  @media (max-width: 540px) {
+    .tool-nav a { padding: 4px 9px; font-size: 11.5px; }
+  }
+  .lang-toggle {
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-family: inherit;
+    font-size: 13px;
+    color: var(--text);
+    cursor: pointer;
+  }
+  .lang-toggle:hover { border-color: var(--accent); }
+  .page-title { padding: 40px 0 16px; }
+  .page-title h1 {
+    font-size: clamp(26px, 4vw, 36px);
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+  .page-title p { color: var(--text-muted); font-size: 15px; }
+  .warning {
+    background: var(--warn-bg);
+    border: 1px solid var(--warn-border);
+    color: var(--warn);
+    padding: 12px 16px;
+    border-radius: 10px;
+    margin-bottom: 24px;
+    font-size: 13px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .warning::before { content: "⚠"; flex-shrink: 0; font-size: 16px; }
+  .layout {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 24px;
+    padding-bottom: 60px;
+  }
+  @media (max-width: 940px) {
+    .layout { grid-template-columns: 1fr; }
+  }
+  .form-card, .result-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+  }
+  .result-card {
+    position: sticky;
+    top: 80px;
+    align-self: start;
+  }
+  @media (max-width: 940px) {
+    .result-card { position: static; }
+  }
+  .form-section { margin-bottom: 28px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+  .form-section:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+  .form-section-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 14px;
+    letter-spacing: 0.01em;
+  }
+  .scope-tag {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+  .scope-tag.s1 { background: rgba(217, 119, 6, 0.12); color: var(--s1); }
+  .scope-tag.s2 { background: rgba(37, 99, 235, 0.12); color: var(--s2); }
+  .scope-tag.s3 { background: rgba(124, 58, 237, 0.12); color: var(--s3); }
+  .scope-tag.sink { background: var(--accent-tint); color: var(--sink); }
+  .scope-tag.profile { background: var(--accent-tint); color: var(--accent); }
+  .form-section-desc { font-size: 12px; color: var(--text-muted); margin-bottom: 14px; margin-top: -8px; }
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  @media (max-width: 480px) {
+    .form-grid { grid-template-columns: 1fr; }
+  }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field.full { grid-column: 1 / -1; }
+  .field label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .field .unit { color: var(--text-muted); font-weight: 400; font-size: 12px; }
+  .field input[type="number"], .field select {
+    padding: 9px 12px;
+    font-family: inherit;
+    font-size: 14px;
+    background: var(--bg-subtle);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    width: 100%;
+    font-variant-numeric: tabular-nums;
+  }
+  .field input:focus, .field select:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+  }
+  .field input[type="number"] { -moz-appearance: textfield; }
+  .field input::-webkit-outer-spin-button,
+  .field input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+  .practice-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  @media (max-width: 480px) { .practice-grid { grid-template-columns: 1fr; } }
+  .practice {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 12px;
+    border: 1px solid var(--border);
+    background: var(--bg-subtle);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .practice:hover { border-color: var(--accent); }
+  .practice input[type="checkbox"] {
+    width: 18px; height: 18px;
+    accent-color: var(--accent);
+    margin-top: 2px;
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+  .practice.checked { border-color: var(--accent); background: var(--accent-tint); }
+  .practice .p-title { font-size: 13px; font-weight: 500; }
+  .practice .p-sub { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+  .total-block { text-align: center; padding: 12px 0 20px; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
+  .total-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+  .total-value {
+    font-size: 44px;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+  }
+  .total-value.negative { color: var(--sink); }
+  .total-unit { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+
+  .gross-sink-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    padding: 10px 0 16px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .gs-cell { text-align: center; }
+  .gs-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+  .gs-val { font-size: 18px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .gs-val.gross { color: var(--s1); }
+  .gs-val.sink { color: var(--sink); }
+
+  .stacked-bar { display: flex; height: 12px; border-radius: 6px; overflow: hidden; margin-bottom: 16px; background: var(--bg-subtle); }
+  .stacked-bar > div { height: 100%; }
+  .stack-s1 { background: var(--s1); }
+  .stack-s2 { background: var(--s2); }
+  .stack-s3 { background: var(--s3); }
+
+  .scope-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+  .scope-row:last-child { border-bottom: none; }
+  .scope-row .label { display: flex; align-items: center; gap: 8px; }
+  .scope-dot { width: 10px; height: 10px; border-radius: 2px; }
+  .dot-s1 { background: var(--s1); }
+  .dot-s2 { background: var(--s2); }
+  .dot-s3 { background: var(--s3); }
+  .dot-sink { background: var(--sink); }
+  .scope-row .val { font-variant-numeric: tabular-nums; font-weight: 500; }
+  .scope-row .pct { color: var(--text-muted); font-size: 12px; margin-left: 6px; }
+  .scope-row.sink-row .val { color: var(--sink); }
+
+  .panel {
+    margin-top: 28px;
+    padding: 20px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--bg-card);
+  }
+  .panel-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 12px;
+  }
+
+  .bench-block { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+  .bench-block .your { font-size: 22px; font-weight: 600; color: var(--accent); font-variant-numeric: tabular-nums; }
+  .bench-block .vs { font-size: 13px; color: var(--text-muted); }
+  .bench-bar-wrap { position: relative; height: 8px; background: var(--bg-subtle); border-radius: 4px; overflow: hidden; }
+  .bench-fill { height: 100%; background: var(--accent); border-radius: 4px; transition: width 0.3s; }
+  .bench-fill.over { background: var(--s1); }
+  .bench-mark {
+    position: absolute; top: -4px; bottom: -4px; width: 2px; background: var(--text-muted); opacity: 0.5;
+  }
+  .bench-legend { display: flex; justify-content: space-between; margin-top: 6px; font-size: 11px; color: var(--text-muted); }
+
+  .recs {
+    margin-top: 28px;
+    padding: 24px;
+    background: var(--accent-tint);
+    border-radius: 12px;
+  }
+  .recs-title { font-size: 14px; font-weight: 600; margin-bottom: 6px; color: var(--accent); }
+  .recs-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 14px; }
+  .rec-item {
+    padding: 12px 0;
+    border-top: 1px solid var(--border);
+    font-size: 14px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .rec-item:first-of-type { border-top: none; padding-top: 4px; }
+  .rec-icon {
+    flex-shrink: 0;
+    width: 24px; height: 24px;
+    background: var(--accent);
+    color: white;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .rec-body strong { display: block; margin-bottom: 2px; }
+  .rec-body span { color: var(--text-muted); font-size: 13px; }
+
+  footer {
+    padding: 24px 0;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 12px;
+  }
+  .share-btn {
+    width: 100%;
+    padding: 10px 16px;
+    margin-top: 20px;
+    font-family: inherit;
+    font-size: 14px;
+    background: var(--bg-subtle);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: border-color 0.15s, color 0.15s, background 0.15s;
+  }
+  .share-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .share-btn.copied { background: var(--accent-tint); color: var(--accent); border-color: var(--accent); }
+</style>
+</head>
+<body>
+<header>
+  <div class="container header-inner">
+    <a href="index.html" class="logo">Taiwan Carbon Tools</a>
+    <div class="header-right">
+      <nav class="tool-nav">
+        <a href="household.html" data-zh="家庭" data-en="Household">家庭</a>
+        <a href="business.html" data-zh="企業" data-en="SME">企業</a>
+        <a href="farm.html" class="current" data-zh="農場" data-en="Farm">農場</a>
+      </nav>
+      <button class="lang-toggle" id="langToggle">English</button>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <section class="page-title">
+    <h1 data-zh="農場碳盤查與碳匯估算" data-en="Farm Carbon & Sink Estimator">農場碳盤查與碳匯估算</h1>
+    <p data-zh="為台灣農場設計，估算範疇一、二、三排放與土壤有機碳變化。改變耕作管理方式可同時減排、增匯。" data-en="Built for Taiwan farms. Estimates Scope 1, 2, 3 emissions and the soil organic carbon impact of your management practices.">為台灣農場設計，估算範疇一、二、三排放與土壤有機碳變化。改變耕作管理方式可同時減排、增匯。</p>
+  </section>
+
+  <div class="warning" data-zh="本工具採用 IPCC Tier 1 預設係數進行教育用途估算，土壤碳匯數值有顯著不確定性。不能取代正式的農場碳盤查、查驗或碳權方法學（如 Verra VM0042）的申請。" data-en="This tool uses IPCC Tier 1 default factors for educational estimation. Soil sink figures carry significant uncertainty. It is not a substitute for verified farm carbon inventory or methodology-based credit issuance (e.g. Verra VM0042).">本工具採用 IPCC Tier 1 預設係數進行教育用途估算，土壤碳匯數值有顯著不確定性。不能取代正式的農場碳盤查、查驗或碳權方法學（如 Verra VM0042）的申請。</div>
+
+  <div class="layout">
+    <div class="form-card">
+      <!-- Farm profile -->
+      <div class="form-section">
+        <div class="form-section-title">
+          <span class="scope-tag profile" data-zh="農場資料" data-en="Profile">農場資料</span>
+        </div>
+        <div class="form-grid">
+          <div class="field">
+            <label data-zh="耕作面積" data-en="Farm size">耕作面積 <span class="unit">(ha / 公頃)</span></label>
+            <input type="number" id="farmSize" min="0" step="0.1" value="1.0">
+          </div>
+          <div class="field">
+            <label data-zh="主要作物類型" data-en="Primary crop type">主要作物類型</label>
+            <select id="cropType">
+              <option value="rice" data-zh="水稻（淹水）" data-en="Paddy rice (flooded)">水稻（淹水）</option>
+              <option value="vegetables" selected data-zh="蔬菜" data-en="Vegetables">蔬菜</option>
+              <option value="fruit" data-zh="果樹 / 經濟作物" data-en="Fruit / orchard">果樹 / 經濟作物</option>
+              <option value="mixed" data-zh="混合作物" data-en="Mixed crops">混合作物</option>
+              <option value="livestock" data-zh="畜牧為主" data-en="Livestock-led">畜牧為主</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scope 1 -->
+      <div class="form-section">
+        <div class="form-section-title">
+          <span class="scope-tag s1" data-zh="範疇一" data-en="Scope 1">範疇一</span>
+          <span data-zh="直接排放" data-en="Direct emissions">直接排放</span>
+        </div>
+        <div class="form-section-desc" data-zh="農機燃料、肥料施用、水稻 CH₄、牲畜與糞肥管理。" data-en="On-farm fuel use, fertilizer application, rice paddy CH₄, livestock and manure management.">農機燃料、肥料施用、水稻 CH₄、牲畜與糞肥管理。</div>
+        <div class="form-grid">
+          <div class="field">
+            <label data-zh="柴油（年）" data-en="Diesel (annual)">柴油（年）<span class="unit">(L / 公升)</span></label>
+            <input type="number" id="diesel" min="0" step="10" value="400">
+          </div>
+          <div class="field">
+            <label data-zh="氮肥施用量（以 N 計）" data-en="Synthetic N fertilizer">氮肥施用量（以 N 計）<span class="unit">(kg N / 年)</span></label>
+            <input type="number" id="nFert" min="0" step="5" value="80">
+          </div>
+          <div class="field">
+            <label data-zh="牛（頭數）" data-en="Cattle (head)">牛（頭數）</label>
+            <input type="number" id="cattle" min="0" step="1" value="0">
+          </div>
+          <div class="field">
+            <label data-zh="豬（頭數）" data-en="Pigs (head)">豬（頭數）</label>
+            <input type="number" id="pigs" min="0" step="1" value="0">
+          </div>
+          <div class="field">
+            <label data-zh="家禽（隻數）" data-en="Poultry (head)">家禽（隻數）</label>
+            <input type="number" id="poultry" min="0" step="10" value="0">
+          </div>
+          <div class="field">
+            <label data-zh="糞肥管理方式" data-en="Manure management">糞肥管理方式</label>
+            <select id="manure">
+              <option value="none" selected data-zh="無 / 不適用" data-en="None / N/A">無 / 不適用</option>
+              <option value="composted" data-zh="堆肥處理" data-en="Composted">堆肥處理</option>
+              <option value="daily" data-zh="每日清運施用" data-en="Daily spread">每日清運施用</option>
+              <option value="lagoon" data-zh="厭氧儲存（化糞池/沼液池）" data-en="Anaerobic lagoon">厭氧儲存（化糞池/沼液池）</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scope 2 -->
+      <div class="form-section">
+        <div class="form-section-title">
+          <span class="scope-tag s2" data-zh="範疇二" data-en="Scope 2">範疇二</span>
+          <span data-zh="購買電力" data-en="Purchased electricity">購買電力</span>
+        </div>
+        <div class="form-section-desc" data-zh="灌溉抽水、後製冷藏、農場設施用電。" data-en="Irrigation pumps, post-harvest cold storage, on-farm facility electricity.">灌溉抽水、後製冷藏、農場設施用電。</div>
+        <div class="form-grid">
+          <div class="field">
+            <label data-zh="灌溉抽水用電（年）" data-en="Irrigation electricity (annual)">灌溉抽水用電（年）<span class="unit">(kWh / 度)</span></label>
+            <input type="number" id="irrigation" min="0" step="50" value="500">
+          </div>
+          <div class="field">
+            <label data-zh="冷藏 / 後製用電（年）" data-en="Cold storage / post-harvest (annual)">冷藏 / 後製用電（年）<span class="unit">(kWh / 度)</span></label>
+            <input type="number" id="coldStorage" min="0" step="50" value="300">
+          </div>
+        </div>
+      </div>
+
+      <!-- Scope 3 -->
+      <div class="form-section">
+        <div class="form-section-title">
+          <span class="scope-tag s3" data-zh="範疇三" data-en="Scope 3">範疇三</span>
+          <span data-zh="上下游" data-en="Upstream & downstream">上下游</span>
+        </div>
+        <div class="form-section-desc" data-zh="肥料製造、農藥與化學品上游、配送至通路的運輸。" data-en="Upstream fertilizer & chemicals production, transport to market.">肥料製造、農藥與化學品上游、配送至通路的運輸。</div>
+        <div class="form-grid">
+          <div class="field">
+            <label data-zh="農藥 / 複合肥料（年）" data-en="Pesticides + compound fertilizer (annual)">農藥 / 複合肥料（年）<span class="unit">(kg)</span></label>
+            <input type="number" id="chemicals" min="0" step="5" value="60">
+          </div>
+          <div class="field">
+            <label data-zh="配送車輛行駛里程（年）" data-en="Delivery truck distance (annual)">配送車輛行駛里程（年）<span class="unit">(km)</span></label>
+            <input type="number" id="transport" min="0" step="100" value="1500">
+          </div>
+        </div>
+      </div>
+
+      <!-- Sinks -->
+      <div class="form-section">
+        <div class="form-section-title">
+          <span class="scope-tag sink" data-zh="碳匯" data-en="Sinks">碳匯</span>
+          <span data-zh="土壤有機碳與生物質" data-en="Soil organic carbon & biomass">土壤有機碳與生物質</span>
+        </div>
+        <div class="form-section-desc" data-zh="勾選你目前實施的耕作管理。同時採用多項時會套用飽和折扣以反映 SOC 累積遞減。" data-en="Tick practices you actually apply. A saturation discount is applied when several land practices stack — SOC accumulation slows over time.">勾選你目前實施的耕作管理。同時採用多項時會套用飽和折扣以反映 SOC 累積遞減。</div>
+        <div class="practice-grid">
+          <label class="practice" data-key="coverCrop">
+            <input type="checkbox" id="p-coverCrop">
+            <div>
+              <div class="p-title" data-zh="覆蓋作物" data-en="Cover crops">覆蓋作物</div>
+              <div class="p-sub" data-zh="休耕期種綠肥 / 覆蓋作物" data-en="Green manure / cover crop in fallow">休耕期種綠肥 / 覆蓋作物</div>
+            </div>
+          </label>
+          <label class="practice" data-key="noTill">
+            <input type="checkbox" id="p-noTill">
+            <div>
+              <div class="p-title" data-zh="免耕 / 減耕" data-en="No-till / reduced till">免耕 / 減耕</div>
+              <div class="p-sub" data-zh="維持土壤結構，減少擾動" data-en="Minimise soil disturbance">維持土壤結構，減少擾動</div>
+            </div>
+          </label>
+          <label class="practice" data-key="compost">
+            <input type="checkbox" id="p-compost">
+            <div>
+              <div class="p-title" data-zh="堆肥施用" data-en="Compost application">堆肥施用</div>
+              <div class="p-sub" data-zh="每年 ≥ 5 噸/公頃" data-en="≥ 5 t/ha per year">每年 ≥ 5 噸/公頃</div>
+            </div>
+          </label>
+          <label class="practice" data-key="residue">
+            <input type="checkbox" id="p-residue">
+            <div>
+              <div class="p-title" data-zh="作物殘體還田" data-en="Crop residue retention">作物殘體還田</div>
+              <div class="p-sub" data-zh="稻草 / 蔬菜殘體不焚燒、不移除" data-en="Straw and trimmings left in field, not burned">稻草 / 蔬菜殘體不焚燒、不移除</div>
+            </div>
+          </label>
+        </div>
+        <div class="form-grid" style="margin-top: 14px;">
+          <div class="field">
+            <label data-zh="生物炭施用量（年）" data-en="Biochar applied (annual)">生物炭施用量（年）<span class="unit">(kg)</span></label>
+            <input type="number" id="biochar" min="0" step="10" value="0">
+          </div>
+          <div class="field">
+            <label data-zh="種植樹木（株數，存活）" data-en="Trees planted (surviving)">種植樹木（株數，存活）</label>
+            <input type="number" id="trees" min="0" step="1" value="0">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Results -->
+    <div class="result-card">
+      <div class="total-block">
+        <div class="total-label" data-zh="淨碳足跡（年度）" data-en="Net annual footprint">淨碳足跡（年度）</div>
+        <div class="total-value" id="total">0.00</div>
+        <div class="total-unit" data-zh="公噸 CO₂e / 年（總排放 − 碳匯）" data-en="tonnes CO₂e / yr (gross − sinks)">公噸 CO₂e / 年（總排放 − 碳匯）</div>
+      </div>
+
+      <div class="gross-sink-row">
+        <div class="gs-cell">
+          <div class="gs-label" data-zh="總排放" data-en="Gross">總排放</div>
+          <div class="gs-val gross"><span id="grossT">0.00</span> <span data-zh="噸" data-en="t">噸</span></div>
+        </div>
+        <div class="gs-cell">
+          <div class="gs-label" data-zh="碳匯" data-en="Sinks">碳匯</div>
+          <div class="gs-val sink">−<span id="sinkT">0.00</span> <span data-zh="噸" data-en="t">噸</span></div>
+        </div>
+      </div>
+
+      <div class="stacked-bar" id="stackedBar"></div>
+      <div id="scopeRows"></div>
+
+      <div class="panel">
+        <div class="panel-title" data-zh="每公頃比較" data-en="Per-hectare benchmark">每公頃比較</div>
+        <div class="bench-block">
+          <span class="your"><span id="benchYou">0.00</span> <span data-zh="噸/公頃" data-en="t/ha">噸/公頃</span></span>
+          <span class="vs" data-zh="vs 台灣平均 3.5 噸/公頃" data-en="vs Taiwan avg 3.5 t/ha">vs 台灣平均 3.5 噸/公頃</span>
+        </div>
+        <div class="bench-bar-wrap">
+          <div class="bench-fill" id="benchFill" style="width: 0%;"></div>
+          <div class="bench-mark" id="benchMark" style="left: 50%;"></div>
+        </div>
+        <div class="bench-legend">
+          <span>0</span>
+          <span id="benchScale">7.0</span>
+        </div>
+      </div>
+
+      <button class="share-btn" id="shareBtn" data-zh="分享結果" data-en="Share result">分享結果</button>
+    </div>
+  </div>
+
+  <section class="recs" id="recsBlock">
+    <div class="recs-title">
+      <span data-zh="行動建議" data-en="Recommended actions">行動建議</span>
+      <span style="color: var(--text-muted); font-weight: 400;"> · </span>
+      <span id="recs-focus">減排與增匯</span>
+    </div>
+    <div class="recs-sub" data-zh="針對你目前最大的排放來源與最大的潛在碳匯機會。" data-en="Targeting your largest emission source and your biggest untapped sink opportunity.">針對你目前最大的排放來源與最大的潛在碳匯機會。</div>
+    <div id="recs"></div>
+  </section>
+</main>
+
+<footer>
+  <div class="container">
+    <p style="margin-bottom: 10px;"><a href="https://tally.so/r/PLACEHOLDER" target="_blank" rel="noopener" style="color: var(--accent); text-decoration: none; font-weight: 500;" data-zh="有建議或發現錯誤？告訴我 →" data-en="Found a bug or have feedback? Let me know →">有建議或發現錯誤？告訴我 →</a></p>
+    <span data-zh="排放係數：經濟部能源署 113 年度電力排碳係數 0.474 kg/kWh、環境部燃料燃燒係數。碳匯：IPCC 2019 Refinement Tier 1 預設值（亞熱帶濕潤氣候），實際 SOC 變化需以土壤採樣驗證。" data-en="Factors: MOEA 2024 grid 0.474 kg/kWh, MOENV fuel combustion factors. Sinks: IPCC 2019 Refinement Tier 1 defaults (subtropical moist), real SOC change requires soil sampling.">排放係數：經濟部能源署 113 年度電力排碳係數 0.474 kg/kWh、環境部燃料燃燒係數。碳匯：IPCC 2019 Refinement Tier 1 預設值（亞熱帶濕潤氣候），實際 SOC 變化需以土壤採樣驗證。</span>
+  </div>
+</footer>
+
+<script>
+  // ─── Emission factors (kg CO2e per unit) ───────────────────────────
+  const EF = {
+    // Scope 1
+    diesel: 2.606,           // per L
+    nFertDirect: 4.29,       // per kg N — IPCC: 1% N2O-N × 44/28 × 273 GWP100
+    riceCH4PerHa: 2970,      // per ha-year, paddy rice (Taiwan-adjusted Tier 1, single-season)
+    cattleHead: 1800,        // per head-year (enteric + manure baseline)
+    pigHead: 175,
+    poultryHead: 6,
+    // Scope 2
+    electricity: 0.474,      // per kWh
+    // Scope 3
+    nFertUpstream: 4.0,      // per kg N (urea avg production)
+    chemicals: 7.0,          // per kg (compound fertilizer + pesticides upstream)
+    transport: 0.65          // per truck-km (light delivery truck)
+  };
+
+  // Manure management multiplier on livestock total
+  const MANURE_MULT = { none: 1.0, composted: 1.0, daily: 1.1, lagoon: 1.3 };
+
+  // ─── Sink factors (kg CO2e per unit per year, IPCC Tier 1 subtropical) ───
+  const SINK = {
+    coverCrop:    1100,   // per ha-year
+    noTill:       500,    // per ha-year
+    compost:      800,    // per ha-year (≥5 t/ha)
+    residue:      400,    // per ha-year
+    biochar:      3.0,    // per kg biochar applied (carbon stored × stability)
+    treePerYear:  22      // per tree-year (mature mixed species mean)
+  };
+
+  // Stacking saturation: real SOC gains don't add linearly when you stack practices
+  function stackingMult(count) {
+    if (count >= 3) return 0.65;
+    if (count === 2) return 0.80;
+    return 1.0;
+  }
+
+  // ─── State ────────────────────────────────────────────────────────
+  const numericIds = [
+    'farmSize', 'diesel', 'nFert', 'cattle', 'pigs', 'poultry',
+    'irrigation', 'coldStorage', 'chemicals', 'transport',
+    'biochar', 'trees'
+  ];
+  const practices = ['coverCrop', 'noTill', 'compost', 'residue'];
+  let currentLang = 'zh';
+
+  function num(id) {
+    const v = parseFloat(document.getElementById(id).value);
+    return isFinite(v) && v >= 0 ? v : 0;
+  }
+  function fmt(n, d) {
+    return n.toLocaleString(undefined, { minimumFractionDigits: d, maximumFractionDigits: d });
+  }
+  function tr(zh, en) { return currentLang === 'zh' ? zh : en; }
+
+  // ─── Calculation ──────────────────────────────────────────────────
+  function calc() {
+    const farmSize = num('farmSize');
+    const diesel = num('diesel');
+    const nFert = num('nFert');
+    const cattle = num('cattle');
+    const pigs = num('pigs');
+    const poultry = num('poultry');
+    const cropType = document.getElementById('cropType').value;
+    const manureMode = document.getElementById('manure').value;
+    const irrigation = num('irrigation');
+    const coldStorage = num('coldStorage');
+    const chemicals = num('chemicals');
+    const transport = num('transport');
+    const biochar = num('biochar');
+    const trees = num('trees');
+
+    // Practices
+    const pState = {};
+    practices.forEach(p => pState[p] = document.getElementById('p-' + p).checked);
+
+    // Scope 1
+    const e_diesel = diesel * EF.diesel;
+    const e_nFertDir = nFert * EF.nFertDirect;
+    const e_rice = cropType === 'rice' ? farmSize * EF.riceCH4PerHa : 0;
+    const livestockBase = cattle * EF.cattleHead + pigs * EF.pigHead + poultry * EF.poultryHead;
+    const e_livestock = livestockBase * MANURE_MULT[manureMode];
+    const s1 = e_diesel + e_nFertDir + e_rice + e_livestock;
+
+    // Scope 2
+    const s2 = (irrigation + coldStorage) * EF.electricity;
+
+    // Scope 3
+    const e_nFertUp = nFert * EF.nFertUpstream;
+    const e_chem = chemicals * EF.chemicals;
+    const e_trans = transport * EF.transport;
+    const s3 = e_nFertUp + e_chem + e_trans;
+
+    const gross = s1 + s2 + s3;
+
+    // Sinks (apply stacking penalty on land practices only)
+    const landCount = practices.filter(p => pState[p]).length;
+    const sm = stackingMult(landCount);
+    const sink_cover = (pState.coverCrop ? farmSize * SINK.coverCrop : 0);
+    const sink_noTill = (pState.noTill ? farmSize * SINK.noTill : 0);
+    const sink_compost = (pState.compost ? farmSize * SINK.compost : 0);
+    const sink_residue = (pState.residue ? farmSize * SINK.residue : 0);
+    const sink_land = (sink_cover + sink_noTill + sink_compost + sink_residue) * sm;
+    const sink_biochar = biochar * SINK.biochar;
+    const sink_trees = trees * SINK.treePerYear;
+    const sinkTotal = sink_land + sink_biochar + sink_trees;
+
+    const net = gross - sinkTotal;
+
+    // ─── Render headline numbers (convert kg → tonnes) ──────────────
+    const totalEl = document.getElementById('total');
+    totalEl.textContent = fmt(net / 1000, 2);
+    totalEl.classList.toggle('negative', net < 0);
+    document.getElementById('grossT').textContent = fmt(gross / 1000, 2);
+    document.getElementById('sinkT').textContent = fmt(sinkTotal / 1000, 2);
+
+    // Stacked emissions bar (s1/s2/s3 proportions)
+    const total = Math.max(gross, 1);
+    const bar = document.getElementById('stackedBar');
+    bar.innerHTML =
+      `<div class="stack-s1" style="width:${s1/total*100}%"></div>` +
+      `<div class="stack-s2" style="width:${s2/total*100}%"></div>` +
+      `<div class="stack-s3" style="width:${s3/total*100}%"></div>`;
+
+    // Scope rows
+    const rows = document.getElementById('scopeRows');
+    function row(cls, dot, labelZh, labelEn, valKg, pct) {
+      return `<div class="scope-row ${cls}">
+        <span class="label"><span class="scope-dot ${dot}"></span>${tr(labelZh, labelEn)}</span>
+        <span class="val">${valKg < 0 ? '−' : ''}${fmt(Math.abs(valKg)/1000, 2)} ${tr('噸', 't')}<span class="pct">${pct}</span></span>
+      </div>`;
+    }
+    rows.innerHTML =
+      row('', 'dot-s1', '範疇一', 'Scope 1', s1, gross > 0 ? `(${(s1/gross*100).toFixed(0)}%)` : '') +
+      row('', 'dot-s2', '範疇二', 'Scope 2', s2, gross > 0 ? `(${(s2/gross*100).toFixed(0)}%)` : '') +
+      row('', 'dot-s3', '範疇三', 'Scope 3', s3, gross > 0 ? `(${(s3/gross*100).toFixed(0)}%)` : '') +
+      row('sink-row', 'dot-sink', '碳匯', 'Sinks', -sinkTotal, '');
+
+    // Per-hectare benchmark
+    const perHa = farmSize > 0 ? gross / 1000 / farmSize : 0;
+    document.getElementById('benchYou').textContent = fmt(perHa, 2);
+    const scaleMax = 7.0;
+    const fillPct = Math.max(0, Math.min(100, perHa / scaleMax * 100));
+    const fillEl = document.getElementById('benchFill');
+    fillEl.style.width = fillPct + '%';
+    fillEl.classList.toggle('over', perHa > 3.5);
+
+    // ─── Recommendations: top scope + top untapped sink ─────────────
+    const scopeRanked = [
+      { key: 's1', val: s1, parts: { diesel: e_diesel, nFert: e_nFertDir, rice: e_rice, livestock: e_livestock } },
+      { key: 's2', val: s2 },
+      { key: 's3', val: s3, parts: { nFertUp: e_nFertUp, chem: e_chem, trans: e_trans } }
+    ].sort((a, b) => b.val - a.val);
+    const topScope = scopeRanked[0];
+
+    const untapped = practices.filter(p => !pState[p]);
+    const recsArr = pickRecs(topScope, untapped, pState, cropType);
+
+    const focusEl = document.getElementById('recs-focus');
+    focusEl.textContent = tr(
+      scopeMeta(topScope.key).zh + ' + ' + (untapped.length ? '增匯' : '深化碳匯'),
+      scopeMeta(topScope.key).en + ' + ' + (untapped.length ? 'new sinks' : 'deepening sinks')
+    );
+
+    const recsEl = document.getElementById('recs');
+    recsEl.innerHTML = '';
+    recsArr.forEach((r, i) => {
+      const item = document.createElement('div');
+      item.className = 'rec-item';
+      item.innerHTML = `<div class="rec-icon">${i + 1}</div>
+        <div class="rec-body"><strong>${tr(r.zhTitle, r.enTitle)}</strong><span>${tr(r.zhBody, r.enBody)}</span></div>`;
+      recsEl.appendChild(item);
+    });
+
+    // Practice card checked styling
+    document.querySelectorAll('.practice').forEach(el => {
+      el.classList.toggle('checked', el.querySelector('input').checked);
+    });
+  }
+
+  function scopeMeta(key) {
+    return {
+      s1: { zh: '範疇一減排', en: 'Scope 1 reduction' },
+      s2: { zh: '範疇二減排', en: 'Scope 2 reduction' },
+      s3: { zh: '範疇三減排', en: 'Scope 3 reduction' }
+    }[key];
+  }
+
+  // ─── Recommendation library ───────────────────────────────────────
+  const REC_LIB = {
+    s1_nFert: {
+      zhTitle: '精準施肥：先做土壤檢測再決定氮量',
+      enTitle: 'Precision N: soil-test before applying',
+      zhBody: '農藥肥料減量是 N₂O 減排最大槓桿。可向農業試驗所或地方農會申請免費土壤分析，依實際缺氮量施用。',
+      enBody: 'Reducing N fertilizer is the biggest lever on N₂O. Free soil testing is available through 農業試驗所 and local farmers\' associations.'
+    },
+    s1_legume: {
+      zhTitle: '輪作豆科作物以固氮',
+      enTitle: 'Legume rotation for biological N fixation',
+      zhBody: '豆科作物（毛豆、田菁、紫雲英）可在輪作週期內固氮 50–150 kg N/ha，直接減少下一季氮肥需求。',
+      enBody: 'Legumes (soybean, sesbania, Chinese milkvetch) fix 50–150 kg N/ha — directly cuts synthetic N demand for the next crop.'
+    },
+    s1_diesel: {
+      zhTitle: '農機共享與升級高效機具',
+      enTitle: 'Share machinery & upgrade to efficient models',
+      zhBody: '透過 產銷班 / 合作社 共購共用，並汰換高油耗舊式農機。電動小型機具適合 0.5 公頃內精緻農場。',
+      enBody: 'Pool equipment through co-ops; retire high-consumption old tractors. Electric small machinery fits farms under 0.5 ha.'
+    },
+    s1_rice: {
+      zhTitle: '間歇灌溉（AWD）可降低稻田 CH₄ 30–50%',
+      enTitle: 'Alternate wetting & drying (AWD) cuts paddy CH₄ 30–50%',
+      zhBody: '在分蘖盛期後實施落水曬田，可大幅減少厭氧 CH₄ 排放，亦能省水。台南農改場有完整作業指引。',
+      enBody: 'Mid-season drainage after tillering dramatically cuts anaerobic CH₄ and saves water. Tainan DARES has full protocols.'
+    },
+    s1_livestock: {
+      zhTitle: '糞肥改採堆肥化處理',
+      enTitle: 'Switch manure handling to composting',
+      zhBody: '厭氧儲存（化糞池）產生大量 CH₄，改為好氧堆肥可降低排放並產出土壤改良劑，一舉兩得。',
+      enBody: 'Anaerobic lagoons release large CH₄; aerobic composting cuts emissions and yields a soil amendment in one step.'
+    },
+    s2_solar: {
+      zhTitle: '灌溉抽水改用太陽能',
+      enTitle: 'Switch irrigation pumping to solar',
+      zhBody: '農委會「綠能設施補助」可補助農用太陽能抽水系統，回收期約 5–7 年，全生命週期幾乎零排放。',
+      enBody: 'Government subsidies cover solar-powered irrigation pumps. Payback 5–7 years, near-zero lifetime emissions.'
+    },
+    s2_cold: {
+      zhTitle: '冷藏設備改用 R290 / CO₂ 冷媒，並加裝變頻',
+      enTitle: 'Upgrade cold storage: R290/CO₂ refrigerants + inverter',
+      zhBody: '老舊 HFC 冷媒洩漏是隱形排放。新一代低 GWP 冷媒加上變頻控制，可降低 30–50% 用電。',
+      enBody: 'HFC refrigerant leaks are hidden emissions. Low-GWP refrigerants with inverter control cut electricity 30–50%.'
+    },
+    s3_local: {
+      zhTitle: '縮短配送距離：在地通路優先',
+      enTitle: 'Shorten supply chain: prioritise local channels',
+      zhBody: '農夫市集、學校午餐、CSA（社區支持型農業）能直接降低物流碳排，且通常售價更高。',
+      enBody: 'Farmers\' markets, school lunch programmes, and CSA boxes cut transport emissions and often pay better.'
+    },
+    s3_organic: {
+      zhTitle: '減用化學農藥、改用生物防治',
+      enTitle: 'Cut chemical pesticides; adopt biological control',
+      zhBody: '農藥上游製程能耗高（~7 kg CO₂e/kg）。生物防治（瓢蟲、蘇力菌、費洛蒙誘捕）可大幅減量。',
+      enBody: 'Pesticide manufacturing is energy-intensive (~7 kg CO₂e/kg). Biological control (ladybugs, BT, pheromone traps) cuts use sharply.'
+    },
+    sink_coverCrop: {
+      zhTitle: '冬季加種覆蓋作物（綠肥）',
+      enTitle: 'Add a winter cover crop / green manure',
+      zhBody: '休耕期種植田菁、紫雲英或燕麥，每公頃每年可增加 ~1.1 噸 CO₂e 的土壤碳固存。',
+      enBody: 'Sesbania, Chinese milkvetch, or oats during fallow periods can sequester ~1.1 tCO₂e/ha/year.'
+    },
+    sink_noTill: {
+      zhTitle: '改為免耕或減耕',
+      enTitle: 'Switch to no-till or reduced till',
+      zhBody: '減少翻耕次數可保留土壤團粒結構，每公頃每年可增加 ~0.5 噸 CO₂e 的 SOC 累積。',
+      enBody: 'Less ploughing preserves soil aggregates and adds ~0.5 tCO₂e/ha/year of SOC accumulation.'
+    },
+    sink_compost: {
+      zhTitle: '每年施用 5 噸以上堆肥',
+      enTitle: 'Apply ≥ 5 t/ha of compost annually',
+      zhBody: '堆肥不僅減少化學肥料需求，每公頃每年可增加 ~0.8 噸 CO₂e 的長期 SOC。',
+      enBody: 'Compost cuts synthetic fertilizer demand and adds ~0.8 tCO₂e/ha/year of long-lived SOC.'
+    },
+    sink_residue: {
+      zhTitle: '稻草與蔬菜殘體還田，不焚燒',
+      enTitle: 'Retain straw & trimmings — no burning',
+      zhBody: '殘體還田每公頃每年可增加 ~0.4 噸 CO₂e 的 SOC；焚燒則直接釋放當季固碳。',
+      enBody: 'Residue retention adds ~0.4 tCO₂e/ha/year of SOC; burning releases that season\'s carbon immediately.'
+    },
+    sink_biochar: {
+      zhTitle: '導入生物炭：穩定百年的碳儲存',
+      enTitle: 'Adopt biochar — century-stable carbon storage',
+      zhBody: '生物炭碳穩定性 70–90%，每公斤可固存 ~3 kg CO₂e。也能改善排水黏重土壤的通氣性。',
+      enBody: 'Biochar carbon is 70–90% stable; each kg sequesters ~3 kg CO₂e. Also improves aeration in heavy clay soils.'
+    },
+    sink_agroforestry: {
+      zhTitle: '田間種樹：林農複合經營',
+      enTitle: 'Agroforestry: plant trees within the farm',
+      zhBody: '田埂、邊界、林木間作可同時固碳（每株 ~22 kg CO₂e/年）、防風並增加生物多樣性。',
+      enBody: 'Border, hedgerow, or alley-cropped trees sequester ~22 kg CO₂e/tree/year while providing windbreak and biodiversity.'
+    }
+  };
+
+  function pickRecs(topScope, untapped, pState, cropType) {
+    const picks = [];
+    // 1) Top emission reducer
+    if (topScope.key === 's1') {
+      const p = topScope.parts;
+      const max = Math.max(p.diesel, p.nFert, p.rice, p.livestock);
+      if (max === p.nFert) { picks.push(REC_LIB.s1_nFert, REC_LIB.s1_legume); }
+      else if (max === p.rice) { picks.push(REC_LIB.s1_rice); }
+      else if (max === p.livestock) { picks.push(REC_LIB.s1_livestock); }
+      else { picks.push(REC_LIB.s1_diesel); }
+    } else if (topScope.key === 's2') {
+      picks.push(REC_LIB.s2_solar, REC_LIB.s2_cold);
+    } else {
+      const p = topScope.parts;
+      if (p.trans >= p.chem && p.trans >= p.nFertUp) picks.push(REC_LIB.s3_local);
+      else picks.push(REC_LIB.s3_organic);
+    }
+
+    // 2-3) Biggest untapped sinks
+    const sinkOptions = [
+      { key: 'coverCrop',    rec: REC_LIB.sink_coverCrop,   weight: SINK.coverCrop },
+      { key: 'compost',      rec: REC_LIB.sink_compost,     weight: SINK.compost },
+      { key: 'noTill',       rec: REC_LIB.sink_noTill,      weight: SINK.noTill },
+      { key: 'residue',      rec: REC_LIB.sink_residue,     weight: SINK.residue }
+    ].filter(o => !pState[o.key]).sort((a, b) => b.weight - a.weight);
+
+    sinkOptions.slice(0, 2).forEach(o => picks.push(o.rec));
+
+    // If all land practices already adopted, suggest biochar / agroforestry as deepening
+    if (untapped.length === 0) {
+      picks.push(REC_LIB.sink_biochar, REC_LIB.sink_agroforestry);
+    }
+
+    // De-dupe and cap at 4
+    const seen = new Set();
+    return picks.filter(r => {
+      if (seen.has(r.zhTitle)) return false;
+      seen.add(r.zhTitle);
+      return true;
+    }).slice(0, 4);
+  }
+
+  // ─── Wiring ──────────────────────────────────────────────────────
+  numericIds.forEach(id => document.getElementById(id).addEventListener('input', calc));
+  ['cropType', 'manure'].forEach(id => document.getElementById(id).addEventListener('change', calc));
+  practices.forEach(p => document.getElementById('p-' + p).addEventListener('change', calc));
+
+  // ─── Language toggle ──────────────────────────────────────────────
+  const STORAGE_KEY = 'tct_lang';
+  const langBtn = document.getElementById('langToggle');
+
+  function applyLang(lang) {
+    currentLang = lang;
+    document.documentElement.lang = lang === 'zh' ? 'zh-Hant' : 'en';
+    document.querySelectorAll('[data-zh]').forEach(el => {
+      const val = el.dataset[lang];
+      if (val !== undefined) el.textContent = val;
+    });
+    langBtn.textContent = lang === 'zh' ? 'English' : '中文';
+    try { localStorage.setItem(STORAGE_KEY, lang); } catch (e) {}
+    calc();
+  }
+
+  let initial = 'zh';
+  try {
+    const s = localStorage.getItem(STORAGE_KEY);
+    if (s === 'zh' || s === 'en') initial = s;
+  } catch (e) {}
+  langBtn.addEventListener('click', () => applyLang(currentLang === 'zh' ? 'en' : 'zh'));
+
+  // ─── Share button (clipboard, same pattern as other tools) ────────
+  const shareBtn = document.getElementById('shareBtn');
+  let copyTimer = null;
+  async function handleShare() {
+    const net = document.getElementById('total').textContent;
+    const url = window.location.href;
+    const text = currentLang === 'zh'
+      ? `我用台灣碳排工具算了一下我的農場：年度淨碳足跡 ${net} 公噸 CO2e。你也來試試：`
+      : `I used Taiwan Carbon Tools to estimate my farm's annual net footprint: ${net} tonnes CO2e. Try it:`;
+    if (navigator.share) {
+      try { await navigator.share({ text, url }); } catch (e) {}
+    } else {
+      try {
+        await navigator.clipboard.writeText(text + ' ' + url);
+        shareBtn.classList.add('copied');
+        shareBtn.textContent = currentLang === 'zh' ? '已複製到剪貼簿！' : 'Copied to clipboard!';
+        clearTimeout(copyTimer);
+        copyTimer = setTimeout(() => {
+          shareBtn.classList.remove('copied');
+          shareBtn.textContent = shareBtn.dataset[currentLang];
+        }, 2000);
+      } catch (e) {
+        alert(currentLang === 'zh' ? '複製失敗，請手動複製連結。' : 'Copy failed — please copy manually.');
+      }
+    }
+  }
+  shareBtn.addEventListener('click', handleShare);
+
+  applyLang(initial);
+</script>
+</body>
+</html>
