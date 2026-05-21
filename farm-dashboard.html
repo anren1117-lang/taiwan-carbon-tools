@@ -1503,6 +1503,16 @@
         </div>
       </div>
 
+      <div class="editor-section">
+        <h4 data-zh="土壤碳基準（最新採樣）" data-en="Soil carbon baseline (latest sample)">土壤碳基準（最新採樣）</h4>
+        <div class="editor-grid">
+          <div><label data-zh="SOC % (有機碳含量)" data-en="SOC % (organic carbon)">SOC % <span class="u">(0–10)</span></label><input type="number" id="soilSOCPercent" min="0" max="20" step="0.1"></div>
+          <div><label data-zh="容積密度 (g/cm³)" data-en="Bulk density (g/cm³)">容積密度 <span class="u">(g/cm³)</span></label><input type="number" id="soilBulkDensity" min="0.5" max="2.5" step="0.05"></div>
+          <div><label data-zh="採樣深度 (cm)" data-en="Sampling depth (cm)">採樣深度 <span class="u">(cm)</span></label><input type="number" id="soilDepthCm" min="5" max="100" step="5"></div>
+          <div><label data-zh="採樣日期 (YYYY-MM)" data-en="Sample date (YYYY-MM)">採樣日期 <span class="u">(YYYY-MM)</span></label><input type="month" id="soilDate"></div>
+        </div>
+      </div>
+
     </div>
   </details>
 
@@ -2088,6 +2098,12 @@
     });
     if (i.annualYieldKg != null) set('annualYieldKg', i.annualYieldKg);
     if (i.productCategory) document.getElementById('productCategory').value = i.productCategory;
+    // Soil baseline (read from top-level CLIENT_CONFIG, not inputs)
+    const soil = CLIENT_CONFIG.soilTest || {};
+    if (soil.socPercent != null) set('soilSOCPercent', soil.socPercent);
+    if (soil.bulkDensity != null) set('soilBulkDensity', soil.bulkDensity);
+    if (soil.depthCm != null) set('soilDepthCm', soil.depthCm);
+    if (soil.date) document.getElementById('soilDate').value = soil.date;
   }
 
   // ── Scenario state ───────────────────────────────────────────────
@@ -3446,6 +3462,24 @@
     // Only show rice water-management selector for rice farms
     const riceWrap = document.getElementById('riceMgmtWrap');
     if (riceWrap) riceWrap.style.display = (inp.cropType === 'rice') ? '' : 'none';
+
+    // Soil baseline editor → CLIENT_CONFIG.soilTest sync. Lets the
+    // consultant update the soil measurement live during a session
+    // without touching the JSON file.
+    const soilEl = document.getElementById('soilSOCPercent');
+    if (soilEl) {
+      const socPct = parseFloat(soilEl.value);
+      const bulk   = parseFloat(document.getElementById('soilBulkDensity').value);
+      const depth  = parseFloat(document.getElementById('soilDepthCm').value);
+      const date   = document.getElementById('soilDate').value;
+      if (isFinite(socPct) && socPct > 0) {
+        if (!CLIENT_CONFIG.soilTest) CLIENT_CONFIG.soilTest = {};
+        CLIENT_CONFIG.soilTest.socPercent = socPct;
+        if (isFinite(bulk))  CLIENT_CONFIG.soilTest.bulkDensity = bulk;
+        if (isFinite(depth)) CLIENT_CONFIG.soilTest.depthCm = depth;
+        if (date)            CLIENT_CONFIG.soilTest.date = date;
+      }
+    }
     renderClientBanner(inp);
     renderMoneyHero(inp, r);
     renderKPIs(inp, r);
@@ -3542,7 +3576,8 @@
     'cattleDairy', 'cattleBeef', 'sowHead', 'growerPigHead', 'poultryLayer', 'poultryBroiler',
       'irrigation', 'coldStorage', 'otherElec',
       'chemicals', 'feed', 'transport', 'commute', 'packaging', 'waste',
-      'biochar', 'trees'
+      'biochar', 'trees',
+      'soilSOCPercent', 'soilBulkDensity', 'soilDepthCm', 'soilDate'
     ];
     liveInputs.forEach(id => {
       const el = document.getElementById(id);
