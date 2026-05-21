@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1:1 私人碳盤查諮詢 · Private Carbon Consulting</title>
+<meta name="description" content="台灣碳排工具創辦人 何安仁 提供的 1:1 私人碳盤查諮詢服務，協助農場、中小企業與團體解讀計算結果並擬定減碳行動。">
+<link rel="canonical" href="https://anren1117-lang.github.io/taiwan-carbon-tools/consulting.html">
+<meta name="theme-color" content="#1D9E75">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:site_name" content="Taiwan Carbon Tools">
+<meta property="og:title" content="1:1 私人碳盤查諮詢 · Private Carbon Consulting">
+<meta property="og:description" content="台灣碳排工具創辦人 何安仁 提供的 1:1 私人碳盤查諮詢服務，協助農場、中小企業與團體解讀計算結果並擬定減碳行動。">
+<meta property="og:url" content="https://anren1117-lang.github.io/taiwan-carbon-tools/consulting.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="1:1 私人碳盤查諮詢 · Private Carbon Consulting">
+<meta name="twitter:description" content="台灣碳排工具創辦人 何安仁 提供的 1:1 私人碳盤查諮詢服務，協助農場、中小企業與團體解讀計算結果並擬定減碳行動。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script defer data-domain="anren1117-lang.github.io/taiwan-carbon-tools" src="https://plausible.io/js/script.js"></script>
+<style>
+  :root {
+    --accent: #1D9E75;
+    --accent-dark: #157a59;
+    --accent-tint: rgba(29, 158, 117, 0.1);
+    --bg: #ffffff;
+    --bg-card: #ffffff;
+    --bg-subtle: #f7f8f7;
+    --text: #1a1a1a;
+    --text-muted: #6b7280;
+    --border: #e5e7eb;
+    --shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0e1410;
+      --bg-card: #161d18;
+      --bg-subtle: #1a2220;
+      --text: #f0f2f0;
+      --text-muted: #9ca3af;
+      --border: #2a3530;
+      --accent-tint: rgba(29, 158, 117, 0.15);
+      --shadow: 0 1px 2px rgba(0,0,0,0.3);
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 980px; margin: 0 auto; padding: 0 20px; }
+  header {
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 10;
+    backdrop-filter: blur(8px);
+  }
+  .header-inner { display: flex; justify-content: space-between; align-items: center; }
+  .logo { font-weight: 700; font-size: 17px; color: var(--accent); text-decoration: none; }
+  .header-right { display: flex; align-items: center; gap: 12px; }
+  .back-link { color: var(--text-muted); text-decoration: none; font-size: 13px; }
+  .back-link:hover { color: var(--accent); }
+  .lang-toggle {
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-family: inherit;
+    font-size: 13px;
+    color: var(--text);
+    cursor: pointer;
+  }
+  .lang-toggle:hover { border-color: var(--accent); }
+
+  .hero { padding: 60px 0 40px; text-align: center; }
+  .hero .eyebrow {
+    display: inline-block;
+    padding: 6px 14px;
+    background: var(--accent-tint);
+    color: var(--accent);
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-size: clamp(32px, 5vw, 44px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+  }
+  .hero .lead {
+    font-size: 17px;
+    color: var(--text-muted);
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  /* Author block */
+  .author-block {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    padding: 24px;
+    margin: 32px 0;
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+  }
+  .author-photo {
+    flex-shrink: 0;
+    width: 64px; height: 64px;
+    background: var(--accent-tint);
+    color: var(--accent);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: 700;
+  }
+  .author-name { font-weight: 600; margin-bottom: 4px; font-size: 16px; }
+  .author-role { font-size: 13px; color: var(--text-muted); margin-bottom: 10px; }
+  .author-bio { font-size: 14px; color: var(--text); }
+
+  /* Tiers */
+  .tiers-section { padding: 40px 0 20px; }
+  .tiers-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .tiers {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  @media (max-width: 880px) { .tiers { grid-template-columns: 1fr; } }
+
+  .tier {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+  }
+  .tier.featured {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px var(--accent);
+    position: relative;
+  }
+  .tier.featured::before {
+    content: "Most popular";
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 4px 12px;
+    background: var(--accent);
+    color: white;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .tier-name { font-size: 14px; font-weight: 600; color: var(--accent); margin-bottom: 6px; letter-spacing: 0.02em; }
+  .tier-duration { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; }
+  .tier-price {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    letter-spacing: -0.01em;
+    font-variant-numeric: tabular-nums;
+  }
+  .tier-price-note { font-size: 12px; color: var(--text-muted); margin-bottom: 18px; }
+  .tier-for {
+    font-size: 13px;
+    color: var(--text-muted);
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 14px;
+  }
+  .tier-for strong { color: var(--text); }
+  .tier-includes { list-style: none; padding: 0; margin: 0 0 24px 0; }
+  .tier-includes li {
+    font-size: 14px;
+    padding: 6px 0;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .tier-includes li::before {
+    content: "✓";
+    color: var(--accent);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .tier-cta {
+    margin-top: auto;
+    display: block;
+    text-align: center;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .tier-cta.primary {
+    background: var(--accent);
+    color: white;
+    border: 1px solid var(--accent);
+  }
+  .tier-cta.primary:hover { background: var(--accent-dark); border-color: var(--accent-dark); }
+  .tier-cta.secondary {
+    background: var(--bg-subtle);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .tier-cta.secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* How it works */
+  .section { padding: 60px 0; }
+  .section.subtle { background: var(--bg-subtle); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .section h2 { font-size: 26px; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 8px; text-align: center; }
+  .section .section-sub { color: var(--text-muted); font-size: 14px; text-align: center; margin-bottom: 32px; }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  @media (max-width: 740px) { .steps { grid-template-columns: 1fr; } }
+  .step { text-align: center; padding: 0 12px; }
+  .step-num {
+    width: 36px; height: 36px;
+    background: var(--accent-tint);
+    color: var(--accent);
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .step h3 { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
+  .step p { font-size: 14px; color: var(--text-muted); }
+
+  /* FAQ */
+  .faq { max-width: 720px; margin: 0 auto; }
+  .faq details {
+    border-bottom: 1px solid var(--border);
+    padding: 16px 0;
+  }
+  .faq details[open] summary { color: var(--accent); }
+  .faq summary {
+    cursor: pointer;
+    font-weight: 500;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 15px;
+  }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: "+"; color: var(--text-muted); font-size: 22px; font-weight: 300; line-height: 1; }
+  .faq details[open] summary::after { content: "−"; }
+  .faq .faq-body { padding-top: 10px; color: var(--text-muted); font-size: 14px; line-height: 1.7; }
+
+  /* Disclaimer */
+  .disclaimer {
+    margin: 40px 0 0;
+    padding: 16px 20px;
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+
+  footer {
+    padding: 32px 0;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="container header-inner">
+    <a href="index.html" class="logo">Taiwan Carbon Tools</a>
+    <div class="header-right">
+      <a href="index.html" class="back-link" data-zh="← 返回首頁" data-en="← Home">← 返回首頁</a>
+      <button class="lang-toggle" id="langToggle">English</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="container">
+      <div class="eyebrow" data-zh="1:1 私人諮詢" data-en="1:1 Private Consulting">1:1 私人諮詢</div>
+      <h1 data-zh="把計算結果變成可執行的減碳行動" data-en="Turn calculator results into a real reduction plan">把計算結果變成可執行的減碳行動</h1>
+      <p class="lead" data-zh="免費的計算工具給你數字。1:1 諮詢協助你把這些數字變成 — 屬於你的農場、企業、團體的 — 一份具體可行的行動方案。" data-en="The free tools give you the numbers. A 1:1 session turns those numbers into a concrete plan — for your farm, your business, or your team.">免費的計算工具給你數字。1:1 諮詢協助你把這些數字變成 — 屬於你的農場、企業、團體的 — 一份具體可行的行動方案。</p>
+    </div>
+  </section>
+
+  <div class="container">
+    <!-- Author / trust block -->
+    <div class="author-block">
+      <div class="author-photo">何</div>
+      <div>
+        <div class="author-name">何安仁 An-Ren Ho</div>
+        <div class="author-role" data-zh="Taiwan Carbon Tools 創辦人 · 18 歲，台灣" data-en="Founder, Taiwan Carbon Tools · 18, Taiwan">Taiwan Carbon Tools 創辦人 · 18 歲，台灣</div>
+        <div class="author-bio" data-zh="我獨立開發了這個網站的所有計算工具，研究台灣官方排放係數、IPCC 方法學與環境部 / 能源署最新規範。我為各種規模的客戶提供 1:1 諮詢 — 從個人農戶到準備 2026 碳費的中小企業 — 協助把數字轉化為實際行動。" data-en="I independently built every calculator on this site, working from Taiwan's official emission factors, IPCC methodology, and the latest MOENV / MOEA standards. I provide 1:1 consulting for everyone from individual farmers to SMEs preparing for the 2026 carbon fee — helping turn numbers into action.">我獨立開發了這個網站的所有計算工具，研究台灣官方排放係數、IPCC 方法學與環境部 / 能源署最新規範。我為各種規模的客戶提供 1:1 諮詢 — 從個人農戶到準備 2026 碳費的中小企業 — 協助把數字轉化為實際行動。</div>
+      </div>
+    </div>
+
+    <!-- Tiers -->
+    <section class="tiers-section">
+      <div class="tiers-title" data-zh="服務方案" data-en="Service tiers">服務方案</div>
+      <div class="tiers">
+
+        <!-- TIER 1: 1-month engagement (lead offering, featured) -->
+        <div class="tier featured">
+          <div class="tier-name" data-zh="一個月碳排陪跑" data-en="1-Month Carbon Companion">一個月碳排陪跑</div>
+          <div class="tier-duration" data-zh="30 天 · 一次付費" data-en="30 days · one-time payment">30 天 · 一次付費</div>
+          <div class="tier-price">NT$ 1,500</div>
+          <div class="tier-price-note" data-zh="起步價，適合第一次合作" data-en="Introductory rate for first-time clients">起步價，適合第一次合作</div>
+          <div class="tier-for"><strong data-zh="適合：" data-en="For: ">適合：</strong><span data-zh="想實際開始減碳的個人、農戶、小型團隊。一次付費，整月有人陪你想。" data-en="Individuals, farmers, and small teams ready to actually start reducing. One payment, a full month of guidance.">想實際開始減碳的個人、農戶、小型團隊。一次付費，整月有人陪你想。</span></div>
+          <ul class="tier-includes">
+            <li data-zh="開場 60 分鐘視訊：解讀你的計算結果" data-en="60-min kickoff call: walk through your calculator results">開場 60 分鐘視訊：解讀你的計算結果</li>
+            <li data-zh="30 天內無限制 email 問答" data-en="Unlimited email Q&A for 30 days">30 天內無限制 email 問答</li>
+            <li data-zh="月底書面行動方案摘要（2–3 頁）" data-en="End-of-month written action plan (2–3 pages)">月底書面行動方案摘要（2–3 頁）</li>
+            <li data-zh="台灣補助與資源導引" data-en="Pointers to Taiwan-local subsidies and resources">台灣補助與資源導引</li>
+          </ul>
+          <!-- TODO: Replace with your Stripe Payment Link (one-time NT$1,500). Setup: dashboard.stripe.com → Payment Links → New -->
+          <a href="https://buy.stripe.com/REPLACE-ME-monthly" target="_blank" rel="noopener" class="tier-cta primary" data-zh="開始一個月陪跑 →" data-en="Start a month →">開始一個月陪跑 →</a>
+        </div>
+
+        <!-- TIER 2: Deep session -->
+        <div class="tier">
+          <div class="tier-name" data-zh="深度盤查工作坊" data-en="Deep Inventory Session">深度盤查工作坊</div>
+          <div class="tier-duration" data-zh="3 小時 · 視訊或實地" data-en="3 hours · video or on-site">3 小時 · 視訊或實地</div>
+          <div class="tier-price">NT$ 5,000</div>
+          <div class="tier-price-note" data-zh="一次付費，含書面報告" data-en="One-time payment, includes written report">一次付費，含書面報告</div>
+          <div class="tier-for"><strong data-zh="適合：" data-en="For: ">適合：</strong><span data-zh="準備 2026 碳費的中小企業、要做正式內部盤查的農場、產銷班團體。" data-en="SMEs preparing for the 2026 carbon fee, farms ready to do real internal inventory, cooperatives.">準備 2026 碳費的中小企業、要做正式內部盤查的農場、產銷班團體。</span></div>
+          <ul class="tier-includes">
+            <li data-zh="範疇一、二、三完整盤點" data-en="Full Scope 1, 2, 3 inventory walkthrough">範疇一、二、三完整盤點</li>
+            <li data-zh="採用環境部與能源署官方係數" data-en="Built on MOENV and MOEA official factors">採用環境部與能源署官方係數</li>
+            <li data-zh="量化減碳目標與時程建議" data-en="Quantified reduction targets and timeline">量化減碳目標與時程建議</li>
+            <li data-zh="5–8 頁書面報告（兩週內交付）" data-en="5–8 page written report (delivered within two weeks)">5–8 頁書面報告（兩週內交付）</li>
+          </ul>
+          <!-- TODO: Replace with your Stripe Payment Link (one-time NT$5,000). Setup: dashboard.stripe.com → Payment Links → New -->
+          <a href="https://buy.stripe.com/REPLACE-ME-deep" target="_blank" rel="noopener" class="tier-cta secondary" data-zh="預約深度盤查 →" data-en="Book a session →">預約深度盤查 →</a>
+        </div>
+
+        <!-- TIER 3: Custom -->
+        <div class="tier">
+          <div class="tier-name" data-zh="客製化專案" data-en="Custom Engagement">客製化專案</div>
+          <div class="tier-duration" data-zh="工作坊 / 多月專案 / 政府標案" data-en="Workshops / multi-month / RFP">工作坊 / 多月專案 / 政府標案</div>
+          <div class="tier-price" data-zh="洽詢" data-en="Inquire">洽詢</div>
+          <div class="tier-price-note" data-zh="依範疇報價，48 小時內回覆" data-en="Custom quote within 48 hours">依範疇報價，48 小時內回覆</div>
+          <div class="tier-for"><strong data-zh="適合：" data-en="For: ">適合：</strong><span data-zh="合作社團體培訓、學校課程設計、ISO 14064 前期準備、政府機關專案。" data-en="Cooperative training, school curriculum, ISO 14064 prep, public sector projects.">合作社團體培訓、學校課程設計、ISO 14064 前期準備、政府機關專案。</span></div>
+          <ul class="tier-includes">
+            <li data-zh="半日 / 全日工作坊（5–30 人）" data-en="Half- or full-day workshops (5–30 participants)">半日 / 全日工作坊（5–30 人）</li>
+            <li data-zh="ISO 14064 前期盤查方法輔導" data-en="ISO 14064 pre-verification methodology coaching">ISO 14064 前期盤查方法輔導</li>
+            <li data-zh="教育單位課程設計與教材" data-en="Curriculum design and teaching materials for educators">教育單位課程設計與教材</li>
+            <li data-zh="政府專案計畫書共同撰寫" data-en="Co-authoring of government project proposals">政府專案計畫書共同撰寫</li>
+          </ul>
+          <!-- TODO: Replace with your Tally inquiry form URL -->
+          <a href="https://tally.so/r/REPLACE-ME" target="_blank" rel="noopener" class="tier-cta secondary" data-zh="提交諮詢 →" data-en="Submit inquiry →">提交諮詢 →</a>
+        </div>
+
+      </div>
+
+      <div class="disclaimer" data-zh="所有諮詢服務皆以教育與規劃建議為目的，不取代依 ISO 14064-1 / ISO 14067 進行的正式組織型或產品型溫室氣體查證，亦不構成政府申報之法定依據。實務上仍需依法委由查驗機構執行。" data-en="All consulting services are for educational and planning purposes. They do not substitute for formal ISO 14064-1 / ISO 14067 organisational or product GHG verification, nor are they a basis for regulatory reporting. Engage an accredited verification body for compliance.">所有諮詢服務皆以教育與規劃建議為目的，不取代依 ISO 14064-1 / ISO 14067 進行的正式組織型或產品型溫室氣體查證，亦不構成政府申報之法定依據。實務上仍需依法委由查驗機構執行。</div>
+    </section>
+  </div>
+
+  <section class="section subtle">
+    <div class="container">
+      <h2 data-zh="運作方式" data-en="How it works">運作方式</h2>
+      <p class="section-sub" data-zh="三步驟，從預約到拿到行動方案。" data-en="Three steps, from booking to actionable plan.">三步驟，從預約到拿到行動方案。</p>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <h3 data-zh="選擇方案並付款" data-en="Pick a tier & pay">選擇方案並付款</h3>
+          <p data-zh="點選方案，透過 Stripe 一次付款。支援信用卡與 Apple Pay。" data-en="Pick a tier and pay once via Stripe. Credit cards and Apple Pay supported.">點選方案，透過 Stripe 一次付款。支援信用卡與 Apple Pay。</p>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <h3 data-zh="24 小時內聯繫你" data-en="I reach out within 24h">24 小時內聯繫你</h3>
+          <p data-zh="付款後 24 小時內 email 你，安排開場視訊並請你準備計算結果或營運資料。" data-en="Within 24 hours of payment, I'll email you to schedule the kickoff call and request your calculator output or operational info.">付款後 24 小時內 email 你，安排開場視訊並請你準備計算結果或營運資料。</p>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <h3 data-zh="陪你一起做" data-en="We work together">陪你一起做</h3>
+          <p data-zh="Google Meet 視訊；陪跑方案整月可隨時 email 提問，月底交付書面行動方案。" data-en="Google Meet sessions; for the monthly tier you can email questions anytime, with a written action plan at month-end.">Google Meet 視訊；陪跑方案整月可隨時 email 提問，月底交付書面行動方案。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2 data-zh="常見問題" data-en="Frequently asked questions">常見問題</h2>
+      <p class="section-sub" data-zh="你可能會想知道的事。" data-en="Things you might want to know.">你可能會想知道的事。</p>
+      <div class="faq">
+        <details>
+          <summary data-zh="可以開立發票嗎？" data-en="Can you issue a Taiwan tax invoice (發票)?">可以開立發票嗎？</summary>
+          <div class="faq-body" data-zh="目前以「個人勞務報酬（9B）」方式提供收據，未開立統一發票。預計 2026 年完成公司行號登記後即可開立發票。如貴單位內部規定須有發票，請於諮詢前告知，我們可協助評估替代方案。" data-en="Currently provided as personal-service income (個人勞務報酬, 9B) with receipts — formal Taiwan tax invoices (統一發票) not yet issued. Business registration is planned for 2026, after which 發票 will be available. If your accounting requires 發票, please let us know before booking.">目前以「個人勞務報酬（9B）」方式提供收據，未開立統一發票。預計 2026 年完成公司行號登記後即可開立發票。如貴單位內部規定須有發票，請於諮詢前告知，我們可協助評估替代方案。</div>
+        </details>
+        <details>
+          <summary data-zh="諮詢服務可以退費嗎？" data-en="What's your refund policy?">諮詢服務可以退費嗎？</summary>
+          <div class="faq-body" data-zh="一個月陪跑方案：付款後 7 天內、尚未進行開場視訊前，可全額退費；開場視訊後不退費，但若期間有任何問題請直接告知。深度盤查工作坊：距通話時間 48 小時以上可全額退費，48 小時內取消收取 50% 行政費用。" data-en="1-Month Companion: full refund within 7 days of payment if the kickoff call has not yet occurred; no refund after kickoff, but please raise any issues directly. Deep Inventory Session: full refund if cancelled at least 48 hours before the session, 50% admin fee within 48 hours.">一個月陪跑方案：付款後 7 天內、尚未進行開場視訊前，可全額退費；開場視訊後不退費，但若期間有任何問題請直接告知。深度盤查工作坊：距通話時間 48 小時以上可全額退費，48 小時內取消收取 50% 行政費用。</div>
+        </details>
+        <details>
+          <summary data-zh="使用的語言？" data-en="What languages do you offer?">使用的語言？</summary>
+          <div class="faq-body" data-zh="中文（華語）為主，亦可使用英文進行。台語可以理解但書面報告以中文與英文為主。" data-en="Primarily Mandarin Chinese; English also available. Taiwanese (Hokkien) understood for conversation, written reports in Chinese or English.">中文（華語）為主，亦可使用英文進行。台語可以理解但書面報告以中文與英文為主。</div>
+        </details>
+        <details>
+          <summary data-zh="不在台灣可以諮詢嗎？" data-en="Can you consult clients outside Taiwan?">不在台灣可以諮詢嗎？</summary>
+          <div class="faq-body" data-zh="可以。視訊諮詢支援全球客戶。但請注意：方法學、補助與政策參考主要為台灣在地資訊（環境部、能源署、農業部規範），對非台灣案例的適用性有限。" data-en="Yes — video consultations are available worldwide. However, methodology references, subsidies, and policy citations are Taiwan-specific (MOENV, MOEA, MOA frameworks). Applicability to non-Taiwan cases is limited.">可以。視訊諮詢支援全球客戶。但請注意：方法學、補助與政策參考主要為台灣在地資訊（環境部、能源署、農業部規範），對非台灣案例的適用性有限。</div>
+        </details>
+        <details>
+          <summary data-zh="諮詢結果可以用於正式法規申報嗎？" data-en="Can session outputs be used for regulatory reporting?">諮詢結果可以用於正式法規申報嗎？</summary>
+          <div class="faq-body" data-zh="不行。我提供的所有報告與建議皆為「教育與規劃用途」，不能取代依 ISO 14064-1 由查驗機構執行的正式組織型溫室氣體盤查、查證、或環境部碳費申報。我會協助你了解流程與準備工作，但正式申報需依法委由認證查驗機構辦理。" data-en="No. All reports and recommendations are for educational and planning purposes — they do not replace formal ISO 14064-1 organisational GHG inventory verification by accredited bodies, nor MOENV carbon fee filing. I can help you understand the process and prepare, but formal reporting must be carried out through accredited verifiers.">不行。我提供的所有報告與建議皆為「教育與規劃用途」，不能取代依 ISO 14064-1 由查驗機構執行的正式組織型溫室氣體盤查、查證、或環境部碳費申報。我會協助你了解流程與準備工作，但正式申報需依法委由認證查驗機構辦理。</div>
+        </details>
+        <details>
+          <summary data-zh="為什麼選擇我？我才 18 歲。" data-en="Why work with me? I'm 18.">為什麼選擇我？我才 18 歲。</summary>
+          <div class="faq-body" data-zh="坦白說：如果你需要一份能在董事會通過、由 PwC / SGS 簽證的正式碳盤查報告，請找認證查驗機構。但如果你需要的是有人能清楚說明你的數據從哪來、最有效的減碳順序是什麼、怎麼開始第一步 — 那我可以做得比許多大顧問公司更直接、更便宜、更貼近你的實際營運。我把所有方法學與排放係數都公開在這個網站上，你可以先看看再決定。" data-en="Honestly: if you need a board-ready report signed off by PwC or SGS, hire an accredited verifier. But if you need someone who can clearly explain where your numbers come from, what the highest-impact reduction order is, and how to take the first step — I can do that more directly, more cheaply, and closer to your actual operations than many large consultancies. All methodology and emission factors are open on this site; review them and decide for yourself.">坦白說：如果你需要一份能在董事會通過、由 PwC / SGS 簽證的正式碳盤查報告，請找認證查驗機構。但如果你需要的是有人能清楚說明你的數據從哪來、最有效的減碳順序是什麼、怎麼開始第一步 — 那我可以做得比許多大顧問公司更直接、更便宜、更貼近你的實際營運。我把所有方法學與排放係數都公開在這個網站上，你可以先看看再決定。</div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Sample deliverable preview ──────────────────────────────────── -->
+  <section style="padding: 16px 0 40px;">
+    <div class="container" style="max-width: 1100px;">
+      <div style="background: linear-gradient(135deg, #1D9E75 0%, #157a59 100%); border-radius: 16px; padding: 28px 32px; color: white; display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap;">
+        <div style="flex: 1; min-width: 240px;">
+          <div style="font-size: 11px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; opacity: 0.85;" data-zh="先看看交付件" data-en="Preview the deliverable">先看看交付件</div>
+          <div style="font-size: 22px; font-weight: 700; margin-top: 6px; letter-spacing: -0.01em;" data-zh="想知道會拿到什麼？看 3 個真實示範" data-en="Want to see what you'd get? View 3 sample dashboards">想知道會拿到什麼？看 3 個真實示範</div>
+          <div style="font-size: 13px; opacity: 0.85; margin-top: 4px; line-height: 1.5;" data-zh="蔬菜、稻米、酪農各一例 — 含顧問端儀表板與買方分享頁。" data-en="Vegetables, rice, dairy — each with consultant dashboard and buyer share view.">蔬菜、稻米、酪農各一例 — 含顧問端儀表板與買方分享頁。</div>
+        </div>
+        <a href="farms.html" style="padding: 12px 22px; background: white; color: #157a59; border-radius: 10px; font-weight: 700; text-decoration: none; font-size: 14px; white-space: nowrap;" data-zh="看儀表板示範 →" data-en="See dashboard demos →">看儀表板示範 →</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container">
+    <p data-zh="© 2026 Taiwan Carbon Tools · 由 何安仁 An-Ren Ho 獨立經營" data-en="© 2026 Taiwan Carbon Tools · Independently operated by An-Ren Ho">© 2026 Taiwan Carbon Tools · 由 何安仁 An-Ren Ho 獨立經營</p>
+  </div>
+</footer>
+
+<script>
+  const STORAGE_KEY = 'tct_lang';
+  const langBtn = document.getElementById('langToggle');
+  let currentLang = 'zh';
+
+  function applyLang(lang) {
+    currentLang = lang;
+    document.documentElement.lang = lang === 'zh' ? 'zh-Hant' : 'en';
+    document.querySelectorAll('[data-zh]').forEach(el => {
+      const val = el.dataset[lang];
+      if (val !== undefined) el.textContent = val;
+    });
+    langBtn.textContent = lang === 'zh' ? 'English' : '中文';
+    try { localStorage.setItem(STORAGE_KEY, lang); } catch (e) {}
+  }
+
+  let initial = 'zh';
+  try {
+    const s = localStorage.getItem(STORAGE_KEY);
+    if (s === 'zh' || s === 'en') initial = s;
+  } catch (e) {}
+  langBtn.addEventListener('click', () => applyLang(currentLang === 'zh' ? 'en' : 'zh'));
+  applyLang(initial);
+</script>
+</body>
+</html>
