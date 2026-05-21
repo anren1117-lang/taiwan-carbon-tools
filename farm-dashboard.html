@@ -1840,6 +1840,13 @@
       <div class="panel-sub" style="margin-bottom: 14px;" data-zh="依目前的四項分數，列出最影響你長期生存的優先事項。" data-en="Based on the four scores above, the priorities most affecting long-term viability.">依目前的四項分數，列出最影響你長期生存的優先事項。</div>
       <div id="survivalPriorities"></div>
     </div>
+
+    <!-- Where your goods can physically go (market infrastructure) -->
+    <div style="margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--border);">
+      <div class="panel-title" style="font-size: 13px; margin-bottom: 4px;" data-zh="你的農產品可以送去哪裡？（在地市場路徑）" data-en="Where your goods can go — local market routes">你的農產品可以送去哪裡？（在地市場路徑）</div>
+      <div class="panel-sub" style="margin-bottom: 14px;" data-zh="依你的所在區域，列出實際可運銷的批發市場、農夫市集、有機通路與外銷港口。" data-en="Based on your region, the wholesale markets, farmers' markets, organic channels, and export ports your goods can physically reach.">依你的所在區域，列出實際可運銷的批發市場、農夫市集、有機通路與外銷港口。</div>
+      <div id="marketRoutes"></div>
+    </div>
   </section>
 
   <!-- ── Reduction roadmap ────────────────────────────────── -->
@@ -1862,6 +1869,10 @@
         <h4 data-zh="農場資料" data-en="Farm profile">農場資料</h4>
         <div class="editor-grid">
           <div><label data-zh="耕作面積 " data-en="Farm size ">耕作面積 <span class="u">(ha)</span></label><input type="number" id="farmSize" min="0" step="0.1"></div>
+          <div style="grid-column: 1 / -1;">
+            <label data-zh="實際地址（用於市場路徑、就近通路推薦）" data-en="Actual address (drives market routing + nearest channels)">實際地址 <span class="u">(address)</span></label>
+            <input type="text" id="address" placeholder="例：屏東縣枋寮鄉xxx路 123 號">
+          </div>
           <div>
             <label data-zh="所在區域（影響顧問建議）" data-en="Region (affects advisor recommendations)">所在區域 <span class="u">(region)</span></label>
             <select id="region">
@@ -2622,6 +2633,8 @@
     if (i.productCategory) document.getElementById('productCategory').value = i.productCategory;
     // Region (read from top-level CLIENT_CONFIG)
     if (CLIENT_CONFIG.region) document.getElementById('region').value = CLIENT_CONFIG.region;
+    // Address (read from top-level CLIENT_CONFIG)
+    if (CLIENT_CONFIG.address) document.getElementById('address').value = CLIENT_CONFIG.address;
 
     // Practice history (read from top-level CLIENT_CONFIG)
     const ph = CLIENT_CONFIG.practiceHistory || {};
@@ -3730,6 +3743,85 @@
     }
   };
 
+  // Market infrastructure by region — where the farmer's actual
+  // goods can physically go. Curated list of major wholesale markets,
+  // farmers' markets, organic channel hubs, and export ports per region.
+  // Used to answer "where could I sell?" based on the farm's location.
+  const MARKET_INFRASTRUCTURE = {
+    north: {
+      wholesale: [
+        { name: { zh: "台北第一果菜批發 · 萬大路", en: "Taipei First Wholesale · Wanda Rd." }, note: { zh: "全台最大蔬果集散，量大、議價空間有限", en: "Largest produce wholesale in Taiwan; high volume, narrow margin" } },
+        { name: { zh: "三重果菜批發市場 (新北)", en: "Sanchong Wholesale (New Taipei)" }, note: { zh: "北部次級集散，蔬菜運銷主力", en: "Secondary distribution; vegetable-heavy" } },
+        { name: { zh: "宜蘭果菜運銷合作社", en: "Yilan Produce Marketing Co-op" }, note: { zh: "宜蘭境內 + 北部都會配送", en: "Local Yilan + delivery to Taipei metro" } }
+      ],
+      farmersMarkets: [
+        { name: { zh: "248 農學市集 (台北)", en: "248 Farmers' Market (Taipei)" }, note: { zh: "週六忠孝市集 + 週日希望廣場", en: "Sat at Zhongxiao + Sun at Hope Plaza" } },
+        { name: { zh: "希望廣場 (台北中正)", en: "Hope Plaza (Taipei Zhongzheng)" }, note: { zh: "全年週末市集，每週 80+ 攤", en: "Year-round weekend market, 80+ vendors" } }
+      ],
+      organicChannels: [
+        { name: { zh: "主婦聯盟 (北部 30+ 站)", en: "Homemakers Union (30+ N. stations)" }, note: { zh: "雙週配送，農戶透明度高的會員制", en: "Biweekly delivery, member-based with producer transparency" } },
+        { name: { zh: "里仁 (北部 50+ 門市)", en: "Leezen (50+ N. stores)" }, note: { zh: "全台最密集，接受轉型期農場", en: "Densest national footprint; accepts transition farms" } }
+      ],
+      exportPort: { name: { zh: "基隆港", en: "Keelung Port" }, note: { zh: "中小型外銷適用，多走台北物流轉港", en: "Suitable for small-medium exports; goods usually shipped via Taipei logistics" } }
+    },
+    central: {
+      wholesale: [
+        { name: { zh: "西螺果菜市場 · 雲林", en: "Xiluo Wholesale · Yunlin" }, note: { zh: "全台最大蔬菜集散，雲嘉農戶主力管道", en: "Largest vegetable hub nationally; main channel for Yunlin/Chiayi growers" } },
+        { name: { zh: "台中果菜批發 · 北屯", en: "Taichung Wholesale · Beitun" }, note: { zh: "中部都會集散", en: "Central-Taiwan urban distribution" } },
+        { name: { zh: "彰化果菜運銷", en: "Changhua Produce Marketing" }, note: { zh: "彰化在地 + 中部跨縣配送", en: "Local Changhua + central cross-county" } }
+      ],
+      farmersMarkets: [
+        { name: { zh: "興大有機農夫市集 (台中)", en: "NCHU Organic Farmers' Market (Taichung)" }, note: { zh: "週六 8-12 點，中興大學校門口", en: "Sat 8 a.m.–noon, NCHU front gate" } },
+        { name: { zh: "微風市集 (台中)", en: "Breeze Farmers' Market (Taichung)" }, note: { zh: "週日 9-13，社區型有機市集", en: "Sun 9–1, community-organic market" } }
+      ],
+      organicChannels: [
+        { name: { zh: "主婦聯盟 (中部 12+ 站)", en: "Homemakers Union (12+ central stations)" } },
+        { name: { zh: "里仁 (中部 25+ 門市)", en: "Leezen (25+ central stores)" } }
+      ],
+      exportPort: { name: { zh: "台中港", en: "Taichung Port" }, note: { zh: "次大商港，農產冷鏈外銷漸增", en: "Second-largest commercial port; cold-chain ag exports growing" } }
+    },
+    south: {
+      wholesale: [
+        { name: { zh: "高雄果菜批發 · 前鎮", en: "Kaohsiung Wholesale · Qianzhen" }, note: { zh: "南部最大蔬果集散", en: "Largest produce wholesale in South Taiwan" } },
+        { name: { zh: "屏東果菜市場", en: "Pingtung Wholesale Market" }, note: { zh: "屏東熱帶水果主管道（芒果、鳳梨、火龍果）", en: "Main channel for Pingtung tropical fruit (mango, pineapple, dragonfruit)" } },
+        { name: { zh: "台南果菜市場 · 安南", en: "Tainan Wholesale · Annan" }, note: { zh: "嘉南平原蔬果集散", en: "Distribution hub for Chiayi-Tainan plains" } }
+      ],
+      farmersMarkets: [
+        { name: { zh: "高雄微風市集", en: "Kaohsiung Breeze Market" }, note: { zh: "週六上午，捷運美麗島", en: "Sat morning, Formosa Boulevard MRT" } },
+        { name: { zh: "屏東 i 郷市集", en: "Pingtung iHome Market" }, note: { zh: "在地小農直銷", en: "Local smallholder direct sales" } }
+      ],
+      organicChannels: [
+        { name: { zh: "主婦聯盟 (南部 10+ 站)", en: "Homemakers Union (10+ S. stations)" } },
+        { name: { zh: "里仁 (南部 20+ 門市)", en: "Leezen (20+ S. stores)" } }
+      ],
+      exportPort: { name: { zh: "高雄港", en: "Kaohsiung Port" }, note: { zh: "<strong>全台最大商港</strong>，熱帶水果外銷日本、香港、新加坡的主要通路", en: "<strong>Largest port in Taiwan.</strong> Main route for tropical fruit export to Japan / HK / Singapore" } }
+    },
+    east: {
+      wholesale: [
+        { name: { zh: "花蓮果菜批發", en: "Hualien Wholesale" }, note: { zh: "東部小型集散，跨蘇花改至北部需 3-4 小時", en: "Small E.-Taiwan hub; 3–4hr drive to north via Suhua Hwy" } },
+        { name: { zh: "台東果菜市場", en: "Taitung Wholesale" }, note: { zh: "南端集散，南迴公路通高雄", en: "South-end hub; Nanhuei Hwy connects to Kaohsiung" } }
+      ],
+      farmersMarkets: [
+        { name: { zh: "花蓮好事集", en: "Hualien Good-Things Market" }, note: { zh: "週六上午，鐵道園區", en: "Sat morning, Railway Cultural Park" } },
+        { name: { zh: "台東日日早市", en: "Taitung Day-by-Day Morning Market" }, note: { zh: "每日，台東市區", en: "Daily, downtown Taitung" } }
+      ],
+      organicChannels: [
+        { name: { zh: "花蓮 / 台東品牌溢價直銷", en: "Hualien / Taitung brand direct-to-consumer" }, note: { zh: "東部品牌力強，網路 / 觀光直銷溢價高", en: "Strong regional brand; online + tourism direct-sales command premium" } }
+      ],
+      exportPort: { name: { zh: "蘇澳港 / 花蓮港", en: "Su'ao Port / Hualien Port" }, note: { zh: "小型商港，多數出口仍走基隆/高雄", en: "Small commercial ports; most exports still routed via Keelung or Kaohsiung" } }
+    },
+    offshore: {
+      wholesale: [
+        { name: { zh: "在地市場 (依屬地)", en: "Local market (by island)" }, note: { zh: "外島市場規模小，多走觀光直銷", en: "Limited local market; most goods go to tourism direct-sales" } }
+      ],
+      farmersMarkets: [],
+      organicChannels: [
+        { name: { zh: "觀光直銷 + 宅配跨海", en: "Tourism direct + cross-strait shipping" }, note: { zh: "稀少性溢價高，但運費為瓶頸", en: "Scarcity premium high; logistics cost is the bottleneck" } }
+      ],
+      exportPort: { name: { zh: "在地小型碼頭", en: "Local small ports" }, note: { zh: "規模有限，多數仍跨海至基隆/高雄", en: "Limited capacity; most exports still routed to Keelung/Kaohsiung" } }
+    }
+  };
+
   // Region-specific context — affects how the survival guide + agent
   // tailor advice. Pulled from CLIENT_CONFIG.region (north / central /
   // south / east / offshore).
@@ -3942,6 +4034,46 @@
         <span class="sv-priority-title">${d.title}</span>
         <div class="sv-priority-body">${d.body}</div>
       </div>`).join('');
+
+    // Market routes — where the goods can physically go
+    const infra = MARKET_INFRASTRUCTURE[region];
+    const routesEl = document.getElementById('marketRoutes');
+    if (!infra) {
+      routesEl.innerHTML = `<div style="color:var(--text-muted);font-size:13px">${tr('請在編輯客戶資料中選擇所在區域以顯示市場路徑。', 'Select a region in the editor to show market routes.')}</div>`;
+    } else {
+      const renderList = (items, emptyMsg) => {
+        if (!items || items.length === 0) return `<div style="color:var(--text-muted); font-size: 11.5px;">${emptyMsg}</div>`;
+        return items.map(item => `
+          <div style="padding: 8px 0; border-top: 1px dashed var(--border); font-size: 12.5px; line-height: 1.55;">
+            <strong style="color: var(--text); font-weight: 600;">${trObj(item.name)}</strong>
+            ${item.note ? `<div style="color: var(--text-muted); font-size: 11.5px; margin-top: 2px;">${trObj(item.note)}</div>` : ''}
+          </div>`).join('');
+      };
+      const addrLine = CLIENT_CONFIG.address ? `<div style="font-size: 11.5px; color: var(--text-muted); margin-bottom: 14px;">📍 ${tr('本農場地址', 'Farm address')}：${CLIENT_CONFIG.address}</div>` : '';
+      routesEl.innerHTML = addrLine + `
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px;">
+          <div style="background: var(--bg-subtle); border: 1px solid var(--border); border-left: 3px solid var(--s1); border-radius: 10px; padding: 14px 16px;">
+            <div style="font-size: 11px; font-weight: 700; color: var(--s1); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 8px;">🏪 ${tr('批發市場', 'Wholesale markets')}</div>
+            ${renderList(infra.wholesale, tr('無資料', 'No data'))}
+          </div>
+          <div style="background: var(--bg-subtle); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 10px; padding: 14px 16px;">
+            <div style="font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 8px;">🥕 ${tr('農夫市集', 'Farmers\' markets')}</div>
+            ${renderList(infra.farmersMarkets, tr('本區暫無大型農夫市集', 'No major farmers\' market in this region'))}
+          </div>
+          <div style="background: var(--bg-subtle); border: 1px solid var(--border); border-left: 3px solid var(--s2); border-radius: 10px; padding: 14px 16px;">
+            <div style="font-size: 11px; font-weight: 700; color: var(--s2); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 8px;">🌱 ${tr('有機 / 友善通路', 'Organic / friendly channels')}</div>
+            ${renderList(infra.organicChannels, tr('本區通路有限', 'Limited channels in this region'))}
+          </div>
+          ${infra.exportPort ? `
+          <div style="background: var(--bg-subtle); border: 1px solid var(--border); border-left: 3px solid var(--s3); border-radius: 10px; padding: 14px 16px;">
+            <div style="font-size: 11px; font-weight: 700; color: var(--s3); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 8px;">🚢 ${tr('外銷港口', 'Export port')}</div>
+            <div style="padding-top: 4px; font-size: 12.5px; line-height: 1.55;">
+              <strong style="color: var(--text); font-weight: 600;">${trObj(infra.exportPort.name)}</strong>
+              ${infra.exportPort.note ? `<div style="color: var(--text-muted); font-size: 11.5px; margin-top: 2px;">${trObj(infra.exportPort.note)}</div>` : ''}
+            </div>
+          </div>` : ''}
+        </div>`;
+    }
   }
 
   function renderRoadmap(inp, r) {
@@ -4372,6 +4504,10 @@
     const regionEl = document.getElementById('region');
     if (regionEl && regionEl.value) CLIENT_CONFIG.region = regionEl.value;
 
+    // Address text → CLIENT_CONFIG.address sync.
+    const addressEl = document.getElementById('address');
+    if (addressEl) CLIENT_CONFIG.address = addressEl.value || '';
+
     // Practice history editor → CLIENT_CONFIG.practiceHistory sync.
     ['coverCrop', 'noTill', 'compost', 'residue'].forEach(k => {
       const el = document.getElementById('ph-' + k);
@@ -4523,7 +4659,7 @@
     applyConfigToDom();
 
     const liveInputs = [
-      'farmSize', 'region', 'cropType', 'annualYieldKg', 'productCategory',
+      'farmSize', 'region', 'address', 'cropType', 'annualYieldKg', 'productCategory',
       'diesel', 'gasoline', 'lpg', 'heatingOil',
       'nFert', 'riceMgmt', 'cattle', 'pigs', 'poultry', 'manure',
     'cattleDairy', 'cattleBeef', 'sowHead', 'growerPigHead', 'poultryLayer', 'poultryBroiler',
