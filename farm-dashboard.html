@@ -970,6 +970,144 @@
   }
   @keyframes dlspin { to { transform: rotate(360deg); } }
 
+  /* ── Farm ERP (activity log / inventory / ledger / contacts) ─ */
+  .erp-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 10px;
+  }
+  .erp-tab {
+    padding: 7px 14px;
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-family: inherit;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+  }
+  .erp-tab:hover { color: var(--accent); border-color: var(--accent); }
+  .erp-tab.active { background: var(--accent); color: white; border-color: var(--accent); }
+  .erp-export-btn {
+    margin-left: auto;
+    padding: 7px 14px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-family: inherit;
+    font-size: 12px;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-weight: 600;
+  }
+  .erp-export-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .erp-tab-content { display: none; }
+  .erp-tab-content.active { display: block; }
+  .erp-summary {
+    padding: 10px 14px;
+    background: var(--bg-subtle);
+    border-radius: 8px;
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+  .erp-summary strong { color: var(--text); font-weight: 700; font-variant-numeric: tabular-nums; }
+  .erp-summary .sep { margin: 0 8px; opacity: 0.4; }
+  .erp-form {
+    background: var(--bg-subtle);
+    border: 1px dashed var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 14px;
+  }
+  .erp-form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .erp-form input, .erp-form select, .erp-form textarea {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    background: var(--bg-card);
+    color: var(--text);
+    font-family: inherit;
+    font-size: 13px;
+  }
+  .erp-form textarea { resize: vertical; min-height: 36px; margin-bottom: 8px; }
+  .erp-form input:focus, .erp-form select:focus, .erp-form textarea:focus {
+    outline: none; border-color: var(--accent);
+  }
+  .erp-submit {
+    padding: 8px 18px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .erp-submit:hover { background: var(--accent-dark); }
+  .erp-table { font-size: 12.5px; }
+  .erp-row {
+    display: grid;
+    grid-template-columns: 92px 110px 1fr auto auto;
+    gap: 12px;
+    padding: 10px 4px;
+    border-top: 1px solid var(--border);
+    align-items: start;
+  }
+  .erp-row:first-of-type { border-top: none; }
+  .erp-row .erp-date { color: var(--text-muted); font-variant-numeric: tabular-nums; }
+  .erp-row .erp-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-size: 11px;
+    color: var(--text);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .erp-row .erp-tag.income  { background: rgba(29,158,117,0.12); color: var(--accent); border-color: rgba(29,158,117,0.25); }
+  .erp-row .erp-tag.expense { background: rgba(180,83,9,0.12); color: var(--pending); border-color: rgba(180,83,9,0.25); }
+  .erp-row .erp-body { line-height: 1.5; }
+  .erp-row .erp-body .sub { color: var(--text-muted); font-size: 11.5px; margin-top: 2px; }
+  .erp-row .erp-cost {
+    font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap;
+  }
+  .erp-row .erp-cost.income { color: var(--accent); }
+  .erp-row .erp-cost.expense { color: var(--pending); }
+  .erp-del {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 16px;
+    padding: 0 4px;
+  }
+  .erp-del:hover { color: var(--neg); }
+  .erp-empty {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 12px;
+    padding: 20px 0;
+    font-style: italic;
+  }
+  @media (max-width: 640px) {
+    .erp-row { grid-template-columns: 1fr auto; }
+    .erp-row .erp-date, .erp-row .erp-tag, .erp-row .erp-cost { font-size: 11.5px; }
+  }
+
   /* ── Glossary (acronym definitions) ─────────────────────── */
   .glossary {
     margin: 0 0 28px;
@@ -1605,6 +1743,7 @@
     <a href="#sec-income" class="sn-link" data-zh="收益機會" data-en="Income">收益機會</a>
     <a href="#sec-survival" class="sn-link" data-zh="生存指引" data-en="Survival">生存指引</a>
     <a href="#sec-actions" class="sn-link" data-zh="行動路徑" data-en="Actions">行動路徑</a>
+    <a href="#sec-erp" class="sn-link" data-zh="營運紀錄" data-en="ERP">營運紀錄</a>
     <a href="#sec-editor" class="sn-link" data-zh="設定" data-en="Settings">設定</a>
   </nav>
 
@@ -1871,6 +2010,113 @@
     </div>
     <div class="panel-sub" data-zh="依目前數據與你的最大排放源、最大未利用碳匯機會排序。勾選「標記完成」即可追蹤執行進度（本機儲存）。" data-en="Ranked by your largest emission source and biggest untapped sink opportunity. Check 'Mark done' to track implementation progress (saved locally).">依目前數據與你的最大排放源、最大未利用碳匯機會排序。勾選「標記完成」即可追蹤執行進度（本機儲存）。</div>
     <div id="recsList"></div>
+  </section>
+
+  <!-- ── Farm ERP: activity log + inventory + ledger + contacts ─── -->
+  <section class="panel" id="sec-erp">
+    <div class="panel-title" data-zh="農場 ERP — 營運紀錄與管理" data-en="Farm ERP — operations management">農場 ERP — 營運紀錄與管理</div>
+    <div class="panel-sub" data-zh="日常田間紀錄、庫存、收支、聯絡簿 — 四個模組，全部本機儲存（依農場代號獨立）。記得用「匯出 JSON」備份。" data-en="Daily field log, inventory, ledger, contact book — four modules, all stored locally per farm-id. Use 'Export JSON' to back up.">日常田間紀錄、庫存、收支、聯絡簿 — 四個模組，全部本機儲存（依農場代號獨立）。記得用「匯出 JSON」備份。</div>
+
+    <div class="erp-tabs">
+      <button class="erp-tab active" data-tab="log"       data-zh="📋 農事日誌"  data-en="📋 Activity log">📋 農事日誌</button>
+      <button class="erp-tab"        data-tab="inventory" data-zh="📦 庫存"      data-en="📦 Inventory">📦 庫存</button>
+      <button class="erp-tab"        data-tab="ledger"    data-zh="💵 收支簿"    data-en="💵 Ledger">💵 收支簿</button>
+      <button class="erp-tab"        data-tab="contacts"  data-zh="📇 聯絡簿"    data-en="📇 Contacts">📇 聯絡簿</button>
+      <button class="erp-export-btn" id="erpExport"       data-zh="📥 匯出所有 JSON" data-en="📥 Export all JSON">📥 匯出所有 JSON</button>
+    </div>
+
+    <!-- ── Activity log ─────────────────────────────────── -->
+    <div class="erp-tab-content active" data-tab-content="log">
+      <div class="erp-summary" id="logSummary"></div>
+      <form class="erp-form" id="logForm">
+        <div class="erp-form-grid">
+          <input type="date" id="logDate" required>
+          <select id="logActivity" required>
+            <option value="planting"      data-zh="播種"        data-en="Planting">播種</option>
+            <option value="transplanting" data-zh="移植"        data-en="Transplanting">移植</option>
+            <option value="fertilizing"   data-zh="施肥"        data-en="Fertilizing">施肥</option>
+            <option value="spraying"      data-zh="噴藥"        data-en="Spraying">噴藥</option>
+            <option value="weeding"       data-zh="除草"        data-en="Weeding">除草</option>
+            <option value="irrigation"    data-zh="灌溉"        data-en="Irrigation">灌溉</option>
+            <option value="harvest"       data-zh="收成"        data-en="Harvest">收成</option>
+            <option value="sales"         data-zh="銷售"        data-en="Sales">銷售</option>
+            <option value="maintenance"   data-zh="設備保養"    data-en="Maintenance">設備保養</option>
+            <option value="inspection"    data-zh="田間觀察"    data-en="Inspection">田間觀察</option>
+            <option value="soil-sampling" data-zh="土壤採樣"    data-en="Soil sampling">土壤採樣</option>
+            <option value="other"         data-zh="其他"        data-en="Other">其他</option>
+          </select>
+          <input type="text" id="logArea" data-zh-placeholder="田區 (選填)" data-en-placeholder="Plot (optional)" placeholder="田區 (選填)">
+          <input type="number" id="logCost" min="0" step="100" data-zh-placeholder="成本 NT$ (選填)" data-en-placeholder="Cost NT$ (optional)" placeholder="成本 NT$ (選填)">
+        </div>
+        <textarea id="logNote" rows="2" data-zh-placeholder="備註：劑量、天氣、觀察..." data-en-placeholder="Note: dose, weather, observations..." placeholder="備註：劑量、天氣、觀察..."></textarea>
+        <button type="submit" class="erp-submit" data-zh="新增紀錄" data-en="Add entry">新增紀錄</button>
+      </form>
+      <div class="erp-table" id="logTable"></div>
+    </div>
+
+    <!-- ── Inventory ────────────────────────────────────── -->
+    <div class="erp-tab-content" data-tab-content="inventory">
+      <div class="erp-summary" id="invSummary"></div>
+      <form class="erp-form" id="invForm">
+        <div class="erp-form-grid">
+          <input type="text" id="invName" required data-zh-placeholder="品項名稱（如：尿素 46-0-0）" data-en-placeholder="Item name (e.g. urea 46-0-0)" placeholder="品項名稱">
+          <select id="invCategory" required>
+            <option value="seeds"      data-zh="種子 / 種苗" data-en="Seeds / seedlings">種子 / 種苗</option>
+            <option value="fertilizer" data-zh="肥料"       data-en="Fertilizer">肥料</option>
+            <option value="pesticide"  data-zh="農藥"       data-en="Pesticide">農藥</option>
+            <option value="equipment"  data-zh="設備 / 機具" data-en="Equipment">設備 / 機具</option>
+            <option value="harvest"    data-zh="收成存貨"    data-en="Harvest stock">收成存貨</option>
+            <option value="other"      data-zh="其他"       data-en="Other">其他</option>
+          </select>
+          <input type="number" id="invQty" min="0" step="0.1" data-zh-placeholder="數量" data-en-placeholder="Quantity" placeholder="數量">
+          <input type="text" id="invUnit" data-zh-placeholder="單位（kg / L / 包 / 件）" data-en-placeholder="Unit (kg / L / bag / item)" placeholder="單位">
+        </div>
+        <input type="text" id="invNote" data-zh-placeholder="備註：儲存位置、批號、有效期..." data-en-placeholder="Note: location, batch, expiry..." placeholder="備註：儲存位置、批號、有效期...">
+        <button type="submit" class="erp-submit" data-zh="新增品項" data-en="Add item">新增品項</button>
+      </form>
+      <div class="erp-table" id="invTable"></div>
+    </div>
+
+    <!-- ── Ledger ───────────────────────────────────────── -->
+    <div class="erp-tab-content" data-tab-content="ledger">
+      <div class="erp-summary" id="ledSummary"></div>
+      <form class="erp-form" id="ledForm">
+        <div class="erp-form-grid">
+          <input type="date" id="ledDate" required>
+          <select id="ledType" required>
+            <option value="income"  data-zh="收入" data-en="Income">收入</option>
+            <option value="expense" data-zh="支出" data-en="Expense">支出</option>
+          </select>
+          <input type="text" id="ledCategory" required data-zh-placeholder="類別（如：銷售收入、肥料採購、燃料）" data-en-placeholder="Category (e.g. sales, fertilizer, fuel)" placeholder="類別">
+          <input type="number" id="ledAmount" min="0" step="100" required data-zh-placeholder="金額 NT$" data-en-placeholder="Amount NT$" placeholder="金額 NT$">
+        </div>
+        <input type="text" id="ledNote" data-zh-placeholder="備註：對象、項目細節..." data-en-placeholder="Note: counterparty, item detail..." placeholder="備註">
+        <button type="submit" class="erp-submit" data-zh="新增收支" data-en="Add entry">新增收支</button>
+      </form>
+      <div class="erp-table" id="ledTable"></div>
+    </div>
+
+    <!-- ── Contacts ─────────────────────────────────────── -->
+    <div class="erp-tab-content" data-tab-content="contacts">
+      <div class="erp-summary" id="conSummary"></div>
+      <form class="erp-form" id="conForm">
+        <div class="erp-form-grid">
+          <input type="text" id="conName" required data-zh-placeholder="姓名 / 公司" data-en-placeholder="Name / company" placeholder="姓名 / 公司">
+          <select id="conRole" required>
+            <option value="buyer"    data-zh="買方 / 通路"    data-en="Buyer / channel">買方 / 通路</option>
+            <option value="supplier" data-zh="供應商"        data-en="Supplier">供應商</option>
+            <option value="advisor"  data-zh="顧問 / 改良場"  data-en="Advisor / Improvement Station">顧問 / 改良場</option>
+            <option value="neighbor" data-zh="鄰近農戶 / 產銷班" data-en="Neighbor / Production group">鄰近農戶 / 產銷班</option>
+            <option value="other"    data-zh="其他"          data-en="Other">其他</option>
+          </select>
+          <input type="text" id="conPhone" data-zh-placeholder="電話 (選填)" data-en-placeholder="Phone (optional)" placeholder="電話">
+          <input type="text" id="conEmail" data-zh-placeholder="Email (選填)" data-en-placeholder="Email (optional)" placeholder="Email">
+        </div>
+        <input type="text" id="conNote" data-zh-placeholder="備註：合作項目、最近一次接洽..." data-en-placeholder="Note: relationship details, last contact..." placeholder="備註">
+        <button type="submit" class="erp-submit" data-zh="新增聯絡人" data-en="Add contact">新增聯絡人</button>
+      </form>
+      <div class="erp-table" id="conTable"></div>
+    </div>
   </section>
 
   <!-- ── Editor drawer ────────────────────────────────────── -->
@@ -4997,6 +5243,232 @@
       render();
     });
 
+    // ── Farm ERP (activity log + inventory + ledger + contacts) ─
+    // All data persisted to localStorage, keyed by farm-id. Each module
+    // has the same shape: array of records with `id` (timestamp).
+    const erpKey = () => 'tct_erp_' + (farmStatus.id || 'demo');
+    const erpLoad = () => {
+      try { return JSON.parse(localStorage.getItem(erpKey()) || '{}'); }
+      catch (e) { return {}; }
+    };
+    const erpSave = (data) => {
+      try { localStorage.setItem(erpKey(), JSON.stringify(data)); }
+      catch (e) {}
+    };
+    const erpAdd = (module, record) => {
+      const data = erpLoad();
+      if (!data[module]) data[module] = [];
+      record.id = Date.now() + Math.random();
+      data[module].push(record);
+      erpSave(data);
+      renderErp();
+    };
+    const erpDelete = (module, id) => {
+      const data = erpLoad();
+      if (data[module]) data[module] = data[module].filter(r => r.id !== id);
+      erpSave(data);
+      renderErp();
+    };
+
+    // ERP localized labels
+    const ACTIVITY_LABELS = {
+      planting:      { zh: "播種",     en: "Planting" },
+      transplanting: { zh: "移植",     en: "Transplanting" },
+      fertilizing:   { zh: "施肥",     en: "Fertilizing" },
+      spraying:      { zh: "噴藥",     en: "Spraying" },
+      weeding:       { zh: "除草",     en: "Weeding" },
+      irrigation:    { zh: "灌溉",     en: "Irrigation" },
+      harvest:       { zh: "收成",     en: "Harvest" },
+      sales:         { zh: "銷售",     en: "Sales" },
+      maintenance:   { zh: "設備保養", en: "Maintenance" },
+      inspection:    { zh: "田間觀察", en: "Inspection" },
+      "soil-sampling": { zh: "土壤採樣", en: "Soil sampling" },
+      other:         { zh: "其他",     en: "Other" }
+    };
+    const INV_CATEGORY = {
+      seeds:      { zh: "種子 / 種苗", en: "Seeds / seedlings" },
+      fertilizer: { zh: "肥料",       en: "Fertilizer" },
+      pesticide:  { zh: "農藥",       en: "Pesticide" },
+      equipment:  { zh: "設備 / 機具", en: "Equipment" },
+      harvest:    { zh: "收成存貨",    en: "Harvest stock" },
+      other:      { zh: "其他",       en: "Other" }
+    };
+    const CONTACT_ROLE = {
+      buyer:    { zh: "買方 / 通路",   en: "Buyer / channel" },
+      supplier: { zh: "供應商",       en: "Supplier" },
+      advisor:  { zh: "顧問 / 改良場", en: "Advisor / Station" },
+      neighbor: { zh: "鄰近農戶",     en: "Neighbor" },
+      other:    { zh: "其他",         en: "Other" }
+    };
+
+    function renderErp() {
+      const data = erpLoad();
+      const todayMonth = new Date().toISOString().slice(0, 7);
+
+      // Activity log
+      const logs = (data.log || []).slice().sort((a, b) => b.date.localeCompare(a.date));
+      const logsThisMonth = logs.filter(l => l.date && l.date.startsWith(todayMonth)).length;
+      const logCost = logs.reduce((a, l) => a + (parseFloat(l.costNT) || 0), 0);
+      document.getElementById('logSummary').innerHTML = `
+        <strong>${logs.length}</strong> ${tr('筆紀錄', 'entries')}
+        <span class="sep">·</span> ${tr('本月', 'This month')} <strong>${logsThisMonth}</strong>
+        <span class="sep">·</span> ${tr('累計成本', 'Total cost')} <strong>NT$ ${fmt0(logCost)}</strong>`;
+      document.getElementById('logTable').innerHTML = logs.length === 0
+        ? `<div class="erp-empty">${tr('還沒有紀錄。第一筆從上方新增。', 'No entries yet. Add the first one above.')}</div>`
+        : logs.map(l => `
+            <div class="erp-row">
+              <span class="erp-date">${l.date || '—'}</span>
+              <span class="erp-tag">${trObj(ACTIVITY_LABELS[l.activity] || { zh: l.activity, en: l.activity })}</span>
+              <div class="erp-body">${l.area ? `<strong>${l.area}</strong> · ` : ''}${l.note || ''}</div>
+              <span class="erp-cost">${l.costNT ? 'NT$ ' + fmt0(l.costNT) : ''}</span>
+              <button class="erp-del" title="${tr('刪除', 'Delete')}" data-module="log" data-id="${l.id}">×</button>
+            </div>`).join('');
+
+      // Inventory
+      const inv = (data.inventory || []).slice().sort((a, b) => (a.category || '').localeCompare(b.category || ''));
+      const invByCat = {};
+      inv.forEach(i => { invByCat[i.category] = (invByCat[i.category] || 0) + 1; });
+      document.getElementById('invSummary').innerHTML = `
+        <strong>${inv.length}</strong> ${tr('品項', 'items')}
+        ${Object.entries(invByCat).map(([c, n]) => `<span class="sep">·</span> ${trObj(INV_CATEGORY[c] || {zh:c,en:c})} <strong>${n}</strong>`).join('')}`;
+      document.getElementById('invTable').innerHTML = inv.length === 0
+        ? `<div class="erp-empty">${tr('還沒有品項。從上方新增庫存。', 'No items yet. Add inventory above.')}</div>`
+        : inv.map(i => `
+            <div class="erp-row">
+              <span class="erp-date">${trObj(INV_CATEGORY[i.category] || {zh:i.category,en:i.category})}</span>
+              <span class="erp-tag">${i.qty} ${i.unit || ''}</span>
+              <div class="erp-body"><strong>${i.name}</strong>${i.note ? `<div class="sub">${i.note}</div>` : ''}</div>
+              <span></span>
+              <button class="erp-del" title="${tr('刪除', 'Delete')}" data-module="inventory" data-id="${i.id}">×</button>
+            </div>`).join('');
+
+      // Ledger
+      const led = (data.ledger || []).slice().sort((a, b) => b.date.localeCompare(a.date));
+      const ledIncome = led.filter(l => l.type === 'income').reduce((a, l) => a + (parseFloat(l.amount) || 0), 0);
+      const ledExpense = led.filter(l => l.type === 'expense').reduce((a, l) => a + (parseFloat(l.amount) || 0), 0);
+      document.getElementById('ledSummary').innerHTML = `
+        ${tr('收入', 'Income')} <strong style="color:var(--accent);">NT$ ${fmt0(ledIncome)}</strong>
+        <span class="sep">·</span> ${tr('支出', 'Expense')} <strong style="color:var(--pending);">NT$ ${fmt0(ledExpense)}</strong>
+        <span class="sep">·</span> ${tr('淨額', 'Net')} <strong>NT$ ${fmt0(ledIncome - ledExpense)}</strong>`;
+      document.getElementById('ledTable').innerHTML = led.length === 0
+        ? `<div class="erp-empty">${tr('還沒有收支紀錄。', 'No ledger entries yet.')}</div>`
+        : led.map(l => `
+            <div class="erp-row">
+              <span class="erp-date">${l.date || '—'}</span>
+              <span class="erp-tag ${l.type}">${l.type === 'income' ? tr('收入', 'Income') : tr('支出', 'Expense')}</span>
+              <div class="erp-body"><strong>${l.category || ''}</strong>${l.note ? ` · ${l.note}` : ''}</div>
+              <span class="erp-cost ${l.type}">${l.type === 'expense' ? '−' : '+'}NT$ ${fmt0(l.amount)}</span>
+              <button class="erp-del" title="${tr('刪除', 'Delete')}" data-module="ledger" data-id="${l.id}">×</button>
+            </div>`).join('');
+
+      // Contacts
+      const con = (data.contacts || []).slice().sort((a, b) => (a.role || '').localeCompare(b.role || ''));
+      const conByRole = {};
+      con.forEach(c => { conByRole[c.role] = (conByRole[c.role] || 0) + 1; });
+      document.getElementById('conSummary').innerHTML = `
+        <strong>${con.length}</strong> ${tr('聯絡人', 'contacts')}
+        ${Object.entries(conByRole).map(([r, n]) => `<span class="sep">·</span> ${trObj(CONTACT_ROLE[r] || {zh:r,en:r})} <strong>${n}</strong>`).join('')}`;
+      document.getElementById('conTable').innerHTML = con.length === 0
+        ? `<div class="erp-empty">${tr('還沒有聯絡人。', 'No contacts yet.')}</div>`
+        : con.map(c => `
+            <div class="erp-row">
+              <span class="erp-date">${trObj(CONTACT_ROLE[c.role] || {zh:c.role,en:c.role})}</span>
+              <span class="erp-tag">${c.phone || c.email || '—'}</span>
+              <div class="erp-body"><strong>${c.name}</strong>${c.note ? `<div class="sub">${c.note}</div>` : ''}</div>
+              <span></span>
+              <button class="erp-del" title="${tr('刪除', 'Delete')}" data-module="contacts" data-id="${c.id}">×</button>
+            </div>`).join('');
+
+      // Wire up delete buttons
+      document.querySelectorAll('.erp-del').forEach(btn => {
+        btn.addEventListener('click', () => {
+          if (confirm(tr('確定刪除此筆紀錄？', 'Delete this entry?'))) {
+            erpDelete(btn.dataset.module, parseFloat(btn.dataset.id));
+          }
+        });
+      });
+    }
+
+    // Tabs
+    document.querySelectorAll('.erp-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.erp-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.erp-tab-content').forEach(c => c.classList.remove('active'));
+        tab.classList.add('active');
+        const target = tab.dataset.tab;
+        document.querySelector(`[data-tab-content="${target}"]`).classList.add('active');
+      });
+    });
+
+    // Form submissions
+    document.getElementById('logForm').addEventListener('submit', e => {
+      e.preventDefault();
+      erpAdd('log', {
+        date:     document.getElementById('logDate').value,
+        activity: document.getElementById('logActivity').value,
+        area:     document.getElementById('logArea').value,
+        note:     document.getElementById('logNote').value,
+        costNT:   parseFloat(document.getElementById('logCost').value) || 0
+      });
+      e.target.reset();
+      document.getElementById('logDate').value = new Date().toISOString().slice(0, 10);
+    });
+    document.getElementById('invForm').addEventListener('submit', e => {
+      e.preventDefault();
+      erpAdd('inventory', {
+        name:     document.getElementById('invName').value,
+        category: document.getElementById('invCategory').value,
+        qty:      parseFloat(document.getElementById('invQty').value) || 0,
+        unit:     document.getElementById('invUnit').value,
+        note:     document.getElementById('invNote').value
+      });
+      e.target.reset();
+    });
+    document.getElementById('ledForm').addEventListener('submit', e => {
+      e.preventDefault();
+      erpAdd('ledger', {
+        date:     document.getElementById('ledDate').value,
+        type:     document.getElementById('ledType').value,
+        category: document.getElementById('ledCategory').value,
+        amount:   parseFloat(document.getElementById('ledAmount').value) || 0,
+        note:     document.getElementById('ledNote').value
+      });
+      e.target.reset();
+      document.getElementById('ledDate').value = new Date().toISOString().slice(0, 10);
+    });
+    document.getElementById('conForm').addEventListener('submit', e => {
+      e.preventDefault();
+      erpAdd('contacts', {
+        name:  document.getElementById('conName').value,
+        role:  document.getElementById('conRole').value,
+        phone: document.getElementById('conPhone').value,
+        email: document.getElementById('conEmail').value,
+        note:  document.getElementById('conNote').value
+      });
+      e.target.reset();
+    });
+
+    // Pre-fill date defaults
+    const today = new Date().toISOString().slice(0, 10);
+    document.getElementById('logDate').value = today;
+    document.getElementById('ledDate').value = today;
+
+    // Export all ERP data as JSON
+    document.getElementById('erpExport').addEventListener('click', () => {
+      const data = erpLoad();
+      const farmId = farmStatus.id || 'demo';
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = farmId + '-erp-' + today + '.json';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    // First render
+    renderErp();
+
     // Engagement notes — autosave per farm-id to localStorage.
     // Notes survive page reload but stay browser-local (not synced).
     const notesEl = document.getElementById('notesText');
@@ -5032,7 +5504,7 @@
     const navLinks = document.querySelectorAll('.section-nav .sn-link');
     const navByTarget = {};
     navLinks.forEach(l => { navByTarget[l.getAttribute('href').slice(1)] = l; });
-    const targets = Array.from(document.querySelectorAll('#sec-overview, #sec-electricity, #sec-agent, #sec-intensity, #sec-sources, #sec-scope, #sec-renewables, #sec-scenarios, #sec-income, #sec-survival, #sec-actions, #sec-editor'));
+    const targets = Array.from(document.querySelectorAll('#sec-overview, #sec-electricity, #sec-agent, #sec-intensity, #sec-sources, #sec-scope, #sec-renewables, #sec-scenarios, #sec-income, #sec-survival, #sec-actions, #sec-erp, #sec-editor'));
     if ('IntersectionObserver' in window && targets.length) {
       const setActive = (id) => {
         navLinks.forEach(l => l.classList.remove('active'));
