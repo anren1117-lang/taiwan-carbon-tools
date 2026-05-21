@@ -2225,22 +2225,40 @@
   const MARKET_RESOURCES = {
     premium_domestic: {
       icon: '🛒',
-      name: { zh: "國內溢價通路", en: "Premium domestic channels" },
+      name: { zh: "國內綠色 / 安全 / 溢價零售通路", en: "Domestic green / safe / premium retail" },
       items: [
         { id: 'hua',     name: { zh: "主婦聯盟生活消費合作社", en: "Homemakers Union Co-op" },
           requires: ['friendly_or_organic'],
           url: "https://www.hucc-coop.tw/",
-          notes: { zh: "10 萬會員、雙週配送、強調生產者透明", en: "100k members, biweekly delivery, producer transparency" } },
+          notes: { zh: "10 萬會員、雙週配送、強調生產者透明 — 友善農場的主力管道", en: "100k members, biweekly delivery, producer transparency — primary channel for friendly-farming producers" } },
         { id: 'liren',   name: { zh: "里仁有機通路", en: "Leezen Organic Stores" },
           requires: ['low_chem'],
           url: "https://www.leezen.com.tw/",
-          notes: { zh: "全台 100+ 門市，接受無毒/轉型期農場", en: "100+ stores, accepts toxin-free transition farms" } },
+          notes: { zh: "全台 100+ 門市，接受無毒 / 轉型期 / 綠色保育標章農場", en: "100+ stores nationwide; accepts toxin-free / transition / Green Conservation farms" } },
+        { id: 'santosa', name: { zh: "聖德科斯 Santosa", en: "Santosa Health Foods" },
+          requires: ['low_chem'],
+          notes: { zh: "健康有機連鎖，全台 30+ 門市；接受 GAP / 友善 / 有機", en: "Health-food chain, 30+ stores; accepts GAP / friendly / organic" } },
+        { id: 'tianhe',  name: { zh: "天和鮮物", en: "Tianhe Fresh" },
+          requires: ['organic'],
+          notes: { zh: "高端有機 / 無毒蔬果與魚產，台北為主、單價最高", en: "High-end organic / toxin-free produce & seafood; Taipei-focused, premium pricing" } },
         { id: 'mottain', name: { zh: "棉花田有機", en: "Mottainai Organic" },
           requires: ['organic'],
-          notes: { zh: "有機驗證為必要條件", en: "Requires organic certification" } },
-        { id: 'esg',     name: { zh: "ESG 採購（統一/義美/台塑/全家）", en: "ESG procurement (PCSC, IMEI, FPG, FamilyMart)" },
+          notes: { zh: "全台 30+ 門市，必須有機驗證", en: "30+ stores nationwide; requires organic certification" } },
+        { id: 'healthlife', name: { zh: "健康人生 Health Life", en: "Health Life" },
+          requires: ['friendly_or_organic'],
+          notes: { zh: "健康食品連鎖，中部與南部分布較密", en: "Health-food chain; denser footprint in central + south Taiwan" } },
+        { id: 'citysuper', name: { zh: "city'super / Jasons / 微風超市", en: "city'super / Jasons / Breeze Super" },
           requires: ['low_carbon_top25', 'has_traceability'],
-          notes: { zh: "需可驗證的低碳強度 + 產銷履歷", en: "Verifiable low-carbon intensity + traceability required" } }
+          notes: { zh: "高端百貨超市；有機 + 低碳 + 履歷三項加分", en: "High-end department-store supermarkets; organic + low-carbon + traceability all command premium" } },
+        { id: 'antoxin', name: { zh: "無毒農夫 / i郷愛農 (線上直銷)", en: "Toxin-Free Farmer / Smile Rural (online direct)" },
+          requires: [],
+          notes: { zh: "線上直銷平台，無毒 / 友善農法門檻較親民", en: "Online direct-sales platforms; toxin-free / friendly methods accepted (lower bar than full organic)" } },
+        { id: 'esg',     name: { zh: "ESG 採購（統一 / 義美 / 台塑生醫 / 全家 / 王品 / 瓦城）", en: "ESG procurement (PCSC / IMEI / FPG / FamilyMart / Wowprime / TTFB)" },
+          requires: ['low_carbon_top25', 'has_traceability'],
+          notes: { zh: "大型食品集團與餐飲集團的低碳採購，需可驗證的碳揭露 + 產銷履歷", en: "Large food + F&B groups' low-carbon procurement; needs verifiable carbon disclosure + traceability" } },
+        { id: 'schoollunch', name: { zh: "學校午餐契作 / 公部門安全食材", en: "School lunch contracts / public-sector safe food" },
+          requires: ['has_traceability'],
+          notes: { zh: "穩定大宗訂單，需 GAP / 產銷履歷；長期、抗市場波動的基本盤", en: "Stable bulk orders; requires GAP or TGAP. Long-term, recession-resistant baseline channel" } }
       ]
     },
     export: {
@@ -3843,7 +3861,10 @@
       ],
       organicChannels: [
         { name: { zh: "主婦聯盟 (北部 30+ 站)", en: "Homemakers Union (30+ N. stations)" }, note: { zh: "雙週配送，農戶透明度高的會員制", en: "Biweekly delivery, member-based with producer transparency" } },
-        { name: { zh: "里仁 (北部 50+ 門市)", en: "Leezen (50+ N. stores)" }, note: { zh: "全台最密集，接受轉型期農場", en: "Densest national footprint; accepts transition farms" } }
+        { name: { zh: "里仁 (北部 50+ 門市)", en: "Leezen (50+ N. stores)" }, note: { zh: "全台最密集，接受轉型期農場", en: "Densest national footprint; accepts transition farms" } },
+        { name: { zh: "天和鮮物 (台北高端)", en: "Tianhe Fresh (Taipei high-end)" }, note: { zh: "信義 / 大直旗艦，單價最高", en: "Xinyi / Dazhi flagships, top-tier pricing" } },
+        { name: { zh: "聖德科斯 Santosa (台北、桃竹)", en: "Santosa (Taipei + Taoyuan / Hsinchu)" }, note: { zh: "健康有機連鎖", en: "Health-food chain" } },
+        { name: { zh: "city'super / Jasons (台北百貨)", en: "city'super / Jasons (Taipei dept stores)" }, note: { zh: "信義、忠孝、微風 — 高端百貨採購", en: "Xinyi / Zhongxiao / Breeze — high-end department-store procurement" } }
       ],
       exportPort: { name: { zh: "基隆港", en: "Keelung Port" }, note: { zh: "中小型外銷適用，多走台北物流轉港", en: "Suitable for small-medium exports; goods usually shipped via Taipei logistics" } }
     },
@@ -3858,8 +3879,11 @@
         { name: { zh: "微風市集 (台中)", en: "Breeze Farmers' Market (Taichung)" }, note: { zh: "週日 9-13，社區型有機市集", en: "Sun 9–1, community-organic market" } }
       ],
       organicChannels: [
-        { name: { zh: "主婦聯盟 (中部 12+ 站)", en: "Homemakers Union (12+ central stations)" } },
-        { name: { zh: "里仁 (中部 25+ 門市)", en: "Leezen (25+ central stores)" } }
+        { name: { zh: "主婦聯盟 (中部 12+ 站)", en: "Homemakers Union (12+ central stations)" }, note: { zh: "台中、彰化、雲嘉密集", en: "Dense in Taichung / Changhua / Yunlin / Chiayi" } },
+        { name: { zh: "里仁 (中部 25+ 門市)", en: "Leezen (25+ central stores)" }, note: { zh: "接受 GAP / 友善 / 有機", en: "Accepts GAP / friendly / organic" } },
+        { name: { zh: "聖德科斯 Santosa (中部)", en: "Santosa (Central)" }, note: { zh: "健康食品連鎖，中部分布較密", en: "Health-food chain; denser central footprint" } },
+        { name: { zh: "健康人生 (中部 10+ 門市)", en: "Health Life (10+ central stores)" } },
+        { name: { zh: "農會直銷站 + 興大有機合作社", en: "Farmers' Assoc. + NCHU Organic Co-op" }, note: { zh: "在地中盤，門檻低、毛利穩定", en: "Local mid-channels; low bar, stable margin" } }
       ],
       exportPort: { name: { zh: "台中港", en: "Taichung Port" }, note: { zh: "次大商港，農產冷鏈外銷漸增", en: "Second-largest commercial port; cold-chain ag exports growing" } }
     },
@@ -3875,7 +3899,9 @@
       ],
       organicChannels: [
         { name: { zh: "主婦聯盟 (南部 10+ 站)", en: "Homemakers Union (10+ S. stations)" } },
-        { name: { zh: "里仁 (南部 20+ 門市)", en: "Leezen (20+ S. stores)" } }
+        { name: { zh: "里仁 (南部 20+ 門市)", en: "Leezen (20+ S. stores)" } },
+        { name: { zh: "健康人生 (高雄、台南、嘉義)", en: "Health Life (Kaohsiung / Tainan / Chiayi)" } },
+        { name: { zh: "高雄夢時代 / 漢神巨蛋有機區", en: "Kaohsiung Dream Mall / Hanshin Arena organic sections" }, note: { zh: "高端百貨採購，熱帶水果優勢顯著", en: "High-end dept-store procurement; tropical fruit advantage" } }
       ],
       exportPort: { name: { zh: "高雄港", en: "Kaohsiung Port" }, note: { zh: "<strong>全台最大商港</strong>，熱帶水果外銷日本、香港、新加坡的主要通路", en: "<strong>Largest port in Taiwan.</strong> Main route for tropical fruit export to Japan / HK / Singapore" } }
     },
@@ -3889,7 +3915,10 @@
         { name: { zh: "台東日日早市", en: "Taitung Day-by-Day Morning Market" }, note: { zh: "每日，台東市區", en: "Daily, downtown Taitung" } }
       ],
       organicChannels: [
-        { name: { zh: "花蓮 / 台東品牌溢價直銷", en: "Hualien / Taitung brand direct-to-consumer" }, note: { zh: "東部品牌力強，網路 / 觀光直銷溢價高", en: "Strong regional brand; online + tourism direct-sales command premium" } }
+        { name: { zh: "花蓮 / 台東品牌溢價直銷", en: "Hualien / Taitung brand direct-to-consumer" }, note: { zh: "東部品牌力強，網路 / 觀光直銷溢價高", en: "Strong regional brand; online + tourism direct-sales command premium" } },
+        { name: { zh: "無毒農業國家隊 (花蓮)", en: "Toxin-Free Agriculture Nat'l Team (Hualien)" }, note: { zh: "縣府品牌 + 行銷補助", en: "County brand + marketing subsidy" } },
+        { name: { zh: "里仁 (東部 5+ 門市)", en: "Leezen (5+ E. stores)" } },
+        { name: { zh: "在地觀光通路 (民宿、農村廚房、火車站農夫直銷)", en: "Local tourism channels (B&Bs, rural kitchens, station direct-sales)" }, note: { zh: "觀光客單價高，現金流穩定", en: "High tourist per-customer spend, stable cash flow" } }
       ],
       exportPort: { name: { zh: "蘇澳港 / 花蓮港", en: "Su'ao Port / Hualien Port" }, note: { zh: "小型商港，多數出口仍走基隆/高雄", en: "Small commercial ports; most exports still routed via Keelung or Kaohsiung" } }
     },
