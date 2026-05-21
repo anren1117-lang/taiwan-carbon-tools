@@ -1418,6 +1418,15 @@
         <h4 data-zh="範疇一：肥料、水稻、牲畜" data-en="Scope 1: fertilizer, rice, livestock">範疇一：肥料、水稻、牲畜</h4>
         <div class="editor-grid">
           <div><label data-zh="氮肥 (kg N/年)" data-en="N fertilizer (kg N/yr)">氮肥 <span class="u">(kg N/yr)</span></label><input type="number" id="nFert" min="0" step="5"></div>
+          <div id="riceMgmtWrap">
+            <label data-zh="水稻水管理（影響 CH₄）" data-en="Rice water mgmt (CH₄)">水稻水管理 <span class="u">(CH₄)</span></label>
+            <select id="riceMgmt">
+              <option value="continuous_flood" data-zh="持續灌溉（基線 ×1.00）"  data-en="Continuous flood (baseline ×1.00)">持續灌溉（基線 ×1.00）</option>
+              <option value="single_drainage"  data-zh="單次中期排水（×0.71）"   data-en="Single drainage (×0.71)">單次中期排水（×0.71）</option>
+              <option value="awd"              data-zh="間歇灌溉 AWD（×0.55）"  data-en="AWD / multiple drainage (×0.55)">間歇灌溉 AWD（×0.55）</option>
+              <option value="upland"           data-zh="旱作 / 無淹水（×0.27）"  data-en="Upland / no standing water (×0.27)">旱作 / 無淹水（×0.27）</option>
+            </select>
+          </div>
           <div><label data-zh="牛（頭）" data-en="Cattle (head)">牛 <span class="u">(head)</span></label><input type="number" id="cattle" min="0" step="1"></div>
           <div><label data-zh="豬（頭）" data-en="Pigs (head)">豬 <span class="u">(head)</span></label><input type="number" id="pigs" min="0" step="1"></div>
           <div><label data-zh="家禽（隻）" data-en="Poultry (head)">家禽 <span class="u">(head)</span></label><input type="number" id="poultry" min="0" step="10"></div>
@@ -1997,6 +2006,7 @@
       lpg:        num('lpg'),
       heatingOil: num('heatingOil'),
       nFert:      num('nFert'),
+      riceMgmt:   document.getElementById('riceMgmt').value,
       cattle:     num('cattle'),
       pigs:       num('pigs'),
       poultry:    num('poultry'),
@@ -2030,6 +2040,7 @@
     document.getElementById('cropType').value = i.cropType;
     set('diesel', i.diesel); set('gasoline', i.gasoline); set('lpg', i.lpg); set('heatingOil', i.heatingOil);
     set('nFert', i.nFert);
+    document.getElementById('riceMgmt').value = i.riceMgmt || 'continuous_flood';
     set('cattle', i.cattle); set('pigs', i.pigs); set('poultry', i.poultry);
     document.getElementById('manure').value = i.manure;
     set('irrigation', i.irrigation); set('coldStorage', i.coldStorage); set('otherElec', i.otherElec);
@@ -3374,6 +3385,9 @@
   function render() {
     const inp = readInputs();
     const r = calcFromInputs(inp);
+    // Only show rice water-management selector for rice farms
+    const riceWrap = document.getElementById('riceMgmtWrap');
+    if (riceWrap) riceWrap.style.display = (inp.cropType === 'rice') ? '' : 'none';
     renderClientBanner(inp);
     renderMoneyHero(inp, r);
     renderKPIs(inp, r);
@@ -3455,7 +3469,7 @@
     const liveInputs = [
       'farmSize', 'cropType', 'annualYieldKg', 'productCategory',
       'diesel', 'gasoline', 'lpg', 'heatingOil',
-      'nFert', 'cattle', 'pigs', 'poultry', 'manure',
+      'nFert', 'riceMgmt', 'cattle', 'pigs', 'poultry', 'manure',
       'irrigation', 'coldStorage', 'otherElec',
       'chemicals', 'feed', 'transport', 'commute', 'packaging', 'waste',
       'biochar', 'trees'

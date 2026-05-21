@@ -39,6 +39,19 @@ const EF = {
 
 const MANURE_MULT = { none: 1.0, composted: 1.0, daily: 1.1, lagoon: 1.3 };
 
+// Rice water management scaling factor for paddy CH₄
+// (IPCC 2019 Refinement Tier 1, applied to the continuous-flood EF):
+//   continuous_flood — baseline, no drainage
+//   single_drainage — one mid-season drainage event
+//   awd             — alternate wetting & drying / multiple drainage
+//   upland          — continuously rainfed / no standing water
+const RICE_MGMT_SCALE = {
+  continuous_flood: 1.00,
+  single_drainage:  0.71,
+  awd:              0.55,
+  upland:           0.27
+};
+
 const SINK = {
   coverCrop: 1100,      // per ha-yr  (IPCC Tier 1, subtropical moist)
   noTill: 500,
@@ -87,7 +100,8 @@ function calcFromInputs(inp) {
 
   // Scope 1 — agronomy
   const e_nFertDir = inp.nFert * EF.nFertDirect;
-  const e_rice     = inp.cropType === 'rice' ? inp.farmSize * EF.riceCH4PerHa : 0;
+  const riceMgmtScale = RICE_MGMT_SCALE[inp.riceMgmt] || RICE_MGMT_SCALE.continuous_flood;
+  const e_rice = inp.cropType === 'rice' ? inp.farmSize * EF.riceCH4PerHa * riceMgmtScale : 0;
   const livestockBase = inp.cattle * EF.cattleHead + inp.pigs * EF.pigHead + inp.poultry * EF.poultryHead;
   const e_livestock = livestockBase * (MANURE_MULT[inp.manure] || 1);
 

@@ -580,8 +580,8 @@
                               data-en="Fuels: MOENV combustion factors (diesel 2.606, gasoline 2.27 kg/L)">燃料：環境部燃料燃燒係數（柴油 2.606、汽油 2.27 kg/L）</div>
           <div class="mb-line" data-zh="氮肥：IPCC 1% N₂O-N × 44/28 × 273 GWP100 = 4.29"
                               data-en="N fertilizer: IPCC 1% N₂O-N × 44/28 × 273 GWP100 = 4.29">氮肥：IPCC 1% N₂O-N × 44/28 × 273 GWP100 = 4.29</div>
-          <div class="mb-line" data-zh="水稻 CH₄：IPCC Tier 1 亞熱帶單期 2,970 kg/ha"
-                              data-en="Rice CH₄: IPCC Tier 1 subtropical single-season 2,970 kg/ha">水稻 CH₄：IPCC Tier 1 亞熱帶單期 2,970 kg/ha</div>
+          <div class="mb-line" id="riceMethodLine" data-zh="水稻 CH₄：IPCC Tier 1 亞熱帶單期 2,970 kg/ha × 水管理係數"
+                              data-en="Rice CH₄: IPCC Tier 1 subtropical 2,970 kg/ha × water-management factor">水稻 CH₄：IPCC Tier 1 亞熱帶單期 2,970 kg/ha × 水管理係數</div>
         </div>
         <div class="b-method-block">
           <strong data-zh="土壤碳匯" data-en="Soil sinks">土壤碳匯</strong>
@@ -871,6 +871,22 @@
           ${rn.capacity && rn.capacity !== '—' ? `<div class="b-renew-cap">${rn.capacity}</div>` : ''}
           ${rn.notes ? `<div class="b-renew-notes">${trObj(rn.notes)}</div>` : ''}
         </div>`).join('');
+    }
+
+    // ─ Methodology — rice management mode (if rice farm)
+    const riceMethodLine = document.getElementById('riceMethodLine');
+    if (inp.cropType === 'rice' && riceMethodLine) {
+      const mgmtLabels = {
+        continuous_flood: { zh: "持續灌溉 (×1.00)", en: "Continuous flood (×1.00)" },
+        single_drainage:  { zh: "單次中期排水 (×0.71)", en: "Single drainage (×0.71)" },
+        awd:              { zh: "間歇灌溉 AWD (×0.55)", en: "AWD / multiple drainage (×0.55)" },
+        upland:           { zh: "旱作 (×0.27)", en: "Upland / no standing water (×0.27)" }
+      };
+      const m = mgmtLabels[inp.riceMgmt] || mgmtLabels.continuous_flood;
+      riceMethodLine.textContent = tr(
+        '水稻 CH₄：IPCC Tier 1 基線 2,970 kg/ha × ' + m.zh + '，本農場套用',
+        'Rice CH₄: IPCC Tier 1 baseline 2,970 kg/ha × ' + m.en + ' applied'
+      );
     }
 
     // ─ Methodology — soil + data quality
