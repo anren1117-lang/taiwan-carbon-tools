@@ -818,6 +818,53 @@
     border-top: 1px solid var(--border);
   }
 
+  /* ── Glossary (acronym definitions) ─────────────────────── */
+  .glossary {
+    margin: 0 0 28px;
+    padding: 14px 0 0;
+    border-top: 1px solid var(--border);
+  }
+  .glossary summary {
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    list-style: none;
+    padding-bottom: 4px;
+  }
+  .glossary summary::-webkit-details-marker { display: none; }
+  .glossary summary::before {
+    content: "▸ ";
+    color: var(--accent);
+    display: inline-block;
+  }
+  .glossary[open] summary::before { content: "▾ "; }
+  .glossary-body {
+    margin: 8px 0 0;
+    font-size: 11.5px;
+    line-height: 1.65;
+    color: var(--text-muted);
+    columns: 2;
+    column-gap: 32px;
+  }
+  @media (max-width: 720px) { .glossary-body { columns: 1; } }
+  .glossary-body > div {
+    margin-bottom: 10px;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  .glossary-body dt {
+    display: inline;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .glossary-body dt::after {
+    content: " — ";
+    color: var(--text-muted);
+    font-weight: 400;
+  }
+  .glossary-body span { display: inline; }
+
   /* ── Dashboard print button + print CSS ─────────────────── */
   .dash-print-btn {
     position: fixed;
@@ -1776,6 +1823,26 @@
   </section>
 
   <div class="methodology" data-zh="排放係數：經濟部能源署 113 年度電力排碳係數 0.474 kg/kWh、環境部燃料燃燒係數。碳匯：IPCC 2019 Refinement Tier 1 預設值（亞熱帶濕潤氣候），實際 SOC 變化需以土壤採樣驗證。本儀表板為教育與顧問估算用途，不能取代正式 ISO 14064 盤查或 Verra VM0042 等碳權方法學申請。" data-en="Factors: MOEA 2024 grid 0.474 kg/kWh, MOENV fuel combustion factors. Sinks: IPCC 2019 Refinement Tier 1 defaults (subtropical moist) — real SOC change requires soil sampling. This dashboard is for educational / consulting estimation only and does not substitute for formal ISO 14064 inventory or methodology-based credit issuance (e.g. Verra VM0042).">排放係數：經濟部能源署 113 年度電力排碳係數 0.474 kg/kWh、環境部燃料燃燒係數。碳匯：IPCC 2019 Refinement Tier 1 預設值（亞熱帶濕潤氣候），實際 SOC 變化需以土壤採樣驗證。本儀表板為教育與顧問估算用途，不能取代正式 ISO 14064 盤查或 Verra VM0042 等碳權方法學申請。</div>
+
+  <details class="glossary">
+    <summary data-zh="名詞解釋（縮寫與專業術語）" data-en="Glossary (acronyms and technical terms)">名詞解釋（縮寫與專業術語）</summary>
+    <dl class="glossary-body">
+      <div><dt>範疇一 / Scope 1</dt><span data-zh="自有設備產生的直接溫室氣體排放：農機燃料燃燒、肥料施用 N₂O、水稻 CH₄、牲畜與糞肥管理。" data-en="Direct GHG emissions from owned sources: machinery fuel combustion, fertilizer N₂O, paddy CH₄, livestock + manure.">自有設備產生的直接溫室氣體排放：農機燃料燃燒、肥料施用 N₂O、水稻 CH₄、牲畜與糞肥管理。</span></div>
+      <div><dt>範疇二 / Scope 2</dt><span data-zh="購買電力產生的間接排放（灌溉、冷藏、設施用電 × 電網排碳係數）。" data-en="Indirect emissions from purchased electricity (irrigation, cold storage, facility kWh × grid factor).">購買電力產生的間接排放（灌溉、冷藏、設施用電 × 電網排碳係數）。</span></div>
+      <div><dt>範疇三 / Scope 3</dt><span data-zh="上下游間接排放：肥料/農藥/飼料製造、配送運輸、員工通勤、包材、廢棄物處理。" data-en="Upstream + downstream indirect: fertilizer/chemical/feed manufacturing, delivery transport, commute, packaging, waste.">上下游間接排放：肥料/農藥/飼料製造、配送運輸、員工通勤、包材、廢棄物處理。</span></div>
+      <div><dt>SOC</dt><span data-zh="Soil Organic Carbon · 土壤有機碳。改變耕作管理（覆蓋作物、堆肥）可增加土壤中的碳含量，形成碳匯。" data-en="Soil Organic Carbon. Practice changes (cover crops, compost) increase soil carbon stocks, creating a sink.">Soil Organic Carbon · 土壤有機碳。改變耕作管理（覆蓋作物、堆肥）可增加土壤中的碳含量，形成碳匯。</span></div>
+      <div><dt>AWD</dt><span data-zh="Alternate Wetting & Drying · 水稻間歇灌溉。讓稻田週期性乾濕，可減少 30–50% CH₄ 排放。" data-en="Alternate Wetting & Drying. Periodic paddy drainage cuts CH₄ emissions by 30–50%.">Alternate Wetting & Drying · 水稻間歇灌溉。讓稻田週期性乾濕，可減少 30–50% CH₄ 排放。</span></div>
+      <div><dt>CH₄ / N₂O</dt><span data-zh="甲烷與氧化亞氮。GWP100（百年全球暖化潛勢）：CH₄ 約 28、N₂O 約 273。" data-en="Methane and nitrous oxide. GWP100 (100-yr Global Warming Potential): CH₄ ≈ 28, N₂O ≈ 273.">甲烷與氧化亞氮。GWP100（百年全球暖化潛勢）：CH₄ 約 28、N₂O 約 273。</span></div>
+      <div><dt>IPCC Tier 1</dt><span data-zh="聯合國 IPCC 預設排放係數（最低精度層級，使用全球平均值）。Tier 2 為國家特定值，Tier 3 為實測。" data-en="IPCC default emission factor (lowest precision tier, using global averages). Tier 2 = country-specific, Tier 3 = measured.">聯合國 IPCC 預設排放係數（最低精度層級，使用全球平均值）。Tier 2 為國家特定值，Tier 3 為實測。</span></div>
+      <div><dt>MOEA</dt><span data-zh="經濟部（Ministry of Economic Affairs）。其能源署公告台灣電網排碳係數。" data-en="Ministry of Economic Affairs (Taiwan). Energy Administration publishes the national grid emission factor.">經濟部（Ministry of Economic Affairs）。其能源署公告台灣電網排碳係數。</span></div>
+      <div><dt>MOENV</dt><span data-zh="環境部（Ministry of Environment，前環保署）。公告燃料燃燒排放係數、運作 2026 碳費制度。" data-en="Ministry of Environment (formerly EPA). Publishes fuel combustion factors, operates the 2026 carbon-fee scheme.">環境部（Ministry of Environment，前環保署）。公告燃料燃燒排放係數、運作 2026 碳費制度。</span></div>
+      <div><dt>友善耕作 / Friendly Farming</dt><span data-zh="台灣農業部認可的環境友善耕作體系，要求降低化學投入、實施土地管理（覆蓋作物 / 堆肥 / 殘體還田 等）。" data-en="Taiwan MOA's recognised eco-agriculture scheme. Requires reduced chemical inputs + land practices (cover crop / compost / residue retention / etc.).">台灣農業部認可的環境友善耕作體系，要求降低化學投入、實施土地管理（覆蓋作物 / 堆肥 / 殘體還田 等）。</span></div>
+      <div><dt>自願減量機制 / VRM</dt><span data-zh="台灣 2025+ 啟動的本土碳權交易機制，由環境部主導。" data-en="Taiwan's voluntary carbon credit mechanism (launching 2025+), operated by MOENV.">台灣 2025+ 啟動的本土碳權交易機制，由環境部主導。</span></div>
+      <div><dt>VM0042</dt><span data-zh="Verra 認證的土壤碳匯方法學，國際碳權市場主要的農地土壤碳量化方法。" data-en="Verra's soil organic carbon methodology — the main international agricultural soil-carbon quantification standard.">Verra 認證的土壤碳匯方法學，國際碳權市場主要的農地土壤碳量化方法。</span></div>
+      <div><dt>ISO 14064-1</dt><span data-zh="國際組織型溫室氣體盤查標準。台灣大型企業 / 製造業申報碳費所需的查驗依據。" data-en="International standard for organisation-level GHG inventories. Required for Taiwan carbon-fee filings by large emitters.">國際組織型溫室氣體盤查標準。台灣大型企業 / 製造業申報碳費所需的查驗依據。</span></div>
+      <div><dt>TGAP / 產銷履歷</dt><span data-zh="台灣良好農業規範驗證（Traceable Agricultural Product）。多為進入溢價通路的第一張入場票。" data-en="Taiwan Good Agricultural Practice traceability. Usually the first ticket into premium retail channels.">台灣良好農業規範驗證（Traceable Agricultural Product）。多為進入溢價通路的第一張入場票。</span></div>
+    </dl>
+  </details>
 
 </main>
 
