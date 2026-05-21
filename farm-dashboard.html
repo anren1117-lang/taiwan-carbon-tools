@@ -877,6 +877,179 @@
   .credit-tier .ct-price { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
   .credit-tier .ct-value { font-size: 22px; font-weight: 700; color: var(--accent); margin-top: 6px; font-variant-numeric: tabular-nums; }
 
+  /* ── Sustainable-ag agent panel ───────────────────────── */
+  .agent-panel {
+    background: linear-gradient(135deg, rgba(29,158,117,0.06) 0%, rgba(37,99,235,0.04) 100%);
+    border: 1px solid rgba(29,158,117,0.25);
+    border-radius: 14px;
+    padding: 22px;
+    margin-bottom: 14px;
+    position: relative;
+  }
+  .agent-head {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 14px;
+  }
+  .agent-avatar {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+    color: white;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    box-shadow: 0 4px 10px rgba(29,158,117,0.3);
+  }
+  .agent-name {
+    font-size: 14px; font-weight: 700;
+    color: var(--text);
+  }
+  .agent-tag {
+    font-size: 11px; color: var(--text-muted);
+    font-weight: 500; margin-top: 2px;
+  }
+  .agent-reset {
+    margin-left: auto;
+    background: transparent; border: 1px solid var(--border);
+    padding: 5px 12px; border-radius: 999px;
+    font-family: inherit; font-size: 11px;
+    color: var(--text-muted); cursor: pointer;
+  }
+  .agent-reset:hover { color: var(--accent); border-color: var(--accent); }
+  .agent-bubble {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px 14px 14px 4px;
+    padding: 14px 16px;
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--text);
+    margin-bottom: 12px;
+    box-shadow: var(--shadow);
+  }
+  .agent-bubble.user {
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 14px 14px 4px 14px;
+    margin-left: auto; max-width: 75%;
+    text-align: right;
+    box-shadow: 0 2px 6px rgba(29,158,117,0.25);
+  }
+  .agent-chips {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 10px;
+    margin-top: 14px;
+  }
+  .agent-chip {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 14px 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: left;
+    font-family: inherit;
+    color: var(--text);
+  }
+  .agent-chip:hover {
+    border-color: var(--accent);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(29,158,117,0.12);
+  }
+  .agent-chip .ac-icon { font-size: 22px; display: block; margin-bottom: 6px; }
+  .agent-chip .ac-label { font-weight: 600; font-size: 13.5px; }
+  .agent-chip .ac-blurb { color: var(--text-muted); font-size: 11.5px; margin-top: 3px; }
+  .agent-step {
+    display: grid;
+    grid-template-columns: 32px 1fr;
+    gap: 12px;
+    margin-top: 10px;
+    align-items: start;
+  }
+  .agent-step-num {
+    width: 30px; height: 30px;
+    background: rgba(29,158,117,0.15);
+    color: var(--accent-dark);
+    border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 13px;
+  }
+  .agent-step-body { padding-top: 4px; }
+  .agent-step-title { font-weight: 600; font-size: 13.5px; }
+  .agent-step-desc { color: var(--text-muted); font-size: 12.5px; margin-top: 3px; line-height: 1.55; }
+  .agent-step-cta {
+    display: inline-block;
+    margin-top: 6px;
+    font-size: 11.5px;
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .agent-step-cta:hover { text-decoration: underline; }
+
+  /* ── Resource / market matching panel ─────────────────── */
+  .mkt-category { margin-top: 16px; }
+  .mkt-category:first-child { margin-top: 0; }
+  .mkt-cat-head {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 10px;
+  }
+  .mkt-cat-icon {
+    width: 22px; height: 22px;
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 12px;
+  }
+  .mkt-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 14px;
+    padding: 12px 14px;
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 8px;
+    align-items: start;
+  }
+  .mkt-row.ready    { border-color: rgba(29,158,117,0.35); background: rgba(29,158,117,0.04); }
+  .mkt-row.close    { border-color: rgba(180,83,9,0.25); background: rgba(180,83,9,0.03); }
+  .mkt-row.develop  { opacity: 0.7; }
+  .mkt-name { font-weight: 600; font-size: 13.5px; }
+  .mkt-criteria { font-size: 11.5px; color: var(--text-muted); margin-top: 3px; line-height: 1.55; }
+  .mkt-missing  { font-size: 11.5px; color: var(--pending); margin-top: 4px; }
+  .mkt-tier {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 999px;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .mkt-tier.ready   { background: rgba(29,158,117,0.18); color: var(--accent-dark); }
+  .mkt-tier.close   { background: rgba(180,83,9,0.15);   color: var(--pending); }
+  .mkt-tier.develop { background: rgba(156,163,175,0.15); color: var(--text-muted); }
+  .mkt-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 10px;
+    padding: 14px;
+    background: var(--bg-subtle);
+    border-radius: 10px;
+    margin-bottom: 18px;
+  }
+  .mkt-sum-cell { text-align: center; }
+  .mkt-sum-cell .v { font-size: 22px; font-weight: 700; color: var(--accent); }
+  .mkt-sum-cell .l { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; margin-top: 2px; }
+
   /* ── Data sources panel ─────────────────────────────────── */
   .ds-row {
     padding: 14px 0;
@@ -1056,6 +1229,19 @@
     <div class="chart-summary" id="chartSummary"></div>
   </section>
 
+  <!-- ── Sustainable-ag agent ─────────────────────────────── -->
+  <section class="agent-panel">
+    <div class="agent-head">
+      <span class="agent-avatar">🌱</span>
+      <div>
+        <div class="agent-name" data-zh="永續農業顧問" data-en="Sustainable Agriculture Advisor">永續農業顧問</div>
+        <div class="agent-tag" data-zh="依你的儀表板狀況提供量身建議" data-en="Personalised next steps based on your dashboard">依你的儀表板狀況提供量身建議</div>
+      </div>
+      <button class="agent-reset" id="agentReset" style="display:none" data-zh="重新開始" data-en="Start over">重新開始</button>
+    </div>
+    <div id="agentBody"></div>
+  </section>
+
   <!-- ── Per-kg product intensity panel ───────────────────── -->
   <section class="panel" id="yieldPanel">
     <div class="panel-title" data-zh="每公斤產品碳強度（買方視角）" data-en="Per-kg carbon intensity (buyer view)">每公斤產品碳強度（買方視角）</div>
@@ -1147,6 +1333,14 @@
       <div class="panel-sub" style="margin-bottom: 12px;" data-zh="不同碳市場的潛在年收入。實際申請需具備可驗證的方法學（如 VM0042）與第三方查驗，目前多為大型聚合者主導。" data-en="Potential annual income across carbon markets. Real issuance requires a verifiable methodology (e.g. VM0042) and third-party verification — currently dominated by large aggregators.">不同碳市場的潛在年收入。實際申請需具備可驗證的方法學（如 VM0042）與第三方查驗，目前多為大型聚合者主導。</div>
       <div class="credit-grid" id="creditGrid"></div>
     </div>
+  </section>
+
+  <!-- ── Resource / market matching ───────────────────────── -->
+  <section class="panel">
+    <div class="panel-title" data-zh="資源與市場媒合" data-en="Resource & market matching">資源與市場媒合</div>
+    <div class="panel-sub" data-zh="依目前耕作狀況、認證進度與碳強度，列出本農場可進入的通路、可申請的資金、可獲取的訓練資源。依據符合程度標記「可進入 / 接近 / 待發展」。" data-en="Based on current practices, certification progress, and per-kg intensity — which channels, financing, and training programs this farm can actually access. Tier-tagged ready / close / develop.">依目前耕作狀況、認證進度與碳強度，列出本農場可進入的通路、可申請的資金、可獲取的訓練資源。依據符合程度標記「可進入 / 接近 / 待發展」。</div>
+    <div class="mkt-summary" id="marketSummary"></div>
+    <div id="marketList"></div>
   </section>
 
   <!-- ── Reduction roadmap ────────────────────────────────── -->
@@ -1424,6 +1618,128 @@
     waste: 0.6            // per kg     (mixed organic/inorganic avg)
   };
   const MANURE_MULT = { none: 1.0, composted: 1.0, daily: 1.1, lagoon: 1.3 };
+
+  // ── Agent priorities & market resource library ──────────────────
+  const AGENT_PRIORITIES = [
+    { id: 'cost',   icon: '💰', label: { zh: "降低成本", en: "Lower costs" },
+      blurb: { zh: "減少帳單支出 + 取得設備補助", en: "Cut bills + capture grants" } },
+    { id: 'market', icon: '🚀', label: { zh: "進入溢價通路", en: "Premium market access" },
+      blurb: { zh: "達到買方碳強度與認證要求", en: "Meet buyer carbon + cert standards" } },
+    { id: 'cert',   icon: '✓',  label: { zh: "取得認證", en: "Get certified" },
+      blurb: { zh: "有機 / 友善 / 產銷履歷的路徑", en: "Organic / friendly / traceability path" } },
+    { id: 'carbon', icon: '🌱', label: { zh: "最大化減碳", en: "Max CO₂e reduction" },
+      blurb: { zh: "為買方 ESG 或自身價值觀", en: "For buyer ESG or own values" } }
+  ];
+
+  // Market resource library — Taiwan-anchored. Tier eligibility uses
+  // capability tags: 'friendly_or_organic', 'organic', 'low_chem',
+  // 'low_carbon_top25', 'low_carbon_premium', 'soc_baseline',
+  // 'min_scale_0_5ha', 'has_traceability', 'has_sensor'.
+  const MARKET_RESOURCES = {
+    premium_domestic: {
+      icon: '🛒',
+      name: { zh: "國內溢價通路", en: "Premium domestic channels" },
+      items: [
+        { id: 'hua',     name: { zh: "主婦聯盟生活消費合作社", en: "Homemakers Union Co-op" },
+          requires: ['friendly_or_organic'],
+          notes: { zh: "10 萬會員、雙週配送、強調生產者透明", en: "100k members, biweekly delivery, producer transparency" } },
+        { id: 'liren',   name: { zh: "里仁有機通路", en: "Leezen Organic Stores" },
+          requires: ['low_chem'],
+          notes: { zh: "全台 100+ 門市，接受無毒/轉型期農場", en: "100+ stores, accepts toxin-free transition farms" } },
+        { id: 'mottain', name: { zh: "棉花田有機", en: "Mottainai Organic" },
+          requires: ['organic'],
+          notes: { zh: "有機驗證為必要條件", en: "Requires organic certification" } },
+        { id: 'esg',     name: { zh: "ESG 採購（統一/義美/台塑/全家）", en: "ESG procurement (PCSC, IMEI, FPG, FamilyMart)" },
+          requires: ['low_carbon_top25', 'has_traceability'],
+          notes: { zh: "需可驗證的低碳強度 + 產銷履歷", en: "Verifiable low-carbon intensity + traceability required" } }
+      ]
+    },
+    export: {
+      icon: '🌏',
+      name: { zh: "外銷通路", en: "Export channels" },
+      items: [
+        { id: 'jp-aeon', name: { zh: "日本 Aeon Organic", en: "Japan Aeon Organic" },
+          requires: ['organic', 'low_carbon_top25'],
+          notes: { zh: "日本第二大零售，有機線需 JAS 等效", en: "2nd-largest JP retailer, requires JAS-equivalent organic" } },
+        { id: 'sg-cold', name: { zh: "新加坡 Cold Storage / Marketplace", en: "Singapore Cold Storage / Marketplace" },
+          requires: ['low_carbon_top25', 'has_traceability'],
+          notes: { zh: "高端超市，需碳足跡標示", en: "High-end retail, requires carbon-footprint labeling" } },
+        { id: 'eu-bio',  name: { zh: "歐盟有機（透過聚合商）", en: "EU Organic (via aggregator)" },
+          requires: ['organic', 'low_carbon_premium'],
+          notes: { zh: "需 EU Organic 認證，多透過台灣聚合商出口", en: "Requires EU Organic; usually via Taiwan-based aggregators" } }
+      ]
+    },
+    carbon_credit: {
+      icon: '🌍',
+      name: { zh: "碳匯收益", en: "Carbon credit pathways" },
+      items: [
+        { id: 'tw-vrm',  name: { zh: "台灣自願減量機制（環境部）", en: "Taiwan Voluntary Mechanism (MOENV)" },
+          requires: ['soc_baseline', 'min_scale_0_5ha'],
+          notes: { zh: "2025+ 啟動中，土壤碳匯方法學陸續通過", en: "Launching 2025+, soil carbon methodologies being approved" } },
+        { id: 'vm0042',  name: { zh: "Verra VM0042（透過聚合商）", en: "Verra VM0042 (via aggregator)" },
+          requires: ['soc_baseline', 'min_scale_0_5ha'],
+          notes: { zh: "土壤碳匯國際方法學，通常聚合 100+ 公頃方可行", en: "International soil carbon methodology, usually needs 100+ ha aggregation" } },
+        { id: 'gold-std',name: { zh: "Gold Standard 農業專案", en: "Gold Standard Ag projects" },
+          requires: ['soc_baseline', 'low_carbon_top25'],
+          notes: { zh: "嚴格的查驗與監測，但價格較高", en: "Stricter verification, commands higher price" } }
+      ]
+    },
+    finance: {
+      icon: '💳',
+      name: { zh: "融資與貸款", en: "Financing & loans" },
+      items: [
+        { id: 'young-farmer', name: { zh: "青年農民貸款（農業部）", en: "Young Farmer Loan (MOA)" },
+          requires: [],
+          notes: { zh: "45 歲以下農民，低利率 + 寬限期", en: "Farmers under 45, low rate + grace period" } },
+        { id: 'farmers-assoc', name: { zh: "農會貸款", en: "Farmers' Association loan" },
+          requires: [],
+          notes: { zh: "在地農會直接申請，週轉資金最常用管道", en: "Direct via local Farmers' Assoc., the most-used working-capital channel" } },
+        { id: 'green-finance', name: { zh: "綠色金融（玉山/中信/台新）", en: "Green finance (E.Sun / CTBC / Taishin)" },
+          requires: ['low_carbon_top25'],
+          notes: { zh: "綠色貸款與 ESG 連動，需碳強度證明", en: "Green loans linked to ESG, requires carbon-intensity proof" } }
+      ]
+    },
+    training: {
+      icon: '🎓',
+      name: { zh: "訓練與認證機構", en: "Training & certification bodies" },
+      items: [
+        { id: 'moa-academy', name: { zh: "農業部 培力課程", en: "MOA Capacity Building Programs" },
+          requires: [],
+          notes: { zh: "免費 / 補助訓練，主題從碳盤查到產銷履歷", en: "Free/subsidised trainings, from carbon inventory to traceability" } },
+        { id: 'organic-certifiers', name: { zh: "有機驗證機構（TOC / FOA / MOA cert）", en: "Organic certification bodies (TOC / FOA / MOA cert)" },
+          requires: ['low_chem'],
+          notes: { zh: "降低化學投入後，準備申請有機驗證", en: "Once chemicals are reduced, prepare organic certification application" } },
+        { id: 'traceability', name: { zh: "產銷履歷（TGAP）", en: "Traceability (TGAP)" },
+          requires: [],
+          notes: { zh: "通常是進入溢價/外銷的第一張門票", en: "Usually the first gate into premium / export channels" } },
+        { id: 'university', name: { zh: "學術合作（台大/中興/嘉大）", en: "University partnerships (NTU / NCHU / NCYU)" },
+          requires: ['has_sensor'],
+          notes: { zh: "智慧農業實驗合作 + 學生實習資源", en: "Smart-ag pilots + student intern resources" } }
+      ]
+    }
+  };
+
+  // Evaluate farm capability tags for market matching.
+  function farmCapabilities(inp, r) {
+    const tags = new Set();
+    const lowChem = inp.chemicals <= 50 * Math.max(inp.farmSize, 0.1);
+    const friendlyLand = ['coverCrop','noTill','compost','residue'].filter(p => inp.practices[p]).length;
+    const yieldKg = inp.annualYieldKg || 0;
+    const intensity = yieldKg > 0 ? r.gross / yieldKg : Infinity;
+    const bench = PRODUCT_BENCHMARKS[inp.productCategory] || PRODUCT_BENCHMARKS.mixed;
+    const hasSensor = CLIENT_CONFIG.dataSources && CLIENT_CONFIG.dataSources.some(d => d.method === 'sensor');
+    const hasSoil = CLIENT_CONFIG.soilTest && CLIENT_CONFIG.soilTest.socPercent != null;
+
+    if (inp.chemicals === 0 && inp.nFert <= 80 * Math.max(inp.farmSize, 0.1)) tags.add('organic');
+    if (lowChem) tags.add('low_chem');
+    if (friendlyLand >= 2 && lowChem) tags.add('friendly_or_organic');
+    if (intensity <= bench.top_quartile) tags.add('low_carbon_top25');
+    if (intensity <= bench.premium) tags.add('low_carbon_premium');
+    if (hasSoil) tags.add('soc_baseline');
+    if (inp.farmSize >= 0.5) tags.add('min_scale_0_5ha');
+    if (hasSensor) tags.add('has_sensor');
+    return tags;
+  }
 
   // ── Per-kg product intensity benchmarks (kg CO₂e per kg product) ─
   // Indicative figures from a mix of sources (FAO LCA, Carbon Trust,
@@ -2069,6 +2385,309 @@
     } else {
       sn.style.display = 'none';
     }
+  }
+
+  // ── Sustainable-ag agent ─────────────────────────────────────────
+  let agentState = { priority: null };
+
+  function buildAgentSteps(priority, inp, r) {
+    const sourceEntries = Object.entries(r.sources).filter(([, v]) => v > 0).sort((a, b) => b[1] - a[1]);
+    const topSourceKey = sourceEntries[0] ? sourceEntries[0][0] : null;
+    const topSourceName = topSourceKey ? trObj(T.sourceName[topSourceKey]) : '—';
+    const fuelsCost = (CLIENT_CONFIG.dataSources || [])
+      .filter(d => ['diesel','gasoline','lpg','heatingOil'].includes(d.id) && d.billAmount)
+      .reduce((a, d) => a + (d.billPeriod === 'month' ? d.billAmount * 12 : d.billAmount), 0);
+    const elecCost = (CLIENT_CONFIG.dataSources || [])
+      .filter(d => d.id === 'electricity' && d.billAmount)
+      .reduce((a, d) => a + (d.billPeriod === 'month' ? d.billAmount * 12 : d.billAmount), 0);
+    const friendlyLand = ['coverCrop','noTill','compost','residue'].filter(p => inp.practices[p]).length;
+    const bench = PRODUCT_BENCHMARKS[inp.productCategory] || PRODUCT_BENCHMARKS.mixed;
+    const yieldKg = inp.annualYieldKg || 0;
+    const intensity = yieldKg > 0 ? r.gross / yieldKg : null;
+
+    if (priority === 'cost') {
+      const subsidies = computeSubsidyTotal(inp, r);
+      const steps = [];
+      // Step 1: biggest fossil cost → electrification grant
+      if (fuelsCost > 0 && topSourceKey && ['diesel','gasoline','lpg','heatingOil'].includes(topSourceKey)) {
+        steps.push({
+          title: tr(`申請農機具電動化補助（NT$100,000），取代部分${topSourceName}`,
+                    `Apply for the electric machinery grant (NT$100k) to replace part of your ${topSourceName.toLowerCase()}`),
+          desc: tr(`目前燃料花費約 NT$${fmt0(fuelsCost)}/年；20% 替換約可省 NT$${fmt0(fuelsCost * 0.20)}/年，補助金額一次性近乎覆蓋投入。`,
+                   `Current fuel spend ~NT$${fmt0(fuelsCost)}/yr; 20% replacement saves ~NT$${fmt0(fuelsCost * 0.20)}/yr. Subsidy nearly covers cost upfront.`)
+        });
+      }
+      // Step 2: stack subsidies through practices
+      if (subsidies.eligible.length >= 1) {
+        steps.push({
+          title: tr(`鎖定已符合的補助合計 NT$${fmt0(subsidies.total)}`,
+                    `Capture the NT$${fmt0(subsidies.total)} you're already eligible for`),
+          desc: tr(`已符合 ${subsidies.eligible.length} 項補助 — 由顧問協助文件準備與申辦時程。`,
+                   `Eligible for ${subsidies.eligible.length} programs — let the advisor handle paperwork and timing.`)
+        });
+      } else {
+        steps.push({
+          title: tr('加入綠肥覆蓋作物以解鎖友善耕作補助',
+                    'Add a cover crop to unlock the Friendly Farming Subsidy'),
+          desc: tr(`目前未實施覆蓋作物。種植成本約 NT$${fmt0(5000 * inp.farmSize)}，補助可帶回 NT$${fmt0(30000 * inp.farmSize)}/年。`,
+                   `Cover crops not yet in place. Cost ~NT$${fmt0(5000 * inp.farmSize)}; subsidy brings back NT$${fmt0(30000 * inp.farmSize)}/yr.`)
+        });
+      }
+      // Step 3: rooftop PV evaluation if electricity is non-trivial
+      if (elecCost > 2000) {
+        steps.push({
+          title: tr(`評估屋頂光電（投入 ~NT$400,000，補助 NT$80,000，自用回收 ~5 年）`,
+                    `Evaluate rooftop PV (~NT$400k cost, NT$80k subsidy, ~5-yr self-consumption payback)`),
+          desc: tr(`電費 NT$${fmt0(elecCost)}/年。屋頂光電可同時自用 + 餘電躉售（台電保證價）。`,
+                   `Electricity ~NT$${fmt0(elecCost)}/yr. Rooftop PV serves self-use + feed-in (Taipower guaranteed rate).`)
+        });
+      }
+      return steps.slice(0, 3);
+    }
+
+    if (priority === 'market') {
+      const steps = [];
+      const tier = intensity == null ? null
+        : intensity <= bench.premium ? 'premium'
+        : intensity <= bench.top_quartile ? 'top'
+        : intensity <= bench.taiwan_avg ? 'avg'
+        : 'below';
+      // Step 1: where can you pitch NOW?
+      if (tier === 'premium' || tier === 'top') {
+        steps.push({
+          title: tr(`現在就可以接洽溢價買方 — 你的 ${fmt(intensity, 3)} kg/kg 已在前 25%`,
+                    `You can pitch premium buyers now — ${fmt(intensity, 3)} kg/kg is already top-quartile`),
+          desc: tr('準備一頁式碳強度報告 + 採樣方法說明，鎖定主婦聯盟、里仁、ESG 採購等對象。',
+                   'Prepare a 1-pager (intensity + methodology) and approach Homemakers Union, Leezen, and ESG procurement teams.')
+        });
+      } else {
+        steps.push({
+          title: tr(`先把每公斤強度從 ${intensity ? fmt(intensity, 3) : '—'} 降到 ${fmt(bench.top_quartile, 3)} kg/kg`,
+                    `Lower per-kg intensity from ${intensity ? fmt(intensity, 3) : '—'} to ${fmt(bench.top_quartile, 3)} kg/kg first`),
+          desc: tr(`最大排放源是${topSourceName} — 從這裡開始減量是進入溢價通路的最短路徑。`,
+                   `Your largest source is ${topSourceName.toLowerCase()} — cutting here is the shortest path into premium channels.`)
+        });
+      }
+      // Step 2: traceability is the cheapest "first gate"
+      steps.push({
+        title: tr('申請產銷履歷（TGAP）— 多數溢價買方的第一道門檻',
+                  'Apply for traceability (TGAP) — the first gate most premium buyers ask for'),
+        desc: tr('成本低、申辦快，比有機驗證早一年可拿到，是切入 ESG 採購的第一張票。',
+                 'Low cost, fast track, comes a year before organic — your first ticket into ESG procurement.')
+      });
+      // Step 3: 1-page carbon disclosure deliverable
+      steps.push({
+        title: tr('整理對買方的碳揭露文件（顧問可代擬）',
+                  'Prepare a buyer-facing carbon disclosure (advisor can draft)'),
+        desc: tr('包含：方法學、感測器/帳單原始來源、年度強度、SOC 基準。直接給統一、義美等 ESG 採購窗口。',
+                 'Includes: methodology, sensor/bill data sources, annual intensity, SOC baseline. Hand directly to PCSC, IMEI, etc.')
+      });
+      return steps;
+    }
+
+    if (priority === 'cert') {
+      const steps = [];
+      // What's the closest cert?
+      if (inp.chemicals === 0 && inp.nFert <= 80 * Math.max(inp.farmSize, 0.1)) {
+        steps.push({
+          title: tr('準備申請有機驗證 — 你目前的化學投入已達門檻',
+                    'Apply for organic certification — your chemical inputs are already below threshold'),
+          desc: tr('進入 2-3 年的轉型期，期間可走「友善耕作」過渡身分；同時申請有機驗證輔導補助 NT$15,000/ha。',
+                   'Enter 2–3 yr transition, holding friendly-farming status meanwhile. Also claim the NT$15,000/ha organic advisory subsidy.')
+        });
+      } else if (friendlyLand >= 2) {
+        steps.push({
+          title: tr('申請友善耕作補助（已具備條件）— 再朝有機方向降低化學品',
+                    'Apply for Friendly Farming Subsidy (criteria met) — keep cutting chemicals toward organic'),
+          desc: tr(`目前已實施 ${friendlyLand} 項土地管理 + 低化學品使用。下一步把化學品降到 0，1-2 年內可進入有機轉型。`,
+                   `Currently ${friendlyLand} land practices + low chemicals. Next step: zero chemicals, then 1–2 yr organic transition.`)
+        });
+      } else {
+        steps.push({
+          title: tr('先取得產銷履歷（TGAP）作為第一步',
+                    'Start with traceability (TGAP) as the first cert'),
+          desc: tr('最容易拿到的認證，培養田間紀錄習慣 + 為後續友善 / 有機認證打基礎。',
+                   'The easiest cert to obtain. Builds field-record habits and lays groundwork for friendly / organic later.')
+        });
+      }
+      steps.push({
+        title: tr('與顧問做認證落差分析（gap analysis）',
+                  'Run a certification gap analysis with the advisor'),
+        desc: tr('盤點當前田間紀錄、投入品來源、隔離緩衝等實際狀況，給出明確待辦清單。',
+                 'Inventory your field records, input sources, buffer zones, etc., and produce a concrete to-do list.')
+      });
+      steps.push({
+        title: tr('預約有機驗證機構的初步輔導訪視',
+                  'Schedule a preliminary consultation with an organic certifier'),
+        desc: tr('TOC、FOA、MOA cert 等機構皆有免費初步諮詢，提早把問題抓出來。',
+                 'TOC, FOA, MOA cert all offer free preliminary consultations — surface blockers early.')
+      });
+      return steps;
+    }
+
+    if (priority === 'carbon') {
+      const steps = [];
+      // Biggest source reduction
+      if (topSourceKey) {
+        steps.push({
+          title: tr(`攻擊最大排放源：${topSourceName}（佔 ${fmt(r.sources[topSourceKey] / r.gross * 100, 1)}%）`,
+                    `Attack the biggest source: ${topSourceName} (${fmt(r.sources[topSourceKey] / r.gross * 100, 1)}% of gross)`),
+          desc: tr(`減量路徑見「減量路徑：前三優先」第一張卡。並聯絡電動化補助窗口。`,
+                   `See card #1 in the reduction roadmap. Also contact the electrification grant office.`)
+        });
+      }
+      // Biggest unused sink
+      const unusedLand = PRACTICES.filter(p => !inp.practices[p]).sort((a, b) => SINK[b] - SINK[a]);
+      if (unusedLand.length) {
+        const top = unusedLand[0];
+        steps.push({
+          title: tr(`增加碳匯：開始實施「${trObj(T.practiceName[top])}」`,
+                    `Add a sink: start ${trObj(T.practiceName[top]).toLowerCase()}`),
+          desc: tr('在「土壤碳匯分項」面板看到目前匯量；加上這項可解鎖「綠色友善環境給付」門檻。',
+                   'See current sinks in the soil-carbon panel. Adding this also unlocks the Green Environment Payment threshold.')
+        });
+      }
+      // SOC monitoring for credit eligibility
+      if (CLIENT_CONFIG.soilTest && CLIENT_CONFIG.soilTest.socPercent != null) {
+        steps.push({
+          title: tr('排定下一次土壤採樣（3 年週期）',
+                    'Schedule next soil resampling (3-yr cycle)'),
+          desc: tr('已有基準存量 — 第二次採樣才能宣稱 SOC 增量並進入碳匯方法學申請。',
+                   'Baseline established — second sampling is required to claim SOC increment and enter credit methodologies.')
+        });
+      } else {
+        steps.push({
+          title: tr('安排土壤碳基準採樣（農試所）',
+                    'Schedule baseline soil sampling (Agricultural Research Institute)'),
+          desc: tr('沒有基準就無法宣稱碳匯增量。建議在主作期之前完成。',
+                   'Without a baseline you can\'t claim sink growth. Best done before main season.')
+        });
+      }
+      return steps;
+    }
+
+    return [];
+  }
+
+  function renderAgent(inp, r) {
+    const body = document.getElementById('agentBody');
+    const resetBtn = document.getElementById('agentReset');
+    if (!agentState.priority) {
+      resetBtn.style.display = 'none';
+      body.innerHTML = `
+        <div class="agent-bubble">${tr(
+          '哈囉 👋 我整理了你儀表板上的所有數字，可以針對你目前最在意的方向給出 3 步走的建議。先選一個方向：',
+          'Hi 👋 I\'ve read your full dashboard. Pick the one direction that matters most to you right now — I\'ll give you a 3-step plan tailored to your numbers:'
+        )}</div>
+        <div class="agent-chips">
+          ${AGENT_PRIORITIES.map(p => `
+            <button class="agent-chip" data-priority="${p.id}">
+              <span class="ac-icon">${p.icon}</span>
+              <span class="ac-label">${trObj(p.label)}</span>
+              <span class="ac-blurb">${trObj(p.blurb)}</span>
+            </button>`).join('')}
+        </div>`;
+      body.querySelectorAll('.agent-chip').forEach(btn => {
+        btn.addEventListener('click', () => {
+          agentState.priority = btn.dataset.priority;
+          render();
+          document.querySelector('.agent-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+    } else {
+      resetBtn.style.display = '';
+      const p = AGENT_PRIORITIES.find(x => x.id === agentState.priority);
+      const steps = buildAgentSteps(agentState.priority, inp, r);
+      body.innerHTML = `
+        <div style="display:flex;justify-content:flex-end">
+          <div class="agent-bubble user">${trObj(p.label)} ${p.icon}</div>
+        </div>
+        <div class="agent-bubble">
+          <strong>${tr('我看你儀表板後的觀察：', 'Here\'s what I see on your dashboard:')}</strong>
+          <div style="margin-top:8px;font-size:12.5px;line-height:1.6;color:var(--text-muted);">
+            ${tr(
+              `最大排放源 ${trObj(T.sourceName[Object.entries(r.sources).sort((a,b)=>b[1]-a[1])[0][0]])}（佔 ${fmt(Object.entries(r.sources).sort((a,b)=>b[1]-a[1])[0][1] / Math.max(r.gross,1) * 100, 0)}%）。`,
+              `Largest source: ${trObj(T.sourceName[Object.entries(r.sources).sort((a,b)=>b[1]-a[1])[0][0]])} (${fmt(Object.entries(r.sources).sort((a,b)=>b[1]-a[1])[0][1] / Math.max(r.gross,1) * 100, 0)}% of gross).`
+            )}
+            ${inp.annualYieldKg ? tr(
+              ` 每公斤碳強度 ${fmt(r.gross / inp.annualYieldKg, 3)} kg。`,
+              ` Per-kg intensity ${fmt(r.gross / inp.annualYieldKg, 3)} kg.`
+            ) : ''}
+          </div>
+        </div>
+        <div class="agent-bubble">
+          <strong>${tr('建議的 3 步走：', 'Suggested 3-step plan:')}</strong>
+          ${steps.map((s, i) => `
+            <div class="agent-step">
+              <div class="agent-step-num">${i + 1}</div>
+              <div class="agent-step-body">
+                <div class="agent-step-title">${s.title}</div>
+                <div class="agent-step-desc">${s.desc}</div>
+              </div>
+            </div>`).join('')}
+          ${steps.length === 0 ? `<div style="color:var(--text-muted);font-size:12px;margin-top:8px">${tr('資料不足以生成建議', 'Not enough data yet')}</div>` : ''}
+          <div style="margin-top:14px;font-size:11.5px;color:var(--text-muted);font-style:italic">${tr(
+            '*以上為依儀表板狀態自動生成的方向性建議；具體申請流程與條件以主管機關公告為準，並由顧問協助執行。',
+            '*Directional guidance auto-generated from your dashboard state. Final eligibility and process: confirm with the relevant agency; advisor handles execution.'
+          )}</div>
+        </div>`;
+    }
+  }
+
+  // ── Resource & market matching ───────────────────────────────────
+  function renderMarket(inp, r) {
+    const tags = farmCapabilities(inp, r);
+    const summary = { ready: 0, close: 0, develop: 0, total: 0 };
+    const sections = [];
+
+    Object.values(MARKET_RESOURCES).forEach(cat => {
+      const items = cat.items.map(item => {
+        const missing = (item.requires || []).filter(req => !tags.has(req));
+        let tier;
+        if (missing.length === 0) tier = 'ready';
+        else if (missing.length <= 1) tier = 'close';
+        else tier = 'develop';
+        summary[tier]++; summary.total++;
+        return { ...item, tier, missing };
+      });
+      items.sort((a, b) => ({ ready: 0, close: 1, develop: 2 }[a.tier] - { ready: 0, close: 1, develop: 2 }[b.tier]));
+      sections.push({ cat, items });
+    });
+
+    document.getElementById('marketSummary').innerHTML = `
+      <div class="mkt-sum-cell"><div class="v" style="color:var(--accent)">${summary.ready}</div><div class="l">${tr('可進入', 'Ready')}</div></div>
+      <div class="mkt-sum-cell"><div class="v" style="color:var(--pending)">${summary.close}</div><div class="l">${tr('接近', 'Close')}</div></div>
+      <div class="mkt-sum-cell"><div class="v" style="color:var(--text-muted)">${summary.develop}</div><div class="l">${tr('待發展', 'Develop')}</div></div>
+      <div class="mkt-sum-cell"><div class="v">${summary.total}</div><div class="l">${tr('資源合計', 'Resources total')}</div></div>`;
+
+    const tagLabels = {
+      organic:              { zh: "有機驗證", en: "Organic cert" },
+      low_chem:             { zh: "低化學投入", en: "Low chemical inputs" },
+      friendly_or_organic:  { zh: "友善或有機", en: "Friendly or organic" },
+      low_carbon_top25:     { zh: "前 25% 碳強度", en: "Top-25% intensity" },
+      low_carbon_premium:   { zh: "溢價碳強度", en: "Premium intensity" },
+      soc_baseline:         { zh: "土壤基準採樣", en: "Soil baseline" },
+      min_scale_0_5ha:      { zh: "≥ 0.5 ha 規模", en: "≥ 0.5 ha scale" },
+      has_traceability:     { zh: "產銷履歷", en: "Traceability cert" },
+      has_sensor:           { zh: "IoT 感測器部署", en: "IoT sensor deployed" }
+    };
+
+    document.getElementById('marketList').innerHTML = sections.map(({ cat, items }) => `
+      <div class="mkt-category">
+        <div class="mkt-cat-head">
+          <span class="mkt-cat-icon">${cat.icon}</span>
+          <span>${trObj(cat.name)}</span>
+        </div>
+        ${items.map(item => `
+          <div class="mkt-row ${item.tier}">
+            <div>
+              <div class="mkt-name">${trObj(item.name)}</div>
+              <div class="mkt-criteria">${trObj(item.notes)}</div>
+              ${item.missing.length ? `<div class="mkt-missing">${tr('還需：', 'Need: ')}${item.missing.map(m => trObj(tagLabels[m] || { zh: m, en: m })).join(' · ')}</div>` : ''}
+            </div>
+            <span class="mkt-tier ${item.tier}">${item.tier === 'ready' ? tr('可進入', 'Ready') : item.tier === 'close' ? tr('接近', 'Close') : tr('待發展', 'Develop')}</span>
+          </div>`).join('')}
+      </div>`).join('');
   }
 
   // ── Financial summary ────────────────────────────────────────────
@@ -2837,6 +3456,7 @@
     renderKPIs(inp, r);
     renderNarrative(inp, r);
     renderElectricityChart();
+    renderAgent(inp, r);
     renderYieldIntensity(inp, r);
     renderDataSources(inp, r);
     renderScopeBreakdown(r);
@@ -2846,7 +3466,9 @@
     renderRenewables();
     renderScenarios(inp, r);
     renderSubsidies(inp, r);
+    renderMarket(inp, r);
     renderRoadmap(inp, r);
+    renderFarmStatusBadge();
   }
 
   // ── Language toggle ───────────────────────────────────────────────
@@ -2862,43 +3484,94 @@
     render();
   }
 
-  // ── Init ─────────────────────────────────────────────────────────
-  applyConfigToDom();
+  // ── Multi-tenant loader ──────────────────────────────────────────
+  // Each farmer gets their own dashboard via ?id=<farm-id>. The
+  // dashboard fetches `farms/<id>.json` and replaces the CLIENT_CONFIG.
+  // If no id is provided, or the fetch fails, the in-file demo config
+  // is used (so the URL still works for previewing).
+  let farmStatus = { id: null, loaded: false };
+  async function loadFarmFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    const farmId = params.get('id');
+    if (!farmId) return;
+    farmStatus.id = farmId;
+    try {
+      const res = await fetch(`farms/${farmId}.json`, { cache: 'no-cache' });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      // Replace the entire CLIENT_CONFIG with the fetched data.
+      // (Each farm JSON file is expected to be a complete config.)
+      Object.keys(data).forEach(k => { CLIENT_CONFIG[k] = data[k]; });
+      farmStatus.loaded = true;
+    } catch (e) {
+      console.warn('Could not load farm config for "' + farmId + '":', e);
+      farmStatus.loaded = false;
+    }
+  }
 
-  const liveInputs = [
-    'farmSize', 'cropType', 'annualYieldKg', 'productCategory',
-    'diesel', 'gasoline', 'lpg', 'heatingOil',
-    'nFert', 'cattle', 'pigs', 'poultry', 'manure',
-    'irrigation', 'coldStorage', 'otherElec',
-    'chemicals', 'feed', 'transport', 'commute', 'packaging', 'waste',
-    'biochar', 'trees'
-  ];
-  liveInputs.forEach(id => {
-    const el = document.getElementById(id);
-    el.addEventListener('input', render);
-    el.addEventListener('change', render);
-  });
-  PRACTICES.forEach(p => {
-    document.getElementById('p-' + p).addEventListener('change', () => {
-      if (document.getElementById('p-' + p).checked) scenarioToggles[p] = false;
+  function renderFarmStatusBadge() {
+    const banner = document.querySelector('.client-banner .cb-eyebrow');
+    if (!banner) return;
+    if (farmStatus.id && farmStatus.loaded) {
+      banner.textContent = (currentLang === 'zh' ? '客戶代號：' : 'Client ID: ') + farmStatus.id;
+    } else if (farmStatus.id && !farmStatus.loaded) {
+      banner.textContent = (currentLang === 'zh'
+        ? '⚠ 找不到 ' + farmStatus.id + ' — 顯示示範資料'
+        : '⚠ Could not load ' + farmStatus.id + ' — showing demo data');
+      banner.style.background = 'rgba(180,83,9,0.30)';
+    } else {
+      banner.textContent = (currentLang === 'zh' ? '示範資料 · 1:1 諮詢交付件' : 'Demo data · 1:1 consulting deliverable');
+    }
+  }
+
+  // ── Init ─────────────────────────────────────────────────────────
+  async function init() {
+    await loadFarmFromUrl();
+    applyConfigToDom();
+
+    const liveInputs = [
+      'farmSize', 'cropType', 'annualYieldKg', 'productCategory',
+      'diesel', 'gasoline', 'lpg', 'heatingOil',
+      'nFert', 'cattle', 'pigs', 'poultry', 'manure',
+      'irrigation', 'coldStorage', 'otherElec',
+      'chemicals', 'feed', 'transport', 'commute', 'packaging', 'waste',
+      'biochar', 'trees'
+    ];
+    liveInputs.forEach(id => {
+      const el = document.getElementById(id);
+      el.addEventListener('input', render);
+      el.addEventListener('change', render);
+    });
+    PRACTICES.forEach(p => {
+      document.getElementById('p-' + p).addEventListener('change', () => {
+        if (document.getElementById('p-' + p).checked) scenarioToggles[p] = false;
+        render();
+      });
+    });
+
+    // Lang toggle
+    let savedLang = 'zh';
+    try {
+      const s = localStorage.getItem('tct_lang');
+      if (s === 'zh' || s === 'en') savedLang = s;
+    } catch (e) {}
+    document.getElementById('langToggle').addEventListener('click', () => {
+      applyLang(currentLang === 'zh' ? 'en' : 'zh');
+    });
+
+    // Agent reset
+    document.getElementById('agentReset').addEventListener('click', () => {
+      agentState.priority = null;
       render();
     });
-  });
 
-  // Lang toggle
-  let savedLang = 'zh';
-  try {
-    const s = localStorage.getItem('tct_lang');
-    if (s === 'zh' || s === 'en') savedLang = s;
-  } catch (e) {}
-  document.getElementById('langToggle').addEventListener('click', () => {
-    applyLang(currentLang === 'zh' ? 'en' : 'zh');
-  });
+    // Re-render chart on resize (responsive SVG width)
+    window.addEventListener('resize', () => renderElectricityChart());
 
-  // Re-render chart on resize (responsive SVG width)
-  window.addEventListener('resize', () => renderElectricityChart());
-
-  applyLang(savedLang);
+    applyLang(savedLang);
+    renderFarmStatusBadge();
+  }
+  init();
 </script>
 
 </body>

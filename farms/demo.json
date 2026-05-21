@@ -1,0 +1,90 @@
+{
+  "clientName":      { "zh": "示範農場", "en": "Sample Farm" },
+  "clientLocation":  { "zh": "台灣 · 雲林", "en": "Yunlin, Taiwan" },
+  "reportingPeriod": "2025",
+
+  "monthlyElectricity": {
+    "2024": [820, 760, 880, 920, 1100, 1280, 1410, 1450, 1380, 1180, 970, 850],
+    "2025": [900, 810, 940, 1010, 1190, 1380, 1550, 1580, 1490, 1280, 1050, 920]
+  },
+  "meterStatus": "live",
+
+  "yoyTotals": {
+    "2024": { "gross": 11.2, "net": 6.8 }
+  },
+
+  "inputs": {
+    "farmSize": 2.5,
+    "cropType": "vegetables",
+    "diesel": 600,
+    "gasoline": 80,
+    "lpg": 250,
+    "heatingOil": 0,
+    "nFert": 120,
+    "cattle": 0,
+    "pigs": 0,
+    "poultry": 0,
+    "manure": "none",
+    "irrigation": 800,
+    "coldStorage": 500,
+    "otherElec": 350,
+    "chemicals": 80,
+    "feed": 0,
+    "transport": 2200,
+    "commute": 1800,
+    "packaging": 120,
+    "waste": 200,
+    "biochar": 0,
+    "trees": 30,
+    "practices": { "coverCrop": true, "noTill": false, "compost": true, "residue": true },
+    "annualYieldKg": 50000,
+    "productCategory": "vegetables_leaf"
+  },
+
+  "renewables": [
+    { "id": "solar", "name": { "zh": "屋頂光電", "en": "Rooftop solar PV" }, "status": "active", "capacity": "30 kWp", "notes": { "zh": "自用 + 餘電躉售（台電）", "en": "Self-consumption + feed-in (Taipower)" } },
+    { "id": "biogas", "name": { "zh": "沼氣回收", "en": "Biogas digester" }, "status": "planned", "capacity": "—", "notes": { "zh": "若導入豬糞，2026 評估", "en": "Under evaluation for 2026 if pig manure available" } },
+    { "id": "wind", "name": { "zh": "小型風機", "en": "Micro wind turbine" }, "status": "not-installed", "capacity": "—", "notes": { "zh": "本場址不適合", "en": "Site not suitable" } },
+    { "id": "solar-thermal", "name": { "zh": "太陽能熱水", "en": "Solar thermal water" }, "status": "active", "capacity": "—", "notes": { "zh": "供應宿舍與沖洗區", "en": "Dorm & wash-station supply" } }
+  ],
+
+  "narrative": { "zh": null, "en": null },
+
+  "dataSources": [
+    { "id": "electricity", "method": "sensor",
+      "provider": { "zh": "台電智慧電表 + my Taipower App", "en": "Taipower smart meter + my Taipower app" },
+      "billAmount": 4760, "billPeriod": "year", "billRate": 2.80,
+      "status": { "zh": "API 同步中", "en": "API syncing" },
+      "guide": { "zh": "申請台電智慧電表流程", "en": "How to enable a Taipower smart meter" } },
+    { "id": "diesel", "method": "bill",
+      "provider": { "zh": "中油加油收據", "en": "CPC fuel receipts" },
+      "billAmount": 18600, "billPeriod": "year", "billRate": 31.00,
+      "guide": { "zh": "如何加裝油箱流量計", "en": "How to install a fuel-tank flow meter" } },
+    { "id": "gasoline", "method": "bill",
+      "provider": { "zh": "汽車/機具加油收據", "en": "Pump receipts (vehicles & equipment)" },
+      "billAmount": 2560, "billPeriod": "year", "billRate": 32.00 },
+    { "id": "lpg", "method": "bill",
+      "provider": { "zh": "LPG 桶裝/槽車單據（換算 kg）", "en": "LPG cylinder / bulk delivery slips (kg)" },
+      "billAmount": 7500, "billPeriod": "year", "billRate": 30.00 },
+    { "id": "heatingOil", "method": "not-connected",
+      "provider": { "zh": "鍋爐燃油（如有）", "en": "Boiler heating oil (if any)" },
+      "guide": { "zh": "未使用 — 留空", "en": "Not in use — leave blank" } },
+    { "id": "nFert", "method": "manual",
+      "provider": { "zh": "尿素 / 化肥包裝（46% N）", "en": "Urea / fertilizer bags (46% N)" },
+      "derivation": { "zh": "20 包 × 40 kg × 46% N", "en": "20 bags × 40 kg × 46% N" } },
+    { "id": "chemicals", "method": "manual",
+      "provider": { "zh": "農藥行 / 複肥行收據", "en": "Pesticide & compound-fert. shop receipts" } },
+    { "id": "feed", "method": "manual",
+      "provider": { "zh": "飼料廠送貨單（如有畜禽）", "en": "Feed mill delivery invoices (if livestock)" } },
+    { "id": "transport", "method": "manual",
+      "provider": { "zh": "配送里程紀錄（GPS 或行車表）", "en": "Delivery mileage log (GPS or odometer)" } }
+  ],
+
+  "soilTest": {
+    "socPercent": 1.8,
+    "bulkDensity": 1.3,
+    "depthCm": 30,
+    "date": "2025-03",
+    "lab": { "zh": "農業試驗所 · 雲林分所", "en": "Taiwan Agricultural Research Institute, Yunlin" }
+  }
+}

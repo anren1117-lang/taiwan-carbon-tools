@@ -1,0 +1,78 @@
+{
+  "clientName":      { "zh": "陳家米作", "en": "Chen Family Rice" },
+  "clientLocation":  { "zh": "台灣 · 宜蘭員山", "en": "Yuanshan, Yilan, Taiwan" },
+  "reportingPeriod": "2025",
+
+  "monthlyElectricity": {
+    "2024": [320, 290, 410, 580, 720, 690, 540, 510, 580, 510, 380, 310],
+    "2025": [350, 320, 470, 650, 800, 770, 600, 560, 640, 560, 420, 340]
+  },
+  "meterStatus": "manual",
+
+  "yoyTotals": {
+    "2024": { "gross": 18.5, "net": 13.2 }
+  },
+
+  "inputs": {
+    "farmSize": 1.8,
+    "cropType": "rice",
+    "diesel": 380,
+    "gasoline": 60,
+    "lpg": 0,
+    "heatingOil": 0,
+    "nFert": 160,
+    "cattle": 0,
+    "pigs": 0,
+    "poultry": 0,
+    "manure": "none",
+    "irrigation": 1850,
+    "coldStorage": 1100,
+    "otherElec": 230,
+    "chemicals": 95,
+    "feed": 0,
+    "transport": 1500,
+    "commute": 800,
+    "packaging": 350,
+    "waste": 120,
+    "biochar": 0,
+    "trees": 18,
+    "practices": { "coverCrop": false, "noTill": false, "compost": true, "residue": true },
+    "annualYieldKg": 11500,
+    "productCategory": "rice"
+  },
+
+  "renewables": [
+    { "id": "solar", "name": { "zh": "屋頂光電", "en": "Rooftop solar PV" }, "status": "planned", "capacity": "15 kWp", "notes": { "zh": "穀倉屋頂評估中（2026 申請）", "en": "Barn rooftop under feasibility review (2026 application)" } },
+    { "id": "solar-thermal", "name": { "zh": "太陽能乾燥", "en": "Solar grain dryer" }, "status": "active", "capacity": "—", "notes": { "zh": "稻穀低溫乾燥，減少 LPG 用量", "en": "Low-temp grain drying — cuts LPG demand" } }
+  ],
+
+  "narrative": { "zh": null, "en": null },
+
+  "dataSources": [
+    { "id": "electricity", "method": "bill",
+      "provider": { "zh": "台電紙本帳單（手動匯入）", "en": "Taipower paper bill (manual entry)" },
+      "billAmount": 9520, "billPeriod": "year", "billRate": 2.80,
+      "status": { "zh": "每月人工輸入", "en": "Monthly manual entry" } },
+    { "id": "diesel", "method": "bill",
+      "provider": { "zh": "宜蘭中油配送", "en": "CPC delivery, Yilan" },
+      "billAmount": 11780, "billPeriod": "year", "billRate": 31.00 },
+    { "id": "gasoline", "method": "bill",
+      "provider": { "zh": "鄉間加油站收據", "en": "Local pump receipts" },
+      "billAmount": 1920, "billPeriod": "year", "billRate": 32.00 },
+    { "id": "nFert", "method": "manual",
+      "provider": { "zh": "農會配送（複合肥 + 尿素）", "en": "Farmers' Assoc. supply (compound + urea)" },
+      "derivation": { "zh": "農會出貨單合計 N 含量", "en": "Sum of N content from Farmers' Assoc. invoices" } },
+    { "id": "chemicals", "method": "manual",
+      "provider": { "zh": "宜蘭農藥行", "en": "Local Yilan agro-supply" } },
+    { "id": "transport", "method": "manual",
+      "provider": { "zh": "送米至契作米廠 + 直銷", "en": "Delivery to contract mill + direct sales" } }
+  ],
+
+  "soilTest": {
+    "socPercent": 2.4,
+    "bulkDensity": 1.25,
+    "depthCm": 30,
+    "date": "2024-12",
+    "lab": { "zh": "宜蘭分所 · 友善耕作試驗", "en": "Yilan Branch · friendly farming trial" }
+  }
+}
