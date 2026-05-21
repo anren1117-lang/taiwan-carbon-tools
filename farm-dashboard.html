@@ -94,6 +94,65 @@
   }
   .lang-toggle:hover { border-color: var(--accent); }
 
+  /* ── Floating section navigator (desktop) ──────────────── */
+  html { scroll-behavior: smooth; scroll-padding-top: 60px; }
+  .section-nav {
+    position: fixed;
+    top: 50%;
+    right: 18px;
+    transform: translateY(-50%);
+    z-index: 50;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 14px;
+    box-shadow: var(--shadow-lift);
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+  .section-nav .sn-title {
+    font-size: 9.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    font-weight: 700;
+    margin-bottom: 4px;
+    padding: 0 6px;
+  }
+  .section-nav .sn-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 8px;
+    font-size: 12px;
+    color: var(--text-muted);
+    text-decoration: none;
+    border-radius: 6px;
+    transition: all 0.12s;
+    white-space: nowrap;
+  }
+  .section-nav .sn-link::before {
+    content: "";
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.4;
+    flex-shrink: 0;
+  }
+  .section-nav .sn-link:hover { color: var(--text); background: var(--bg-subtle); }
+  .section-nav .sn-link.active {
+    color: var(--accent);
+    background: var(--accent-tint);
+    font-weight: 600;
+  }
+  .section-nav .sn-link.active::before { opacity: 1; }
+  @media (max-width: 1340px) {
+    .section-nav { display: none; }
+  }
+
   /* ── Client banner ──────────────────────────────────────── */
   .client-banner {
     margin: 28px 0 24px;
@@ -1172,8 +1231,24 @@
 
 <main class="container">
 
+  <!-- ── Floating section navigator (desktop only) ─────────── -->
+  <nav class="section-nav" id="sectionNav" aria-label="Section navigation">
+    <div class="sn-title" data-zh="跳至" data-en="Jump to">跳至</div>
+    <a href="#sec-overview" class="sn-link active" data-zh="概覽" data-en="Overview">概覽</a>
+    <a href="#sec-electricity" class="sn-link" data-zh="用電趨勢" data-en="Electricity">用電趨勢</a>
+    <a href="#sec-agent" class="sn-link" data-zh="顧問建議" data-en="Advisor">顧問建議</a>
+    <a href="#sec-intensity" class="sn-link" data-zh="競爭力" data-en="Intensity">競爭力</a>
+    <a href="#sec-sources" class="sn-link" data-zh="資料來源" data-en="Sources">資料來源</a>
+    <a href="#sec-scope" class="sn-link" data-zh="排放分項" data-en="Breakdown">排放分項</a>
+    <a href="#sec-renewables" class="sn-link" data-zh="能源系統" data-en="Energy">能源系統</a>
+    <a href="#sec-scenarios" class="sn-link" data-zh="情境模擬" data-en="Scenarios">情境模擬</a>
+    <a href="#sec-income" class="sn-link" data-zh="收益機會" data-en="Income">收益機會</a>
+    <a href="#sec-actions" class="sn-link" data-zh="行動路徑" data-en="Actions">行動路徑</a>
+    <a href="#sec-editor" class="sn-link" data-zh="設定" data-en="Settings">設定</a>
+  </nav>
+
   <!-- ── Client banner ─────────────────────────────────────── -->
-  <section class="client-banner">
+  <section class="client-banner" id="sec-overview">
     <div>
       <span class="cb-eyebrow" data-zh="1:1 諮詢交付件" data-en="1:1 consulting deliverable">1:1 諮詢交付件</span>
       <div class="cb-name" id="clientName">客戶名稱</div>
@@ -1248,7 +1323,7 @@
   </section>
 
   <!-- ── Electricity trend chart ──────────────────────────── -->
-  <section class="panel chart-wrap">
+  <section class="panel chart-wrap" id="sec-electricity">
     <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap">
       <div>
         <div class="panel-title">
@@ -1264,7 +1339,7 @@
   </section>
 
   <!-- ── Sustainable-ag agent ─────────────────────────────── -->
-  <section class="agent-panel">
+  <section class="agent-panel" id="sec-agent">
     <div class="agent-head">
       <span class="agent-avatar">🌱</span>
       <div>
@@ -1277,6 +1352,7 @@
   </section>
 
   <!-- ── Per-kg product intensity panel ───────────────────── -->
+  <a id="sec-intensity" aria-hidden="true" style="position: relative; top: -60px;"></a>
   <section class="panel" id="yieldPanel">
     <div class="panel-title" data-zh="每公斤產品碳強度（買方視角）" data-en="Per-kg carbon intensity (buyer view)">每公斤產品碳強度（買方視角）</div>
     <div class="panel-sub" data-zh="買方（外銷、量販、餐飲、ESG 採購）比較的是「每公斤產品的碳成本」，而非「每公頃排放」。 此數值決定能否進入溢價通路。" data-en="Buyers (export, large retail, F&B, ESG procurement) compare carbon per kg of product, not per hectare. This metric gates access to premium channels.">買方（外銷、量販、餐飲、ESG 採購）比較的是「每公斤產品的碳成本」，而非「每公頃排放」。 此數值決定能否進入溢價通路。</div>
@@ -1284,14 +1360,14 @@
   </section>
 
   <!-- ── Data sources & sensor connections ────────────────── -->
-  <section class="panel">
+  <section class="panel" id="sec-sources">
     <div class="panel-title" data-zh="資料來源與感測器連接" data-en="Data sources & sensor connections">資料來源與感測器連接</div>
     <div class="panel-sub" data-zh="每筆排放數字背後的單據、感測器與單位換算。讓農民看見「帳單 → 公噸 CO₂e」的完整路徑。" data-en="The receipts, sensors, and unit conversions behind every emission number. Shows the full bill → t CO₂e chain.">每筆排放數字背後的單據、感測器與單位換算。讓農民看見「帳單 → 公噸 CO₂e」的完整路徑。</div>
     <div id="dsRows"></div>
   </section>
 
   <!-- ── Scope breakdown + Sinks ──────────────────────────── -->
-  <section class="grid-2">
+  <section class="grid-2" id="sec-scope">
     <div class="panel">
       <div class="panel-title" data-zh="範疇一二三排放分布" data-en="Scope 1 / 2 / 3 breakdown">範疇一二三排放分布</div>
       <div class="panel-sub" data-zh="依排放源類別劃分年度總排放。" data-en="Annual gross emissions by category.">依排放源類別劃分年度總排放。</div>
@@ -1327,14 +1403,14 @@
   </section>
 
   <!-- ── Renewables status ─────────────────────────────────── -->
-  <section class="panel">
+  <section class="panel" id="sec-renewables">
     <div class="panel-title" data-zh="再生能源與替代系統狀態" data-en="Renewable & alternative systems">再生能源與替代系統狀態</div>
     <div class="panel-sub" data-zh="自有發電與替代能源系統現況；對範疇二與範疇一的減碳貢獻路徑。" data-en="On-site generation and alternative-energy systems — pathways to reduce Scope 2 and Scope 1.">自有發電與替代能源系統現況；對範疇二與範疇一的減碳貢獻路徑。</div>
     <div class="renewable-grid" id="renewableGrid"></div>
   </section>
 
   <!-- ── What-if ───────────────────────────────────────────── -->
-  <section class="panel">
+  <section class="panel" id="sec-scenarios">
     <div class="panel-title" data-zh="情境模擬：再增加哪些做法？" data-en="What-if scenarios">情境模擬：再增加哪些做法？</div>
     <div class="panel-sub" data-zh="勾選未實施的耕作管理，即時看到淨碳足跡的變化。已實施項目會標註。" data-en="Toggle practices not currently in place to see net footprint change in real time. Currently active practices are marked.">勾選未實施的耕作管理，即時看到淨碳足跡的變化。已實施項目會標註。</div>
     <div class="scenario-grid" id="scenarioGrid"></div>
@@ -1358,7 +1434,7 @@
   </section>
 
   <!-- ── Subsidies & carbon income ────────────────────────── -->
-  <section class="panel">
+  <section class="panel" id="sec-income">
     <div class="panel-title" data-zh="補助與碳匯收益" data-en="Subsidies & carbon income">補助與碳匯收益</div>
     <div class="panel-sub" data-zh="依目前耕作管理與感測器部署狀況評估的台灣補助計畫資格；土壤碳匯增量則依不同市場價格估算潛在價值。本表為諮詢起點，實際資格與金額以主管機關公告為準。" data-en="Eligible Taiwan subsidy programs based on current practices and sensor deployment. Soil sink growth valued at multiple market prices. Indicative — confirm with the relevant agency before applying.">依目前耕作管理與感測器部署狀況評估的台灣補助計畫資格；土壤碳匯增量則依不同市場價格估算潛在價值。本表為諮詢起點，實際資格與金額以主管機關公告為準。</div>
     <div id="subsidyList"></div>
@@ -1378,13 +1454,14 @@
   </section>
 
   <!-- ── Reduction roadmap ────────────────────────────────── -->
-  <section class="panel">
+  <section class="panel" id="sec-actions">
     <div class="panel-title" data-zh="減量路徑：前三優先" data-en="Reduction roadmap: top 3">減量路徑：前三優先</div>
     <div class="panel-sub" data-zh="依目前數據與你的最大排放源、最大未利用碳匯機會排序。" data-en="Ranked by your largest emission source and biggest untapped sink opportunity.">依目前數據與你的最大排放源、最大未利用碳匯機會排序。</div>
     <div id="recsList"></div>
   </section>
 
   <!-- ── Editor drawer ────────────────────────────────────── -->
+  <a id="sec-editor" aria-hidden="true" style="position: relative; top: -60px;"></a>
   <details class="editor" id="editor">
     <summary data-zh="編輯客戶資料（諮詢工作用）" data-en="Edit client inputs (consulting workspace)">編輯客戶資料（諮詢工作用）</summary>
     <div class="editor-body">
@@ -3653,6 +3730,26 @@
 
     // Re-render chart on resize (responsive SVG width)
     window.addEventListener('resize', () => renderElectricityChart());
+
+    // Section nav: highlight the link whose section is currently in view.
+    const navLinks = document.querySelectorAll('.section-nav .sn-link');
+    const navByTarget = {};
+    navLinks.forEach(l => { navByTarget[l.getAttribute('href').slice(1)] = l; });
+    const targets = Array.from(document.querySelectorAll('#sec-overview, #sec-electricity, #sec-agent, #sec-intensity, #sec-sources, #sec-scope, #sec-renewables, #sec-scenarios, #sec-income, #sec-actions, #sec-editor'));
+    if ('IntersectionObserver' in window && targets.length) {
+      const setActive = (id) => {
+        navLinks.forEach(l => l.classList.remove('active'));
+        const a = navByTarget[id];
+        if (a) a.classList.add('active');
+      };
+      const observer = new IntersectionObserver(entries => {
+        // Pick the entry closest to the top of viewport
+        const visible = entries.filter(e => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+        if (visible.length) setActive(visible[0].target.id);
+      }, { rootMargin: '-100px 0px -55% 0px', threshold: 0 });
+      targets.forEach(t => observer.observe(t));
+    }
 
     applyLang(savedLang);
     renderFarmStatusBadge();
