@@ -803,9 +803,25 @@
     @page { size: A4; margin: 12mm 10mm; }
     body { background: white !important; color: black !important; font-size: 10.5pt; line-height: 1.45; }
     header, .section-nav, .dash-print-btn, .lang-toggle,
-    .agent-panel, #yieldPanel, .editor,
+    .agent-panel, #yieldPanel,
+    .editor:not(#notes),
     section[id="sec-scenarios"], .scenario-result,
     .agent-chips, .agent-reset { display: none !important; }
+
+    /* Notes drawer: show in print only if non-empty; force open */
+    #notes { display: block; page-break-inside: avoid; margin-top: 14px; }
+    #notes summary { font-size: 9pt; color: black; padding: 6px 12px; }
+    #notes summary::before { display: none; }
+    #notes[open] summary::before { display: none; }
+    #notes .editor-body { padding: 8px 12px 14px; }
+    #notes textarea {
+      border: 1px solid var(--border) !important;
+      font-size: 10pt !important;
+      min-height: 60px !important;
+      max-height: none !important;
+      overflow: visible !important;
+    }
+    #notesStatus { display: none !important; }
     .container { max-width: 100%; padding: 0; }
 
     /* Compress hero/banner */
@@ -1689,6 +1705,15 @@
         </div>
       </div>
 
+    </div>
+  </details>
+
+  <!-- ── Engagement notes (consultant workspace, autosaved locally) ─ -->
+  <details class="editor" id="notes" style="margin-top: 0;">
+    <summary data-zh="諮詢筆記（自動儲存於本機）" data-en="Engagement notes (autosaved locally)">諮詢筆記（自動儲存於本機）</summary>
+    <div class="editor-body">
+      <textarea id="notesText" rows="8" placeholder="諮詢過程的筆記、客戶問題、討論結論..." style="width: 100%; padding: 12px 14px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-card); color: var(--text); font-family: inherit; font-size: 14px; line-height: 1.6; resize: vertical;"></textarea>
+      <div id="notesStatus" style="margin-top: 8px; font-size: 11px; color: var(--text-muted); text-align: right;"></div>
     </div>
   </details>
 
@@ -3817,6 +3842,34 @@
     document.getElementById('agentReset').addEventListener('click', () => {
       agentState.priority = null;
       render();
+    });
+
+    // Engagement notes — autosave per farm-id to localStorage.
+    // Notes survive page reload but stay browser-local (not synced).
+    const notesEl = document.getElementById('notesText');
+    const notesStatusEl = document.getElementById('notesStatus');
+    const notesKey = 'tct_notes_' + (farmStatus.id || 'demo');
+    try {
+      const saved = localStorage.getItem(notesKey);
+      if (saved) {
+        notesEl.value = saved;
+        if (saved.length > 0) document.getElementById('notes').open = true;
+      }
+    } catch (e) {}
+    let notesSaveTimer = null;
+    notesEl.addEventListener('input', () => {
+      notesStatusEl.textContent = currentLang === 'zh' ? '輸入中...' : 'Typing...';
+      clearTimeout(notesSaveTimer);
+      notesSaveTimer = setTimeout(() => {
+        try {
+          localStorage.setItem(notesKey, notesEl.value);
+          const t = new Date();
+          notesStatusEl.textContent = (currentLang === 'zh' ? '已儲存 ' : 'Saved ')
+            + t.getHours().toString().padStart(2, '0') + ':' + t.getMinutes().toString().padStart(2, '0') + ':' + t.getSeconds().toString().padStart(2, '0');
+        } catch (e) {
+          notesStatusEl.textContent = currentLang === 'zh' ? '儲存失敗' : 'Save failed';
+        }
+      }, 400);
     });
 
     // Re-render chart on resize (responsive SVG width)
