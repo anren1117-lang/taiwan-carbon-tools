@@ -48,6 +48,13 @@
     "productCategory": "livestock_dairy"
   },
 
+  "practiceHistory": {
+    "noTill":  "2020-01",
+    "compost": "2019-06",
+    "residue": "2018-01",
+    "trees":   "2017-03"
+  },
+
   "renewables": [
     { "id": "solar", "name": { "zh": "屋頂光電", "en": "Rooftop solar PV" }, "status": "active",
       "capacity": "20 kWp", "notes": { "zh": "牛舍屋頂自用，部分餘電躉售", "en": "Barn rooftop self-consumption + partial feed-in" } },

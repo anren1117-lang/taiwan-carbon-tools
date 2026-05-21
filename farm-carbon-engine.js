@@ -194,3 +194,19 @@ function fmt(n, d = 2) {
 function fmt0(n) {
   return Math.round(n).toLocaleString();
 }
+
+// Practice timeline helper: given a "YYYY-MM" start date string and
+// the reporting period year, return years of operation (rounded to
+// 1 decimal). Returns null when the date is missing/invalid.
+function yearsSince(dateStr, reportingPeriod) {
+  if (!dateStr || typeof dateStr !== 'string') return null;
+  const parts = dateStr.split('-').map(Number);
+  if (parts.length < 1 || !isFinite(parts[0])) return null;
+  const startYr = parts[0];
+  const startMo = isFinite(parts[1]) ? parts[1] : 6;
+  const refYr = parseInt(reportingPeriod) || new Date().getFullYear();
+  const startDec = startYr + (startMo - 1) / 12;
+  const endDec   = refYr + 0.5;
+  const years = endDec - startDec;
+  return years > 0 ? Math.round(years * 10) / 10 : null;
+}

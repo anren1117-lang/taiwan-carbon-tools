@@ -42,6 +42,12 @@
     "productCategory": "rice"
   },
 
+  "practiceHistory": {
+    "compost": "2021-03",
+    "residue": "2018-01",
+    "trees":   "2019-04"
+  },
+
   "renewables": [
     { "id": "solar", "name": { "zh": "屋頂光電", "en": "Rooftop solar PV" }, "status": "planned", "capacity": "15 kWp", "notes": { "zh": "穀倉屋頂評估中（2026 申請）", "en": "Barn rooftop under feasibility review (2026 application)" } },
     { "id": "solar-thermal", "name": { "zh": "太陽能乾燥", "en": "Solar grain dryer" }, "status": "active", "capacity": "—", "notes": { "zh": "稻穀低溫乾燥，減少 LPG 用量", "en": "Low-temp grain drying — cuts LPG demand" } }

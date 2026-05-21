@@ -41,6 +41,13 @@
     "productCategory": "vegetables_leaf"
   },
 
+  "practiceHistory": {
+    "coverCrop": "2023-09",
+    "compost":   "2022-03",
+    "residue":   "2020-01",
+    "trees":     "2021-04"
+  },
+
   "renewables": [
     { "id": "solar", "name": { "zh": "屋頂光電", "en": "Rooftop solar PV" }, "status": "active", "capacity": "30 kWp", "notes": { "zh": "自用 + 餘電躉售（台電）", "en": "Self-consumption + feed-in (Taipower)" } },
     { "id": "biogas", "name": { "zh": "沼氣回收", "en": "Biogas digester" }, "status": "planned", "capacity": "—", "notes": { "zh": "若導入豬糞，2026 評估", "en": "Under evaluation for 2026 if pig manure available" } },

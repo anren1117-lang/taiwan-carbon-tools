@@ -275,6 +275,13 @@
   }
   .b-practice-name { font-size: 14px; font-weight: 600; }
   .b-practice-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  .b-practice-since {
+    font-size: 11px;
+    color: var(--accent);
+    margin-top: 6px;
+    font-weight: 500;
+  }
+  .b-practice-since strong { font-weight: 700; }
 
   /* ── Benchmark bars ────────────────────────────────────── */
   .b-bench {
@@ -650,7 +657,7 @@
 </footer>
 
 <!-- Shared carbon math (EF, SINK, calcFromInputs, fmt, etc.) — see farm-carbon-engine.js -->
-<script src="farm-carbon-engine.js"></script>
+<script src="farm-carbon-engine.js?v=2"></script>
 <script>
   // EF, MANURE_MULT, SINK, PRACTICES, PRODUCT_BENCHMARKS, stackingMult,
   // calcFromInputs, fmt, fmt0 — provided by farm-carbon-engine.js
@@ -798,14 +805,21 @@
     if (CONFIG.dataSources && CONFIG.dataSources.some(d => d.method === 'sensor')) activePractices.push('iotMeter');
     if (hasSoil) activePractices.push('soilTest');
     if (inp.chemicals === 0) activePractices.push('organic');
+    const history = CONFIG.practiceHistory || {};
     document.getElementById('practiceGrid').innerHTML = activePractices.length
       ? activePractices.map(k => {
           const p = T.practiceCard[k];
+          const since = history[k];
+          const yrs = yearsSince(since, CONFIG.reportingPeriod);
+          const durationLine = (since && yrs)
+            ? `<div class="b-practice-since">${tr('自 ', 'since ')}${since} · <strong>${yrs} ${tr('年', yrs === 1 ? 'yr' : 'yrs')}</strong></div>`
+            : '';
           return `<div class="b-practice active">
                     <div class="b-practice-icon">${p.icon}</div>
                     <div>
                       <div class="b-practice-name">${trObj(p.name)}</div>
                       <div class="b-practice-sub">${trObj(p.sub)}</div>
+                      ${durationLine}
                     </div>
                   </div>`;
         }).join('')

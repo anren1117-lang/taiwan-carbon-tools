@@ -1506,7 +1506,7 @@
 </main>
 
 <!-- Shared carbon math (EF, SINK, calcFromInputs, fmt, etc.) — see farm-carbon-engine.js -->
-<script src="farm-carbon-engine.js"></script>
+<script src="farm-carbon-engine.js?v=2"></script>
 <script>
   // ──────────────────────────────────────────────────────────────────
   // CLIENT_CONFIG — duplicate this file per client and edit below.
@@ -2312,14 +2312,21 @@
 
   function renderSinks(r) {
     const order = ['coverCrop', 'noTill', 'compost', 'residue', 'biochar', 'trees'];
+    const history = CLIENT_CONFIG.practiceHistory || {};
     document.getElementById('sinkRows').innerHTML = order.map(k => {
       const v = r.sinkByPractice[k] || 0;
       const active = v > 0;
       const sub = T.practiceSub[k] ? trObj(T.practiceSub[k]) : '';
+      const since = history[k];
+      const yrs = yearsSince(since, CLIENT_CONFIG.reportingPeriod);
+      const sinceLine = (active && since && yrs)
+        ? `<span class="sub" style="color: var(--accent); font-weight: 500;">${tr('自 ', 'since ')}${since} · ${yrs} ${tr('年', yrs === 1 ? 'yr' : 'yrs')}</span>`
+        : '';
       return `
         <div class="sink-row ${active ? '' : 'inactive'}">
           <span class="sink-name">${trObj(T.practiceName[k])}
-            ${sub ? `<span class="sub">${sub}</span>` : ''}</span>
+            ${sub ? `<span class="sub">${sub}</span>` : ''}
+            ${sinceLine}</span>
           <span class="sink-val ${active ? '' : 'zero'}">
             ${active ? '−' : ''}${fmt(v / 1000, 2)} t
           </span>
