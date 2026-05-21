@@ -1,0 +1,101 @@
+{
+  "clientName":      { "zh": "賴家果園 · 愛文芒果", "en": "Lai Family Orchard · Aiwen Mango" },
+  "clientLocation":  { "zh": "台灣 · 屏東枋寮", "en": "Fangliao, Pingtung, Taiwan" },
+  "reportingPeriod": "2025",
+
+  "monthlyElectricity": {
+    "2024": [85, 80, 95, 110, 130, 150, 165, 160, 145, 125, 95, 85],
+    "2025": [90, 85, 105, 125, 145, 170, 180, 175, 160, 135, 105, 95]
+  },
+  "meterStatus": "manual",
+
+  "yoyTotals": {
+    "2024": { "gross": 5.6, "net": -1.8 }
+  },
+
+  "inputs": {
+    "farmSize": 2.2,
+    "cropType": "fruit",
+    "riceMgmt": "continuous_flood",
+    "diesel": 250,
+    "gasoline": 60,
+    "lpg": 50,
+    "heatingOil": 0,
+    "nFert": 80,
+    "cattle": 0,
+    "pigs": 0,
+    "poultry": 0,
+    "cattleDairy": 0,
+    "cattleBeef": 0,
+    "sowHead": 0,
+    "growerPigHead": 0,
+    "poultryLayer": 0,
+    "poultryBroiler": 0,
+    "manure": "composted",
+    "irrigation": 300,
+    "coldStorage": 800,
+    "otherElec": 200,
+    "chemicals": 90,
+    "feed": 0,
+    "transport": 2000,
+    "commute": 1500,
+    "packaging": 800,
+    "waste": 200,
+    "biochar": 0,
+    "trees": 250,
+    "practices": { "coverCrop": false, "noTill": true, "compost": true, "residue": true },
+    "annualYieldKg": 40000,
+    "productCategory": "fruit"
+  },
+
+  "practiceHistory": {
+    "noTill":  "2010-01",
+    "compost": "2018-04",
+    "residue": "2008-01",
+    "trees":   "2008-01"
+  },
+
+  "renewables": [
+    { "id": "solar", "name": { "zh": "屋頂光電", "en": "Rooftop solar PV" }, "status": "active",
+      "capacity": "10 kWp", "notes": { "zh": "包裝場屋頂自用 + 餘電躉售", "en": "Packing-shed rooftop self-consumption + feed-in" } },
+    { "id": "solar-thermal", "name": { "zh": "太陽能水井泵", "en": "Solar irrigation pump" }, "status": "active",
+      "capacity": "—", "notes": { "zh": "果園灌溉以太陽能直驅", "en": "Direct solar drive for orchard irrigation" } }
+  ],
+
+  "narrative": { "zh": null, "en": null },
+
+  "dataSources": [
+    { "id": "electricity", "method": "bill",
+      "provider": { "zh": "台電紙本帳單", "en": "Taipower paper bill" },
+      "billAmount": 3640, "billPeriod": "year", "billRate": 2.80 },
+    { "id": "diesel", "method": "bill",
+      "provider": { "zh": "中油配送（果園機具用）", "en": "CPC delivery (orchard equipment)" },
+      "billAmount": 7750, "billPeriod": "year", "billRate": 31.00 },
+    { "id": "gasoline", "method": "bill",
+      "provider": { "zh": "貨車 + 小機具加油收據", "en": "Truck + small equipment pump receipts" },
+      "billAmount": 1920, "billPeriod": "year", "billRate": 32.00 },
+    { "id": "lpg", "method": "bill",
+      "provider": { "zh": "LPG 桶裝（包裝場熱水）", "en": "LPG cylinder (packing shed hot water)" },
+      "billAmount": 1500, "billPeriod": "year", "billRate": 30.00 },
+    { "id": "nFert", "method": "manual",
+      "provider": { "zh": "有機質肥料為主 + 少量複肥", "en": "Organic amendments + minimal compound fertilizer" } },
+    { "id": "chemicals", "method": "manual",
+      "provider": { "zh": "屏東農藥行（果蠅 + 蓟馬防治）", "en": "Pingtung agro-supply (fruit fly + thrips control)" } },
+    { "id": "transport", "method": "manual",
+      "provider": { "zh": "送高雄/屏東果菜批發 + 宅配直銷", "en": "Wholesale market delivery + direct shipping" } },
+    { "id": "packaging", "method": "manual",
+      "provider": { "zh": "宅配紙箱 + 緩衝材", "en": "Shipping cartons + protective fill" } }
+  ],
+
+  "soilTest": {
+    "socPercent": 1.6,
+    "bulkDensity": 1.30,
+    "depthCm": 30,
+    "date": "2025-02",
+    "lab": { "zh": "高雄區農業改良場 · 果園採樣", "en": "Kaohsiung Agricultural Improvement Station · orchard sample" }
+  },
+
+  "soilHistory": [
+    { "date": "2022-02", "socPercent": 1.4, "bulkDensity": 1.30, "depthCm": 30 }
+  ]
+}
