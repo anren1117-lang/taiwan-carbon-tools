@@ -1841,6 +1841,13 @@
       <div id="survivalPriorities"></div>
     </div>
 
+    <!-- Certification ladder — green/safe/organic options analyzed for THIS farm -->
+    <div style="margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--border);">
+      <div class="panel-title" style="font-size: 13px; margin-bottom: 4px;" data-zh="認證階梯：「綠色」與「安全」的所有選項，本農場分析" data-en="Certification ladder: every green & safe option, analyzed for this farm">認證階梯：「綠色」與「安全」的所有選項，本農場分析</div>
+      <div class="panel-sub" style="margin-bottom: 14px;" data-zh="台灣有 6 種主要的綠色 / 安全 / 有機認證，門檻與溢價不同。下表分析每張你現在能拿、接近、或還待發展。建議從可申請的最高階開始。" data-en="Taiwan has 6 main green / safe / organic certifications with different bars + premiums. Each is analyzed for this farm — eligible now, close, or develop. Recommendation: start with the highest tier you currently qualify for.">台灣有 6 種主要的綠色 / 安全 / 有機認證，門檻與溢價不同。下表分析每張你現在能拿、接近、或還待發展。建議從可申請的最高階開始。</div>
+      <div id="certLadder"></div>
+    </div>
+
     <!-- Where your goods can physically go (market infrastructure) -->
     <div style="margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--border);">
       <div class="panel-title" style="font-size: 13px; margin-bottom: 4px;" data-zh="你的農產品可以送去哪裡？（在地市場路徑）" data-en="Where your goods can go — local market routes">你的農產品可以送去哪裡？（在地市場路徑）</div>
@@ -3743,6 +3750,82 @@
     }
   };
 
+  // Certification ladder — Taiwan green/safe/organic certifications,
+  // ordered from easiest (GAP safety) to hardest (organic + regional
+  // toxin-free). Each has eligibility predicates so the dashboard can
+  // tell the farmer exactly which cert they can pursue NEXT.
+  const CERTIFICATION_LADDER = [
+    {
+      id: 'gap', level: 1, icon: '🥬',
+      name:    { zh: "吉園圃 GAP 安全蔬果", en: "GAP Safe Vegetables" },
+      agency:  { zh: "農業部", en: "MOA" },
+      level_label: { zh: "入門 · 安全", en: "Entry · Safe" },
+      requires:{ zh: "只用核可農藥 + 遵守採收前安全期 + 田間用藥紀錄。", en: "Approved pesticides only + observe pre-harvest interval + field spray records." },
+      unlocks: { zh: "進入學校午餐、超市安全蔬果區、軍方採購、量販低價通路。", en: "Access to school lunches, retail safe-produce sections, military procurement, mass-market channels." },
+      eligibility: () => true,
+      note:    { zh: "最容易入門的政府安全認證。重點是「田間紀錄」+「沒用禁藥」。", en: "Easiest government safety cert. Bar is record-keeping + no banned chemicals." }
+    },
+    {
+      id: 'tgap', level: 2, icon: '📋',
+      name:    { zh: "產銷履歷 TGAP", en: "Traceability (TGAP)" },
+      agency:  { zh: "農業部 農糧署", en: "MOA Agriculture & Food Agency" },
+      level_label: { zh: "中階 · 可追溯", en: "Mid · Traceable" },
+      requires:{ zh: "完整田間紀錄 + 可追溯生產履歷 + 驗證機構檢核。", en: "Complete field records + traceable production history + certifier audit." },
+      unlocks: { zh: "ESG 採購、量販通路低碳線、外銷需求的入門票。", en: "ESG procurement, retail low-carbon lines, entry ticket for export demand." },
+      eligibility: () => true,
+      note:    { zh: "<strong>進入溢價通路的第一張票</strong>，比 GAP 嚴一點，比有機輕鬆許多。", en: "<strong>First ticket into premium channels.</strong> Stricter than GAP, much easier than organic." }
+    },
+    {
+      id: 'friendly', level: 3, icon: '🌿',
+      name:    { zh: "友善耕作", en: "Friendly Farming" },
+      agency:  { zh: "農業部", en: "MOA" },
+      level_label: { zh: "高階 · 生態友善", en: "High · Eco-friendly" },
+      requires:{ zh: "低化學投入 + 覆蓋作物 + 堆肥或殘體還田。", en: "Low chemical inputs + cover crops + compost or residue retention." },
+      unlocks: { zh: "友善耕作補助 NT$30,000/ha + 主婦聯盟、里仁 等友善通路。", en: "Friendly Farming Subsidy NT$30,000/ha + Homemakers Union, Leezen, friendly-farming channels." },
+      eligibility: (inp) =>
+        inp.practices.coverCrop &&
+        (inp.practices.compost || inp.practices.residue) &&
+        inp.chemicals < 50 * Math.max(inp.farmSize, 0.1),
+      note:    { zh: "需採用生態友善方法。本儀表板的「補助與碳匯收益」面板已自動評估。", en: "Eco-friendly methods required. Dashboard's subsidies panel auto-evaluates this." }
+    },
+    {
+      id: 'green-conservation', level: 3, icon: '🐸',
+      name:    { zh: "綠色保育標章", en: "Green Conservation Label" },
+      agency:  { zh: "慈心有機 + 林業署", en: "Tse-Xin Organic + Forestry Bureau" },
+      level_label: { zh: "高階 · 生態保育", en: "High · Conservation" },
+      requires:{ zh: "生態敏感區域 + 友善農法 + 受保護物種棲息證明（如石虎、八色鳥、田鱉）。", en: "Ecologically sensitive area + friendly methods + evidence of protected species (e.g. leopard cat, fairy pitta, water beetle)." },
+      unlocks: { zh: "里仁通路、生態品牌溢價、政府保育合作專案。", en: "Leezen channels, eco-brand premium, government conservation partnerships." },
+      eligibility: (inp) =>
+        inp.chemicals === 0 &&
+        ['coverCrop','noTill','compost','residue'].filter(p => inp.practices[p]).length >= 2,
+      note:    { zh: "限定生態敏感地。由慈心查驗，與物種保育綁定。", en: "Restricted to ecologically sensitive land. Audited by Tse-Xin, tied to species conservation." }
+    },
+    {
+      id: 'organic', level: 4, icon: '✨',
+      name:    { zh: "有機驗證", en: "Organic Certification" },
+      agency:  { zh: "TOC / FOA / MOA cert 等", en: "TOC / FOA / MOA cert" },
+      level_label: { zh: "頂階 · 有機", en: "Top · Organic" },
+      requires:{ zh: "零化學農藥 + 零化學肥料 + 2-3 年轉型期 + 第三方查驗。", en: "Zero chemical pesticides + zero chemical fertilizer + 2-3 yr transition + 3rd-party audit." },
+      unlocks: { zh: "全有機通路（棉花田、有機店、宅配）+ 外銷 JAS / EU Bio + 最高溢價。", en: "Full organic channels + JAS/EU Bio export + highest premium." },
+      eligibility: (inp) =>
+        inp.chemicals === 0 &&
+        inp.nFert <= 80 * Math.max(inp.farmSize, 0.1),
+      note:    { zh: "<strong>最高門檻、最高溢價。</strong>需 2-3 年轉型期。期間可走友善身分過渡。", en: "<strong>Highest bar, highest premium.</strong> 2-3 yr transition; hold friendly-farming status during it." }
+    },
+    {
+      id: 'toxin-free', level: 4, icon: '🛡',
+      name:    { zh: "無毒農業國家隊（花蓮）", en: "Toxin-Free Agriculture Nat'l Team (Hualien)" },
+      agency:  { zh: "花蓮縣政府 + 在地品牌", en: "Hualien County Govt + local brand" },
+      level_label: { zh: "頂階 · 區域品牌", en: "Top · Regional brand" },
+      requires:{ zh: "農場位於花蓮 + 無化學農藥 + 加入無毒農業國家隊。", en: "Farm in Hualien + zero chemical pesticide + join the 'Toxin-Free National Team'." },
+      unlocks: { zh: "花蓮國家隊品牌、縣府行銷補助、觀光直銷加成。", en: "Hualien brand membership, county marketing support, tourism direct-sales premium." },
+      eligibility: (inp) =>
+        inp.chemicals === 0 &&
+        CLIENT_CONFIG.region === 'east',
+      note:    { zh: "區域限定（花蓮）。品牌力強，觀光地區農場特別適用。", en: "Region-locked (Hualien). Strong brand; especially suits tourism-area farms." }
+    }
+  ];
+
   // Market infrastructure by region — where the farmer's actual
   // goods can physically go. Curated list of major wholesale markets,
   // farmers' markets, organic channel hubs, and export ports per region.
@@ -4034,6 +4117,47 @@
         <span class="sv-priority-title">${d.title}</span>
         <div class="sv-priority-body">${d.body}</div>
       </div>`).join('');
+
+    // Certification ladder — analyze each cert for this specific farm
+    const certs = CERTIFICATION_LADDER.map(c => {
+      let eligible = false;
+      try { eligible = !!c.eligibility(inp); } catch (e) {}
+      return { ...c, eligible };
+    });
+    // Recommended next cert: the highest level the farm currently qualifies for
+    const eligibleSorted = certs.filter(c => c.eligible).sort((a, b) => b.level - a.level);
+    const recommendedId = eligibleSorted.length ? eligibleSorted[0].id : null;
+
+    document.getElementById('certLadder').innerHTML = certs.map(c => {
+      const isRecommended = c.id === recommendedId;
+      const statusLabel = c.eligible
+        ? (isRecommended ? tr('★ 建議從這張開始', '★ Recommended next cert') : tr('✓ 符合條件', '✓ Eligible now'))
+        : tr('☐ 條件未滿足', '☐ Not yet eligible');
+      const statusColor = c.eligible
+        ? (isRecommended ? 'var(--accent)' : 'var(--ok)')
+        : 'var(--text-muted)';
+      const cardBg = isRecommended ? 'background: rgba(29,158,117,0.06); border-color: rgba(29,158,117,0.40);' :
+                     c.eligible    ? 'background: rgba(29,158,117,0.03);' : '';
+      return `
+        <div style="padding: 14px 16px; background: var(--bg-subtle); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 8px; ${cardBg} ${!c.eligible ? 'opacity: 0.78;' : ''}">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 14px; flex-wrap: wrap;">
+            <div style="flex: 1; min-width: 260px;">
+              <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                <span style="font-size: 18px;">${c.icon}</span>
+                <span style="font-weight: 700; font-size: 14px;">${trObj(c.name)}</span>
+                <span style="font-size: 10.5px; padding: 1px 7px; border-radius: 999px; background: var(--bg-card); border: 1px solid var(--border); color: var(--text-muted); font-weight: 600; letter-spacing: 0.03em;">L${c.level} · ${trObj(c.level_label)}</span>
+                <span style="font-size: 11px; color: var(--text-muted);">· ${trObj(c.agency)}</span>
+              </div>
+              <div style="font-size: 12px; color: var(--text-muted); line-height: 1.55;"><strong style="color: var(--text); font-weight: 600;">${tr('要求', 'Requires')}：</strong>${trObj(c.requires)}</div>
+              <div style="font-size: 12px; color: var(--text-muted); line-height: 1.55; margin-top: 4px;"><strong style="color: var(--text); font-weight: 600;">${tr('能進入', 'Unlocks')}：</strong>${trObj(c.unlocks)}</div>
+              ${c.note ? `<div style="font-size: 11.5px; color: var(--text-muted); margin-top: 6px; line-height: 1.55;">${trObj(c.note)}</div>` : ''}
+            </div>
+            <div style="text-align: right; min-width: 110px;">
+              <div style="font-size: 11.5px; font-weight: 700; color: ${statusColor}; padding: 3px 9px; border-radius: 999px; background: ${c.eligible ? (isRecommended ? 'rgba(29,158,117,0.18)' : 'rgba(29,158,117,0.10)') : 'rgba(156,163,175,0.10)'}; display: inline-block; white-space: nowrap;">${statusLabel}</div>
+            </div>
+          </div>
+        </div>`;
+    }).join('');
 
     // Market routes — where the goods can physically go
     const infra = MARKET_INFRASTRUCTURE[region];
