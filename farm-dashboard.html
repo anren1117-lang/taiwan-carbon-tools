@@ -506,6 +506,18 @@
     gap: 10px;
     margin-top: 4px;
   }
+  .scenario-preset {
+    padding: 5px 12px;
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-family: inherit;
+    font-size: 11.5px;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-weight: 600;
+  }
+  .scenario-preset:hover { border-color: var(--accent); color: var(--accent); }
   .scenario {
     border: 1px solid var(--border);
     border-radius: 12px;
@@ -1546,6 +1558,10 @@
   <section class="panel" id="sec-scenarios">
     <div class="panel-title" data-zh="情境模擬：再增加哪些做法？" data-en="What-if scenarios">情境模擬：再增加哪些做法？</div>
     <div class="panel-sub" data-zh="勾選未實施的耕作管理，即時看到淨碳足跡的變化。已實施項目會標註。" data-en="Toggle practices not currently in place to see net footprint change in real time. Currently active practices are marked.">勾選未實施的耕作管理，即時看到淨碳足跡的變化。已實施項目會標註。</div>
+    <div style="display: flex; gap: 6px; margin-bottom: 10px; flex-wrap: wrap;">
+      <button type="button" class="scenario-preset" id="scenarioAll" data-zh="全選未實施" data-en="Select all unused">全選未實施</button>
+      <button type="button" class="scenario-preset" id="scenarioReset" data-zh="清除" data-en="Clear">清除</button>
+    </div>
     <div class="scenario-grid" id="scenarioGrid"></div>
     <div class="scenario-result">
       <div>
@@ -3922,6 +3938,19 @@
     // Agent reset
     document.getElementById('agentReset').addEventListener('click', () => {
       agentState.priority = null;
+      render();
+    });
+
+    // Scenario preset buttons (select all unused / clear all)
+    document.getElementById('scenarioAll').addEventListener('click', () => {
+      const inp = readInputs();
+      PRACTICES.forEach(p => {
+        if (!inp.practices[p]) scenarioToggles[p] = true;
+      });
+      render();
+    });
+    document.getElementById('scenarioReset').addEventListener('click', () => {
+      scenarioToggles = {};
       render();
     });
 
