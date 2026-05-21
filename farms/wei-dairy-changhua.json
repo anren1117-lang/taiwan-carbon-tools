@@ -1,0 +1,94 @@
+{
+  "clientName":      { "zh": "魏家牧場", "en": "Wei Family Dairy" },
+  "clientLocation":  { "zh": "台灣 · 彰化埔心", "en": "Puxin, Changhua, Taiwan" },
+  "reportingPeriod": "2025",
+
+  "monthlyElectricity": {
+    "2024": [110, 100, 120, 130, 150, 165, 180, 180, 160, 140, 120, 110],
+    "2025": [120, 110, 130, 140, 165, 180, 200, 200, 180, 155, 130, 120]
+  },
+  "meterStatus": "manual",
+
+  "yoyTotals": {
+    "2024": { "gross": 38.4, "net": 36.0 }
+  },
+
+  "inputs": {
+    "farmSize": 1.5,
+    "cropType": "livestock",
+    "riceMgmt": "continuous_flood",
+    "diesel": 400,
+    "gasoline": 50,
+    "lpg": 80,
+    "heatingOil": 0,
+    "nFert": 30,
+    "cattle": 0,
+    "pigs": 0,
+    "poultry": 0,
+    "cattleDairy": 8,
+    "cattleBeef": 0,
+    "sowHead": 0,
+    "growerPigHead": 0,
+    "poultryLayer": 200,
+    "poultryBroiler": 0,
+    "manure": "composted",
+    "irrigation": 100,
+    "coldStorage": 1500,
+    "otherElec": 200,
+    "chemicals": 5,
+    "feed": 8000,
+    "transport": 1500,
+    "commute": 1000,
+    "packaging": 50,
+    "waste": 100,
+    "biochar": 0,
+    "trees": 25,
+    "practices": { "coverCrop": false, "noTill": true, "compost": true, "residue": true },
+    "annualYieldKg": 50000,
+    "productCategory": "livestock_dairy"
+  },
+
+  "renewables": [
+    { "id": "solar", "name": { "zh": "屋頂光電", "en": "Rooftop solar PV" }, "status": "active",
+      "capacity": "20 kWp", "notes": { "zh": "牛舍屋頂自用，部分餘電躉售", "en": "Barn rooftop self-consumption + partial feed-in" } },
+    { "id": "solar-thermal", "name": { "zh": "太陽能熱水", "en": "Solar thermal water" }, "status": "active",
+      "capacity": "—", "notes": { "zh": "供應擠乳區清洗熱水", "en": "Hot water for milking parlour cleaning" } },
+    { "id": "biogas", "name": { "zh": "沼氣回收", "en": "Biogas digester" }, "status": "planned",
+      "capacity": "—", "notes": { "zh": "依糞肥量評估中（2026 申請）", "en": "Under feasibility based on manure volume (2026 application)" } }
+  ],
+
+  "narrative": { "zh": null, "en": null },
+
+  "dataSources": [
+    { "id": "electricity", "method": "bill",
+      "provider": { "zh": "台電紙本帳單", "en": "Taipower paper bill" },
+      "billAmount": 5040, "billPeriod": "year", "billRate": 2.80,
+      "status": { "zh": "每月人工輸入", "en": "Monthly manual entry" } },
+    { "id": "diesel", "method": "bill",
+      "provider": { "zh": "中油配送（牧場用）", "en": "CPC delivery (farm)" },
+      "billAmount": 12400, "billPeriod": "year", "billRate": 31.00 },
+    { "id": "gasoline", "method": "bill",
+      "provider": { "zh": "鮮乳運輸車加油", "en": "Milk delivery van pump receipts" },
+      "billAmount": 1600, "billPeriod": "year", "billRate": 32.00 },
+    { "id": "lpg", "method": "bill",
+      "provider": { "zh": "LPG 桶裝（清洗用熱水）", "en": "LPG cylinder (cleaning hot water)" },
+      "billAmount": 2400, "billPeriod": "year", "billRate": 30.00 },
+    { "id": "nFert", "method": "manual",
+      "provider": { "zh": "牧草地用複合肥", "en": "Pasture compound fertilizer" },
+      "derivation": { "zh": "少量複合肥 — 大部分氮來自堆肥還田", "en": "Small compound fert. application — most N comes from compost recycling" } },
+    { "id": "feed", "method": "bill",
+      "provider": { "zh": "飼料廠送貨單（高蛋白濃縮料）", "en": "Feed mill (high-protein concentrate)" } },
+    { "id": "chemicals", "method": "manual",
+      "provider": { "zh": "極少量蹄部消毒劑", "en": "Minimal hoof disinfectant" } },
+    { "id": "transport", "method": "manual",
+      "provider": { "zh": "鮮乳送至契作酪農場 + 蛋直銷", "en": "Milk delivery to contract dairy + egg direct sales" } }
+  ],
+
+  "soilTest": {
+    "socPercent": 2.1,
+    "bulkDensity": 1.35,
+    "depthCm": 30,
+    "date": "2024-11",
+    "lab": { "zh": "彰化分所 · 牧草地採樣", "en": "Changhua Branch · pasture sampling" }
+  }
+}
