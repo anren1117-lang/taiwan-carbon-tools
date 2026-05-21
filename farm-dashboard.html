@@ -818,6 +818,33 @@
     border-top: 1px solid var(--border);
   }
 
+  /* ── Loading overlay (shown while ?id JSON is fetched) ──── */
+  body.loading main { opacity: 0; }
+  main { transition: opacity 0.2s; }
+  .dash-loader {
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+  }
+  body.loading .dash-loader { display: flex; }
+  .dash-loader-inner {
+    display: flex; flex-direction: column; align-items: center; gap: 14px;
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+  .dash-loader-ring {
+    width: 32px; height: 32px;
+    border: 2.5px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: dlspin 0.8s linear infinite;
+  }
+  @keyframes dlspin { to { transform: rotate(360deg); } }
+
   /* ── Glossary (acronym definitions) ─────────────────────── */
   .glossary {
     margin: 0 0 28px;
@@ -1410,6 +1437,22 @@
 </style>
 </head>
 <body>
+
+<script>
+  // Set body.loading immediately if a ?id is requested, so the main
+  // content stays hidden until the fetch completes and the dashboard
+  // is fully rendered. Prevents the placeholder text flash.
+  if (new URLSearchParams(window.location.search).get('id')) {
+    document.body.classList.add('loading');
+  }
+</script>
+
+<div class="dash-loader" id="dashLoader" aria-hidden="true">
+  <div class="dash-loader-inner">
+    <div class="dash-loader-ring"></div>
+    <div data-zh="載入農場資料..." data-en="Loading farm data...">載入農場資料...</div>
+  </div>
+</div>
 
 <header>
   <div class="container header-inner">
@@ -4091,6 +4134,9 @@
 
     applyLang(savedLang);
     renderFarmStatusBadge();
+    // Reveal main content + hide the loader now that the dashboard
+    // is fully rendered (a tick after applyLang triggers first render).
+    requestAnimationFrame(() => document.body.classList.remove('loading'));
   }
   init();
 </script>
