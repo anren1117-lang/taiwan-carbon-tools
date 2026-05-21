@@ -649,76 +649,16 @@
   </div>
 </footer>
 
+<!-- Shared carbon math (EF, SINK, calcFromInputs, fmt, etc.) — see farm-carbon-engine.js -->
+<script src="farm-carbon-engine.js"></script>
 <script>
-  // ──────────────────────────────────────────────────────────────────
-  // CARBON ENGINE — KEEP IN SYNC WITH farm-dashboard.html
-  // The same EF / SINK / PRODUCT_BENCHMARKS / calcFromInputs as the
-  // consulting dashboard. If you change factors there, mirror them
-  // here (or refactor to a shared engine file).
-  // ──────────────────────────────────────────────────────────────────
-  const EF = {
-    diesel: 2.606, gasoline: 2.27, lpg: 2.99, heatingOil: 2.68,
-    nFertDirect: 4.29, riceCH4PerHa: 2970,
-    cattleHead: 1800, pigHead: 175, poultryHead: 6,
-    electricity: 0.474,
-    nFertUpstream: 4.0, chemicals: 7.0, feed: 0.5,
-    transport: 0.65, commute: 0.13, packaging: 1.8, waste: 0.6
-  };
-  const MANURE_MULT = { none: 1.0, composted: 1.0, daily: 1.1, lagoon: 1.3 };
-  const SINK = { coverCrop: 1100, noTill: 500, compost: 800, residue: 400, biochar: 3.0, treePerYear: 22 };
-  const PRACTICES = ['coverCrop', 'noTill', 'compost', 'residue'];
-  const PRODUCT_BENCHMARKS = {
-    vegetables_leaf:  { name: { zh: "葉菜類", en: "Leafy vegetables" },     taiwan_avg: 0.35, eu_avg: 0.50, top_quartile: 0.20, premium: 0.10 },
-    vegetables_root:  { name: { zh: "根莖類蔬菜", en: "Root vegetables" }, taiwan_avg: 0.30, eu_avg: 0.40, top_quartile: 0.18, premium: 0.09 },
-    rice:             { name: { zh: "稻米", en: "Rice" },                    taiwan_avg: 2.50, eu_avg: 2.80, top_quartile: 1.80, premium: 1.20 },
-    fruit:            { name: { zh: "果樹", en: "Fruit" },                   taiwan_avg: 0.40, eu_avg: 0.60, top_quartile: 0.25, premium: 0.15 },
-    livestock_dairy:  { name: { zh: "乳製品", en: "Dairy" },                 taiwan_avg: 1.20, eu_avg: 1.40, top_quartile: 0.90, premium: 0.70 },
-    livestock_meat:   { name: { zh: "肉品", en: "Meat" },                     taiwan_avg: 8.00, eu_avg: 12.0, top_quartile: 6.00, premium: 4.50 },
-    mixed:            { name: { zh: "綜合作物", en: "Mixed produce" },        taiwan_avg: 0.40, eu_avg: 0.55, top_quartile: 0.22, premium: 0.12 }
-  };
+  // EF, MANURE_MULT, SINK, PRACTICES, PRODUCT_BENCHMARKS, stackingMult,
+  // calcFromInputs, fmt, fmt0 — provided by farm-carbon-engine.js
 
-  function stackingMult(count) {
-    if (count >= 3) return 0.65;
-    if (count === 2) return 0.80;
-    return 1.0;
-  }
-
-  function calcFromInputs(inp) {
-    const e_fuels = inp.diesel * EF.diesel + inp.gasoline * EF.gasoline + inp.lpg * EF.lpg + inp.heatingOil * EF.heatingOil;
-    const e_nFertDir = inp.nFert * EF.nFertDirect;
-    const e_rice = inp.cropType === 'rice' ? inp.farmSize * EF.riceCH4PerHa : 0;
-    const livestockBase = inp.cattle * EF.cattleHead + inp.pigs * EF.pigHead + inp.poultry * EF.poultryHead;
-    const e_livestock = livestockBase * (MANURE_MULT[inp.manure] || 1);
-    const s1 = e_fuels + e_nFertDir + e_rice + e_livestock;
-
-    const e_elec = (inp.irrigation + inp.coldStorage + (inp.otherElec || 0)) * EF.electricity;
-    const s2 = e_elec;
-
-    const s3 = inp.nFert * EF.nFertUpstream + inp.chemicals * EF.chemicals + (inp.feed || 0) * EF.feed
-             + inp.transport * EF.transport + (inp.commute || 0) * EF.commute
-             + (inp.packaging || 0) * EF.packaging + (inp.waste || 0) * EF.waste;
-
-    const gross = s1 + s2 + s3;
-    const activeLand = PRACTICES.filter(p => inp.practices[p]);
-    const sm = stackingMult(activeLand.length);
-    const sinkByPractice = {
-      coverCrop: inp.practices.coverCrop ? inp.farmSize * SINK.coverCrop * sm : 0,
-      noTill:    inp.practices.noTill    ? inp.farmSize * SINK.noTill    * sm : 0,
-      compost:   inp.practices.compost   ? inp.farmSize * SINK.compost   * sm : 0,
-      residue:   inp.practices.residue   ? inp.farmSize * SINK.residue   * sm : 0,
-      biochar:   inp.biochar * SINK.biochar,
-      trees:     inp.trees * SINK.treePerYear
-    };
-    const sinkTotal = Object.values(sinkByPractice).reduce((a, b) => a + b, 0);
-    return { s1, s2, s3, gross, sinkTotal, net: gross - sinkTotal, activeLandCount: activeLand.length, stackingMult: sm, sinkByPractice };
-  }
-
-  // ── Helpers ───────────────────────────────────────────────────────
+  // ── Page-specific i18n state ──────────────────────────────────────
   let currentLang = 'zh';
   function tr(zh, en) { return currentLang === 'zh' ? zh : en; }
   function trObj(o) { return o ? o[currentLang] || o.zh : ''; }
-  function fmt(n, d=2) { return n.toLocaleString(undefined, { minimumFractionDigits: d, maximumFractionDigits: d }); }
-  function fmt0(n) { return Math.round(n).toLocaleString(); }
 
   // ── i18n labels ───────────────────────────────────────────────────
   const T = {
