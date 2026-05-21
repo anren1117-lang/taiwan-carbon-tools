@@ -488,7 +488,7 @@
     border-top: 1px solid var(--border);
     padding: 14px 0;
     display: grid;
-    grid-template-columns: 28px 1fr auto;
+    grid-template-columns: 28px 1fr;
     gap: 14px;
     align-items: start;
   }
@@ -518,6 +518,61 @@
     font-size: 15px;
     font-weight: 700;
     font-variant-numeric: tabular-nums;
+  }
+  .rec-econ {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-top: 12px;
+    padding: 12px 14px;
+    background: var(--bg-subtle);
+    border-radius: 10px;
+  }
+  .re-cell { font-size: 12px; }
+  .re-label {
+    color: var(--text-muted);
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .re-val {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+    line-height: 1.15;
+  }
+  .re-val.good  { color: var(--accent); }
+  .re-val.muted { color: var(--text-muted); font-weight: 500; }
+  .re-sub {
+    font-size: 10.5px;
+    color: var(--text-muted);
+    margin-top: 3px;
+    line-height: 1.4;
+  }
+  .rec-tags {
+    margin-top: 10px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .rec-tag {
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    background: var(--bg-subtle);
+    color: var(--text-muted);
+  }
+  .rec-tag.risk-low    { background: rgba(29,158,117,0.12); color: var(--ok); }
+  .rec-tag.risk-med    { background: rgba(180,83,9,0.12);   color: var(--pending); }
+  .rec-tag.risk-high   { background: rgba(185,28,28,0.12);  color: var(--neg); }
+  .rec-tag.carbon      { background: rgba(29,158,117,0.10); color: var(--accent-dark); }
+  .rec-tag.payback-fast{ background: var(--accent); color: white; }
+  @media (max-width: 700px) {
+    .rec-econ { grid-template-columns: repeat(2, 1fr); }
   }
 
   /* ── Editor drawer ──────────────────────────────────────── */
@@ -2408,6 +2463,29 @@
   }
 
   function renderRoadmap(inp, r) {
+    // ── Economics helpers ─────────────────────────────────────────
+    const fmtNT = (n) => 'NT$ ' + fmt0(n);
+    const computePayback = (cost, savings, subsidy) => {
+      const net = Math.max(0, cost - subsidy);
+      if (net === 0) return 0;
+      if (savings <= 0) return null;
+      return net / savings;
+    };
+    const paybackLabel = (yr) => {
+      if (yr === null) return tr('長期回收 / 策略性', 'Strategic / long');
+      if (yr === 0)    return tr('立即（無投入）', 'Immediate');
+      if (yr < 1)      return tr('< 1 年', '< 1 yr');
+      if (yr < 100)    return fmt(yr, 1) + tr(' 年', ' yrs');
+      return tr('> 10 年', '> 10 yrs');
+    };
+    const riskLabel = (rk) => rk === 'low' ? tr('風險：低', 'Risk: low')
+                            : rk === 'med' ? tr('風險：中', 'Risk: med')
+                            :                 tr('風險：高', 'Risk: high');
+
+    // ── Library: per-source reduction recs with economics ────────
+    // Cost / savings / subsidy figures are realistic Taiwan-context
+    // estimates for a typical small farm; the consultant should
+    // adjust per client during the engagement.
     const recs = [];
     const sourceEntries = Object.entries(r.sources).filter(([, v]) => v > 0)
       .sort((a, b) => b[1] - a[1]);
@@ -2417,93 +2495,170 @@
       const lib = {
         diesel: {
           title: { zh: "減少農機柴油用量", en: "Reduce machinery diesel" },
-          desc:  { zh: "改善農機調度、共用機具、評估電動小型農機。每減 10% 柴油約省 " + fmt(topVal * 0.10 / 1000, 2) + " 噸。",
-                   en: "Optimise scheduling, share equipment, evaluate small electric machinery. ~" + fmt(topVal * 0.10 / 1000, 2) + " t per 10% diesel cut." },
-          impact: topVal * 0.20 / 1000
+          desc:  { zh: "改善農機調度、共用機具、評估電動小型農機。每減 10% 柴油約省 " + fmt(topVal * 0.10 / 1000, 2) + " 噸 + NT$ " + fmt0(inp.diesel * 31 * 0.10) + "。",
+                   en: "Optimise scheduling, share equipment, evaluate small electric machinery. ~" + fmt(topVal * 0.10 / 1000, 2) + " t + NT$ " + fmt0(inp.diesel * 31 * 0.10) + " per 10% cut." },
+          impact: topVal * 0.20 / 1000,
+          econ: {
+            costNT: 50000, savingsNT: inp.diesel * 31 * 0.20, subsidyNT: 100000,
+            subsidyName: { zh: "農機具電動化補助", en: "Electric machinery grant" },
+            timeWeeks: 12, risk: 'low'
+          }
         },
         gasoline: {
           title: { zh: "汽油車輛電動化或共乘", en: "Electrify or rideshare gasoline vehicles" },
           desc:  { zh: "汽油車與小型動力機具改電動，或整合共乘。",
                    en: "Switch gasoline light vehicles & equipment to electric, or consolidate rides." },
-          impact: topVal * 0.30 / 1000
+          impact: topVal * 0.30 / 1000,
+          econ: {
+            costNT: 80000, savingsNT: inp.gasoline * 32 * 0.30, subsidyNT: 50000,
+            subsidyName: { zh: "電動機車補助", en: "E-scooter grant" },
+            timeWeeks: 8, risk: 'low'
+          }
         },
         lpg: {
           title: { zh: "LPG 加溫系統節能升級", en: "Upgrade LPG heating efficiency" },
           desc:  { zh: "改善溫室隔熱、夜間幕簾、變頻熱泵替代部分 LPG 用量。",
                    en: "Improve greenhouse insulation, deploy night curtains, replace LPG with heat pump where feasible." },
-          impact: topVal * 0.25 / 1000
+          impact: topVal * 0.25 / 1000,
+          econ: {
+            costNT: 80000, savingsNT: inp.lpg * 30 * 0.25, subsidyNT: 30000,
+            subsidyName: { zh: "節能設備補助", en: "Energy efficiency grant" },
+            timeWeeks: 10, risk: 'med'
+          }
         },
         heatingOil: {
           title: { zh: "燃油鍋爐汰換", en: "Replace heating-oil boiler" },
           desc:  { zh: "改用空氣源熱泵、生物質鍋爐或太陽能輔助加溫。",
                    en: "Air-source heat pumps, biomass boilers, or solar-thermal assistance." },
-          impact: topVal * 0.40 / 1000
+          impact: topVal * 0.40 / 1000,
+          econ: {
+            costNT: 250000, savingsNT: inp.heatingOil * 28 * 0.40, subsidyNT: 80000,
+            subsidyName: { zh: "再生能源汰換補助", en: "Renewable retrofit grant" },
+            timeWeeks: 20, risk: 'med'
+          }
         },
         nFert: {
           title: { zh: "氮肥精準化與綠肥取代", en: "Precision N + green manure" },
-          desc:  { zh: "土壤檢測施肥、分次施用、加入豆科覆蓋作物固氮。氮肥減 20% 約可減 " + fmt(topVal * 0.20 / 1000, 2) + " 噸（含上下游）。",
-                   en: "Soil-test-based fertilization, split applications, legume cover crops. ~" + fmt(topVal * 0.20 / 1000, 2) + " t per 20% N cut." },
-          impact: topVal * 0.20 / 1000
+          desc:  { zh: "土壤檢測施肥、分次施用、加入豆科覆蓋作物固氮。氮肥減 20% 約可減 " + fmt(topVal * 0.20 / 1000, 2) + " 噸 + NT$ " + fmt0(inp.nFert * 18 * 0.20) + "（含上下游）。",
+                   en: "Soil-test-based fertilization, split applications, legume cover crops. ~" + fmt(topVal * 0.20 / 1000, 2) + " t + NT$ " + fmt0(inp.nFert * 18 * 0.20) + " per 20% N cut." },
+          impact: topVal * 0.20 / 1000,
+          econ: {
+            costNT: 8000, savingsNT: inp.nFert * 18 * 0.20 + 5000 * inp.farmSize, subsidyNT: 30000 * inp.farmSize,
+            subsidyName: { zh: "友善耕作補助", en: "Friendly Farming Subsidy" },
+            timeWeeks: 8, risk: 'low'
+          }
         },
         rice: {
           title: { zh: "水稻間歇灌溉（AWD）", en: "Alternate wetting & drying (AWD)" },
-          desc:  { zh: "間歇灌溉可減少 30–50% 稻田 CH₄ 排放。",
-                   en: "Cuts paddy CH₄ by 30–50%." },
-          impact: topVal * 0.40 / 1000
+          desc:  { zh: "間歇灌溉可減少 30–50% 稻田 CH₄ 排放，並節水 25–30%。",
+                   en: "Cuts paddy CH₄ by 30–50% and water by 25–30%." },
+          impact: topVal * 0.40 / 1000,
+          econ: {
+            costNT: 30000, savingsNT: 8000 * inp.farmSize, subsidyNT: 25000 * inp.farmSize,
+            subsidyName: { zh: "氣候智慧農業計畫", en: "Climate-smart agriculture grant" },
+            timeWeeks: 4, risk: 'med'
+          }
         },
         livestock: {
           title: { zh: "糞肥管理升級為堆肥", en: "Switch manure mgmt to composting" },
-          desc:  { zh: "從厭氧儲存/每日清運轉為堆肥，減少 N₂O 與 CH₄ 並產出堆肥。",
-                   en: "Move from anaerobic lagoon / daily spread to composting — cuts N₂O & CH₄ and yields applicable compost." },
-          impact: topVal * 0.15 / 1000
+          desc:  { zh: "從厭氧儲存/每日清運轉為堆肥，減少 N₂O 與 CH₄ 並產出可施用堆肥。",
+                   en: "Move from anaerobic lagoon / daily spread to composting — cuts N₂O & CH₄ and yields usable compost." },
+          impact: topVal * 0.15 / 1000,
+          econ: {
+            costNT: 80000, savingsNT: 18000, subsidyNT: 50000,
+            subsidyName: { zh: "智慧畜牧計畫", en: "Smart livestock grant" },
+            timeWeeks: 16, risk: 'med'
+          }
         },
         electricity: {
           title: { zh: "灌溉/冷藏節能 + 屋頂光電", en: "Pump/cooling efficiency + rooftop PV" },
-          desc:  { zh: "變頻抽水馬達、高效冷藏、自用屋頂光電。",
-                   en: "VFD pumps, efficient cooling, self-consumption rooftop PV." },
-          impact: topVal * 0.30 / 1000
+          desc:  { zh: "變頻抽水馬達、高效冷藏、自用屋頂光電（搭配台電躉售保證）。",
+                   en: "VFD pumps, efficient cooling, self-consumption rooftop PV (with Taipower feed-in tariff)." },
+          impact: topVal * 0.30 / 1000,
+          econ: {
+            costNT: 400000, savingsNT: (inp.irrigation + inp.coldStorage + inp.otherElec) * 2.8 * 0.30, subsidyNT: 80000,
+            subsidyName: { zh: "屋頂光電 + 智慧農業", en: "Rooftop PV + smart-ag grant" },
+            timeWeeks: 24, risk: 'low'
+          }
         },
         chemicals: {
-          title: { zh: "減少複肥/農藥施用", en: "Reduce compound fert. & pesticides" },
-          desc:  { zh: "IPM 害物綜合管理 + 改善土壤健康。",
-                   en: "IPM + soil-health improvements lower upstream carbon cost." },
-          impact: topVal * 0.20 / 1000
+          title: { zh: "減少複肥/農藥施用（IPM）", en: "Reduce compound fert. & pesticides (IPM)" },
+          desc:  { zh: "害物綜合管理 + 改善土壤健康 → 降低上游碳成本與藥劑開支。",
+                   en: "IPM + soil-health improvements lower upstream carbon cost and chemical spend." },
+          impact: topVal * 0.20 / 1000,
+          econ: {
+            costNT: 10000, savingsNT: inp.chemicals * 50 * 0.20, subsidyNT: 15000 * inp.farmSize,
+            subsidyName: { zh: "有機驗證輔導 (若達門檻)", en: "Organic certification (if threshold met)" },
+            timeWeeks: 12, risk: 'med'
+          }
         },
         feed: {
           title: { zh: "在地飼料 / 草飼比例提升", en: "Local feed / increase forage share" },
           desc:  { zh: "縮短飼料運輸鏈，提高自有牧草或農場副產品比例。",
                    en: "Shorten feed supply chain, raise on-farm forage or by-product share." },
-          impact: topVal * 0.20 / 1000
+          impact: topVal * 0.20 / 1000,
+          econ: {
+            costNT: 30000, savingsNT: inp.feed * 12 * 0.10, subsidyNT: 0,
+            subsidyName: null,
+            timeWeeks: 12, risk: 'low'
+          }
         },
         transport: {
           title: { zh: "縮短配送距離 / 在地通路", en: "Shorter delivery / local channels" },
           desc:  { zh: "在地批發與 CSA 直送可減少配送公噸公里。",
                    en: "Local wholesale and CSA direct-to-consumer cuts tonne-km." },
-          impact: topVal * 0.25 / 1000
+          impact: topVal * 0.25 / 1000,
+          econ: {
+            costNT: 5000, savingsNT: inp.transport * 4 * 0.25, subsidyNT: 0,
+            subsidyName: null,
+            timeWeeks: 4, risk: 'low'
+          }
         },
         commute: {
           title: { zh: "員工共乘 / 電動通勤誘因", en: "Staff carpool / EV commute incentives" },
           desc:  { zh: "共乘配對、電動機車補貼、改善宿舍可選性。",
                    en: "Carpool matching, e-scooter subsidies, dorm option to cut commute." },
-          impact: topVal * 0.20 / 1000
+          impact: topVal * 0.20 / 1000,
+          econ: {
+            costNT: 20000, savingsNT: inp.commute * 1.5 * 0.20, subsidyNT: 0,
+            subsidyName: null,
+            timeWeeks: 8, risk: 'low'
+          }
         },
         packaging: {
           title: { zh: "包材輕量化 / 重複使用", en: "Lighter or reusable packaging" },
           desc:  { zh: "FSC 紙箱、可回收 PLA、CSA 蔬菜籃循環。",
                    en: "FSC cartons, recyclable PLA, returnable CSA crates." },
-          impact: topVal * 0.20 / 1000
+          impact: topVal * 0.20 / 1000,
+          econ: {
+            costNT: 8000, savingsNT: inp.packaging * 8 * 0.15, subsidyNT: 0,
+            subsidyName: null,
+            timeWeeks: 6, risk: 'low'
+          }
         },
         waste: {
           title: { zh: "農場廢棄物堆肥化", en: "Compost farm waste on-site" },
           desc:  { zh: "有機殘體就地堆肥，避免外運與掩埋。",
                    en: "On-site composting of organic residues — avoids haul-out & landfilling." },
-          impact: topVal * 0.30 / 1000
+          impact: topVal * 0.30 / 1000,
+          econ: {
+            costNT: 15000, savingsNT: inp.waste * 3 * 0.30 + 2000, subsidyNT: 0,
+            subsidyName: null,
+            timeWeeks: 6, risk: 'low'
+          }
         }
       };
       if (lib[topKey]) recs.push(lib[topKey]);
     }
 
-    // Biggest unused land-practice sink
+    // ── Biggest unused land-practice sink ────────────────────────
+    const PRACTICE_ECON = {
+      coverCrop: { costPerHa: 5000,  weeksTo: 6,  risk: 'low', subsidyName: { zh: "友善耕作補助", en: "Friendly Farming Subsidy" }, subsidyPerHa: 30000 },
+      noTill:    { costFlat: 80000,  weeksTo: 12, risk: 'med', subsidyName: { zh: "友善耕作補助", en: "Friendly Farming Subsidy" }, subsidyPerHa: 30000 },
+      compost:   { costFlat: 15000,  weeksTo: 8,  risk: 'low', subsidyName: { zh: "友善耕作補助", en: "Friendly Farming Subsidy" }, subsidyPerHa: 30000 },
+      residue:   { costFlat: 0,      weeksTo: 2,  risk: 'low', subsidyName: { zh: "綠色友善環境給付（總額）", en: "Green env. payment (combined)" }, subsidyPerHa: 0 }
+    };
+
     const unusedLand = PRACTICES.filter(p => !inp.practices[p])
       .map(p => ({ key: p, weight: SINK[p] }))
       .sort((a, b) => b.weight - a.weight);
@@ -2513,46 +2668,108 @@
       trial.practices[top.key] = true;
       const trialR = calcFromInputs(trial);
       const delta = (r.net - trialR.net) / 1000;
+      const pe = PRACTICE_ECON[top.key];
+      const cost = pe.costPerHa ? pe.costPerHa * inp.farmSize : (pe.costFlat || 0);
+      // Indirect annual savings: practice usually reduces N fert needs ~10% + yield retention
+      const savings = (inp.nFert * 18 * 0.10) + (top.key === 'noTill' ? inp.diesel * 31 * 0.15 : 0) + 1500 * inp.farmSize;
+      const subsidy = pe.subsidyPerHa * inp.farmSize;
       recs.push({
         title: { zh: "新增「" + trObj(T.practiceName[top.key]) + "」做法",
                  en: "Add " + trObj(T.practiceName[top.key]).toLowerCase() },
         desc: {
-          zh: "最大未利用 SOC 機會。依目前面積 " + fmt(inp.farmSize, 1) + " 公頃估算新增碳匯 " + fmt(delta, 2) + " 噸/年。",
-          en: "Largest untapped SOC opportunity. At " + fmt(inp.farmSize, 1) + " ha, ~" + fmt(delta, 2) + " t/yr added sink."
+          zh: "最大未利用 SOC 機會。依目前面積 " + fmt(inp.farmSize, 1) + " 公頃估算新增碳匯 " + fmt(delta, 2) + " 噸/年；補助通常足以覆蓋投入。",
+          en: "Largest untapped SOC opportunity. At " + fmt(inp.farmSize, 1) + " ha, ~" + fmt(delta, 2) + " t/yr added sink; subsidy usually covers cost."
         },
-        impact: delta
+        impact: delta,
+        econ: {
+          costNT: cost, savingsNT: savings, subsidyNT: subsidy,
+          subsidyName: pe.subsidyName,
+          timeWeeks: pe.weeksTo, risk: pe.risk
+        }
       });
     }
 
+    // ── Biochar / agroforestry fallback ──────────────────────────
     if (inp.biochar === 0 && recs.length < 3) {
       recs.push({
-        title: { zh: "評估生物炭施用", en: "Evaluate biochar application" },
-        desc:  { zh: "高穩定性碳儲，每 100 kg 約固定 0.3 噸 CO₂e。",
-                 en: "High-stability carbon storage. ~0.3 t CO₂e per 100 kg." },
-        impact: 0.3
+        title: { zh: "評估生物炭施用（試辦）", en: "Pilot biochar application" },
+        desc:  { zh: "高穩定性碳儲，每 100 kg 約固定 0.3 噸 CO₂e。建議先試辦 500 kg 評估土壤反應。",
+                 en: "High-stability carbon storage. ~0.3 t CO₂e per 100 kg. Start with a 500 kg pilot to assess soil response." },
+        impact: 0.3,
+        econ: {
+          costNT: 15000, savingsNT: 1500, subsidyNT: 0,
+          subsidyName: null,
+          timeWeeks: 8, risk: 'med'
+        }
       });
     } else if (inp.trees < 20 && recs.length < 3) {
       recs.push({
         title: { zh: "農林木邊界種植", en: "Boundary agroforestry" },
-        desc:  { zh: "田間邊界、防風林、果樹間作。每株成熟樹年固碳約 22 kg CO₂e。",
-                 en: "Field boundaries, windbreaks, alley cropping. ~22 kg CO₂e/yr per mature tree." },
-        impact: 0.5
+        desc:  { zh: "田間邊界、防風林、果樹間作。每株成熟樹年固碳約 22 kg CO₂e；50 株起跑。",
+                 en: "Field boundaries, windbreaks, alley cropping. ~22 kg CO₂e/yr per mature tree; start with 50." },
+        impact: 0.5,
+        econ: {
+          costNT: 15000, savingsNT: 3000, subsidyNT: 8000,
+          subsidyName: { zh: "平地造林 / 林業署", en: "Lowland afforestation grant" },
+          timeWeeks: 12, risk: 'low'
+        }
       });
     }
 
-    document.getElementById('recsList').innerHTML = recs.slice(0, 3).map((rec, i) => `
-      <div class="rec">
-        <div class="rec-num">${i + 1}</div>
-        <div class="rec-body">
-          <div class="rec-title">${trObj(rec.title)}</div>
-          <div class="rec-desc">${trObj(rec.desc)}</div>
+    // ── Render each rec card with economics ──────────────────────
+    document.getElementById('recsList').innerHTML = recs.slice(0, 3).map((rec, i) => {
+      const econ = rec.econ || null;
+      let econHtml = '';
+      let tagsHtml = '';
+
+      if (econ) {
+        const payback = computePayback(econ.costNT, econ.savingsNT, econ.subsidyNT);
+        econHtml = `
+          <div class="rec-econ">
+            <div class="re-cell">
+              <div class="re-label">${tr('投入成本', 'Cost')}</div>
+              <div class="re-val">${econ.costNT === 0 ? '—' : fmtNT(econ.costNT)}</div>
+            </div>
+            <div class="re-cell">
+              <div class="re-label">${tr('年度節省', 'Yearly savings')}</div>
+              <div class="re-val ${econ.savingsNT > 0 ? 'good' : 'muted'}">${econ.savingsNT > 0 ? fmtNT(econ.savingsNT) : '—'}</div>
+            </div>
+            <div class="re-cell">
+              <div class="re-label">${tr('投資回收', 'Payback')}</div>
+              <div class="re-val">${paybackLabel(payback)}</div>
+            </div>
+            <div class="re-cell">
+              <div class="re-label">${tr('補助可得', 'Available subsidy')}</div>
+              <div class="re-val ${econ.subsidyNT > 0 ? 'good' : 'muted'}">${econ.subsidyNT > 0 ? fmtNT(econ.subsidyNT) : '—'}</div>
+              ${econ.subsidyName && econ.subsidyNT > 0 ? `<div class="re-sub">${trObj(econ.subsidyName)}</div>` : ''}
+            </div>
+          </div>`;
+        tagsHtml = `
+          <div class="rec-tags">
+            <span class="rec-tag risk-${econ.risk}">${riskLabel(econ.risk)}</span>
+            <span class="rec-tag">${tr('實施期', 'Lead time')}：${econ.timeWeeks} ${tr('週', 'wks')}</span>
+            <span class="rec-tag carbon">−${fmt(Math.abs(rec.impact), 2)} t CO₂e/${tr('年', 'yr')}</span>
+            ${payback !== null && payback <= 2 ? `<span class="rec-tag payback-fast">${tr('快速回收 ⚡', 'Fast payback ⚡')}</span>` : ''}
+          </div>`;
+      } else {
+        tagsHtml = `
+          <div class="rec-tags">
+            <span class="rec-tag carbon">−${fmt(Math.abs(rec.impact), 2)} t CO₂e/${tr('年', 'yr')}</span>
+          </div>`;
+      }
+
+      return `
+        <div class="rec">
+          <div class="rec-num">${i + 1}</div>
+          <div class="rec-body">
+            <div class="rec-title">${trObj(rec.title)}</div>
+            <div class="rec-desc">${trObj(rec.desc)}</div>
+            ${econHtml}
+            ${tagsHtml}
+          </div>
         </div>
-        <div class="rec-impact">
-          <strong>−${fmt(Math.abs(rec.impact), 2)} t</strong>
-          <span>${tr('潛在年減量', 'potential / yr')}</span>
-        </div>
-      </div>
-    `).join('') || `<div style="color:var(--text-muted);font-size:13px;padding:8px 0">${tr('沒有可顯示的建議', 'No recommendations.')}</div>`;
+      `;
+    }).join('') || `<div style="color:var(--text-muted);font-size:13px;padding:8px 0">${tr('沒有可顯示的建議', 'No recommendations.')}</div>`;
   }
 
   function renderNarrative(inp, r) {
