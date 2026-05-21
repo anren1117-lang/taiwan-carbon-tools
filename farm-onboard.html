@@ -460,6 +460,12 @@
       </div>
 
       <div class="panel">
+        <div class="panel-title" data-zh="你的儀表板 URL（部署後可用）" data-en="Your dashboard URLs (after deployment)">你的儀表板 URL（部署後可用）</div>
+        <div id="urlPreview" style="font-size: 13px; line-height: 1.8;"></div>
+        <div class="help" style="margin-top: 10px; font-size: 12px; color: var(--text-muted); line-height: 1.6;" data-zh="存取代碼 (token) 自動產生，已寫入 JSON 內。買方分享頁需要這組代碼才能存取 — 不知道代碼的人無法靠猜測 URL 看到你的資料。" data-en="The access token is auto-generated and embedded in the JSON. The buyer share page requires this token to load — random URL guessing cannot reach your data.">存取代碼 (token) 自動產生，已寫入 JSON 內。買方分享頁需要這組代碼才能存取 — 不知道代碼的人無法靠猜測 URL 看到你的資料。</div>
+      </div>
+
+      <div class="panel">
         <div class="panel-title" data-zh="生成的 JSON（farms/<id>.json）" data-en="Generated JSON (farms/<id>.json)">生成的 JSON（farms/&lt;id&gt;.json）</div>
         <pre class="json" id="jsonOutput">{}</pre>
         <div class="action-row">
@@ -524,6 +530,24 @@
   }
   function val(id) { return document.getElementById(id).value || ''; }
 
+  // Generate a stable per-session access token. Sticks to the same
+  // value across rebuilds so the JSON's token field doesn't churn
+  // every time the user edits a number. Use sessionStorage to keep
+  // it stable per browser tab; regenerate only on full reload.
+  function ensureToken() {
+    let t = null;
+    try { t = sessionStorage.getItem('tct_onboard_token'); } catch (e) {}
+    if (!t) {
+      const chars = 'abcdefghijkmnpqrstuvwxyz23456789';  // ambiguity-free
+      t = '';
+      const rand = new Uint8Array(14);
+      crypto.getRandomValues(rand);
+      for (let i = 0; i < 14; i++) t += chars[rand[i] % chars.length];
+      try { sessionStorage.setItem('tct_onboard_token', t); } catch (e) {}
+    }
+    return t;
+  }
+
   function buildConfig() {
     const period = val('period') || '2025';
     const inputs = {
@@ -564,6 +588,7 @@
       clientName:      { zh: val('nameZh') || '農場', en: val('nameEn') || 'Farm' },
       clientLocation:  { zh: val('locZh') || '台灣', en: val('locEn') || 'Taiwan' },
       reportingPeriod: String(period),
+      token:           ensureToken(),
       inputs
     };
 
@@ -614,6 +639,19 @@
       <div class="summary-row"><span class="summary-key">${tr('淨碳足跡', 'Net footprint')}</span>           <span class="summary-val">${fmt(r.net / 1000, 2)} t CO₂e</span></div>
       <div class="summary-row"><span class="summary-key">${tr('每公斤產品強度', 'Per-kg intensity')}</span>  <span class="summary-val ${intensity == null ? 'warn' : ''}">${intensity != null ? fmt(intensity, 3) + ' kg/kg' : tr('未提供年產量', 'yield not set')}</span></div>
       <div class="summary-row"><span class="summary-key">${tr('產品類別 benchmark tier', 'Product tier')}</span> <span class="summary-val" style="color: ${intensity != null && intensity <= bench.top_quartile ? 'var(--accent)' : 'var(--text-muted)'}">${tierLabel}</span></div>
+    `;
+
+    // URL preview using the generated token
+    const fid = val('farmId') || 'your-farm-id';
+    const t = cfg.token;
+    const base = window.location.origin + window.location.pathname.replace(/\/[^/]+$/, '/');
+    const dashUrl  = base + 'farm-dashboard.html?id=' + encodeURIComponent(fid) + '&t=' + encodeURIComponent(t);
+    const buyerUrl = base + 'farm-buyer.html?id='    + encodeURIComponent(fid) + '&t=' + encodeURIComponent(t);
+    document.getElementById('urlPreview').innerHTML = `
+      <div><strong>${tr('顧問儀表板', 'Consulting dashboard')}：</strong></div>
+      <div style="word-break: break-all; font-family: ui-monospace, Menlo, Consolas, monospace; background: var(--bg-subtle); padding: 6px 10px; border-radius: 6px; margin: 4px 0 10px;">${dashUrl}</div>
+      <div><strong>${tr('買方分享頁', 'Buyer share view')}：</strong></div>
+      <div style="word-break: break-all; font-family: ui-monospace, Menlo, Consolas, monospace; background: var(--bg-subtle); padding: 6px 10px; border-radius: 6px; margin: 4px 0;">${buyerUrl}</div>
     `;
   }
 

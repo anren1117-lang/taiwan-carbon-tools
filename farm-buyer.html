@@ -795,6 +795,7 @@
   async function loadConfig() {
     const params = new URLSearchParams(window.location.search);
     const farmId = params.get('id');
+    const token  = params.get('t');
     if (!farmId) {
       document.getElementById('farmName').textContent = currentLang === 'zh'
         ? '請提供 ?id=<農場代號>' : 'Please provide ?id=<farm-id>';
@@ -804,7 +805,20 @@
     try {
       const res = await fetch(`farms/${farmId}.json`, { cache: 'no-cache' });
       if (!res.ok) throw new Error('HTTP ' + res.status);
-      return await res.json();
+      const data = await res.json();
+      // Per-farm token gate: if JSON has a token, URL must match.
+      // Demo farms have no token and remain open.
+      if (data.token && data.token !== token) {
+        document.getElementById('farmName').textContent = currentLang === 'zh'
+          ? '🔒 此頁需要存取代碼' : '🔒 Access token required';
+        document.querySelector('.b-claim-wrap').style.display = 'none';
+        const meta = document.getElementById('farmMeta');
+        if (meta) meta.innerHTML = '<span>' + (currentLang === 'zh'
+          ? '請向農場主人或顧問索取完整 URL'
+          : 'Please request the full URL from the farm owner or advisor') + '</span>';
+        return null;
+      }
+      return data;
     } catch (e) {
       console.error('Failed to load farm', farmId, e);
       document.getElementById('farmName').textContent = currentLang === 'zh'

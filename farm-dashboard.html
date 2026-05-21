@@ -3544,18 +3544,25 @@
   // dashboard fetches `farms/<id>.json` and replaces the CLIENT_CONFIG.
   // If no id is provided, or the fetch fails, the in-file demo config
   // is used (so the URL still works for previewing).
-  let farmStatus = { id: null, loaded: false };
+  let farmStatus = { id: null, loaded: false, tokenError: false };
   async function loadFarmFromUrl() {
     const params = new URLSearchParams(window.location.search);
     const farmId = params.get('id');
+    const token  = params.get('t');
     if (!farmId) return;
     farmStatus.id = farmId;
     try {
       const res = await fetch(`farms/${farmId}.json`, { cache: 'no-cache' });
       if (!res.ok) throw new Error('HTTP ' + res.status);
       const data = await res.json();
-      // Replace the entire CLIENT_CONFIG with the fetched data.
-      // (Each farm JSON file is expected to be a complete config.)
+      // Per-farm access token: if the JSON declares one, the URL
+      // must include a matching ?t=<token>. Sample demo farms have
+      // no token field and remain open.
+      if (data.token && data.token !== token) {
+        farmStatus.loaded = false;
+        farmStatus.tokenError = true;
+        return;
+      }
       Object.keys(data).forEach(k => { CLIENT_CONFIG[k] = data[k]; });
       farmStatus.loaded = true;
     } catch (e) {
@@ -3569,6 +3576,11 @@
     if (!banner) return;
     if (farmStatus.id && farmStatus.loaded) {
       banner.textContent = (currentLang === 'zh' ? '客戶代號：' : 'Client ID: ') + farmStatus.id;
+    } else if (farmStatus.id && farmStatus.tokenError) {
+      banner.textContent = (currentLang === 'zh'
+        ? '🔒 此農場需要存取代碼 — 請聯絡顧問取得正確 URL'
+        : '🔒 This farm requires an access token — contact the advisor for the correct URL');
+      banner.style.background = 'rgba(180,83,9,0.35)';
     } else if (farmStatus.id && !farmStatus.loaded) {
       banner.textContent = (currentLang === 'zh'
         ? '⚠ 找不到 ' + farmStatus.id + ' — 顯示示範資料'
@@ -3578,11 +3590,16 @@
       banner.textContent = (currentLang === 'zh' ? '示範資料 · 1:1 諮詢交付件' : 'Demo data · 1:1 consulting deliverable');
     }
 
-    // Buyer share link — only valid when loaded from a real farm JSON
+    // Buyer share link — only valid when loaded from a real farm JSON.
+    // Forwards the token so the buyer page also clears the gate.
     const buyerLink = document.getElementById('buyerViewLink');
     if (buyerLink) {
       if (farmStatus.id && farmStatus.loaded) {
-        buyerLink.href = 'farm-buyer.html?id=' + encodeURIComponent(farmStatus.id);
+        const params = new URLSearchParams(window.location.search);
+        const t = params.get('t');
+        let href = 'farm-buyer.html?id=' + encodeURIComponent(farmStatus.id);
+        if (t) href += '&t=' + encodeURIComponent(t);
+        buyerLink.href = href;
         buyerLink.style.display = '';
       } else {
         buyerLink.style.display = 'none';
