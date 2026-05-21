@@ -1848,6 +1848,13 @@
       <div id="certLadder"></div>
     </div>
 
+    <!-- Supply chain: where to source seeds, fert, equipment, finance, training -->
+    <div style="margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--border);">
+      <div class="panel-title" style="font-size: 13px; margin-bottom: 4px;" data-zh="供應鏈：種子、肥料、設備、檢測、金融、訓練 — 你的所有需求從哪裡來" data-en="Supply chain: seeds, fertilizer, equipment, testing, finance, training — where to source everything">供應鏈：種子、肥料、設備、檢測、金融、訓練 — 你的所有需求從哪裡來</div>
+      <div class="panel-sub" style="margin-bottom: 14px;" data-zh="不只「賣到哪裡」 — 也包括「哪裡買種子、肥料、機具？哪裡做土壤檢測？哪裡申請貸款？哪裡學新技術？」依在地狀況整理。" data-en="Not just where to sell — also where to buy seeds, fertilizer, equipment; where to test soil; where to apply for loans; where to learn new techniques. Region-aware.">不只「賣到哪裡」 — 也包括「哪裡買種子、肥料、機具？哪裡做土壤檢測？哪裡申請貸款？哪裡學新技術？」依在地狀況整理。</div>
+      <div id="supplyChain"></div>
+    </div>
+
     <!-- Where your goods can physically go (market infrastructure) -->
     <div style="margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--border);">
       <div class="panel-title" style="font-size: 13px; margin-bottom: 4px;" data-zh="你的農產品可以送去哪裡？（在地市場路徑）" data-en="Where your goods can go — local market routes">你的農產品可以送去哪裡？（在地市場路徑）</div>
@@ -3772,6 +3779,96 @@
     }
   };
 
+  // Supply chain — where the farmer can BUY their inputs (seeds,
+  // fertilizer, equipment, soil testing, financing, training).
+  // National players + regional specialty suppliers.
+  // Each entry has `regions` (array) telling which regions it serves;
+  // 'all' means available across Taiwan.
+  const SUPPLY_CHAIN = {
+    seeds: {
+      icon: '🌱',
+      name: { zh: "種子 / 種苗", en: "Seeds / Seedlings" },
+      items: [
+        { name: { zh: "農友種苗 (Known-You Seed)", en: "Known-You Seed" }, regions: ['all'],
+          note: { zh: "台灣最大種苗公司，蔬果種子主力供應，全台經銷網", en: "Taiwan's largest seed company; main vegetable/fruit seed supplier nationwide" }, url: "https://www.knownyou.com/" },
+        { name: { zh: "種子方舟 / 主婦聯盟有機種子", en: "Seed Ark + Homemakers Union organic seeds" }, regions: ['all'],
+          note: { zh: "有機 / 自留種子，非基改、適合友善農法", en: "Organic / saved seeds, non-GMO, suits friendly farming" } },
+        { name: { zh: "在地農會種苗配給", en: "Local Farmers' Association seedlings" }, regions: ['all'],
+          note: { zh: "每縣農會供應符合在地氣候的種苗，價格最低", en: "Each county FA supplies climate-appropriate seedlings at lowest prices" } },
+        { name: { zh: "各區農業改良場種苗園", en: "Regional Ag. Improvement Station seedling gardens" }, regions: ['all'],
+          note: { zh: "政府研發新品種試種、提供合作農戶優先取得", en: "Government-bred new varieties; partner farms get priority access" } }
+      ]
+    },
+    fertilizer: {
+      icon: '🧪',
+      name: { zh: "肥料 / 土壤改良", en: "Fertilizer / Soil amendments" },
+      items: [
+        { name: { zh: "台灣肥料 (台肥)", en: "Taiwan Fertilizer" }, regions: ['all'],
+          note: { zh: "國營大廠，化肥 + 有機肥 + 微生物肥；農會通路最便宜", en: "State-owned major supplier; chemical + organic + microbial fert. Cheapest via FA channel" }, url: "https://www.taifer.com.tw/" },
+        { name: { zh: "福壽實業 (有機肥 / 飼料)", en: "Fwusow Industry (organic fert + feed)" }, regions: ['all'],
+          note: { zh: "全台主要有機肥廠之一，適合友善 / 有機農場", en: "One of Taiwan's main organic fertilizer producers; fits friendly + organic farms" } },
+        { name: { zh: "在地堆肥廠 / 自製堆肥", en: "Local composting plants + on-farm composting" }, regions: ['all'],
+          note: { zh: "農場廢棄物就地堆肥成本最低；外購多向農會堆肥場購買", en: "On-farm composting is cheapest; otherwise buy from FA compost yards" } },
+        { name: { zh: "生物炭供應 (限定)", en: "Biochar suppliers (limited)" }, regions: ['all'],
+          note: { zh: "市場初期，多為小型供應商，價格仍高；可向農試所詢問試驗用炭", en: "Emerging market; small suppliers, still expensive. Ask Ag. Research Institute about trial biochar" } }
+      ]
+    },
+    equipment: {
+      icon: '🚜',
+      name: { zh: "農機 / 設備", en: "Equipment" },
+      items: [
+        { name: { zh: "井關農機 (Iseki) 經銷網", en: "Iseki dealer network" }, regions: ['all'],
+          note: { zh: "日系主力，全台超過 50 個經銷點", en: "Main Japanese brand; 50+ dealer points nationwide" } },
+        { name: { zh: "久保田 Kubota", en: "Kubota" }, regions: ['all'],
+          note: { zh: "另一日系主力，售後服務密集", en: "Second main Japanese brand; dense after-sales service" } },
+        { name: { zh: "電動農機補助廠商 (農業部清單)", en: "Electric machinery grant-approved vendors (MOA list)" }, regions: ['all'],
+          note: { zh: "申請電動化補助 NT$100k 時須採用名冊內廠商", en: "Electric grant (NT$100k) requires purchase from MOA's approved vendor list" }, url: "https://www.moa.gov.tw/" },
+        { name: { zh: "農會二手農機交易", en: "Farmers' Association used-equipment exchange" }, regions: ['all'],
+          note: { zh: "在地農會常有二手農機資訊，初期投入低風險", en: "Local FAs often have used-equipment listings; low-risk for initial investment" } }
+      ]
+    },
+    soilTesting: {
+      icon: '🔬',
+      name: { zh: "土壤檢測 / 顧問", en: "Soil testing / Advisory" },
+      items: [
+        { name: { zh: "農業試驗所 + 各區農業改良場", en: "Agricultural Research Institute + Regional Improvement Stations" }, regions: ['all'],
+          note: { zh: "官方土壤檢測，費用最低（基本項目通常免費或數百元）", en: "Government soil testing; lowest cost (basic tests free or NT$ hundreds)" } },
+        { name: { zh: "私人土壤檢測公司 (例：中興大學技轉)", en: "Private soil testing labs (e.g. NCHU spin-offs)" }, regions: ['all'],
+          note: { zh: "詳細項目 (重金屬、有機質、微生物) — 數千元", en: "Detailed panels (heavy metals, OM, microbiology) — NT$ thousands" } },
+        { name: { zh: "農會土壤檢測站", en: "Farmers' Association testing stations" }, regions: ['all'],
+          note: { zh: "在地農會常設點，方便就近送樣", en: "Local FA stations; convenient sample drop-off" } }
+      ]
+    },
+    finance: {
+      icon: '💰',
+      name: { zh: "金融 / 保險", en: "Finance + Insurance" },
+      items: [
+        { name: { zh: "全國農業金庫 + 農會信用部", en: "Agricultural Bank of Taiwan + FA Credit Dept" }, regions: ['all'],
+          note: { zh: "政策性農業貸款主要管道，利率最優惠", en: "Main channel for policy-driven agricultural loans; best rates" }, url: "https://www.naf.com.tw/" },
+        { name: { zh: "青年農民貸款 (45 歲以下)", en: "Young Farmer Loan (under-45)" }, regions: ['all'],
+          note: { zh: "農業部，低利率 + 寬限期", en: "MOA program; low rate + grace period" }, url: "https://www.moa.gov.tw/" },
+        { name: { zh: "農作物保險 (富邦 / 國泰 / 新光)", en: "Crop insurance (Fubon / Cathay / Shin Kong)" }, regions: ['all'],
+          note: { zh: "政府補貼保費 50–70%；颱風 / 旱災 / 雨災為主要承保項目", en: "Government subsidies 50–70% of premium; typhoon / drought / flood are main coverage" } },
+        { name: { zh: "綠色金融 (玉山 / 中信 / 台新)", en: "Green finance (E.Sun / CTBC / Taishin)" }, regions: ['all'],
+          note: { zh: "ESG-連動貸款，需碳強度證明", en: "ESG-linked loans; require carbon-intensity proof" } }
+      ]
+    },
+    training: {
+      icon: '📚',
+      name: { zh: "訓練 / 教育 / 顧問", en: "Training / Education / Advisory" },
+      items: [
+        { name: { zh: "農民學院 (農業部)", en: "Farmers' Academy (MOA)" }, regions: ['all'],
+          note: { zh: "從入門到專業課程，多為免費或低費用", en: "Beginner to advanced courses; mostly free or low-cost" }, url: "https://academy.moa.gov.tw/" },
+        { name: { zh: "青年農民輔導 (農業部 + 改良場)", en: "Young Farmer Advisory (MOA + Improvement Stations)" }, regions: ['all'],
+          note: { zh: "新進農戶 3 年陪跑、技術 + 行銷 + 補助申請輔導", en: "3-year mentorship for new farmers; tech + marketing + grant applications" } },
+        { name: { zh: "大學農業科系合作 (台大、中興、嘉大)", en: "University ag-school partnerships (NTU / NCHU / NCYU)" }, regions: ['all'],
+          note: { zh: "智慧農業 / 永續實驗 / 學生實習", en: "Smart-ag + sustainability trials + student interns" } },
+        { name: { zh: "在地產銷班 / 合作社", en: "Local production-sales groups + co-ops" }, regions: ['all'],
+          note: { zh: "同類作物農戶互助，技術交流、團購、共銷", en: "Same-crop farmer mutual support; tech exchange, bulk buying, joint sales" } }
+      ]
+    }
+  };
+
   // Certification ladder — Taiwan green/safe/organic certifications,
   // ordered from easiest (GAP safety) to hardest (organic + regional
   // toxin-free). Each has eligibility predicates so the dashboard can
@@ -4193,6 +4290,37 @@
           </div>
         </div>`;
     }).join('');
+
+    // Supply chain — where to BUY seeds, fert, equipment, testing,
+    // financing, training. Each category card lists relevant suppliers.
+    const categoryColors = {
+      seeds:       'var(--accent)',
+      fertilizer:  'var(--s2)',
+      equipment:   'var(--s1)',
+      soilTesting: 'var(--s3)',
+      finance:     'var(--pending)',
+      training:    'var(--accent-dark)'
+    };
+    document.getElementById('supplyChain').innerHTML = `
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px;">
+        ${Object.entries(SUPPLY_CHAIN).map(([key, cat]) => {
+          const relevant = cat.items.filter(it => it.regions.includes('all') || it.regions.includes(region));
+          const items = relevant.map(it => `
+            <div style="padding: 8px 0; border-top: 1px dashed var(--border); font-size: 12.5px; line-height: 1.55;">
+              <div><strong style="color: var(--text); font-weight: 600;">${trObj(it.name)}</strong>
+                ${it.url ? ` <a href="${it.url}" target="_blank" rel="noopener" style="color: var(--accent); text-decoration: none; font-size: 11px; font-weight: 500;">↗</a>` : ''}
+              </div>
+              ${it.note ? `<div style="color: var(--text-muted); font-size: 11.5px; margin-top: 3px;">${trObj(it.note)}</div>` : ''}
+            </div>`).join('');
+          return `
+            <div style="background: var(--bg-subtle); border: 1px solid var(--border); border-left: 3px solid ${categoryColors[key]}; border-radius: 10px; padding: 14px 16px;">
+              <div style="font-size: 11px; font-weight: 700; color: ${categoryColors[key]}; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 6px;">
+                ${cat.icon} ${trObj(cat.name)}
+              </div>
+              ${items || `<div style="color:var(--text-muted); font-size: 12px;">${tr('本區暫無資料', 'No data for this region yet')}</div>`}
+            </div>`;
+        }).join('')}
+      </div>`;
 
     // Market routes — where the goods can physically go
     const infra = MARKET_INFRASTRUCTURE[region];
