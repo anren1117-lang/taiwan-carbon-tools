@@ -174,6 +174,20 @@
   .check-grid label.checked { border-color: var(--accent); background: var(--accent-tint); color: var(--accent-dark); }
   .check-grid input[type="checkbox"] { margin: 0; }
 
+  .template-btn {
+    padding: 9px 16px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 13px;
+    color: var(--text);
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.15s;
+  }
+  .template-btn:hover { border-color: var(--accent); background: var(--accent-tint); color: var(--accent-dark); }
+
   .nav-row {
     display: flex;
     justify-content: space-between;
@@ -290,6 +304,18 @@
 
     <!-- ── STEP 1: Basics + inputs ─────────────────────── -->
     <div class="step active" id="step-1">
+      <div class="panel" style="background: var(--accent-tint); border-color: rgba(29,158,117,0.30);">
+        <div class="panel-title" data-zh="從範例農場開始（推薦：先看看資料長什麼樣子）" data-en="Start from a sample farm (recommended)">從範例農場開始（推薦：先看看資料長什麼樣子）</div>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <button type="button" class="template-btn" data-template="vegetables" data-zh="🥬 蔬菜農場" data-en="🥬 Vegetables">🥬 蔬菜農場</button>
+          <button type="button" class="template-btn" data-template="rice" data-zh="🌾 稻米農場" data-en="🌾 Rice">🌾 稻米農場</button>
+          <button type="button" class="template-btn" data-template="dairy" data-zh="🐄 酪農場" data-en="🐄 Dairy">🐄 酪農場</button>
+          <button type="button" class="template-btn" data-template="fruit" data-zh="🥭 果園" data-en="🥭 Fruit orchard">🥭 果園</button>
+          <button type="button" class="template-btn" data-template="blank" data-zh="空白開始" data-en="Start blank">空白開始</button>
+        </div>
+        <div class="help" style="margin-top: 10px;" data-zh="點任一範例 → 表單會帶入該類型農場的典型數值。你再依實際狀況調整即可。" data-en="Click any sample → the form populates with that type's typical values. Adjust to match your actual operation.">點任一範例 → 表單會帶入該類型農場的典型數值。你再依實際狀況調整即可。</div>
+      </div>
+
       <div class="panel">
         <div class="panel-title" data-zh="農場資料" data-en="Farm profile">農場資料</div>
         <div class="grid">
@@ -654,6 +680,117 @@
       <div style="word-break: break-all; font-family: ui-monospace, Menlo, Consolas, monospace; background: var(--bg-subtle); padding: 6px 10px; border-radius: 6px; margin: 4px 0;">${buyerUrl}</div>
     `;
   }
+
+  // ── Sample templates: pre-fill the form from an existing farm JSON
+  const TEMPLATES = {
+    vegetables: 'demo',
+    rice:       'chen-rice-yilan',
+    dairy:      'wei-dairy-changhua',
+    fruit:      'lai-mango-pingtung'
+  };
+
+  function populateFromTemplate(cfg, suggestedId) {
+    // Top-level identity
+    document.getElementById('farmId').value = suggestedId;
+    document.getElementById('nameZh').value = (cfg.clientName && cfg.clientName.zh) || '';
+    document.getElementById('nameEn').value = (cfg.clientName && cfg.clientName.en) || '';
+    document.getElementById('locZh').value  = (cfg.clientLocation && cfg.clientLocation.zh) || '';
+    document.getElementById('locEn').value  = (cfg.clientLocation && cfg.clientLocation.en) || '';
+    document.getElementById('period').value = cfg.reportingPeriod || '2025';
+
+    const inp = cfg.inputs || {};
+    const setNum = (id, v) => { document.getElementById(id).value = (v != null ? v : 0); };
+    const setSel = (id, v) => { if (v != null) document.getElementById(id).value = v; };
+    setNum('farmSize', inp.farmSize);
+    setSel('cropType', inp.cropType);
+    setNum('annualYieldKg', inp.annualYieldKg);
+    setSel('productCategory', inp.productCategory);
+    setNum('diesel', inp.diesel); setNum('gasoline', inp.gasoline);
+    setNum('lpg', inp.lpg); setNum('heatingOil', inp.heatingOil);
+    setNum('nFert', inp.nFert);
+    setNum('cattle', inp.cattle); setNum('pigs', inp.pigs); setNum('poultry', inp.poultry);
+    setSel('manure', inp.manure || 'none');
+    setSel('riceMgmt', inp.riceMgmt || 'continuous_flood');
+    setNum('irrigation', inp.irrigation); setNum('coldStorage', inp.coldStorage); setNum('otherElec', inp.otherElec);
+    setNum('chemicals', inp.chemicals); setNum('feed', inp.feed);
+    setNum('transport', inp.transport); setNum('commute', inp.commute);
+    setNum('packaging', inp.packaging); setNum('waste', inp.waste);
+    setNum('biochar', inp.biochar); setNum('trees', inp.trees);
+
+    // Practices
+    const practices = inp.practices || {};
+    ['coverCrop','noTill','compost','residue'].forEach(k => {
+      const cb = document.getElementById('p-' + k);
+      cb.checked = !!practices[k];
+      cb.closest('label').classList.toggle('checked', cb.checked);
+    });
+
+    // Practice history
+    const ph = cfg.practiceHistory || {};
+    ['coverCrop','noTill','compost','residue'].forEach(k => {
+      document.getElementById('ph-' + k).value = ph[k] || '';
+    });
+
+    // Soil baseline
+    const soil = cfg.soilTest || {};
+    document.getElementById('socPercent').value = soil.socPercent != null ? soil.socPercent : '';
+    document.getElementById('bulkDensity').value = soil.bulkDensity != null ? soil.bulkDensity : 1.3;
+    document.getElementById('depthCm').value = soil.depthCm != null ? soil.depthCm : 30;
+    document.getElementById('socDate').value = soil.date || '';
+    document.getElementById('socLab').value = soil.lab ? (soil.lab.zh || soil.lab.en || '') : '';
+
+    toggleRiceMgmt();
+  }
+
+  function clearForm() {
+    document.querySelectorAll('#step-1 input[type="number"]').forEach(el => { el.value = 0; });
+    document.querySelectorAll('#step-1 input[type="text"]').forEach(el => { el.value = ''; });
+    document.getElementById('period').value = '2025';
+    document.getElementById('farmSize').value = 1.0;
+    document.getElementById('annualYieldKg').value = 10000;
+    document.getElementById('bulkDensity').value = 1.3;
+    document.getElementById('depthCm').value = 30;
+    document.getElementById('socPercent').value = '';
+    ['coverCrop','noTill','compost','residue'].forEach(k => {
+      const cb = document.getElementById('p-' + k);
+      cb.checked = false;
+      cb.closest('label').classList.toggle('checked', false);
+      document.getElementById('ph-' + k).value = '';
+    });
+    document.getElementById('socDate').value = '';
+    document.getElementById('socLab').value = '';
+    document.getElementById('cropType').value = 'vegetables';
+    document.getElementById('productCategory').value = 'vegetables_leaf';
+    document.getElementById('manure').value = 'none';
+    document.getElementById('riceMgmt').value = 'continuous_flood';
+    toggleRiceMgmt();
+  }
+
+  document.querySelectorAll('.template-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const key = btn.dataset.template;
+      if (key === 'blank') {
+        clearForm();
+        return;
+      }
+      const farmId = TEMPLATES[key];
+      if (!farmId) return;
+      try {
+        const res = await fetch(`farms/${farmId}.json`, { cache: 'no-cache' });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const cfg = await res.json();
+        // Suggest a derivative id (e.g., wei-dairy-changhua → my-dairy-farm)
+        const suggested = key === 'vegetables' ? 'my-vegetable-farm'
+                       : key === 'rice'        ? 'my-rice-farm'
+                       : key === 'dairy'       ? 'my-dairy-farm'
+                       :                          'my-fruit-orchard';
+        populateFromTemplate(cfg, suggested);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } catch (e) {
+        alert(tr('載入範例失敗：', 'Failed to load sample: ') + e.message);
+      }
+    });
+  });
 
   // ── Wiring ───────────────────────────────────────────────────────
   document.getElementById('toStep2').addEventListener('click', () => {
