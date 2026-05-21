@@ -93,5 +93,9 @@
     "depthCm": 30,
     "date": "2025-03",
     "lab": { "zh": "農業試驗所 · 雲林分所", "en": "Taiwan Agricultural Research Institute, Yunlin" }
-  }
+  },
+
+  "soilHistory": [
+    { "date": "2022-03", "socPercent": 1.5, "bulkDensity": 1.3, "depthCm": 30 }
+  ]
 }

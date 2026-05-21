@@ -2942,11 +2942,26 @@
         </div>`;
     });
 
-    // Soil baseline row (informational)
+    // Soil baseline row (informational, with trend line if soilHistory)
     const soil = CLIENT_CONFIG.soilTest;
     if (soil && soil.socPercent != null) {
-      const stock = soil.socPercent * soil.bulkDensity * soil.depthCm; // t SOC / ha (top depthCm)
+      const stock = soil.socPercent * soil.bulkDensity * soil.depthCm;
       const lab = soil.lab ? trObj(soil.lab) : '';
+      const history = CLIENT_CONFIG.soilHistory || [];
+      let trendLine = '';
+      if (history.length >= 1) {
+        const earliest = history.reduce((acc, x) => !acc || x.date < acc.date ? x : acc, null);
+        if (earliest) {
+          const yrsSpan = yearsSince(earliest.date, CLIENT_CONFIG.reportingPeriod);
+          const delta = soil.socPercent - earliest.socPercent;
+          const pctGrowth = earliest.socPercent !== 0 ? (delta / earliest.socPercent * 100) : 0;
+          const arrow = delta > 0 ? '↑' : delta < 0 ? '↓' : '→';
+          trendLine = `<div style="margin-top: 4px; color: var(--accent);">${tr(
+            `量測趨勢：${earliest.socPercent}% (${earliest.date}) ${arrow} ${soil.socPercent}% (${soil.date}) · ${delta >= 0 ? '+' : ''}${fmt(delta, 2)} 百分點 (${pctGrowth >= 0 ? '+' : ''}${fmt(pctGrowth, 1)}%) 於 ${yrsSpan} 年內`,
+            `Trend: ${earliest.socPercent}% (${earliest.date}) ${arrow} ${soil.socPercent}% (${soil.date}) · ${delta >= 0 ? '+' : ''}${fmt(delta, 2)} pp (${pctGrowth >= 0 ? '+' : ''}${fmt(pctGrowth, 1)}%) over ${yrsSpan} yrs`
+          )}</div>`;
+        }
+      }
       rows.push(`
         <div class="ds-row">
           <div class="ds-head">
@@ -2957,7 +2972,8 @@
           </div>
           <div class="ds-formula">
             <div>SOC ${soil.socPercent}% <span class="ds-arrow">×</span> ${soil.bulkDensity} g/cm³ <span class="ds-arrow">×</span> ${soil.depthCm} cm <span class="ds-arrow">=</span> <span class="ds-result">${fmt(stock, 1)} t SOC/ha</span></div>
-            <div class="ds-note">${tr('基準存量 — 實際 SOC 變化需 3–5 年週期採樣驗證。本儀表板土壤碳匯仍採 IPCC Tier 1 預設值估算。', 'Baseline stock — real SOC change requires 3–5 year resampling. Soil-sink figures on this dashboard still use IPCC Tier 1 defaults.')}</div>
+            ${trendLine}
+            <div class="ds-note">${tr('實際 SOC 變化需 3–5 年週期採樣驗證。本儀表板土壤碳匯仍採 IPCC Tier 1 預設值估算。', 'Real SOC change requires 3–5 year resampling. Soil-sink figures on this dashboard still use IPCC Tier 1 defaults.')}</div>
           </div>
           ${soil.date || lab ? `<div class="ds-actions">
             ${soil.date ? `<span>${tr('採樣日期', 'Sampled')}: ${soil.date}</span>` : ''}

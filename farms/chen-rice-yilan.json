@@ -81,5 +81,9 @@
     "depthCm": 30,
     "date": "2024-12",
     "lab": { "zh": "宜蘭分所 · 友善耕作試驗", "en": "Yilan Branch · friendly farming trial" }
-  }
+  },
+
+  "soilHistory": [
+    { "date": "2022-03", "socPercent": 2.1, "bulkDensity": 1.25, "depthCm": 30 }
+  ]
 }

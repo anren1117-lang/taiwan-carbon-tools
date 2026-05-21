@@ -97,5 +97,9 @@
     "depthCm": 30,
     "date": "2024-11",
     "lab": { "zh": "彰化分所 · 牧草地採樣", "en": "Changhua Branch · pasture sampling" }
-  }
+  },
+
+  "soilHistory": [
+    { "date": "2021-11", "socPercent": 1.8, "bulkDensity": 1.35, "depthCm": 30 }
+  ]
 }

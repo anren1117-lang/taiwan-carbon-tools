@@ -904,10 +904,35 @@
     }
 
     // ─ Methodology — soil + data quality
-    document.getElementById('soilLine').innerHTML = hasSoil
-      ? tr(`本農場基準：SOC ${CONFIG.soilTest.socPercent}% × ${CONFIG.soilTest.bulkDensity} g/cm³ × ${CONFIG.soilTest.depthCm} cm ≈ ${fmt(socStock, 1)} t SOC/ha（${CONFIG.soilTest.date}・${trObj(CONFIG.soilTest.lab)}）`,
-           `Baseline: SOC ${CONFIG.soilTest.socPercent}% × ${CONFIG.soilTest.bulkDensity} g/cm³ × ${CONFIG.soilTest.depthCm} cm ≈ ${fmt(socStock, 1)} t SOC/ha (${CONFIG.soilTest.date} · ${trObj(CONFIG.soilTest.lab)})`)
-      : tr('本農場尚未提供土壤採樣基準。', 'No soil sampling baseline provided.');
+    // Soil trend: if we have prior measurements, render baseline →
+    // current with measured SOC delta and growth rate per year.
+    if (hasSoil) {
+      const baseLine = tr(
+        `本農場基準：SOC ${CONFIG.soilTest.socPercent}% × ${CONFIG.soilTest.bulkDensity} g/cm³ × ${CONFIG.soilTest.depthCm} cm ≈ ${fmt(socStock, 1)} t SOC/ha（${CONFIG.soilTest.date}・${trObj(CONFIG.soilTest.lab)}）`,
+        `Baseline: SOC ${CONFIG.soilTest.socPercent}% × ${CONFIG.soilTest.bulkDensity} g/cm³ × ${CONFIG.soilTest.depthCm} cm ≈ ${fmt(socStock, 1)} t SOC/ha (${CONFIG.soilTest.date} · ${trObj(CONFIG.soilTest.lab)})`
+      );
+      let trendLine = '';
+      const history = CONFIG.soilHistory || [];
+      if (history.length >= 1) {
+        const earliest = history.reduce((acc, x) => !acc || x.date < acc.date ? x : acc, null);
+        if (earliest) {
+          const yrsSpan = yearsSince(earliest.date, CONFIG.reportingPeriod);
+          const delta = CONFIG.soilTest.socPercent - earliest.socPercent;
+          const pctGrowth = earliest.socPercent !== 0 ? (delta / earliest.socPercent * 100) : 0;
+          const arrow = delta > 0 ? '↑' : delta < 0 ? '↓' : '→';
+          trendLine = `<div style="margin-top: 6px; color: var(--accent); font-weight: 500;">${tr(
+            `量測趨勢：${earliest.socPercent}% (${earliest.date}) ${arrow} ${CONFIG.soilTest.socPercent}% (${CONFIG.soilTest.date}) · ${delta >= 0 ? '+' : ''}${fmt(delta, 2)} 百分點 (${pctGrowth >= 0 ? '+' : ''}${fmt(pctGrowth, 1)}%) 於 ${yrsSpan} 年內`,
+            `Measured trend: ${earliest.socPercent}% (${earliest.date}) ${arrow} ${CONFIG.soilTest.socPercent}% (${CONFIG.soilTest.date}) · ${delta >= 0 ? '+' : ''}${fmt(delta, 2)} pp (${pctGrowth >= 0 ? '+' : ''}${fmt(pctGrowth, 1)}%) over ${yrsSpan} years`
+          )}</div>`;
+        }
+      }
+      document.getElementById('soilLine').innerHTML = baseLine + trendLine;
+    } else {
+      document.getElementById('soilLine').textContent = tr(
+        '本農場尚未提供土壤採樣基準。',
+        'No soil sampling baseline provided.'
+      );
+    }
 
     const ds = CONFIG.dataSources || [];
     const sensorCount = ds.filter(d => d.method === 'sensor').length;
