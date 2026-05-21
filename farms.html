@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>農場儀表板示範 · Farm Dashboard Demos</title>
+<meta name="description" content="台灣農場碳儀表板示範集合：蔬菜、稻米、酪農三種經營型態各一例。">
+<meta name="theme-color" content="#1D9E75">
+<link rel="canonical" href="https://anren1117-lang.github.io/taiwan-carbon-tools/farms.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --accent: #1D9E75;
+    --accent-dark: #157a59;
+    --accent-tint: rgba(29, 158, 117, 0.1);
+    --bg: #ffffff;
+    --bg-card: #ffffff;
+    --bg-subtle: #f7f8f7;
+    --text: #1a1a1a;
+    --text-muted: #6b7280;
+    --border: #e5e7eb;
+    --shadow: 0 1px 2px rgba(0,0,0,0.04);
+    --premium: #1D9E75;
+    --top: #34d399;
+    --avg: #9ca3af;
+    --below: #d97706;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0e1410;
+      --bg-card: #161d18;
+      --bg-subtle: #1a2220;
+      --text: #f0f2f0;
+      --text-muted: #9ca3af;
+      --border: #2a3530;
+      --accent-tint: rgba(29, 158, 117, 0.15);
+      --premium: #34d399;
+      --top: #1D9E75;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+  header {
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .header-inner { display: flex; justify-content: space-between; align-items: center; }
+  .logo { font-weight: 700; font-size: 16px; color: var(--accent); text-decoration: none; }
+  .back-link { color: var(--text-muted); text-decoration: none; font-size: 13px; }
+  .back-link:hover { color: var(--accent); }
+  .lang-toggle {
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-family: inherit;
+    font-size: 12px;
+    color: var(--text);
+    cursor: pointer;
+    margin-left: 12px;
+  }
+  .lang-toggle:hover { border-color: var(--accent); }
+  .header-right { display: flex; align-items: center; }
+  .hero {
+    padding: 56px 0 24px;
+    text-align: center;
+  }
+  .hero h1 {
+    font-size: clamp(28px, 4vw, 38px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+  .hero p {
+    font-size: 16px;
+    color: var(--text-muted);
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  .farms {
+    padding: 24px 0 56px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 18px;
+  }
+  .farm-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 26px;
+    box-shadow: var(--shadow);
+    transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+  }
+  .farm-card:hover { transform: translateY(-2px); border-color: var(--accent); box-shadow: 0 12px 28px rgba(29,158,117,0.10); }
+  .farm-eyebrow {
+    display: inline-block;
+    padding: 3px 10px;
+    background: var(--accent-tint);
+    color: var(--accent-dark);
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .farm-name { font-size: 22px; font-weight: 700; letter-spacing: -0.01em; }
+  .farm-meta { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+  .farm-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 20px 0;
+    padding: 16px 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .farm-stat .lab {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .farm-stat .val {
+    font-size: 18px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+  .farm-tier {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+  .farm-tier.premium  { background: rgba(29,158,117,0.18); color: var(--accent-dark); }
+  .farm-tier.top      { background: rgba(29,158,117,0.10); color: var(--top); }
+  .farm-tier.avg      { background: rgba(156,163,175,0.18); color: var(--text-muted); }
+  .farm-tier.below    { background: rgba(180,83,9,0.15); color: var(--below); }
+  .farm-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .farm-action {
+    flex: 1;
+    padding: 9px 12px;
+    border-radius: 10px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    transition: background 0.15s;
+    white-space: nowrap;
+  }
+  .farm-action.primary { background: var(--accent); color: white; }
+  .farm-action.primary:hover { background: var(--accent-dark); }
+  .farm-action.secondary { background: var(--bg-subtle); color: var(--text); border: 1px solid var(--border); }
+  .farm-action.secondary:hover { border-color: var(--accent); color: var(--accent); }
+  .note {
+    padding: 28px 0 56px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  .note code {
+    background: var(--bg-subtle);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+  }
+  footer {
+    padding: 28px 0;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="container header-inner">
+    <a href="index.html" class="logo">Taiwan Carbon Tools</a>
+    <div class="header-right">
+      <a href="index.html" class="back-link" data-zh="← 返回首頁" data-en="← Home">← 返回首頁</a>
+      <button class="lang-toggle" id="langToggle">English</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero container">
+    <h1 data-zh="農場儀表板示範" data-en="Farm dashboard demos">農場儀表板示範</h1>
+    <p data-zh="三個示範農場，展示同一套儀表板如何適應不同經營型態：蔬菜、稻米、酪農。每個農場都有顧問端與買方端兩個視角。" data-en="Three sample farms showing how the same dashboard adapts to different operations: vegetables, rice, dairy. Each has both a consulting view and a buyer-facing share view.">三個示範農場，展示同一套儀表板如何適應不同經營型態：蔬菜、稻米、酪農。每個農場都有顧問端與買方端兩個視角。</p>
+  </section>
+
+  <section class="container">
+    <div class="farms" id="farmsGrid"></div>
+  </section>
+
+  <section class="container note">
+    <p data-zh="想替你的農場建一個專屬儀表板？歡迎來信討論 →" data-en="Want your own farm-specific dashboard? Get in touch →">想替你的農場建一個專屬儀表板？歡迎來信討論 →</p>
+    <p style="margin-top: 8px;"><a href="mailto:anren.carbon@gmail.com" style="color: var(--accent); text-decoration: none; font-weight: 600;">anren.carbon@gmail.com</a></p>
+    <p style="margin-top: 16px; opacity: 0.85; font-size: 12px;" data-zh="技術上：每個農場是 farms/&lt;id&gt;.json 一份檔案。URL 形式 ?id=&lt;agriId&gt;。多租戶但無資料庫。" data-en="Technically: each farm is a farms/&lt;id&gt;.json file. URL form is ?id=&lt;agriId&gt;. Multi-tenant, no database.">技術上：每個農場是 <code>farms/&lt;id&gt;.json</code> 一份檔案。URL 形式 <code>?id=&lt;agriId&gt;</code>。多租戶但無資料庫。</p>
+  </section>
+</main>
+
+<footer>
+  <div class="container">
+    <p>© 2026 何安仁 An-Ren Ho · <span data-zh="獨立顧問項目" data-en="Independent advisor project">獨立顧問項目</span></p>
+  </div>
+</footer>
+
+<script src="farm-carbon-engine.js?v=2"></script>
+<script>
+  const FARMS = [
+    { id: 'demo',                tag: { zh: "蔬菜 · 雲林",   en: "Vegetables · Yunlin" } },
+    { id: 'chen-rice-yilan',     tag: { zh: "稻米 · 宜蘭",   en: "Rice · Yilan" } },
+    { id: 'wei-dairy-changhua',  tag: { zh: "酪農 · 彰化",   en: "Dairy · Changhua" } }
+  ];
+
+  let currentLang = 'zh';
+  function tr(zh, en) { return currentLang === 'zh' ? zh : en; }
+  function trObj(o) { return o ? o[currentLang] || o.zh : ''; }
+
+  function tierFor(intensity, bench) {
+    if (intensity == null) return { cls: 'avg', label: { zh: "—", en: "—" } };
+    if (intensity <= bench.premium)      return { cls: 'premium', label: { zh: "溢價 / 再生", en: "Premium / regenerative" } };
+    if (intensity <= bench.top_quartile) return { cls: 'top',     label: { zh: "前 25%",      en: "Top quartile" } };
+    if (intensity <= bench.taiwan_avg)   return { cls: 'avg',     label: { zh: "優於台灣平均", en: "Above TW avg" } };
+    return { cls: 'below', label: { zh: "需改善", en: "Improvement needed" } };
+  }
+
+  async function loadFarm(farm) {
+    try {
+      const res = await fetch(`farms/${farm.id}.json`, { cache: 'no-cache' });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const cfg = await res.json();
+      return { farm, cfg };
+    } catch (e) {
+      console.warn('Could not load', farm.id, e);
+      return { farm, cfg: null };
+    }
+  }
+
+  function renderCard(entry) {
+    const { farm, cfg } = entry;
+    if (!cfg) {
+      return `<div class="farm-card">
+        <div class="farm-eyebrow">${trObj(farm.tag)}</div>
+        <div class="farm-name">${farm.id}</div>
+        <div class="farm-meta">${tr('找不到資料', 'Could not load')}</div>
+      </div>`;
+    }
+    const inp = cfg.inputs;
+    const r = calcFromInputs(inp);
+    const yieldKg = inp.annualYieldKg || 0;
+    const intensity = yieldKg > 0 ? r.gross / yieldKg : null;
+    const bench = PRODUCT_BENCHMARKS[inp.productCategory] || PRODUCT_BENCHMARKS.mixed;
+    const tier = tierFor(intensity, bench);
+
+    return `<div class="farm-card">
+      <div class="farm-eyebrow">${trObj(farm.tag)}</div>
+      <div class="farm-name">${trObj(cfg.clientName)}</div>
+      <div class="farm-meta">${trObj(cfg.clientLocation)} · ${fmt(inp.farmSize, 1)} ${tr('公頃', 'ha')}</div>
+      <div class="farm-stats">
+        <div class="farm-stat">
+          <div class="lab">${tr('年度淨', 'Net /yr')}</div>
+          <div class="val">${fmt(r.net / 1000, 2)} t</div>
+        </div>
+        <div class="farm-stat">
+          <div class="lab">${tr('每 kg 強度', 'kg/kg')}</div>
+          <div class="val">${intensity != null ? fmt(intensity, 3) : '—'}</div>
+        </div>
+      </div>
+      <span class="farm-tier ${tier.cls}">${trObj(tier.label)}</span>
+      <div class="farm-actions">
+        <a class="farm-action primary" href="farm-dashboard.html?id=${encodeURIComponent(farm.id)}">${tr('顧問儀表板', 'Dashboard')} →</a>
+        <a class="farm-action secondary" href="farm-buyer.html?id=${encodeURIComponent(farm.id)}">${tr('買方分享頁', 'Buyer view')} →</a>
+      </div>
+    </div>`;
+  }
+
+  async function renderAll() {
+    const entries = await Promise.all(FARMS.map(loadFarm));
+    document.getElementById('farmsGrid').innerHTML = entries.map(renderCard).join('');
+  }
+
+  function applyLang(lang) {
+    currentLang = lang;
+    document.documentElement.lang = lang === 'zh' ? 'zh-Hant' : 'en';
+    document.querySelectorAll('[data-zh]').forEach(el => {
+      const v = el.dataset[lang];
+      if (v !== undefined) {
+        // Preserve <code> children
+        if (el.querySelector('code')) return;
+        el.textContent = v;
+      }
+    });
+    document.getElementById('langToggle').textContent = lang === 'zh' ? 'English' : '中文';
+    try { localStorage.setItem('tct_lang', lang); } catch (e) {}
+    renderAll();
+  }
+
+  let savedLang = 'zh';
+  try {
+    const s = localStorage.getItem('tct_lang');
+    if (s === 'zh' || s === 'en') savedLang = s;
+  } catch (e) {}
+  document.getElementById('langToggle').addEventListener('click', () => {
+    applyLang(currentLang === 'zh' ? 'en' : 'zh');
+  });
+  applyLang(savedLang);
+</script>
+</body>
+</html>

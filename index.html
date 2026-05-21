@@ -183,6 +183,61 @@
     font-size: 18px;
   }
   .contact-card a:hover { text-decoration: underline; }
+  .consult-banner {
+    margin: 0 0 40px;
+    padding: 32px;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+    border-radius: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    color: white;
+  }
+  .consult-banner-text { flex: 1; min-width: 0; }
+  .consult-banner .eyebrow {
+    display: inline-block;
+    padding: 4px 12px;
+    background: rgba(255,255,255,0.18);
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .consult-banner h3 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    letter-spacing: -0.01em;
+  }
+  .consult-banner p {
+    font-size: 14px;
+    color: rgba(255,255,255,0.85);
+    margin-bottom: 0;
+    line-height: 1.5;
+  }
+  .consult-banner .cta {
+    flex-shrink: 0;
+    padding: 12px 22px;
+    background: white;
+    color: var(--accent-dark);
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .consult-banner .cta:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.18);
+  }
+  @media (max-width: 640px) {
+    .consult-banner { flex-direction: column; align-items: flex-start; padding: 24px; }
+    .consult-banner h3 { font-size: 20px; }
+  }
   footer {
     padding: 32px 0;
     border-top: 1px solid var(--border);
@@ -241,6 +296,25 @@
         <p data-zh="為中小企業設計，涵蓋範疇一、二、三排放，內建台灣 2026 碳費試算（製造業）與產業別 benchmark 比較。" data-en="Built for SMEs. Covers Scopes 1, 2, 3 with Taiwan's 2026 carbon fee simulator (manufacturing) and industry benchmarks.">為中小企業設計，涵蓋範疇一、二、三排放，內建台灣 2026 碳費試算（製造業）與產業別 benchmark 比較。</p>
         <span class="arrow"><span data-zh="開始盤查" data-en="Start inventory">開始盤查</span> →</span>
       </a>
+      <a href="farm.html" class="tool-card">
+        <div class="tool-icon">農</div>
+        <h3 data-zh="農場碳盤查與碳匯" data-en="Farm Carbon & Sinks">農場碳盤查與碳匯</h3>
+        <div class="subtitle" data-zh="Farm Carbon & Sink Estimator" data-en="農場排放與土壤碳匯">Farm Carbon & Sink Estimator</div>
+        <p data-zh="為台灣農場設計，估算範疇一、二、三排放，並依耕作管理（覆蓋作物、免耕、堆肥、生物炭）估算土壤有機碳變化。Beta。" data-en="Built for Taiwan farms. Estimates Scope 1, 2, 3 emissions and soil-organic-carbon impact of practices (cover crops, no-till, compost, biochar). Beta.">為台灣農場設計，估算範疇一、二、三排放，並依耕作管理（覆蓋作物、免耕、堆肥、生物炭）估算土壤有機碳變化。Beta。</p>
+        <span class="arrow"><span data-zh="開始估算" data-en="Start estimating">開始估算</span> →</span>
+      </a>
+    </div>
+
+    <div class="consult-banner">
+      <div class="consult-banner-text">
+        <span class="eyebrow" data-zh="1:1 私人諮詢" data-en="1:1 Private Consulting">1:1 私人諮詢</span>
+        <h3 data-zh="需要把結果變成行動方案？" data-en="Need to turn results into an action plan?">需要把結果變成行動方案？</h3>
+        <p data-zh="免費工具給你數字。1:1 諮詢幫你做出屬於你的農場、企業或團體的具體減碳路徑。" data-en="The free tools give you the numbers. A 1:1 session turns them into a concrete reduction plan for your farm, business, or team.">免費工具給你數字。1:1 諮詢幫你做出屬於你的農場、企業或團體的具體減碳路徑。</p>
+      </div>
+      <a href="consulting.html" class="cta" data-zh="了解諮詢方案 →" data-en="See consulting →">了解諮詢方案 →</a>
+    </div>
+    <div style="text-align: center; margin: -16px 0 24px; font-size: 13px;">
+      <a href="farms.html" style="color: var(--text-muted); text-decoration: none;" data-zh="或 看 3 個顧問交付件範例 →" data-en="Or see 3 sample consulting deliverables →">或 看 3 個顧問交付件範例 →</a>
     </div>
   </section>
 
