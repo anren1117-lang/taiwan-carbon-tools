@@ -778,6 +778,95 @@
     border-top: 1px solid var(--border);
   }
 
+  /* ── Dashboard print button + print CSS ─────────────────── */
+  .dash-print-btn {
+    position: fixed;
+    bottom: 22px;
+    right: 22px;
+    padding: 11px 18px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 999px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(29,158,117,0.30);
+    transition: transform 0.15s, background 0.15s;
+    z-index: 99;
+  }
+  .dash-print-btn:hover { background: var(--accent-dark); transform: translateY(-1px); }
+  @media (max-width: 1340px) { .dash-print-btn { bottom: 16px; right: 16px; padding: 9px 14px; font-size: 12px; } }
+
+  @media print {
+    @page { size: A4; margin: 12mm 10mm; }
+    body { background: white !important; color: black !important; font-size: 10.5pt; line-height: 1.45; }
+    header, .section-nav, .dash-print-btn, .lang-toggle,
+    .agent-panel, #yieldPanel, .editor,
+    section[id="sec-scenarios"], .scenario-result,
+    .agent-chips, .agent-reset { display: none !important; }
+    .container { max-width: 100%; padding: 0; }
+
+    /* Compress hero/banner */
+    .client-banner { padding: 18px 22px; margin: 0 0 14px; page-break-inside: avoid; }
+    .cb-name { font-size: 22pt; margin-bottom: 4px; }
+    .cb-meta { font-size: 10pt; }
+    .cb-period { font-size: 9pt; }
+
+    /* Money + KPIs tighter */
+    .money-row { gap: 8px; margin-bottom: 10px; page-break-inside: avoid; }
+    .money-card { padding: 12px 14px; }
+    .money-label { font-size: 8pt; }
+    .money-value { font-size: 18pt; }
+    .money-unit { font-size: 9pt; }
+    .money-breakdown { font-size: 9pt; margin-top: 8px; padding-top: 6px; }
+
+    .kpis { gap: 8px; margin-bottom: 12px; page-break-inside: avoid; }
+    .kpi { padding: 12px; }
+    .kpi-label { font-size: 8pt; }
+    .kpi-value { font-size: 20pt; }
+    .kpi-unit { font-size: 9pt; }
+    .kpi-context { font-size: 9pt; margin-top: 6px; padding-top: 6px; }
+
+    /* Narrative + panels */
+    .narrative { padding: 14px 18px; margin-bottom: 10px; page-break-inside: avoid; }
+    .narrative .nar-body { font-size: 10pt; }
+    .panel { padding: 14px 16px; margin-bottom: 10px; box-shadow: none; page-break-inside: avoid; }
+    .panel-title { font-size: 11pt; }
+    .panel-sub { font-size: 8.5pt; margin-bottom: 10px; }
+
+    /* Chart compressed */
+    .chart-svg { height: 160px !important; }
+    .chart-year-toggle { font-size: 8pt; }
+    .chart-summary { font-size: 8.5pt; }
+
+    /* Scope + sinks + fuels + S3 rows */
+    .scope-row, .sink-row, .hbar-row { font-size: 9.5pt; padding: 5px 0; }
+    .scope-pct, .scope-val, .sink-val { font-size: 9pt; }
+
+    /* Data sources rows compressed */
+    .ds-row { padding: 8px 0; }
+    .ds-name { font-size: 10pt; }
+    .ds-formula { font-size: 9pt; padding: 6px 10px; line-height: 1.55; }
+    .ds-actions { font-size: 8.5pt; margin-left: 32px; }
+
+    /* Subsidies + market */
+    .sub-card { padding: 9px 12px; margin-bottom: 5px; page-break-inside: avoid; }
+    .mkt-row { padding: 8px 11px; margin-bottom: 5px; page-break-inside: avoid; }
+
+    /* Recommendations roadmap */
+    .rec { padding: 10px 0; page-break-inside: avoid; }
+    .rec-title { font-size: 10pt; }
+    .rec-desc { font-size: 9pt; }
+    .rec-econ { padding: 8px 10px; margin-top: 6px; gap: 6px; }
+    .re-val { font-size: 11pt; }
+
+    /* Advisor + footer */
+    .advisor { padding: 14px 18px; page-break-inside: avoid; }
+    .methodology { font-size: 8pt; padding: 10px 0 0; }
+  }
+
   /* ── Financial summary cards ──────────────────────────── */
   .money-row {
     display: grid;
@@ -1616,6 +1705,8 @@
   <div class="methodology" data-zh="排放係數：經濟部能源署 113 年度電力排碳係數 0.474 kg/kWh、環境部燃料燃燒係數。碳匯：IPCC 2019 Refinement Tier 1 預設值（亞熱帶濕潤氣候），實際 SOC 變化需以土壤採樣驗證。本儀表板為教育與顧問估算用途，不能取代正式 ISO 14064 盤查或 Verra VM0042 等碳權方法學申請。" data-en="Factors: MOEA 2024 grid 0.474 kg/kWh, MOENV fuel combustion factors. Sinks: IPCC 2019 Refinement Tier 1 defaults (subtropical moist) — real SOC change requires soil sampling. This dashboard is for educational / consulting estimation only and does not substitute for formal ISO 14064 inventory or methodology-based credit issuance (e.g. Verra VM0042).">排放係數：經濟部能源署 113 年度電力排碳係數 0.474 kg/kWh、環境部燃料燃燒係數。碳匯：IPCC 2019 Refinement Tier 1 預設值（亞熱帶濕潤氣候），實際 SOC 變化需以土壤採樣驗證。本儀表板為教育與顧問估算用途，不能取代正式 ISO 14064 盤查或 Verra VM0042 等碳權方法學申請。</div>
 
 </main>
+
+<button class="dash-print-btn" id="dashPrintBtn" onclick="window.print()" data-zh="📄 列印 / 存為 PDF" data-en="📄 Print / Save as PDF">📄 列印 / 存為 PDF</button>
 
 <!-- Shared carbon math (EF, SINK, calcFromInputs, fmt, etc.) — see farm-carbon-engine.js -->
 <script src="farm-carbon-engine.js?v=2"></script>
