@@ -487,12 +487,95 @@
   footer a { color: var(--accent); text-decoration: none; }
   footer .disclaimer { font-size: 11px; max-width: 720px; margin: 14px auto 0; line-height: 1.6; opacity: 0.85; }
 
-  /* Print: clean one-page-ish */
+  /* ── Print button ──────────────────────────────────────── */
+  .print-btn {
+    position: fixed;
+    bottom: 22px;
+    right: 22px;
+    padding: 11px 18px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 999px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(29,158,117,0.30);
+    transition: transform 0.15s, background 0.15s;
+    z-index: 100;
+  }
+  .print-btn:hover { background: var(--accent-dark); transform: translateY(-1px); }
+  @media (max-width: 640px) { .print-btn { bottom: 16px; right: 16px; padding: 9px 14px; font-size: 12px; } }
+
+  /* ── Print: A4-friendly buyer document ─────────────────── */
   @media print {
-    body { background: white !important; color: black !important; }
-    .lang-toggle, header { display: none; }
-    .b-section { padding: 24px 0; page-break-inside: avoid; }
-    .b-claim-wrap { box-shadow: none; }
+    @page { size: A4; margin: 14mm 12mm; }
+    body { background: white !important; color: black !important; font-size: 11.5pt; line-height: 1.45; }
+    header, footer, .print-btn { display: none !important; }
+    .container { max-width: 100%; padding: 0; }
+
+    .b-hero { padding: 0 0 16px; background: white; border-bottom: 2px solid #1D9E75; }
+    .b-eyebrow { background: #e8f5ef; color: #157a59; margin-bottom: 8px; padding: 3px 10px; }
+    .b-farm-name { font-size: 26pt; margin-bottom: 6px; }
+    .b-meta { font-size: 11pt; }
+    .b-period { font-size: 10pt; margin-top: 2px; }
+
+    .b-claim-wrap {
+      margin-top: 16px; padding: 16px; box-shadow: none; border: 1.5px solid #1D9E75;
+      page-break-inside: avoid; gap: 16px;
+    }
+    .b-claim { padding-right: 16px; }
+    .b-claim-num { font-size: 42pt; }
+    .b-claim-unit { font-size: 9pt; margin-top: 4px; }
+    .b-tier-tag { padding: 3px 10px; font-size: 10pt; margin-bottom: 6px; }
+    .b-claim-line { font-size: 9.5pt; }
+
+    .b-section { padding: 14px 0; border-bottom: 1px solid #e5e7eb; page-break-inside: avoid; }
+    .b-section h2 { font-size: 9pt; margin-bottom: 10px; letter-spacing: 0.08em; }
+    .b-section h2::before { width: 14px; height: 1.5px; margin-right: 8px; }
+
+    .b-metrics { gap: 8px; }
+    .b-metric { padding: 12px; border-radius: 6px; }
+    .b-mlabel { font-size: 7.5pt; margin-bottom: 4px; }
+    .b-mval { font-size: 16pt; }
+    .b-msub { font-size: 8pt; margin-top: 2px; }
+
+    .b-practice-grid { gap: 6px; }
+    .b-practice { padding: 9px 12px; }
+    .b-practice-icon { width: 28px; height: 28px; font-size: 13pt; }
+    .b-practice-name { font-size: 10.5pt; }
+    .b-practice-sub { font-size: 8pt; }
+    .b-practice-since { font-size: 8pt; margin-top: 3px; }
+
+    .b-bench { padding: 14px 16px; }
+    .b-bench-row { padding: 4px 0; gap: 12px; grid-template-columns: 110px 1fr auto; font-size: 10pt; }
+    .b-bench-row .bb-track { height: 7px; }
+    .b-bench-row .bb-val { font-size: 9.5pt; min-width: 70px; }
+
+    .b-scope { padding: 14px 18px; }
+    .b-scope-bar { height: 10px; margin-bottom: 12px; }
+    .b-scope-row { padding: 5px 0; font-size: 10pt; }
+    .b-scope-sub { font-size: 8pt; }
+
+    .b-renew-grid { gap: 8px; }
+    .b-renew { padding: 10px 12px; }
+    .b-renew-name { font-size: 10.5pt; }
+    .b-renew-cap, .b-renew-notes { font-size: 8.5pt; }
+
+    .b-method-grid { gap: 10px; }
+    .b-method-block { padding: 12px 14px; font-size: 9pt; line-height: 1.5; }
+    .b-method-block strong { font-size: 8pt; margin-bottom: 6px; }
+
+    .b-verify { padding: 16px 20px; page-break-inside: avoid; gap: 14px; }
+    .b-verify-text { font-size: 9.5pt; line-height: 1.55; }
+    .b-verify-text strong { font-size: 12pt; margin-bottom: 4px; }
+    .b-verify-url { font-size: 8.5pt; padding: 3px 6px; }
+    .b-verify-stamp { padding: 10px 12px; }
+    .b-verify-stamp .bs-line1 { font-size: 7.5pt; }
+    .b-verify-stamp .bs-line2 { font-size: 10pt; }
+    .b-verify-stamp .bs-qr { width: 90px; height: 90px; margin-top: 6px; padding: 2px; }
+    .b-verify-stamp .bs-qr-hint { font-size: 7pt; margin-top: 3px; }
   }
 </style>
 </head>
@@ -647,6 +730,8 @@
     </div>
   </section>
 </main>
+
+<button class="print-btn" id="printBtn" data-zh="📄 列印 / 存為 PDF" data-en="📄 Print / Save as PDF" onclick="window.print()">📄 列印 / 存為 PDF</button>
 
 <footer>
   <div class="container">
