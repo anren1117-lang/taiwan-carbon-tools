@@ -818,6 +818,131 @@
     border-top: 1px solid var(--border);
   }
 
+  /* ── Sustainable Survival Guide ─────────────────────────── */
+  .survival-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 6px;
+  }
+  @media (max-width: 900px) { .survival-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 540px) { .survival-grid { grid-template-columns: 1fr; } }
+  .sv-card {
+    padding: 16px 18px;
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    border-left: 3px solid var(--text-muted);
+  }
+  .sv-card.good   { border-left-color: var(--accent); background: rgba(29,158,117,0.04); }
+  .sv-card.ok     { border-left-color: var(--s2); background: rgba(37,99,235,0.04); }
+  .sv-card.warn   { border-left-color: var(--pending); background: rgba(180,83,9,0.04); }
+  .sv-card.poor   { border-left-color: var(--neg); background: rgba(185,28,28,0.04); }
+  .sv-icon { font-size: 22px; display: block; margin-bottom: 4px; }
+  .sv-name {
+    font-size: 11.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+  }
+  .sv-score {
+    font-size: 18px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  .sv-implication {
+    font-size: 11.5px;
+    line-height: 1.6;
+    color: var(--text-muted);
+  }
+
+  .sv-practice {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    gap: 14px;
+    padding: 14px 0;
+    border-top: 1px solid var(--border);
+  }
+  .sv-practice:first-of-type { border-top: none; padding-top: 4px; }
+  .sv-practice.inactive { opacity: 0.55; }
+  .sv-practice-icon {
+    width: 32px; height: 32px;
+    background: var(--accent-tint);
+    color: var(--accent-dark);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+  }
+  .sv-practice.inactive .sv-practice-icon { background: var(--bg-subtle); color: var(--text-muted); }
+  .sv-practice-name { font-weight: 600; font-size: 13.5px; margin-bottom: 4px; }
+  .sv-practice-name .sv-active-tag {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 1px 7px;
+    background: var(--accent);
+    color: white;
+    font-size: 10px;
+    font-weight: 600;
+    border-radius: 999px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .sv-practice-name .sv-not-yet-tag {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 1px 7px;
+    background: var(--bg-subtle);
+    color: var(--text-muted);
+    font-size: 10px;
+    font-weight: 600;
+    border-radius: 999px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .sv-practice-why {
+    font-size: 12px;
+    color: var(--text);
+    line-height: 1.65;
+  }
+  .sv-practice-why strong { color: var(--accent-dark); font-weight: 600; }
+  .sv-practice-savings {
+    font-size: 11.5px;
+    color: var(--text-muted);
+    margin-top: 4px;
+    line-height: 1.5;
+  }
+  .sv-practice-savings .nt { color: var(--accent); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+  .sv-priority {
+    padding: 14px 16px;
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 10px;
+    margin-bottom: 10px;
+  }
+  .sv-priority-num {
+    display: inline-block;
+    width: 22px; height: 22px;
+    background: var(--accent);
+    color: white;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 22px;
+    font-size: 12px;
+    font-weight: 700;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+  .sv-priority-title { font-weight: 600; font-size: 13.5px; display: inline; }
+  .sv-priority-body { font-size: 12.5px; color: var(--text-muted); margin-top: 8px; line-height: 1.6; }
+
   /* ── Loading overlay (shown while ?id JSON is fetched) ──── */
   body.loading main { opacity: 0; }
   main { transition: opacity 0.2s; }
@@ -1478,6 +1603,7 @@
     <a href="#sec-renewables" class="sn-link" data-zh="能源系統" data-en="Energy">能源系統</a>
     <a href="#sec-scenarios" class="sn-link" data-zh="情境模擬" data-en="Scenarios">情境模擬</a>
     <a href="#sec-income" class="sn-link" data-zh="收益機會" data-en="Income">收益機會</a>
+    <a href="#sec-survival" class="sn-link" data-zh="生存指引" data-en="Survival">生存指引</a>
     <a href="#sec-actions" class="sn-link" data-zh="行動路徑" data-en="Actions">行動路徑</a>
     <a href="#sec-editor" class="sn-link" data-zh="設定" data-en="Settings">設定</a>
   </nav>
@@ -1691,6 +1817,29 @@
     <div class="panel-sub" data-zh="依目前耕作狀況、認證進度與碳強度，列出本農場可進入的通路、可申請的資金、可獲取的訓練資源。依據符合程度標記「可進入 / 接近 / 待發展」。" data-en="Based on current practices, certification progress, and per-kg intensity — which channels, financing, and training programs this farm can actually access. Tier-tagged ready / close / develop.">依目前耕作狀況、認證進度與碳強度，列出本農場可進入的通路、可申請的資金、可獲取的訓練資源。依據符合程度標記「可進入 / 接近 / 待發展」。</div>
     <div class="mkt-summary" id="marketSummary"></div>
     <div id="marketList"></div>
+  </section>
+
+  <!-- ── Sustainable Survival Guide ────────────────────────── -->
+  <section class="panel" id="sec-survival">
+    <div class="panel-title" data-zh="永續生存指引：為什麼這些做法能幫你的農場活下去" data-en="Sustainable survival guide: how these practices keep your farm viable">永續生存指引：為什麼這些做法能幫你的農場活下去</div>
+    <div class="panel-sub" data-zh="在台灣農業面對的成本上升、氣候風險與市場壓力下，永續耕作不只是減碳 — 它是經濟上的生存策略。下面四個分項評估你目前的處境，並指出每個永續做法在「碳」以外的實際好處。" data-en="Against rising costs, climate risk, and tightening market demands in Taiwan agriculture, sustainable practices aren't just about carbon — they're a survival strategy. Four dimensions of viability below, plus what each practice does for your farm beyond CO₂.">在台灣農業面對的成本上升、氣候風險與市場壓力下，永續耕作不只是減碳 — 它是經濟上的生存策略。下面四個分項評估你目前的處境，並指出每個永續做法在「碳」以外的實際好處。</div>
+
+    <!-- 4-dimension viability scorecard -->
+    <div class="survival-grid" id="survivalScorecard"></div>
+
+    <!-- Practice → survival benefit explanations -->
+    <div style="margin-top: 24px;">
+      <div class="panel-title" style="font-size: 13px; margin-bottom: 4px;" data-zh="每個做法在「碳」之外能幫你什麼？" data-en="What each practice does beyond carbon">每個做法在「碳」之外能幫你什麼？</div>
+      <div class="panel-sub" style="margin-bottom: 14px;" data-zh="排放係數說明這些做法能減多少 CO₂e；下表說明它們能讓你「省多少錢、撐多久、賣多好」。" data-en="The emission factors tell you how much CO₂e each practice cuts; the table below tells you how much money it saves, how it builds resilience, and what it unlocks for your market.">排放係數說明這些做法能減多少 CO₂e；下表說明它們能讓你「省多少錢、撐多久、賣多好」。</div>
+      <div id="survivalPractices"></div>
+    </div>
+
+    <!-- Top 3 survival actions for THIS farm -->
+    <div style="margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--border);">
+      <div class="panel-title" style="font-size: 13px; margin-bottom: 4px;" data-zh="針對本農場的生存重點（前三）" data-en="Top-3 survival priorities for this farm">針對本農場的生存重點（前三）</div>
+      <div class="panel-sub" style="margin-bottom: 14px;" data-zh="依目前的四項分數，列出最影響你長期生存的優先事項。" data-en="Based on the four scores above, the priorities most affecting long-term viability.">依目前的四項分數，列出最影響你長期生存的優先事項。</div>
+      <div id="survivalPriorities"></div>
+    </div>
   </section>
 
   <!-- ── Reduction roadmap ────────────────────────────────── -->
@@ -3456,6 +3605,207 @@
       : tr('變化 (公噸 CO₂e)', 'change (t CO₂e)');
   }
 
+  // ── Sustainable Survival Guide ────────────────────────────────────
+  // Reframes the data through "how does this help the farm survive?"
+  // — for farmers, sustainability is also an economic strategy, not
+  // just a carbon-accounting exercise.
+  const PRACTICE_WHY = {
+    coverCrop: {
+      name: { zh: "覆蓋作物", en: "Cover crops" }, icon: "🌿",
+      why: { zh: "<strong>除了減碳：</strong>豆科覆蓋作物固定 30–100 kg N/ha；保土壤水分、抑制雜草、減少風雨侵蝕。長期能讓你少買氮肥、少用除草劑、少修復被沖刷的田。",
+             en: "<strong>Beyond carbon:</strong> Legume cover crops fix 30–100 kg N/ha; retain soil moisture, suppress weeds, prevent erosion. You buy less N fert, spray less herbicide, repair less rain-washed soil." },
+      savings: { zh: "估算節省：<span class='nt'>NT$5,000–15,000 / ha / 年</span>（氮肥替代 + 灌溉用水減少）",
+                 en: "Est. savings: <span class='nt'>NT$5,000–15,000 / ha / yr</span> (N fert replacement + lower irrigation)" }
+    },
+    noTill: {
+      name: { zh: "免耕 / 減耕", en: "No-till / reduced till" }, icon: "🪴",
+      why: { zh: "<strong>除了減碳：</strong>柴油用量減 30–50%、機具維護費降低、土壤微生物群保留更多、結構穩定 → 抗旱抗澇能力大幅提升。極端天氣下產量比鄰田穩定。",
+             en: "<strong>Beyond carbon:</strong> Diesel drops 30–50%, machinery wear lower, soil microbiome preserved → much better drought/flood resilience. Yields stay steadier than neighbour farms in extreme weather." },
+      savings: { zh: "估算節省：<span class='nt'>NT$3,000–10,000 / ha / 年</span>（柴油 + 機具）",
+                 en: "Est. savings: <span class='nt'>NT$3,000–10,000 / ha / yr</span> (diesel + machinery)" }
+    },
+    compost: {
+      name: { zh: "堆肥施用", en: "Compost application" }, icon: "🌱",
+      why: { zh: "<strong>除了減碳：</strong>把農場廢棄物變成有機肥，等於免費回收 N、P、K。長期改善土壤質地，化肥依賴下降。對畜牧場是糞肥處理 + 副產品收益的雙重解。",
+             en: "<strong>Beyond carbon:</strong> Turns farm waste into organic fertilizer — recycling N, P, K for free. Long-term soil texture improves; chemical fert dependency drops. For livestock farms, it's both manure mgmt AND a by-product revenue stream." },
+      savings: { zh: "估算節省：<span class='nt'>NT$4,000–12,000 / ha / 年</span>（複合肥替代）",
+                 en: "Est. savings: <span class='nt'>NT$4,000–12,000 / ha / yr</span> (compound fertilizer replacement)" }
+    },
+    residue: {
+      name: { zh: "殘體還田", en: "Residue retention" }, icon: "🌾",
+      why: { zh: "<strong>除了減碳：</strong>不焚燒稻草 → 不違法、空氣不被罰款舉報、土壤獲得免費覆蓋與有機質。風蝕水蝕都減少，下季少修田。",
+             en: "<strong>Beyond carbon:</strong> Don't burn stubble → no illegal-burn fines, no neighbour complaints, soil gets free mulch + organic matter. Less wind/water erosion means less field repair next season." },
+      savings: { zh: "估算節省：<span class='nt'>NT$1,000–3,000 / ha / 年</span>（避免清運 + 表土流失）",
+                 en: "Est. savings: <span class='nt'>NT$1,000–3,000 / ha / yr</span> (avoided haul-out + topsoil retention)" }
+    },
+    biochar: {
+      name: { zh: "生物炭施用", en: "Biochar" }, icon: "🪨",
+      why: { zh: "<strong>除了減碳：</strong>穩定的碳結構在土壤中可存續數百年。提升保水能力 5–20%，乾旱年的歉收損失大幅降低。",
+             en: "<strong>Beyond carbon:</strong> Stable carbon structure persists in soil for centuries. Improves water retention 5–20% — drought-year yield losses drop substantially." },
+      savings: { zh: "估算減損：抗旱年產量穩定，避免 <span class='nt'>NT$10,000–50,000 / ha</span> 的歉收損失",
+                 en: "Est. loss avoided: drought-year yield stability worth <span class='nt'>NT$10,000–50,000 / ha</span> in avoided losses" }
+    },
+    trees: {
+      name: { zh: "農林木", en: "Trees / agroforestry" }, icon: "🌳",
+      why: { zh: "<strong>除了減碳：</strong>防風林降低 20–40% 蒸發量、邊界緩衝、果樹間作 / 林下作物可成為第二收入流。把單一作物風險分散掉。",
+             en: "<strong>Beyond carbon:</strong> Windbreaks cut 20–40% of evaporation, boundary buffers, alley-cropped fruit or timber adds a second income. Diversifies away from single-crop risk." },
+      savings: { zh: "估算收益：<span class='nt'>NT$5,000–30,000 / ha / 年</span>（次要產品 + 風險降低）",
+                 en: "Est. income: <span class='nt'>NT$5,000–30,000 / ha / yr</span> (secondary products + risk reduction)" }
+    }
+  };
+
+  function computeSurvivalMetrics(inp, r) {
+    // Dim 1: cost pressure — total annual bills
+    const billsTotal = (CLIENT_CONFIG.dataSources || [])
+      .filter(d => d.billAmount)
+      .reduce((a, d) => a + (d.billPeriod === 'month' ? d.billAmount * 12 : d.billAmount), 0);
+    let costTier;
+    if (billsTotal < 30000)       costTier = 'good';
+    else if (billsTotal < 100000) costTier = 'ok';
+    else if (billsTotal < 300000) costTier = 'warn';
+    else                          costTier = 'poor';
+
+    // Dim 2: market access — per-kg intensity tier
+    const yieldKg = inp.annualYieldKg || 0;
+    const intensity = yieldKg > 0 ? r.gross / yieldKg : null;
+    const bench = PRODUCT_BENCHMARKS[inp.productCategory] || PRODUCT_BENCHMARKS.mixed;
+    let marketTier, marketScore;
+    if (intensity == null)                       { marketTier = 'warn'; marketScore = '—'; }
+    else if (intensity <= bench.premium)         { marketTier = 'good'; marketScore = tr('溢價 / 再生',  'Premium / regen'); }
+    else if (intensity <= bench.top_quartile)    { marketTier = 'good'; marketScore = tr('前 25%',       'Top quartile'); }
+    else if (intensity <= bench.taiwan_avg)      { marketTier = 'ok';   marketScore = tr('優於台灣平均', 'Above TW avg'); }
+    else                                         { marketTier = 'poor'; marketScore = tr('待改善',       'Needs work'); }
+
+    // Dim 3: resilience — practices + signals
+    const practicesCount = ['coverCrop','noTill','compost','residue'].filter(p => inp.practices[p]).length;
+    const hasSoil = !!(CLIENT_CONFIG.soilTest && CLIENT_CONFIG.soilTest.socPercent != null);
+    const hasSensor = (CLIENT_CONFIG.dataSources || []).some(d => d.method === 'sensor');
+    const hasTrees = inp.trees >= 20;
+    const activeRenew = (CLIENT_CONFIG.renewables || []).filter(rn => rn.status === 'active').length;
+    const resilience = practicesCount + (hasSoil ? 1 : 0) + (hasSensor ? 1 : 0) + (hasTrees ? 1 : 0) + (activeRenew > 0 ? 1 : 0);
+    let resilienceTier;
+    if (resilience >= 6)      resilienceTier = 'good';
+    else if (resilience >= 4) resilienceTier = 'ok';
+    else if (resilience >= 2) resilienceTier = 'warn';
+    else                      resilienceTier = 'poor';
+
+    // Dim 4: income diversification — subsidies + credit potential
+    const subsidies = computeSubsidyTotal(inp, r);
+    const creditValue = computeCarbonCreditValue(r, 'taiwan_voluntary');
+    const incomePotential = subsidies.total + creditValue;
+    let incomeTier;
+    if (incomePotential >= 150000)      incomeTier = 'good';
+    else if (incomePotential >= 50000)  incomeTier = 'ok';
+    else if (incomePotential >= 10000)  incomeTier = 'warn';
+    else                                incomeTier = 'poor';
+
+    return {
+      cost:       { tier: costTier,       score: 'NT$ ' + fmt0(billsTotal) + tr(' / 年', ' / yr'), bills: billsTotal },
+      market:     { tier: marketTier,     score: marketScore, intensity },
+      resilience: { tier: resilienceTier, score: resilience + ' / 8', practicesCount, hasSoil, hasSensor, hasTrees, activeRenew },
+      income:     { tier: incomeTier,     score: 'NT$ ' + fmt0(incomePotential), total: incomePotential, eligibleCount: subsidies.eligible.length }
+    };
+  }
+
+  function renderSurvival(inp, r) {
+    const m = computeSurvivalMetrics(inp, r);
+
+    document.getElementById('survivalScorecard').innerHTML = `
+      <div class="sv-card ${m.cost.tier}">
+        <span class="sv-icon">💰</span>
+        <div class="sv-name">${tr('成本壓力', 'Cost pressure')}</div>
+        <div class="sv-score">${m.cost.score}</div>
+        <div class="sv-implication">${
+          m.cost.tier === 'good' ? tr('能源與投入品支出控制得宜，現金流壓力較小。', 'Bills under control. Cash-flow pressure is manageable.') :
+          m.cost.tier === 'ok'   ? tr('支出在合理範圍。每降 10% 直接增加利潤。', 'Bills in a reasonable range. Each 10% cut adds direct profit.') :
+          m.cost.tier === 'warn' ? tr('支出顯著，建議從最大宗（燃料/電/肥）逐項優化。', 'Bills significant. Optimise the biggest line (fuel/power/fert) first.') :
+                                    tr('高支出農場 — 任何能源效率提升都是顯著省錢。', 'High-cost operation — any efficiency gain saves real money.')
+        }</div>
+      </div>
+      <div class="sv-card ${m.market.tier}">
+        <span class="sv-icon">🛒</span>
+        <div class="sv-name">${tr('市場進入', 'Market access')}</div>
+        <div class="sv-score">${m.market.score}</div>
+        <div class="sv-implication">${
+          m.market.tier === 'good' ? tr('碳強度已達買方對低碳產品的標準 — 可開始接洽溢價通路與外銷。', 'Intensity meets buyer low-carbon thresholds — can pitch premium / export now.') :
+          m.market.tier === 'ok'   ? tr('優於台灣平均。可作為產銷履歷的低碳訴求基礎。', 'Above TW avg. Usable as low-carbon claim on traceability labels.') :
+          m.market.tier === 'warn' ? tr('碳強度待改善，進入溢價通路前需先處理最大排放源。', 'Intensity needs work before targeting premium channels.') :
+                                      tr('進入溢價通路前需顯著降低碳強度（或補產量資料）。', 'Substantial reduction needed before premium-channel access (or fill in yield data).')
+        }</div>
+      </div>
+      <div class="sv-card ${m.resilience.tier}">
+        <span class="sv-icon">🌱</span>
+        <div class="sv-name">${tr('耕作韌性', 'Resilience')}</div>
+        <div class="sv-score">${m.resilience.score}</div>
+        <div class="sv-implication">${
+          m.resilience.tier === 'good' ? tr('土壤管理與多重信號齊全 — 極端天氣下產量比鄰田穩定。', 'Multiple practices + signals in place — yields stay steadier in extreme weather.') :
+          m.resilience.tier === 'ok'   ? tr('有基礎耕作管理。再加入 1–2 項就能達到「韌性農場」。', 'Solid baseline. One or two more practices reach "resilient farm" tier.') :
+          m.resilience.tier === 'warn' ? tr('韌性偏低。氣候異常時容易受衝擊。', 'Limited resilience. Climate anomalies will hit hard.') :
+                                          tr('高風險：氣候異常或市場價格波動時，農場財務最先受傷。', 'High risk: climate or market volatility will impact finances first.')
+        }</div>
+      </div>
+      <div class="sv-card ${m.income.tier}">
+        <span class="sv-icon">💳</span>
+        <div class="sv-name">${tr('收益多元化', 'Income diversification')}</div>
+        <div class="sv-score">${m.income.score}</div>
+        <div class="sv-implication">${
+          m.income.tier === 'good' ? tr(`潛在補助 + 碳匯收益顯著（${m.income.eligibleCount} 項補助符合）— 不只靠產品銷售。`, `Strong subsidy + credit pipeline (${m.income.eligibleCount} programs eligible) — not just product sales.`) :
+          m.income.tier === 'ok'   ? tr(`部分補助與碳匯機會（${m.income.eligibleCount} 項補助符合）。仍可擴大。`, `Some subsidy + credit opportunity (${m.income.eligibleCount} programs eligible). Room to expand.`) :
+          m.income.tier === 'warn' ? tr('收益來源單一，可申請的補助有限。應主動探詢更多。', 'Single income stream, limited subsidies available. Worth actively exploring more.') :
+                                      tr('收益高度依賴產品銷售。市場波動風險完全由農場承擔。', 'Revenue entirely product-sales dependent. Market shocks land entirely on the farm.')
+        }</div>
+      </div>`;
+
+    // Practice why-beyond-carbon
+    const allPracticeKeys = ['coverCrop', 'noTill', 'compost', 'residue', 'biochar', 'trees'];
+    document.getElementById('survivalPractices').innerHTML = allPracticeKeys.map(k => {
+      const p = PRACTICE_WHY[k];
+      let active = false;
+      if (k === 'biochar')      active = inp.biochar > 0;
+      else if (k === 'trees')   active = inp.trees >= 10;
+      else                       active = !!inp.practices[k];
+      return `
+        <div class="sv-practice ${active ? '' : 'inactive'}">
+          <div class="sv-practice-icon">${p.icon}</div>
+          <div>
+            <div class="sv-practice-name">${trObj(p.name)}
+              <span class="${active ? 'sv-active-tag' : 'sv-not-yet-tag'}">${active ? tr('已實施', 'active') : tr('未實施', 'not yet')}</span>
+            </div>
+            <div class="sv-practice-why">${trObj(p.why)}</div>
+            <div class="sv-practice-savings">${trObj(p.savings)}</div>
+          </div>
+        </div>`;
+    }).join('');
+
+    // Top-3 priorities — sort by worst-tier first
+    const tierRank = { poor: 0, warn: 1, ok: 2, good: 3 };
+    const dims = [
+      { key: 'cost', tier: m.cost.tier,
+        title: tr('降低能源與投入品支出', 'Cut energy and input costs'),
+        body:  tr(`你目前每年花 NT$${fmt0(m.cost.bills)} 在燃料、電力與投入品。第一步：申請最大宗的補助（農機電動化 NT$100k、屋頂光電補助等），再做精準肥料與燈光、抽水節能。可降 10–30%。`,
+                  `Current spend is NT$${fmt0(m.cost.bills)}/yr on fuels, electricity, inputs. Step 1: apply for the biggest grant (machinery electrification NT$100k, rooftop PV, etc.). Step 2: precision N + pump/cooling efficiency. 10–30% achievable.`) },
+      { key: 'market', tier: m.market.tier,
+        title: tr('提升每公斤碳強度，進入溢價通路', 'Improve per-kg intensity to access premium channels'),
+        body:  tr('買方比較的是「每公斤產品的碳成本」。降強度的最短路徑：減少最大排放源 + 取得產銷履歷或友善耕作驗證。一旦達到前 25%，主婦聯盟、里仁、ESG 採購都可主動接洽。',
+                  'Buyers compare carbon-per-kg-product. Shortest path to lower it: cut the biggest source + get traceability or friendly-farming cert. Once in top quartile, premium channels (Homemakers Union, Leezen, ESG procurement) become reachable.') },
+      { key: 'resilience', tier: m.resilience.tier,
+        title: tr('累積耕作韌性以應對氣候風險', 'Build resilience against climate risk'),
+        body:  tr(`目前耕作韌性 ${m.resilience.score}（含 ${m.resilience.practicesCount}/4 項土地管理${m.resilience.hasSoil?'、土壤基準已建立':''}${m.resilience.hasSensor?'、有即時感測':''}${m.resilience.activeRenew?'、有再生能源':''}）。每加一項土地管理（覆蓋作物、免耕、堆肥、殘體還田），抗極端天氣能力上升一階。`,
+                  `Resilience score ${m.resilience.score} (includes ${m.resilience.practicesCount}/4 land practices${m.resilience.hasSoil?', soil baseline':''}${m.resilience.hasSensor?', live sensors':''}${m.resilience.activeRenew?', renewables':''}). Each added land practice (cover crop, no-till, compost, residue) bumps climate-resilience another tier.`) },
+      { key: 'income', tier: m.income.tier,
+        title: tr('擴大收益來源（補助 + 碳匯）', 'Expand revenue streams (subsidies + credits)'),
+        body:  tr(`目前 ${m.income.eligibleCount} 項補助符合條件。再實施 1–2 項友善耕作做法，可解鎖「綠色友善環境給付」（NT$45,000 / ha）。長期累積 SOC 後，台灣自願減量機制將是另一條收益管道。`,
+                  `${m.income.eligibleCount} subsidy programs currently eligible. One or two more friendly-farming practices unlock the Green Environment Payment (NT$45,000/ha). Long-term SOC accumulation opens the Taiwan voluntary mechanism as another income channel.`) }
+    ];
+    dims.sort((a, b) => tierRank[a.tier] - tierRank[b.tier]);
+    document.getElementById('survivalPriorities').innerHTML = dims.slice(0, 3).map((d, i) => `
+      <div class="sv-priority">
+        <span class="sv-priority-num">${i + 1}</span>
+        <span class="sv-priority-title">${d.title}</span>
+        <div class="sv-priority-body">${d.body}</div>
+      </div>`).join('');
+  }
+
   function renderRoadmap(inp, r) {
     // ── Economics helpers ─────────────────────────────────────────
     const fmtNT = (n) => 'NT$ ' + fmt0(n);
@@ -3923,6 +4273,7 @@
     renderScenarios(inp, r);
     renderSubsidies(inp, r);
     renderMarket(inp, r);
+    renderSurvival(inp, r);
     renderRoadmap(inp, r);
     renderFarmStatusBadge();
   }
@@ -4116,7 +4467,7 @@
     const navLinks = document.querySelectorAll('.section-nav .sn-link');
     const navByTarget = {};
     navLinks.forEach(l => { navByTarget[l.getAttribute('href').slice(1)] = l; });
-    const targets = Array.from(document.querySelectorAll('#sec-overview, #sec-electricity, #sec-agent, #sec-intensity, #sec-sources, #sec-scope, #sec-renewables, #sec-scenarios, #sec-income, #sec-actions, #sec-editor'));
+    const targets = Array.from(document.querySelectorAll('#sec-overview, #sec-electricity, #sec-agent, #sec-intensity, #sec-sources, #sec-scope, #sec-renewables, #sec-scenarios, #sec-income, #sec-survival, #sec-actions, #sec-editor'));
     if ('IntersectionObserver' in window && targets.length) {
       const setActive = (id) => {
         navLinks.forEach(l => l.classList.remove('active'));
