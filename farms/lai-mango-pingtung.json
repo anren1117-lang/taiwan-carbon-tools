@@ -1,6 +1,7 @@
 {
   "clientName":      { "zh": "賴家果園 · 愛文芒果", "en": "Lai Family Orchard · Aiwen Mango" },
   "clientLocation":  { "zh": "台灣 · 屏東枋寮", "en": "Fangliao, Pingtung, Taiwan" },
+  "region": "south",
   "reportingPeriod": "2025",
 
   "monthlyElectricity": {

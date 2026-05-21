@@ -1863,6 +1863,16 @@
         <div class="editor-grid">
           <div><label data-zh="耕作面積 " data-en="Farm size ">耕作面積 <span class="u">(ha)</span></label><input type="number" id="farmSize" min="0" step="0.1"></div>
           <div>
+            <label data-zh="所在區域（影響顧問建議）" data-en="Region (affects advisor recommendations)">所在區域 <span class="u">(region)</span></label>
+            <select id="region">
+              <option value="north"    data-zh="北部 (北北基宜竹)"  data-en="North (Taipei area + Yilan + Hsinchu)">北部 (北北基宜竹)</option>
+              <option value="central"  data-zh="中部 (中彰投雲)"    data-en="Central (Taichung + Changhua + Nantou + Yunlin)">中部 (中彰投雲)</option>
+              <option value="south"    data-zh="南部 (嘉南高屏)"    data-en="South (Chiayi + Tainan + Kaohsiung + Pingtung)">南部 (嘉南高屏)</option>
+              <option value="east"     data-zh="東部 (花蓮、台東)"  data-en="East (Hualien + Taitung)">東部 (花蓮、台東)</option>
+              <option value="offshore" data-zh="外島 (澎金馬)"      data-en="Offshore (Penghu / Kinmen / Matsu)">外島 (澎金馬)</option>
+            </select>
+          </div>
+          <div>
             <label data-zh="主要作物" data-en="Primary crop">主要作物</label>
             <select id="cropType">
               <option value="rice" data-zh="水稻（淹水）" data-en="Paddy rice (flooded)">水稻（淹水）</option>
@@ -2610,6 +2620,9 @@
     });
     if (i.annualYieldKg != null) set('annualYieldKg', i.annualYieldKg);
     if (i.productCategory) document.getElementById('productCategory').value = i.productCategory;
+    // Region (read from top-level CLIENT_CONFIG)
+    if (CLIENT_CONFIG.region) document.getElementById('region').value = CLIENT_CONFIG.region;
+
     // Practice history (read from top-level CLIENT_CONFIG)
     const ph = CLIENT_CONFIG.practiceHistory || {};
     ['coverCrop', 'noTill', 'compost', 'residue'].forEach(k => {
@@ -3037,6 +3050,17 @@
       // Use the same metric calculation as the Survival Guide panel
       const m = computeSurvivalMetrics(inp, r);
       const tierRank = { poor: 0, warn: 1, ok: 2, good: 3 };
+      const region = CLIENT_CONFIG.region;
+      const rc = REGION_CONTEXT[region];
+      // Region-specific climate-risk emphasis injected into step 2/3
+      const climateRiskNote = rc ? tr(
+        `（${trObj(rc.name)}農場特別注意：${(trObj(rc.climateRisks) || '').replace(/<[^>]+>/g, '')}）`,
+        ` (For ${trObj(rc.name)} farms specifically: ${(trObj(rc.climateRisks) || '').replace(/<[^>]+>/g, '')})`
+      ) : '';
+      const marketNote = rc ? tr(
+        `（${trObj(rc.name)}農場的市場優勢：${trObj(rc.marketAdvantage)}）`,
+        ` (Market advantage for ${trObj(rc.name)} farms: ${trObj(rc.marketAdvantage)})`
+      ) : '';
       // Pick the two worst dimensions + the strongest dimension as a "leverage" angle
       const ranked = [
         { key: 'cost',       m: m.cost,
@@ -3044,10 +3068,10 @@
           fix:   tr('申請農機電動化 + 屋頂光電補助、做精準肥料與抽水節能 — 可降帳單 10–30%。', 'Apply for the electric machinery grant + rooftop PV, then precision N + pump efficiency — 10–30% bill reduction.') },
         { key: 'market',     m: m.market,
           worse: tr('每公斤碳強度與買方標準的距離', 'distance from buyer per-kg-carbon standards'),
-          fix:   tr('先降最大排放源（見「行動路徑」第 1 項）+ 申請產銷履歷。一旦達到前 25%，主婦聯盟、里仁、ESG 採購都可主動接洽。', 'Cut the top source first (see roadmap item 1) + get TGAP traceability. Once in top quartile, Homemakers Union / Leezen / ESG buyers become reachable.') },
+          fix:   tr('先降最大排放源（見「行動路徑」第 1 項）+ 申請產銷履歷。一旦達到前 25%，主婦聯盟、里仁、ESG 採購都可主動接洽。', 'Cut the top source first (see roadmap item 1) + get TGAP traceability. Once in top quartile, Homemakers Union / Leezen / ESG buyers become reachable.') + marketNote },
         { key: 'resilience', m: m.resilience,
           worse: tr('氣候衝擊下的韌性', 'climate-shock resilience'),
-          fix:   tr('每加一項土地管理（覆蓋作物、免耕、堆肥、殘體還田）= 抗極端天氣能力上升一階。再做一次土壤採樣建立基準。', 'Each added land practice (cover crop / no-till / compost / residue) bumps climate resilience another tier. Plus get a soil sample done to establish baseline.') },
+          fix:   tr('每加一項土地管理（覆蓋作物、免耕、堆肥、殘體還田）= 抗極端天氣能力上升一階。再做一次土壤採樣建立基準。', 'Each added land practice (cover crop / no-till / compost / residue) bumps climate resilience another tier. Plus get a soil sample done to establish baseline.') + climateRiskNote },
         { key: 'income',     m: m.income,
           worse: tr('收益來源單一性', 'income concentration'),
           fix:   tr('鎖定已符合的補助 — 顧問可代擬申請文件。長期累積 SOC 後再進台灣自願減量機制。', 'Lock in the subsidies you already qualify for (advisor can draft applications). Long-term, SOC growth opens the Taiwan VRM as a second income channel.') }
@@ -3706,6 +3730,47 @@
     }
   };
 
+  // Region-specific context — affects how the survival guide + agent
+  // tailor advice. Pulled from CLIENT_CONFIG.region (north / central /
+  // south / east / offshore).
+  const REGION_CONTEXT = {
+    north: {
+      name: { zh: "北部", en: "North" },
+      climateRisks: { zh: "颱風與豪雨頻繁，氣溫較低；冬春淹水風險高於乾旱。", en: "Frequent typhoons + heavy rain, cooler temperatures; winter/spring flooding more common than drought." },
+      marketAdvantage: { zh: "鄰近大台北、桃園都會區 — 主婦聯盟、里仁、有機通路在這裡最密集，週末市集也活躍。可走「短鏈直銷」。", en: "Adjacent to Taipei + Taoyuan metro — Homemakers Union, Leezen, organic channels densest here; weekend markets active. Strong short-chain direct sales potential." },
+      keyOffices: { zh: "桃園、苗栗、宜蘭區農業改良場", en: "Taoyuan / Miaoli / Yilan Agricultural Improvement Stations" },
+      socNote: { zh: "氣候濕潤涼爽，SOC 累積條件較佳。", en: "Cool + wet climate, favourable for SOC accumulation." }
+    },
+    central: {
+      name: { zh: "中部", en: "Central" },
+      climateRisks: { zh: "颱風 + 夏季高溫；中部沖積平原排水管理是長期課題。", en: "Typhoons + summer heat; drainage management is the long-term challenge on the central plains." },
+      marketAdvantage: { zh: "農業重鎮，產銷履歷與大盤通路發達。鄰近台中、彰化、雲林都會區。", en: "Agricultural heartland. Established traceability + wholesale infrastructure. Near Taichung / Changhua / Yunlin urban centres." },
+      keyOffices: { zh: "台中、台南區農業改良場（雲林歸台南改良場管）", en: "Taichung + Tainan Agricultural Improvement Stations (Yunlin under Tainan jurisdiction)" },
+      socNote: { zh: "氣候適中，SOC 累積條件中等。", en: "Temperate-ish, moderate SOC accumulation potential." }
+    },
+    south: {
+      name: { zh: "南部", en: "South" },
+      climateRisks: { zh: "<strong>乾旱與熱浪風險最高</strong>，水資源是首要課題；颱風 + 短時強降雨亦頻繁。", en: "<strong>Highest drought + heat-wave risk</strong>; water management is the #1 issue. Typhoons + flash floods also common." },
+      marketAdvantage: { zh: "熱帶水果（芒果、鳳梨、火龍果）與外銷強項。高雄港為主要外銷管道。", en: "Tropical fruit (mango, pineapple, dragonfruit) + strong export base. Kaohsiung Port is the main export route." },
+      keyOffices: { zh: "高雄、台南區農業改良場", en: "Kaohsiung + Tainan Agricultural Improvement Stations" },
+      socNote: { zh: "<strong>炎熱乾燥 → SOC 累積較慢，覆蓋作物 + 殘體還田 + 灌溉效率特別重要。</strong>", en: "<strong>Hot + drier → slower SOC accumulation. Cover crops + residue retention + irrigation efficiency are especially critical here.</strong>" }
+    },
+    east: {
+      name: { zh: "東部", en: "East" },
+      climateRisks: { zh: "颱風登陸首當其衝；西側中央山脈造成的焚風與地震風險。", en: "First in the path of incoming typhoons; foehn winds + earthquake risk from the Central Mountain Range." },
+      marketAdvantage: { zh: "<strong>低工業污染 + 花蓮/台東品牌溢價</strong>。有機驗證門檻低、適合直接走高端零售與觀光直銷。", en: "<strong>Low industrial contamination + Hualien/Taitung brand premium.</strong> Organic certification easier to achieve; suits direct high-end retail + tourism direct-sales." },
+      keyOffices: { zh: "花蓮、台東區農業改良場", en: "Hualien + Taitung Agricultural Improvement Stations" },
+      socNote: { zh: "涼爽濕潤，SOC 累積條件佳，但土壤普遍偏酸需注意 pH 管理。", en: "Cool + wet, favourable for SOC; but soils tend to be acidic — manage pH." }
+    },
+    offshore: {
+      name: { zh: "外島", en: "Offshore" },
+      climateRisks: { zh: "海風鹽害、淡水資源稀缺、強風為常態。", en: "Salt-spray damage, limited freshwater, persistent strong winds." },
+      marketAdvantage: { zh: "稀少性 + 觀光直銷可實現高溢價；運費為瓶頸。", en: "Scarcity + tourist-direct-sales achieve high premiums; logistics costs are the constraint." },
+      keyOffices: { zh: "離島農業改良分場（依屬地）", en: "Local offshore branch of the relevant Improvement Station" },
+      socNote: { zh: "風蝕嚴重，殘體還田與防風林優先。", en: "Wind erosion severe — residue retention + windbreaks are priorities." }
+    }
+  };
+
   function computeSurvivalMetrics(inp, r) {
     // Dim 1: cost pressure — total annual bills
     const billsTotal = (CLIENT_CONFIG.dataSources || [])
@@ -3761,8 +3826,29 @@
 
   function renderSurvival(inp, r) {
     const m = computeSurvivalMetrics(inp, r);
+    const region = CLIENT_CONFIG.region;
+    const rc = REGION_CONTEXT[region];
 
-    document.getElementById('survivalScorecard').innerHTML = `
+    // Region context banner — shows region-specific climate risks +
+    // market opportunities the agent should be aware of.
+    const scorecardEl = document.getElementById('survivalScorecard');
+    let regionBanner = '';
+    if (rc) {
+      regionBanner = `
+        <div style="grid-column: 1 / -1; padding: 14px 16px; background: var(--bg-subtle); border: 1px solid var(--border); border-left: 3px solid var(--s2); border-radius: 10px; margin-bottom: 4px;">
+          <div style="font-size: 11px; font-weight: 700; color: var(--s2); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 6px;">
+            📍 ${tr('區域背景', 'Regional context')}：${trObj(rc.name)}
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; font-size: 12px; line-height: 1.6;">
+            <div><strong style="color: var(--text);">${tr('氣候風險', 'Climate risks')}：</strong>${trObj(rc.climateRisks)}</div>
+            <div><strong style="color: var(--text);">${tr('市場優勢', 'Market advantage')}：</strong>${trObj(rc.marketAdvantage)}</div>
+            <div><strong style="color: var(--text);">${tr('土壤碳累積', 'SOC accumulation')}：</strong>${trObj(rc.socNote)}</div>
+            <div><strong style="color: var(--text);">${tr('當地改良場', 'Local agri station')}：</strong>${trObj(rc.keyOffices)}</div>
+          </div>
+        </div>`;
+    }
+
+    scorecardEl.innerHTML = regionBanner + `
       <div class="sv-card ${m.cost.tier}">
         <span class="sv-icon">💰</span>
         <div class="sv-name">${tr('成本壓力', 'Cost pressure')}</div>
@@ -4282,6 +4368,10 @@
     const riceWrap = document.getElementById('riceMgmtWrap');
     if (riceWrap) riceWrap.style.display = (inp.cropType === 'rice') ? '' : 'none';
 
+    // Region selector → CLIENT_CONFIG.region sync.
+    const regionEl = document.getElementById('region');
+    if (regionEl && regionEl.value) CLIENT_CONFIG.region = regionEl.value;
+
     // Practice history editor → CLIENT_CONFIG.practiceHistory sync.
     ['coverCrop', 'noTill', 'compost', 'residue'].forEach(k => {
       const el = document.getElementById('ph-' + k);
@@ -4433,7 +4523,7 @@
     applyConfigToDom();
 
     const liveInputs = [
-      'farmSize', 'cropType', 'annualYieldKg', 'productCategory',
+      'farmSize', 'region', 'cropType', 'annualYieldKg', 'productCategory',
       'diesel', 'gasoline', 'lpg', 'heatingOil',
       'nFert', 'riceMgmt', 'cattle', 'pigs', 'poultry', 'manure',
     'cattleDairy', 'cattleBeef', 'sowHead', 'growerPigHead', 'poultryLayer', 'poultryBroiler',

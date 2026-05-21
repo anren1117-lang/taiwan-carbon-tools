@@ -1,6 +1,7 @@
 {
   "clientName":      { "zh": "魏家牧場", "en": "Wei Family Dairy" },
   "clientLocation":  { "zh": "台灣 · 彰化埔心", "en": "Puxin, Changhua, Taiwan" },
+  "region": "central",
   "reportingPeriod": "2025",
 
   "monthlyElectricity": {

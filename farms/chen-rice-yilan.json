@@ -1,6 +1,7 @@
 {
   "clientName":      { "zh": "陳家米作", "en": "Chen Family Rice" },
   "clientLocation":  { "zh": "台灣 · 宜蘭員山", "en": "Yuanshan, Yilan, Taiwan" },
+  "region": "north",
   "reportingPeriod": "2025",
 
   "monthlyElectricity": {

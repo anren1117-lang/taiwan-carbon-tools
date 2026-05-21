@@ -1,6 +1,7 @@
 {
   "clientName":      { "zh": "示範農場", "en": "Sample Farm" },
   "clientLocation":  { "zh": "台灣 · 雲林", "en": "Yunlin, Taiwan" },
+  "region": "central",
   "reportingPeriod": "2025",
 
   "monthlyElectricity": {
