@@ -24,9 +24,18 @@ const EF = {
   heatingOil: 2.68,     // per L      (MOENV)
   nFertDirect: 4.29,    // per kg N   (IPCC: 1% N2O-N × 44/28 × 273 GWP100)
   riceCH4PerHa: 2970,   // per ha-yr  (subtropical Tier 1, single-season)
-  cattleHead: 1800,     // per head-yr
-  pigHead: 175,
-  poultryHead: 6,
+  cattleHead: 1800,     // per head-yr (beef-equivalent average; legacy field)
+  pigHead: 175,         // per head-yr (mixed-class average; legacy field)
+  poultryHead: 6,       // per head-yr (mixed layer/broiler average; legacy field)
+  // ── Livestock class breakdown (IPCC 2006 Vol 4, Tables 10.10/10.16) ──
+  // Used when sub-class fields are provided on the input. Falls back
+  // to the legacy single-field factor above if none are set.
+  cattleDairy:    4000,  // high-production dairy cow (enteric + manure)
+  cattleBeef:     1800,  // beef cattle
+  sowHead:         280,  // breeding sow (gestation + lactation)
+  growerPigHead:   150,  // grower-finisher pig
+  poultryLayer:      4,  // layer hen
+  poultryBroiler:    1,  // broiler chicken
   electricity: 0.474,   // per kWh    (MOEA 2024)
   nFertUpstream: 4.0,   // per kg N   (urea avg production)
   chemicals: 7.0,       // per kg     (compound fert + pesticides upstream)
@@ -102,7 +111,19 @@ function calcFromInputs(inp) {
   const e_nFertDir = inp.nFert * EF.nFertDirect;
   const riceMgmtScale = RICE_MGMT_SCALE[inp.riceMgmt] || RICE_MGMT_SCALE.continuous_flood;
   const e_rice = inp.cropType === 'rice' ? inp.farmSize * EF.riceCH4PerHa * riceMgmtScale : 0;
-  const livestockBase = inp.cattle * EF.cattleHead + inp.pigs * EF.pigHead + inp.poultry * EF.poultryHead;
+  // Livestock: prefer sub-class fields when any are non-zero; fall back
+  // to single-field totals (inp.cattle / inp.pigs / inp.poultry) when
+  // the consultant has only basic counts.
+  const cattleSub  = (inp.cattleDairy   || 0) * EF.cattleDairy
+                   + (inp.cattleBeef    || 0) * EF.cattleBeef;
+  const pigsSub    = (inp.sowHead       || 0) * EF.sowHead
+                   + (inp.growerPigHead || 0) * EF.growerPigHead;
+  const poultrySub = (inp.poultryLayer  || 0) * EF.poultryLayer
+                   + (inp.poultryBroiler|| 0) * EF.poultryBroiler;
+  const e_cattle   = cattleSub  > 0 ? cattleSub  : (inp.cattle  || 0) * EF.cattleHead;
+  const e_pigs     = pigsSub    > 0 ? pigsSub    : (inp.pigs    || 0) * EF.pigHead;
+  const e_poultry  = poultrySub > 0 ? poultrySub : (inp.poultry || 0) * EF.poultryHead;
+  const livestockBase = e_cattle + e_pigs + e_poultry;
   const e_livestock = livestockBase * (MANURE_MULT[inp.manure] || 1);
 
   const s1 = e_fuels + e_nFertDir + e_rice + e_livestock;

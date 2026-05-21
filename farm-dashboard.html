@@ -1440,6 +1440,17 @@
             </select>
           </div>
         </div>
+        <details style="margin-top: 12px;">
+          <summary style="cursor: pointer; font-size: 11.5px; color: var(--text-muted); font-weight: 600;" data-zh="▸ 精細牲畜分類（任一填入 &gt; 0 即取代上方基本欄位）" data-en="▸ Livestock class breakdown (any non-zero value overrides the basic field above)">▸ 精細牲畜分類（任一填入 &gt; 0 即取代上方基本欄位）</summary>
+          <div class="editor-grid" style="margin-top: 10px;">
+            <div><label data-zh="乳牛（頭）" data-en="Dairy cattle">乳牛 <span class="u">(head)</span></label><input type="number" id="cattleDairy" min="0" step="1"></div>
+            <div><label data-zh="肉牛（頭）" data-en="Beef cattle">肉牛 <span class="u">(head)</span></label><input type="number" id="cattleBeef" min="0" step="1"></div>
+            <div><label data-zh="母豬（頭）" data-en="Sow">母豬 <span class="u">(head)</span></label><input type="number" id="sowHead" min="0" step="1"></div>
+            <div><label data-zh="育成豬（頭）" data-en="Grower pig">育成豬 <span class="u">(head)</span></label><input type="number" id="growerPigHead" min="0" step="1"></div>
+            <div><label data-zh="蛋雞（隻）" data-en="Layer hen">蛋雞 <span class="u">(head)</span></label><input type="number" id="poultryLayer" min="0" step="10"></div>
+            <div><label data-zh="肉雞（隻）" data-en="Broiler">肉雞 <span class="u">(head)</span></label><input type="number" id="poultryBroiler" min="0" step="10"></div>
+          </div>
+        </details>
       </div>
 
       <div class="editor-section">
@@ -2010,6 +2021,12 @@
       cattle:     num('cattle'),
       pigs:       num('pigs'),
       poultry:    num('poultry'),
+      cattleDairy:    num('cattleDairy'),
+      cattleBeef:     num('cattleBeef'),
+      sowHead:        num('sowHead'),
+      growerPigHead:  num('growerPigHead'),
+      poultryLayer:   num('poultryLayer'),
+      poultryBroiler: num('poultryBroiler'),
       manure:     document.getElementById('manure').value,
       irrigation: num('irrigation'),
       coldStorage:num('coldStorage'),
@@ -2042,6 +2059,9 @@
     set('nFert', i.nFert);
     document.getElementById('riceMgmt').value = i.riceMgmt || 'continuous_flood';
     set('cattle', i.cattle); set('pigs', i.pigs); set('poultry', i.poultry);
+    set('cattleDairy', i.cattleDairy || 0);   set('cattleBeef', i.cattleBeef || 0);
+    set('sowHead', i.sowHead || 0);            set('growerPigHead', i.growerPigHead || 0);
+    set('poultryLayer', i.poultryLayer || 0);  set('poultryBroiler', i.poultryBroiler || 0);
     document.getElementById('manure').value = i.manure;
     set('irrigation', i.irrigation); set('coldStorage', i.coldStorage); set('otherElec', i.otherElec);
     set('chemicals', i.chemicals); set('feed', i.feed);
@@ -3470,6 +3490,7 @@
       'farmSize', 'cropType', 'annualYieldKg', 'productCategory',
       'diesel', 'gasoline', 'lpg', 'heatingOil',
       'nFert', 'riceMgmt', 'cattle', 'pigs', 'poultry', 'manure',
+    'cattleDairy', 'cattleBeef', 'sowHead', 'growerPigHead', 'poultryLayer', 'poultryBroiler',
       'irrigation', 'coldStorage', 'otherElec',
       'chemicals', 'feed', 'transport', 'commute', 'packaging', 'waste',
       'biochar', 'trees'
