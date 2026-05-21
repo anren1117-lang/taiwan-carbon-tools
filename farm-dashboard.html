@@ -1408,6 +1408,7 @@
       <strong id="reportingPeriod">2025</strong>
       <span data-zh="顧問：" data-en="Advisor: ">顧問：</span><span>An-Ren Ho</span>
       <a id="buyerViewLink" href="#" target="_blank" rel="noopener" class="cb-buyer-link" style="display:none" data-zh="買方分享頁 ↗" data-en="Buyer share view ↗">買方分享頁 ↗</a>
+      <button id="copyUrlsBtn" class="cb-buyer-link" style="display:none; cursor:pointer; background:rgba(255,255,255,0.12); margin-left: 4px;" data-zh="📋 複製分享 URL" data-en="📋 Copy share URLs">📋 複製分享 URL</button>
     </div>
   </section>
 
@@ -3880,19 +3881,35 @@
       banner.textContent = (currentLang === 'zh' ? '示範資料 · 1:1 諮詢交付件' : 'Demo data · 1:1 consulting deliverable');
     }
 
-    // Buyer share link — only valid when loaded from a real farm JSON.
-    // Forwards the token so the buyer page also clears the gate.
+    // Buyer share link + copy-URLs helper.
+    // Both only show when a real farm JSON is loaded.
     const buyerLink = document.getElementById('buyerViewLink');
-    if (buyerLink) {
+    const copyBtn = document.getElementById('copyUrlsBtn');
+    if (buyerLink && copyBtn) {
       if (farmStatus.id && farmStatus.loaded) {
         const params = new URLSearchParams(window.location.search);
         const t = params.get('t');
-        let href = 'farm-buyer.html?id=' + encodeURIComponent(farmStatus.id);
-        if (t) href += '&t=' + encodeURIComponent(t);
-        buyerLink.href = href;
+        const tStr = t ? '&t=' + encodeURIComponent(t) : '';
+        const base = window.location.origin + window.location.pathname.replace(/\/[^/]+$/, '/');
+        const dashUrl  = base + 'farm-dashboard.html?id=' + encodeURIComponent(farmStatus.id) + tStr;
+        const buyerUrl = base + 'farm-buyer.html?id='    + encodeURIComponent(farmStatus.id) + tStr;
+        buyerLink.href = buyerUrl;
         buyerLink.style.display = '';
+        copyBtn.style.display = '';
+        copyBtn.onclick = async () => {
+          const text = `${tr('顧問儀表板', 'Consulting dashboard')}：\n${dashUrl}\n\n${tr('買方分享頁', 'Buyer share view')}：\n${buyerUrl}`;
+          try {
+            await navigator.clipboard.writeText(text);
+            const orig = copyBtn.textContent;
+            copyBtn.textContent = tr('✓ 已複製', '✓ Copied');
+            setTimeout(() => { copyBtn.textContent = orig; }, 1800);
+          } catch (e) {
+            alert(text);
+          }
+        };
       } else {
         buyerLink.style.display = 'none';
+        copyBtn.style.display = 'none';
       }
     }
   }
