@@ -127,6 +127,20 @@
     line-height: 1.5;
   }
   .cb-period strong { display: block; font-size: 14px; color: white; font-weight: 600; }
+  .cb-buyer-link {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 5px 12px;
+    background: rgba(255,255,255,0.18);
+    color: white;
+    text-decoration: none;
+    font-size: 11.5px;
+    font-weight: 600;
+    border-radius: 999px;
+    letter-spacing: 0.02em;
+    transition: background 0.15s;
+  }
+  .cb-buyer-link:hover { background: rgba(255,255,255,0.30); }
   @media (max-width: 640px) {
     .client-banner { grid-template-columns: 1fr; padding: 22px; }
     .cb-period { text-align: left; }
@@ -1173,6 +1187,7 @@
       <span data-zh="報告期間" data-en="Reporting period">報告期間</span>
       <strong id="reportingPeriod">2025</strong>
       <span data-zh="顧問：" data-en="Advisor: ">顧問：</span><span>An-Ren Ho</span>
+      <a id="buyerViewLink" href="#" target="_blank" rel="noopener" class="cb-buyer-link" style="display:none" data-zh="買方分享頁 ↗" data-en="Buyer share view ↗">買方分享頁 ↗</a>
     </div>
   </section>
 
@@ -3501,6 +3516,17 @@
       banner.style.background = 'rgba(180,83,9,0.30)';
     } else {
       banner.textContent = (currentLang === 'zh' ? '示範資料 · 1:1 諮詢交付件' : 'Demo data · 1:1 consulting deliverable');
+    }
+
+    // Buyer share link — only valid when loaded from a real farm JSON
+    const buyerLink = document.getElementById('buyerViewLink');
+    if (buyerLink) {
+      if (farmStatus.id && farmStatus.loaded) {
+        buyerLink.href = 'farm-buyer.html?id=' + encodeURIComponent(farmStatus.id);
+        buyerLink.style.display = '';
+      } else {
+        buyerLink.style.display = 'none';
+      }
     }
   }
 
