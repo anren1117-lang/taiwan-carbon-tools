@@ -451,6 +451,22 @@
   }
   .b-verify-stamp .bs-line1 { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; }
   .b-verify-stamp .bs-line2 { font-size: 13px; margin-top: 2px; }
+  .b-verify-stamp .bs-qr {
+    margin-top: 10px;
+    width: 110px; height: 110px;
+    border-radius: 6px;
+    background: white;
+    padding: 4px;
+    border: 1px solid var(--border);
+  }
+  .b-verify-stamp .bs-qr-hint {
+    margin-top: 6px;
+    font-size: 10.5px;
+    color: var(--text-muted);
+    font-weight: 400;
+    letter-spacing: 0;
+    text-transform: none;
+  }
   @media (max-width: 640px) { .b-verify { grid-template-columns: 1fr; } }
 
   /* ── Footer ─────────────────────────────────────────────── */
@@ -617,6 +633,8 @@
         <div class="b-verify-stamp">
           <div class="bs-line1" data-zh="顧問驗證" data-en="Advisor verified">顧問驗證</div>
           <div class="bs-line2">An-Ren Ho</div>
+          <img class="bs-qr" id="verifyQr" alt="QR code">
+          <div class="bs-qr-hint" data-zh="掃描可驗證" data-en="Scan to verify">掃描可驗證</div>
         </div>
       </div>
     </div>
@@ -932,10 +950,17 @@
       `<div class="mb-line" style="margin-top: 8px;">${tr('儀表板呈現完整 bill → kg CO₂e 換算鏈，買方可直接檢視來源。', 'Dashboard shows full bill → kg CO₂e chain — buyers can inspect every source.')}</div>`;
 
     // ─ Verification footer
-    document.getElementById('verifyUrl').textContent = window.location.href;
+    const verifyUrl = window.location.href;
+    document.getElementById('verifyUrl').textContent = verifyUrl;
     const now = new Date();
     document.getElementById('issuedDate').textContent =
       now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
+
+    // QR code (api.qrserver.com generates the PNG; page degrades
+    // gracefully to no-QR if the service is unreachable).
+    const qrEl = document.getElementById('verifyQr');
+    qrEl.src = 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&margin=8&data=' + encodeURIComponent(verifyUrl);
+    qrEl.onerror = () => { qrEl.style.display = 'none'; document.querySelector('.bs-qr-hint').style.display = 'none'; };
   }
 
   // ── Language toggle ──────────────────────────────────────────────

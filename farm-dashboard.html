@@ -861,6 +861,25 @@
   }
   .sub-card .sc-status.eligible { background: rgba(29,158,117,0.18); color: var(--accent-dark); }
   .sub-card .sc-status.partial  { background: rgba(180,83,9,0.12); color: var(--pending); }
+  .sub-card .sc-link {
+    margin-top: 6px;
+    font-size: 12px;
+  }
+  .sub-card .sc-link a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .sub-card .sc-link a:hover { text-decoration: underline; }
+  .mkt-link {
+    display: inline-block;
+    margin-top: 6px;
+    font-size: 12px;
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .mkt-link:hover { text-decoration: underline; }
   .credit-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -1642,9 +1661,11 @@
       items: [
         { id: 'hua',     name: { zh: "主婦聯盟生活消費合作社", en: "Homemakers Union Co-op" },
           requires: ['friendly_or_organic'],
+          url: "https://www.hucc-coop.tw/",
           notes: { zh: "10 萬會員、雙週配送、強調生產者透明", en: "100k members, biweekly delivery, producer transparency" } },
         { id: 'liren',   name: { zh: "里仁有機通路", en: "Leezen Organic Stores" },
           requires: ['low_chem'],
+          url: "https://www.leezen.com.tw/",
           notes: { zh: "全台 100+ 門市，接受無毒/轉型期農場", en: "100+ stores, accepts toxin-free transition farms" } },
         { id: 'mottain', name: { zh: "棉花田有機", en: "Mottainai Organic" },
           requires: ['organic'],
@@ -1675,12 +1696,15 @@
       items: [
         { id: 'tw-vrm',  name: { zh: "台灣自願減量機制（環境部）", en: "Taiwan Voluntary Mechanism (MOENV)" },
           requires: ['soc_baseline', 'min_scale_0_5ha'],
+          url: "https://www.moenv.gov.tw/",
           notes: { zh: "2025+ 啟動中，土壤碳匯方法學陸續通過", en: "Launching 2025+, soil carbon methodologies being approved" } },
         { id: 'vm0042',  name: { zh: "Verra VM0042（透過聚合商）", en: "Verra VM0042 (via aggregator)" },
           requires: ['soc_baseline', 'min_scale_0_5ha'],
+          url: "https://verra.org/",
           notes: { zh: "土壤碳匯國際方法學，通常聚合 100+ 公頃方可行", en: "International soil carbon methodology, usually needs 100+ ha aggregation" } },
         { id: 'gold-std',name: { zh: "Gold Standard 農業專案", en: "Gold Standard Ag projects" },
           requires: ['soc_baseline', 'low_carbon_top25'],
+          url: "https://www.goldstandard.org/",
           notes: { zh: "嚴格的查驗與監測，但價格較高", en: "Stricter verification, commands higher price" } }
       ]
     },
@@ -1690,6 +1714,7 @@
       items: [
         { id: 'young-farmer', name: { zh: "青年農民貸款（農業部）", en: "Young Farmer Loan (MOA)" },
           requires: [],
+          url: "https://www.moa.gov.tw/",
           notes: { zh: "45 歲以下農民，低利率 + 寬限期", en: "Farmers under 45, low rate + grace period" } },
         { id: 'farmers-assoc', name: { zh: "農會貸款", en: "Farmers' Association loan" },
           requires: [],
@@ -1705,12 +1730,14 @@
       items: [
         { id: 'moa-academy', name: { zh: "農業部 培力課程", en: "MOA Capacity Building Programs" },
           requires: [],
+          url: "https://www.moa.gov.tw/",
           notes: { zh: "免費 / 補助訓練，主題從碳盤查到產銷履歷", en: "Free/subsidised trainings, from carbon inventory to traceability" } },
         { id: 'organic-certifiers', name: { zh: "有機驗證機構（TOC / FOA / MOA cert）", en: "Organic certification bodies (TOC / FOA / MOA cert)" },
           requires: ['low_chem'],
           notes: { zh: "降低化學投入後，準備申請有機驗證", en: "Once chemicals are reduced, prepare organic certification application" } },
         { id: 'traceability', name: { zh: "產銷履歷（TGAP）", en: "Traceability (TGAP)" },
           requires: [],
+          url: "https://www.moa.gov.tw/",
           notes: { zh: "通常是進入溢價/外銷的第一張門票", en: "Usually the first gate into premium / export channels" } },
         { id: 'university', name: { zh: "學術合作（台大/中興/嘉大）", en: "University partnerships (NTU / NCHU / NCYU)" },
           requires: ['has_sensor'],
@@ -1774,6 +1801,10 @@
       name:    { zh: "友善耕作補助", en: "Friendly Farming Subsidy" },
       agency:  { zh: "農業部", en: "Ministry of Agriculture" },
       rateNTPerHa: 30000,
+      // Agency homepage — specific program pages move year-to-year;
+      // the consultant should confirm the current PDF / application URL
+      // per engagement and override per-client if needed.
+      url:     "https://www.moa.gov.tw/",
       eligibility: (inp) =>
         inp.practices.coverCrop &&
         (inp.practices.compost || inp.practices.residue) &&
@@ -1786,6 +1817,7 @@
       name:    { zh: "綠色友善環境給付", en: "Green Environment Payment" },
       agency:  { zh: "農業部", en: "MOA" },
       rateNTPerHa: 45000,
+      url:     "https://www.moa.gov.tw/",
       eligibility: (inp) =>
         ['coverCrop', 'noTill', 'compost', 'residue'].filter(p => inp.practices[p]).length >= 3,
       note: { zh: "三項以上土地管理（覆蓋作物 / 免耕 / 堆肥 / 殘體還田）",
@@ -1794,8 +1826,9 @@
     {
       id: "carbon-pilot",
       name:    { zh: "碳匯先行區域試辦", en: "Soil Carbon Pilot Program" },
-      agency:  { zh: "農業部", en: "MOA" },
+      agency:  { zh: "農業部 + 環境部", en: "MOA + MOENV" },
       rateNTPerHa: 20000,
+      url:     "https://www.moenv.gov.tw/",
       eligibility: (inp, r) =>
         r.sinkTotal > 1000 &&
         CLIENT_CONFIG.soilTest && CLIENT_CONFIG.soilTest.socPercent != null,
@@ -1807,6 +1840,7 @@
       name:    { zh: "智慧農業計畫", en: "Smart Agriculture Grants" },
       agency:  { zh: "農業部", en: "MOA" },
       flatRate: 50000,
+      url:     "https://www.moa.gov.tw/",
       eligibility: () =>
         CLIENT_CONFIG.dataSources &&
         CLIENT_CONFIG.dataSources.some(d => d.method === 'sensor'),
@@ -1818,6 +1852,7 @@
       name:    { zh: "農機具電動化補助", en: "Electric Farm Equipment Grant" },
       agency:  { zh: "農業部 + 經濟部", en: "MOA + MOEA" },
       flatRate: 100000,
+      url:     "https://www.moa.gov.tw/",
       eligibility: (inp) => inp.diesel > 300 || inp.gasoline > 50,
       note: { zh: "現有柴油/汽油機具符合電動化轉換評估",
               en: "Existing diesel/gasoline equipment qualifies for electrification review" }
@@ -1827,6 +1862,7 @@
       name:    { zh: "有機驗證輔導", en: "Organic Certification Support" },
       agency:  { zh: "農業部", en: "MOA" },
       rateNTPerHa: 15000,
+      url:     "https://www.moa.gov.tw/",
       eligibility: (inp) => inp.chemicals === 0 && inp.nFert <= 80 * Math.max(inp.farmSize, 0.1),
       note: { zh: "零化學農藥/複肥 + 低合成氮肥 → 申請有機驗證輔導",
               en: "Zero chemicals + low synthetic N → organic certification support" }
@@ -2684,6 +2720,7 @@
               <div class="mkt-name">${trObj(item.name)}</div>
               <div class="mkt-criteria">${trObj(item.notes)}</div>
               ${item.missing.length ? `<div class="mkt-missing">${tr('還需：', 'Need: ')}${item.missing.map(m => trObj(tagLabels[m] || { zh: m, en: m })).join(' · ')}</div>` : ''}
+              ${item.url ? `<a class="mkt-link" href="${item.url}" target="_blank" rel="noopener">${tr('了解詳情', 'Visit')} →</a>` : ''}
             </div>
             <span class="mkt-tier ${item.tier}">${item.tier === 'ready' ? tr('可進入', 'Ready') : item.tier === 'close' ? tr('接近', 'Close') : tr('待發展', 'Develop')}</span>
           </div>`).join('')}
@@ -2861,6 +2898,7 @@
             <span class="sc-status ${eligible ? 'eligible' : 'partial'}">${eligible ? tr('符合', 'eligible') : tr('條件未滿足', 'criteria unmet')}</span>
             <div class="sc-name">${trObj(p.name)}<span class="sc-agency">· ${trObj(p.agency)}</span></div>
             <div class="sc-note">${trObj(p.note)}</div>
+            ${p.url ? `<div class="sc-link"><a href="${p.url}" target="_blank" rel="noopener">${tr('主管機關公告', 'Agency information')} →</a></div>` : ''}
           </div>
           <div class="sc-amount">
             <strong>${eligible ? 'NT$ ' + fmt0(amount) : '—'}</strong>
