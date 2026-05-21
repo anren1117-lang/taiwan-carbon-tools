@@ -2178,6 +2178,8 @@
 
   // ── Agent priorities & market resource library ──────────────────
   const AGENT_PRIORITIES = [
+    { id: 'survival', icon: '🛡', label: { zh: "永續生存", en: "Long-term survival" },
+      blurb: { zh: "成本上升 + 氣候風險 + 市場壓力下，如何撐下去", en: "How to keep going under rising costs + climate + market pressure" } },
     { id: 'cost',   icon: '💰', label: { zh: "降低成本", en: "Lower costs" },
       blurb: { zh: "減少帳單支出 + 取得設備補助", en: "Cut bills + capture grants" } },
     { id: 'market', icon: '🚀', label: { zh: "進入溢價通路", en: "Premium market access" },
@@ -3027,6 +3029,56 @@
                   'Schedule a preliminary consultation with an organic certifier'),
         desc: tr('TOC、FOA、MOA cert 等機構皆有免費初步諮詢，提早把問題抓出來。',
                  'TOC, FOA, MOA cert all offer free preliminary consultations — surface blockers early.')
+      });
+      return steps;
+    }
+
+    if (priority === 'survival') {
+      // Use the same metric calculation as the Survival Guide panel
+      const m = computeSurvivalMetrics(inp, r);
+      const tierRank = { poor: 0, warn: 1, ok: 2, good: 3 };
+      // Pick the two worst dimensions + the strongest dimension as a "leverage" angle
+      const ranked = [
+        { key: 'cost',       m: m.cost,
+          worse: tr('能源與投入品支出', 'energy + input spend'),
+          fix:   tr('申請農機電動化 + 屋頂光電補助、做精準肥料與抽水節能 — 可降帳單 10–30%。', 'Apply for the electric machinery grant + rooftop PV, then precision N + pump efficiency — 10–30% bill reduction.') },
+        { key: 'market',     m: m.market,
+          worse: tr('每公斤碳強度與買方標準的距離', 'distance from buyer per-kg-carbon standards'),
+          fix:   tr('先降最大排放源（見「行動路徑」第 1 項）+ 申請產銷履歷。一旦達到前 25%，主婦聯盟、里仁、ESG 採購都可主動接洽。', 'Cut the top source first (see roadmap item 1) + get TGAP traceability. Once in top quartile, Homemakers Union / Leezen / ESG buyers become reachable.') },
+        { key: 'resilience', m: m.resilience,
+          worse: tr('氣候衝擊下的韌性', 'climate-shock resilience'),
+          fix:   tr('每加一項土地管理（覆蓋作物、免耕、堆肥、殘體還田）= 抗極端天氣能力上升一階。再做一次土壤採樣建立基準。', 'Each added land practice (cover crop / no-till / compost / residue) bumps climate resilience another tier. Plus get a soil sample done to establish baseline.') },
+        { key: 'income',     m: m.income,
+          worse: tr('收益來源單一性', 'income concentration'),
+          fix:   tr('鎖定已符合的補助 — 顧問可代擬申請文件。長期累積 SOC 後再進台灣自願減量機制。', 'Lock in the subsidies you already qualify for (advisor can draft applications). Long-term, SOC growth opens the Taiwan VRM as a second income channel.') }
+      ];
+      ranked.sort((a, b) => tierRank[a.m.tier] - tierRank[b.m.tier]);
+
+      const steps = [];
+      // Step 1: the worst dimension — the most urgent threat
+      const worst = ranked[0];
+      steps.push({
+        title: tr(`先處理你最大的生存風險：${worst.worse}`,
+                  `Address your biggest survival risk first: ${worst.worse}`),
+        desc: worst.fix
+      });
+      // Step 2: the second-worst
+      const second = ranked[1];
+      steps.push({
+        title: tr(`再加強：${second.worse}`,
+                  `Then strengthen: ${second.worse}`),
+        desc: second.fix
+      });
+      // Step 3: long-term diversification
+      const sourceEntries = Object.entries(r.sources).filter(([, v]) => v > 0).sort((a, b) => b[1] - a[1]);
+      const top = sourceEntries[0];
+      const topName = top ? trObj(T.sourceName[top[0]]) : '—';
+      steps.push({
+        title: tr('長期：分散風險，不只靠單一作物 / 單一買方', 'Long-term: diversify so you\'re not all-in on one crop / one buyer'),
+        desc: tr(
+          `兩條路：(1) 多元產品 — 農林木、果樹間作、副產品。(2) 多元收益 — 補助、碳匯、ESG 採購、產銷履歷溢價。目前最大支出是${topName}，先解決它能讓現金流喘口氣，才有餘力推動多元化。`,
+          `Two angles: (1) Diversify products — agroforestry trees, alley-cropped fruit, by-products. (2) Diversify revenue — subsidies, carbon credits, ESG procurement, traceability premiums. The biggest current bill is ${topName}; fixing that frees up cash flow to invest in diversification.`
+        )
       });
       return steps;
     }
