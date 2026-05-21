@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>農場儀表板設定 · Farm Dashboard Onboarding</title>
+<meta name="description" content="3 步驟設定你的農場碳儀表板。輸入帳單與耕作管理，匯出可直接部署的 JSON 設定檔。">
+<meta name="theme-color" content="#1D9E75">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --accent: #1D9E75;
+    --accent-dark: #157a59;
+    --accent-tint: rgba(29, 158, 117, 0.10);
+    --bg: #ffffff;
+    --bg-card: #ffffff;
+    --bg-subtle: #f7f8f7;
+    --text: #1a1a1a;
+    --text-muted: #6b7280;
+    --border: #e5e7eb;
+    --shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0e1410;
+      --bg-card: #161d18;
+      --bg-subtle: #1a2220;
+      --text: #f0f2f0;
+      --text-muted: #9ca3af;
+      --border: #2a3530;
+      --accent-tint: rgba(29, 158, 117, 0.15);
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 760px; margin: 0 auto; padding: 0 20px; }
+
+  header {
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .header-inner { display: flex; justify-content: space-between; align-items: center; }
+  .logo { font-weight: 700; font-size: 16px; color: var(--accent); text-decoration: none; }
+  .back-link { color: var(--text-muted); text-decoration: none; font-size: 13px; }
+  .back-link:hover { color: var(--accent); }
+  .lang-toggle {
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-family: inherit;
+    font-size: 12px;
+    color: var(--text);
+    cursor: pointer;
+    margin-left: 12px;
+  }
+  .lang-toggle:hover { border-color: var(--accent); }
+  .header-right { display: flex; align-items: center; }
+
+  .hero { padding: 40px 0 12px; text-align: center; }
+  .hero h1 {
+    font-size: clamp(26px, 4vw, 34px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 10px;
+  }
+  .hero p { font-size: 15px; color: var(--text-muted); max-width: 540px; margin: 0 auto; }
+
+  .progress {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 24px 0 32px;
+  }
+  .progress-step {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12.5px; color: var(--text-muted); font-weight: 600;
+  }
+  .progress-step .dot {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: var(--bg-subtle);
+    color: var(--text-muted);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    border: 1px solid var(--border);
+  }
+  .progress-step.active .dot { background: var(--accent); color: white; border-color: var(--accent); }
+  .progress-step.done .dot { background: var(--accent-tint); color: var(--accent-dark); border-color: rgba(29,158,117,0.30); }
+  .progress-step.active { color: var(--text); }
+  .progress-bar {
+    width: 32px; height: 1.5px;
+    background: var(--border);
+    border-radius: 1px;
+  }
+  .progress-bar.done { background: var(--accent); }
+
+  .step {
+    padding: 0 0 32px;
+    display: none;
+  }
+  .step.active { display: block; }
+
+  .panel {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px;
+    box-shadow: var(--shadow);
+    margin-bottom: 16px;
+  }
+  .panel-title {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; }
+  .field { display: block; }
+  .field label {
+    display: block;
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin-bottom: 5px;
+  }
+  .field label .u { font-weight: 400; }
+  .field input, .field select {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg-card);
+    color: var(--text);
+    font-family: inherit;
+    font-size: 14px;
+  }
+  .field input:focus, .field select:focus { outline: none; border-color: var(--accent); }
+  .field .help { font-size: 11px; color: var(--text-muted); margin-top: 4px; line-height: 1.5; }
+
+  .check-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 4px;
+  }
+  .check-grid label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-size: 13px;
+    color: var(--text);
+    cursor: pointer;
+    margin: 0;
+    font-weight: 500;
+  }
+  .check-grid label.checked { border-color: var(--accent); background: var(--accent-tint); color: var(--accent-dark); }
+  .check-grid input[type="checkbox"] { margin: 0; }
+
+  .nav-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 8px;
+  }
+  .nav-btn {
+    padding: 11px 24px;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .nav-btn.primary { background: var(--accent); color: white; }
+  .nav-btn.primary:hover { background: var(--accent-dark); }
+  .nav-btn.secondary {
+    background: var(--bg-subtle); color: var(--text); border: 1px solid var(--border);
+  }
+  .nav-btn.secondary:hover { border-color: var(--accent); color: var(--accent); }
+  .nav-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* ── Review step ──────────────────────────────────────── */
+  .summary-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 14px;
+    padding: 12px 0;
+    border-top: 1px solid var(--border);
+    font-size: 14px;
+  }
+  .summary-row:first-of-type { border-top: none; padding-top: 4px; }
+  .summary-key { color: var(--text-muted); }
+  .summary-val { font-weight: 600; font-variant-numeric: tabular-nums; text-align: right; }
+  .summary-val.warn { color: var(--text-muted); font-weight: 400; font-style: italic; }
+  pre.json {
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 12px;
+    line-height: 1.55;
+    overflow-x: auto;
+    max-height: 380px;
+    overflow-y: auto;
+    color: var(--text);
+  }
+  .action-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 18px;
+  }
+  .action-row .nav-btn { flex: 1; min-width: 180px; justify-content: center; }
+  .toast {
+    position: fixed;
+    bottom: 22px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 18px;
+    background: var(--accent);
+    color: white;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    box-shadow: 0 6px 18px rgba(29,158,117,0.30);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+  }
+  .toast.show { opacity: 1; }
+
+  footer {
+    padding: 28px 0;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container header-inner">
+    <a href="index.html" class="logo">Taiwan Carbon Tools</a>
+    <div class="header-right">
+      <a href="farms.html" class="back-link" data-zh="← 看示範" data-en="← See demos">← 看示範</a>
+      <button class="lang-toggle" id="langToggle">English</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero container">
+    <h1 data-zh="設定你的農場儀表板" data-en="Set up your farm dashboard">設定你的農場儀表板</h1>
+    <p data-zh="3 步驟、約 5 分鐘。完成後可下載 JSON 設定檔，交給顧問部署或自行上傳。" data-en="3 steps, ~5 minutes. Outputs a JSON file the advisor can deploy, or you can upload yourself.">3 步驟、約 5 分鐘。完成後可下載 JSON 設定檔，交給顧問部署或自行上傳。</p>
+  </section>
+
+  <section class="container">
+    <div class="progress">
+      <div class="progress-step active" id="p1"><span class="dot">1</span><span data-zh="基本" data-en="Basics">基本</span></div>
+      <div class="progress-bar" id="pb1"></div>
+      <div class="progress-step" id="p2"><span class="dot">2</span><span data-zh="耕作 + 土壤" data-en="Practices + soil">耕作 + 土壤</span></div>
+      <div class="progress-bar" id="pb2"></div>
+      <div class="progress-step" id="p3"><span class="dot">3</span><span data-zh="檢視 + 下載" data-en="Review + download">檢視 + 下載</span></div>
+    </div>
+
+    <!-- ── STEP 1: Basics + inputs ─────────────────────── -->
+    <div class="step active" id="step-1">
+      <div class="panel">
+        <div class="panel-title" data-zh="農場資料" data-en="Farm profile">農場資料</div>
+        <div class="grid">
+          <div class="field">
+            <label data-zh="農場/客戶代號 (英數字)" data-en="Farm ID (lowercase, hyphens)">農場代號 <span class="u">(a-z, 0-9, -)</span></label>
+            <input type="text" id="farmId" pattern="[a-z0-9-]+" placeholder="lai-mango-pingtung" required>
+            <div class="help" data-zh="儀表板 URL 將是 farm-dashboard.html?id=<這個代號>" data-en="Dashboard URL will be farm-dashboard.html?id=<this-id>">儀表板 URL 將是 farm-dashboard.html?id=&lt;這個代號&gt;</div>
+          </div>
+          <div class="field">
+            <label data-zh="農場名稱（中）" data-en="Farm name (Chinese)">農場名稱 <span class="u">(中)</span></label>
+            <input type="text" id="nameZh" placeholder="賴家果園">
+          </div>
+          <div class="field">
+            <label data-zh="農場名稱（英）" data-en="Farm name (English)">Farm name <span class="u">(en)</span></label>
+            <input type="text" id="nameEn" placeholder="Lai Family Orchard">
+          </div>
+          <div class="field">
+            <label data-zh="所在地（中）" data-en="Location (Chinese)">所在地 <span class="u">(中)</span></label>
+            <input type="text" id="locZh" placeholder="台灣 · 屏東枋寮">
+          </div>
+          <div class="field">
+            <label data-zh="所在地（英）" data-en="Location (English)">Location <span class="u">(en)</span></label>
+            <input type="text" id="locEn" placeholder="Fangliao, Pingtung, Taiwan">
+          </div>
+          <div class="field">
+            <label data-zh="報告年度" data-en="Reporting year">報告年度</label>
+            <input type="number" id="period" min="2020" max="2030" value="2025">
+          </div>
+          <div class="field">
+            <label data-zh="耕作面積 (ha)" data-en="Farm size (ha)">耕作面積 <span class="u">(ha)</span></label>
+            <input type="number" id="farmSize" min="0" step="0.1" value="1.0">
+          </div>
+          <div class="field">
+            <label data-zh="主要作物" data-en="Primary crop">主要作物</label>
+            <select id="cropType">
+              <option value="vegetables" data-zh="蔬菜" data-en="Vegetables">蔬菜</option>
+              <option value="rice" data-zh="水稻" data-en="Rice">水稻</option>
+              <option value="fruit" data-zh="果樹" data-en="Fruit">果樹</option>
+              <option value="mixed" data-zh="混合作物" data-en="Mixed">混合作物</option>
+              <option value="livestock" data-zh="畜牧為主" data-en="Livestock">畜牧為主</option>
+            </select>
+          </div>
+          <div class="field">
+            <label data-zh="年產量 (kg)" data-en="Annual yield (kg)">年產量 <span class="u">(kg)</span></label>
+            <input type="number" id="annualYieldKg" min="0" step="100" value="10000">
+          </div>
+          <div class="field">
+            <label data-zh="產品類別 (per-kg)" data-en="Product category (per-kg)">產品類別 <span class="u">(per-kg)</span></label>
+            <select id="productCategory">
+              <option value="vegetables_leaf">葉菜類 / Leafy</option>
+              <option value="vegetables_root">根莖類 / Root veg</option>
+              <option value="rice">稻米 / Rice</option>
+              <option value="fruit">果樹 / Fruit</option>
+              <option value="livestock_dairy">乳製品 / Dairy</option>
+              <option value="livestock_meat">肉品 / Meat</option>
+              <option value="mixed">綜合 / Mixed</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title" data-zh="範疇一：燃料（年）" data-en="Scope 1: fuels (annual)">範疇一：燃料（年）</div>
+        <div class="grid">
+          <div class="field"><label>柴油 <span class="u">(L)</span></label><input type="number" id="diesel" min="0" step="10" value="0"></div>
+          <div class="field"><label>汽油 <span class="u">(L)</span></label><input type="number" id="gasoline" min="0" step="10" value="0"></div>
+          <div class="field"><label>LPG <span class="u">(kg)</span></label><input type="number" id="lpg" min="0" step="5" value="0"></div>
+          <div class="field"><label data-zh="燃油 (L)" data-en="Heating oil (L)">燃油 <span class="u">(L)</span></label><input type="number" id="heatingOil" min="0" step="10" value="0"></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title" data-zh="範疇一：肥料 + 牲畜" data-en="Scope 1: fertilizer + livestock">範疇一：肥料 + 牲畜</div>
+        <div class="grid">
+          <div class="field"><label data-zh="氮肥 (kg N/年)" data-en="N fertilizer (kg N/yr)">氮肥 <span class="u">(kg N/yr)</span></label><input type="number" id="nFert" min="0" step="5" value="0"></div>
+          <div class="field"><label data-zh="牛（頭）" data-en="Cattle">牛 <span class="u">(head)</span></label><input type="number" id="cattle" min="0" step="1" value="0"></div>
+          <div class="field"><label data-zh="豬（頭）" data-en="Pigs">豬 <span class="u">(head)</span></label><input type="number" id="pigs" min="0" step="1" value="0"></div>
+          <div class="field"><label data-zh="家禽（隻）" data-en="Poultry">家禽 <span class="u">(head)</span></label><input type="number" id="poultry" min="0" step="10" value="0"></div>
+          <div class="field"><label data-zh="糞肥管理" data-en="Manure mgmt">糞肥管理</label>
+            <select id="manure">
+              <option value="none">無 / None</option>
+              <option value="composted">堆肥 / Composted</option>
+              <option value="daily">每日清運 / Daily</option>
+              <option value="lagoon">厭氧儲存 / Lagoon</option>
+            </select>
+          </div>
+          <div class="field" id="riceMgmtField" style="display:none">
+            <label data-zh="水稻水管理 (CH₄)" data-en="Rice water mgmt">水稻水管理 <span class="u">(CH₄)</span></label>
+            <select id="riceMgmt">
+              <option value="continuous_flood">持續灌溉 / Continuous flood</option>
+              <option value="single_drainage">單次排水 / Single drainage</option>
+              <option value="awd">AWD 間歇灌溉</option>
+              <option value="upland">旱作 / Upland</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title" data-zh="範疇二 + 三（年）" data-en="Scope 2 + 3 (annual)">範疇二 + 三（年）</div>
+        <div class="grid">
+          <div class="field"><label data-zh="灌溉電 (kWh)" data-en="Irrigation (kWh)">灌溉電 <span class="u">(kWh)</span></label><input type="number" id="irrigation" min="0" step="50" value="0"></div>
+          <div class="field"><label data-zh="冷藏電 (kWh)" data-en="Cold storage (kWh)">冷藏電 <span class="u">(kWh)</span></label><input type="number" id="coldStorage" min="0" step="50" value="0"></div>
+          <div class="field"><label data-zh="其他設施電 (kWh)" data-en="Other facility (kWh)">其他設施 <span class="u">(kWh)</span></label><input type="number" id="otherElec" min="0" step="50" value="0"></div>
+          <div class="field"><label data-zh="農藥/複肥 (kg)" data-en="Chemicals (kg)">農藥/複肥 <span class="u">(kg)</span></label><input type="number" id="chemicals" min="0" step="5" value="0"></div>
+          <div class="field"><label data-zh="飼料 (kg)" data-en="Feed (kg)">飼料 <span class="u">(kg)</span></label><input type="number" id="feed" min="0" step="100" value="0"></div>
+          <div class="field"><label data-zh="配送里程 (km)" data-en="Delivery (km)">配送 <span class="u">(km)</span></label><input type="number" id="transport" min="0" step="100" value="0"></div>
+          <div class="field"><label data-zh="員工通勤 (km)" data-en="Commute (km)">通勤 <span class="u">(km)</span></label><input type="number" id="commute" min="0" step="100" value="0"></div>
+          <div class="field"><label data-zh="包材 (kg)" data-en="Packaging (kg)">包材 <span class="u">(kg)</span></label><input type="number" id="packaging" min="0" step="10" value="0"></div>
+          <div class="field"><label data-zh="廢棄物 (kg)" data-en="Waste (kg)">廢棄物 <span class="u">(kg)</span></label><input type="number" id="waste" min="0" step="10" value="0"></div>
+        </div>
+      </div>
+
+      <div class="nav-row">
+        <span></span>
+        <button class="nav-btn primary" id="toStep2" data-zh="下一步：耕作 + 土壤 →" data-en="Next: practices + soil →">下一步：耕作 + 土壤 →</button>
+      </div>
+    </div>
+
+    <!-- ── STEP 2: Practices + soil + sinks ────────────── -->
+    <div class="step" id="step-2">
+      <div class="panel">
+        <div class="panel-title" data-zh="碳匯：土地管理（勾選實施中）" data-en="Sinks: land practices (check what you do)">碳匯：土地管理（勾選實施中）</div>
+        <div class="check-grid" id="practiceChecks">
+          <label data-key="coverCrop"><input type="checkbox" id="p-coverCrop"> <span data-zh="覆蓋作物" data-en="Cover crops">覆蓋作物</span></label>
+          <label data-key="noTill"><input type="checkbox" id="p-noTill"> <span data-zh="免耕/減耕" data-en="No-till">免耕/減耕</span></label>
+          <label data-key="compost"><input type="checkbox" id="p-compost"> <span data-zh="堆肥施用" data-en="Compost">堆肥施用</span></label>
+          <label data-key="residue"><input type="checkbox" id="p-residue"> <span data-zh="殘體還田" data-en="Residue">殘體還田</span></label>
+        </div>
+        <div class="grid" style="margin-top: 16px;">
+          <div class="field"><label data-zh="生物炭 (kg/年)" data-en="Biochar (kg/yr)">生物炭 <span class="u">(kg/yr)</span></label><input type="number" id="biochar" min="0" step="10" value="0"></div>
+          <div class="field"><label data-zh="種樹（株，存活）" data-en="Trees (surviving)">種樹 <span class="u">(trees)</span></label><input type="number" id="trees" min="0" step="1" value="0"></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title" data-zh="耕作管理起始日期（可空）" data-en="Practice start dates (optional)">耕作管理起始日期（可空）</div>
+        <div class="grid">
+          <div class="field"><label data-zh="覆蓋作物 自" data-en="Cover crops since">覆蓋作物 <span class="u">since</span></label><input type="month" id="ph-coverCrop"></div>
+          <div class="field"><label data-zh="免耕 自" data-en="No-till since">免耕 <span class="u">since</span></label><input type="month" id="ph-noTill"></div>
+          <div class="field"><label data-zh="堆肥 自" data-en="Compost since">堆肥 <span class="u">since</span></label><input type="month" id="ph-compost"></div>
+          <div class="field"><label data-zh="殘體還田 自" data-en="Residue since">殘體還田 <span class="u">since</span></label><input type="month" id="ph-residue"></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title" data-zh="土壤碳基準（可空，但強烈建議）" data-en="Soil carbon baseline (optional but recommended)">土壤碳基準（可空，但強烈建議）</div>
+        <div class="grid">
+          <div class="field"><label data-zh="SOC %" data-en="SOC %">SOC % <span class="u">(0–10)</span></label><input type="number" id="socPercent" min="0" max="20" step="0.1"></div>
+          <div class="field"><label data-zh="容積密度 (g/cm³)" data-en="Bulk density">容積密度 <span class="u">(g/cm³)</span></label><input type="number" id="bulkDensity" min="0.5" max="2.5" step="0.05" value="1.3"></div>
+          <div class="field"><label data-zh="採樣深度 (cm)" data-en="Depth">採樣深度 <span class="u">(cm)</span></label><input type="number" id="depthCm" min="5" max="100" step="5" value="30"></div>
+          <div class="field"><label data-zh="採樣日期" data-en="Date">採樣日期 <span class="u">(YYYY-MM)</span></label><input type="month" id="socDate"></div>
+          <div class="field" style="grid-column: 1 / -1;"><label data-zh="檢測單位 (可空)" data-en="Lab (optional)">檢測單位 <span class="u">(optional)</span></label><input type="text" id="socLab" placeholder="農業試驗所 · 雲林分所"></div>
+        </div>
+      </div>
+
+      <div class="nav-row">
+        <button class="nav-btn secondary" id="backTo1" data-zh="← 回基本資料" data-en="← Back to basics">← 回基本資料</button>
+        <button class="nav-btn primary" id="toStep3" data-zh="下一步：檢視 + 下載 →" data-en="Next: review + download →">下一步：檢視 + 下載 →</button>
+      </div>
+    </div>
+
+    <!-- ── STEP 3: Review + download ──────────────────── -->
+    <div class="step" id="step-3">
+      <div class="panel">
+        <div class="panel-title" data-zh="計算結果預覽" data-en="Computed preview">計算結果預覽</div>
+        <div id="summary"></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title" data-zh="生成的 JSON（farms/<id>.json）" data-en="Generated JSON (farms/<id>.json)">生成的 JSON（farms/&lt;id&gt;.json）</div>
+        <pre class="json" id="jsonOutput">{}</pre>
+        <div class="action-row">
+          <button class="nav-btn primary" id="copyJson" data-zh="📋 複製 JSON" data-en="📋 Copy JSON">📋 複製 JSON</button>
+          <button class="nav-btn primary" id="downloadJson" data-zh="📥 下載 JSON 檔案" data-en="📥 Download JSON file">📥 下載 JSON 檔案</button>
+          <a href="mailto:anren.carbon@gmail.com?subject=%E6%96%B0%E5%AE%A2%E6%88%B6%E8%BE%B2%E5%A0%B4%20JSON%20%E8%AD%B7%E6%B8%85%E5%96%AE&body=%E9%A1%A7%E5%95%8F%E6%82%A8%E5%A5%BD%EF%BC%8C%E9%99%84%E4%B8%8A%E6%88%91%E7%9A%84%E8%BE%B2%E5%A0%B4%20JSON%20%E8%A8%AD%E5%AE%9A%EF%BC%8C%E8%AB%8B%E5%8D%94%E5%8A%A9%E9%83%A8%E7%BD%B2%E5%88%B0%E5%84%80%E8%A1%A8%E6%9D%BF%E3%80%82%0A%0A%5B%E8%AB%8B%E8%B2%BC%E4%B8%8A%E5%8C%85%E8%A3%A1%E7%9A%84%20JSON%20%E5%85%A7%E5%AE%B9%5D" class="nav-btn secondary" data-zh="✉ Email 給顧問" data-en="✉ Email to advisor">✉ Email 給顧問</a>
+        </div>
+      </div>
+
+      <div class="nav-row">
+        <button class="nav-btn secondary" id="backTo2" data-zh="← 回耕作 + 土壤" data-en="← Back to practices + soil">← 回耕作 + 土壤</button>
+        <span></span>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container">
+    <p data-zh="© 2026 何安仁 An-Ren Ho · Taiwan Carbon Tools" data-en="© 2026 An-Ren Ho · Taiwan Carbon Tools">© 2026 何安仁 An-Ren Ho · Taiwan Carbon Tools</p>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script src="farm-carbon-engine.js?v=2"></script>
+<script>
+  let currentLang = 'zh';
+  function tr(zh, en) { return currentLang === 'zh' ? zh : en; }
+  let currentStep = 1;
+
+  function applyLang(lang) {
+    currentLang = lang;
+    document.documentElement.lang = lang === 'zh' ? 'zh-Hant' : 'en';
+    document.querySelectorAll('[data-zh]').forEach(el => {
+      const v = el.dataset[lang];
+      if (v !== undefined) el.textContent = v;
+    });
+    document.getElementById('langToggle').textContent = lang === 'zh' ? 'English' : '中文';
+    try { localStorage.setItem('tct_lang', lang); } catch (e) {}
+    rebuildPreview();
+  }
+
+  function showStep(n) {
+    currentStep = n;
+    [1, 2, 3].forEach(i => {
+      document.getElementById('step-' + i).classList.toggle('active', i === n);
+      const p = document.getElementById('p' + i);
+      p.classList.toggle('active', i === n);
+      p.classList.toggle('done', i < n);
+    });
+    document.getElementById('pb1').classList.toggle('done', n >= 2);
+    document.getElementById('pb2').classList.toggle('done', n >= 3);
+    if (n === 3) rebuildPreview();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ── Build the config object from form state ──────────────────────
+  function num(id) {
+    const v = parseFloat(document.getElementById(id).value);
+    return isFinite(v) && v >= 0 ? v : 0;
+  }
+  function val(id) { return document.getElementById(id).value || ''; }
+
+  function buildConfig() {
+    const period = val('period') || '2025';
+    const inputs = {
+      farmSize: num('farmSize'),
+      cropType: val('cropType') || 'vegetables',
+      riceMgmt: val('riceMgmt') || 'continuous_flood',
+      diesel: num('diesel'),
+      gasoline: num('gasoline'),
+      lpg: num('lpg'),
+      heatingOil: num('heatingOil'),
+      nFert: num('nFert'),
+      cattle: num('cattle'),
+      pigs: num('pigs'),
+      poultry: num('poultry'),
+      manure: val('manure') || 'none',
+      irrigation: num('irrigation'),
+      coldStorage: num('coldStorage'),
+      otherElec: num('otherElec'),
+      chemicals: num('chemicals'),
+      feed: num('feed'),
+      transport: num('transport'),
+      commute: num('commute'),
+      packaging: num('packaging'),
+      waste: num('waste'),
+      biochar: num('biochar'),
+      trees: num('trees'),
+      practices: {
+        coverCrop: document.getElementById('p-coverCrop').checked,
+        noTill:    document.getElementById('p-noTill').checked,
+        compost:   document.getElementById('p-compost').checked,
+        residue:   document.getElementById('p-residue').checked
+      },
+      annualYieldKg: num('annualYieldKg'),
+      productCategory: val('productCategory') || 'mixed'
+    };
+
+    const cfg = {
+      clientName:      { zh: val('nameZh') || '農場', en: val('nameEn') || 'Farm' },
+      clientLocation:  { zh: val('locZh') || '台灣', en: val('locEn') || 'Taiwan' },
+      reportingPeriod: String(period),
+      inputs
+    };
+
+    // Practice history (only include set dates)
+    const ph = {};
+    ['coverCrop', 'noTill', 'compost', 'residue'].forEach(k => {
+      const d = val('ph-' + k);
+      if (d) ph[k] = d;
+    });
+    if (Object.keys(ph).length) cfg.practiceHistory = ph;
+
+    // Soil test (only include if SOC % is set)
+    const soc = parseFloat(val('socPercent'));
+    if (isFinite(soc) && soc > 0) {
+      cfg.soilTest = {
+        socPercent: soc,
+        bulkDensity: num('bulkDensity') || 1.3,
+        depthCm: num('depthCm') || 30
+      };
+      const d = val('socDate');
+      if (d) cfg.soilTest.date = d;
+      const lab = val('socLab');
+      if (lab) cfg.soilTest.lab = { zh: lab, en: lab };
+    }
+
+    return cfg;
+  }
+
+  function rebuildPreview() {
+    const cfg = buildConfig();
+    document.getElementById('jsonOutput').textContent = JSON.stringify(cfg, null, 2);
+
+    // Computed preview
+    const r = calcFromInputs(cfg.inputs);
+    const yieldKg = cfg.inputs.annualYieldKg || 0;
+    const intensity = yieldKg > 0 ? r.gross / yieldKg : null;
+    const bench = PRODUCT_BENCHMARKS[cfg.inputs.productCategory] || PRODUCT_BENCHMARKS.mixed;
+    let tierLabel;
+    if (intensity == null) tierLabel = tr('—（請輸入年產量）', '— (enter annual yield)');
+    else if (intensity <= bench.premium) tierLabel = tr('溢價 / 再生', 'Premium / regenerative');
+    else if (intensity <= bench.top_quartile) tierLabel = tr('前 25% 表現', 'Top quartile');
+    else if (intensity <= bench.taiwan_avg) tierLabel = tr('優於台灣平均', 'Above TW avg');
+    else tierLabel = tr('需改善', 'Improvement needed');
+
+    document.getElementById('summary').innerHTML = `
+      <div class="summary-row"><span class="summary-key">${tr('年度總排放', 'Annual gross')}</span>           <span class="summary-val">${fmt(r.gross / 1000, 2)} t CO₂e</span></div>
+      <div class="summary-row"><span class="summary-key">${tr('碳匯總量', 'Total sinks')}</span>             <span class="summary-val" style="color: var(--accent)">−${fmt(r.sinkTotal / 1000, 2)} t</span></div>
+      <div class="summary-row"><span class="summary-key">${tr('淨碳足跡', 'Net footprint')}</span>           <span class="summary-val">${fmt(r.net / 1000, 2)} t CO₂e</span></div>
+      <div class="summary-row"><span class="summary-key">${tr('每公斤產品強度', 'Per-kg intensity')}</span>  <span class="summary-val ${intensity == null ? 'warn' : ''}">${intensity != null ? fmt(intensity, 3) + ' kg/kg' : tr('未提供年產量', 'yield not set')}</span></div>
+      <div class="summary-row"><span class="summary-key">${tr('產品類別 benchmark tier', 'Product tier')}</span> <span class="summary-val" style="color: ${intensity != null && intensity <= bench.top_quartile ? 'var(--accent)' : 'var(--text-muted)'}">${tierLabel}</span></div>
+    `;
+  }
+
+  // ── Wiring ───────────────────────────────────────────────────────
+  document.getElementById('toStep2').addEventListener('click', () => {
+    if (!val('farmId').match(/^[a-z0-9-]+$/)) {
+      alert(tr('請輸入有效的農場代號（僅限小寫英數字與連字號）', 'Please enter a valid farm ID (lowercase letters, digits, hyphens only)'));
+      return;
+    }
+    showStep(2);
+  });
+  document.getElementById('toStep3').addEventListener('click', () => showStep(3));
+  document.getElementById('backTo1').addEventListener('click', () => showStep(1));
+  document.getElementById('backTo2').addEventListener('click', () => showStep(2));
+
+  // Rice mgmt field visibility
+  function toggleRiceMgmt() {
+    document.getElementById('riceMgmtField').style.display =
+      document.getElementById('cropType').value === 'rice' ? '' : 'none';
+  }
+  document.getElementById('cropType').addEventListener('change', toggleRiceMgmt);
+  toggleRiceMgmt();
+
+  // Practice checkbox styling
+  document.querySelectorAll('#practiceChecks label').forEach(lbl => {
+    const cb = lbl.querySelector('input[type=checkbox]');
+    cb.addEventListener('change', () => lbl.classList.toggle('checked', cb.checked));
+  });
+
+  // Toast helper
+  function toast(msg) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 1800);
+  }
+
+  // Copy + download
+  document.getElementById('copyJson').addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(document.getElementById('jsonOutput').textContent);
+      toast(tr('已複製到剪貼簿', 'Copied to clipboard'));
+    } catch (e) { toast(tr('複製失敗，請手動選取', 'Copy failed, please select manually')); }
+  });
+  document.getElementById('downloadJson').addEventListener('click', () => {
+    const farmId = val('farmId') || 'new-farm';
+    const blob = new Blob([document.getElementById('jsonOutput').textContent], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = farmId + '.json'; a.click();
+    URL.revokeObjectURL(url);
+    toast(tr('已開始下載', 'Download started'));
+  });
+
+  // Lang init
+  let savedLang = 'zh';
+  try { const s = localStorage.getItem('tct_lang'); if (s === 'zh' || s === 'en') savedLang = s; } catch (e) {}
+  document.getElementById('langToggle').addEventListener('click', () => applyLang(currentLang === 'zh' ? 'en' : 'zh'));
+  applyLang(savedLang);
+</script>
+</body>
+</html>
