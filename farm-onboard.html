@@ -320,9 +320,9 @@
         <div class="panel-title" data-zh="農場資料" data-en="Farm profile">農場資料</div>
         <div class="grid">
           <div class="field">
-            <label data-zh="農場/客戶代號 (英數字)" data-en="Farm ID (lowercase, hyphens)">農場代號 <span class="u">(a-z, 0-9, -)</span></label>
-            <input type="text" id="farmId" pattern="[a-z0-9-]+" placeholder="lai-mango-pingtung" required>
-            <div class="help" data-zh="儀表板 URL 將是 farm-dashboard.html?id=<這個代號>" data-en="Dashboard URL will be farm-dashboard.html?id=<this-id>">儀表板 URL 將是 farm-dashboard.html?id=&lt;這個代號&gt;</div>
+            <label data-zh="農場/客戶代號（選填，可空白）" data-en="Farm ID (optional)">農場代號 <span class="u">(optional)</span></label>
+            <input type="text" id="farmId" placeholder="my-farm">
+            <div class="help" data-zh="所有欄位都是選填 — 你可以只填知道的部分，其他留空。儀表板會處理好。" data-en="Everything is optional. Fill in what you know, leave the rest blank. The dashboard handles missing data gracefully.">所有欄位都是選填 — 你可以只填知道的部分，其他留空。儀表板會處理好。</div>
           </div>
           <div class="field">
             <label data-zh="農場名稱（中）" data-en="Farm name (Chinese)">農場名稱 <span class="u">(中)</span></label>
@@ -818,13 +818,9 @@
   });
 
   // ── Wiring ───────────────────────────────────────────────────────
-  document.getElementById('toStep2').addEventListener('click', () => {
-    if (!val('farmId').match(/^[a-z0-9-]+$/)) {
-      alert(tr('請輸入有效的農場代號（僅限小寫英數字與連字號）', 'Please enter a valid farm ID (lowercase letters, digits, hyphens only)'));
-      return;
-    }
-    showStep(2);
-  });
+  // No validation gate — every field is optional. Empty fields fall
+  // back to sensible defaults in buildConfig().
+  document.getElementById('toStep2').addEventListener('click', () => showStep(2));
   document.getElementById('toStep3').addEventListener('click', () => showStep(3));
   document.getElementById('backTo1').addEventListener('click', () => showStep(1));
   document.getElementById('backTo2').addEventListener('click', () => showStep(2));
