@@ -1994,6 +1994,13 @@
       <div id="supplyChain"></div>
     </div>
 
+    <!-- Business mindset — turn heart into business -->
+    <div style="margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--border);">
+      <div class="panel-title" style="font-size: 13px; margin-bottom: 4px;" data-zh="經營心法：把「心」變成「事業」" data-en="Business mindset: turn heart into a viable business">經營心法：把「心」變成「事業」</div>
+      <div class="panel-sub" style="margin-bottom: 14px;" data-zh="永續農戶最常缺的不是熱情，而是「把這件事當成生意做」的思考方式。下面是定價、利潤、議價、現金流的具體分析 + 7 條心法。" data-en="Sustainable farmers don't lack passion — they lack the business mindset to make this thing pay. Concrete margin / pricing / cash-flow analysis + 7 mental shifts.">永續農戶最常缺的不是熱情，而是「把這件事當成生意做」的思考方式。下面是定價、利潤、議價、現金流的具體分析 + 7 條心法。</div>
+      <div id="businessMindset"></div>
+    </div>
+
     <!-- Where your goods can physically go (market infrastructure) -->
     <div style="margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--border);">
       <div class="panel-title" style="font-size: 13px; margin-bottom: 4px;" data-zh="你的農產品可以送去哪裡？（在地市場路徑）" data-en="Where your goods can go — local market routes">你的農產品可以送去哪裡？（在地市場路徑）</div>
@@ -2154,6 +2161,7 @@
             </select>
           </div>
           <div><label data-zh="年產量 (kg)" data-en="Annual yield (kg)">年產量 <span class="u">(kg)</span></label><input type="number" id="annualYieldKg" min="0" step="100"></div>
+          <div><label data-zh="年營收 (NT$ · 用於利潤分析)" data-en="Annual revenue (NT$ · margin analysis)">年營收 <span class="u">(NT$, optional)</span></label><input type="number" id="annualRevenueNT" min="0" step="10000" placeholder="500000"></div>
           <div>
             <label data-zh="產品類別（用於 per-kg 對比）" data-en="Product category (for per-kg benchmark)">產品類別 <span class="u">(per-kg)</span></label>
             <select id="productCategory">
@@ -2378,6 +2386,7 @@
       practices: { coverCrop: true, noTill: false, compost: true, residue: true },
       // Yield (for per-kg intensity & buyer-facing benchmarks)
       annualYieldKg: 50000,
+      annualRevenueNT: 1200000,
       productCategory: "vegetables_leaf"
     },
 
@@ -2886,6 +2895,7 @@
         residue:   document.getElementById('p-residue').checked
       },
       annualYieldKg:   num('annualYieldKg'),
+      annualRevenueNT: num('annualRevenueNT'),
       productCategory: document.getElementById('productCategory').value
     };
   }
@@ -2912,6 +2922,7 @@
       document.getElementById('p-' + k).checked = i.practices[k];
     });
     if (i.annualYieldKg != null) set('annualYieldKg', i.annualYieldKg);
+    if (i.annualRevenueNT != null) set('annualRevenueNT', i.annualRevenueNT);
     if (i.productCategory) document.getElementById('productCategory').value = i.productCategory;
     // Region (read from top-level CLIENT_CONFIG)
     if (CLIENT_CONFIG.region) document.getElementById('region').value = CLIENT_CONFIG.region;
@@ -5026,6 +5037,114 @@
     }
   }
 
+  // ── Business mindset: turn heart into a real business ────────────
+  // The dashboard's mission is to give sustainable farmers a business
+  // mindset, not just passion. This section computes actual margin /
+  // break-even / cash flow metrics and surfaces 7 mental shifts.
+  const BUSINESS_MINDSET = [
+    { icon: '💪', tone: 'good',
+      title: { zh: '1. 停止為你的價格道歉', en: '1. Stop apologizing for your price' },
+      body:  { zh: '你的溢價來自多年的耕作管理、第三方驗證、實測的土壤碳累積。買家付的是「過程證據」，不是「貴」。要敢開價，更要有資料佐證。',
+               en: 'Your premium reflects years of practice, third-party verification, and measured soil-C gain. They\'re paying for evidence of process, not for "expensive". Quote with confidence — and back it with data.' } },
+    { icon: '📖', tone: 'good',
+      title: { zh: '2. 你的故事就是你的溢價', en: '2. Your story IS your premium' },
+      body:  { zh: '驗證標章 + 實踐時間軸 + SOC 趨勢 = 一個買家願意付錢的故事。每一場談判、每一份提案都應該帶著這份證據組合。',
+               en: 'Cert + practice timeline + SOC trend = a story buyers will pay for. Bring this evidence stack to every negotiation and every proposal.' } },
+    { icon: '🚪', tone: 'warn',
+      title: { zh: '3. 不是每個買方都該服務', en: '3. Not every buyer deserves your goods' },
+      body:  { zh: '傳統批發拍賣 = 低毛利、高週轉、零議價。團購 / CSA / 餐廳直供 = 高毛利、高摩擦、需要說故事。挑你做得起的買家，不要被通路逼著降價。',
+               en: 'Wholesale auction = low margin, high turnover, zero leverage. CSA / direct-to-restaurant / community boxes = higher margin, more friction, story-driven. Pick the buyers who match your tier — don\'t let channels drag you down.' } },
+    { icon: '💧', tone: 'warn',
+      title: { zh: '4. 現金流比利潤更重要', en: '4. Cash flow > profit' },
+      body:  { zh: '你可能整年帳面賺錢，卻在 5 月青黃不接時還不出貨款。把「收入 → 支出 → 月份」用 ERP 記帳模組畫出來，找出資金缺口、提前借款或預收訂金。',
+               en: 'You can be profitable on paper and still bounce checks in the gap month. Use the ledger module to map cash in / out by month, find the gap window, and pre-sell or pre-arrange a line of credit.' } },
+    { icon: '🏛️', tone: 'good',
+      title: { zh: '5. 補助是收入，不是慈善', en: '5. Subsidies are revenue, not charity' },
+      body:  { zh: '友善耕作、有機驗證、生態給付 — 你符合的就要去申請，這是你「實際做的事」換來的對價。把它列在年度收入預估，不要當意外之財。',
+               en: 'Friendly farming, organic, eco-payment — apply for every one you qualify for. You earned them through actual practices. Treat them as planned revenue, not bonus.' } },
+    { icon: '🌱', tone: 'warn',
+      title: { zh: '6. 擴張前先穩定基礎', en: '6. Stabilize before scaling' },
+      body:  { zh: '別在第一年就想擴一倍面積。先讓現有面積連續三年穩定產量 + 穩定買家 + 穩定 SOC 趨勢，再談擴大。盲目擴張會把現金流和土壤同時打壞。',
+               en: 'Don\'t double acres in year one. Get three years of consistent yield + steady buyer base + measurable SOC trend on current land first. Premature scaling breaks cash flow and soil at the same time.' } },
+    { icon: '📊', tone: 'good',
+      title: { zh: '7. 測量了才能管理', en: '7. You can\'t manage what you don\'t measure' },
+      body:  { zh: 'ERP 的四個模組（作業日誌、庫存、帳本、聯絡人）不是表格作業 — 是你做決策的基礎建設。連續記三個月，你會發現自己以為的「賠錢作物」其實是金牛。',
+               en: 'The four ERP modules (log / inventory / ledger / contacts) aren\'t paperwork — they\'re your decision-making infrastructure. Log three months and you\'ll find the "loss-making" crop is actually your cash cow.' } }
+  ];
+
+  function renderBusinessMindset(inp, r) {
+    const host = document.getElementById('businessMindset');
+    if (!host) return;
+    const cost = computeAnnualCost();
+    const revenue = inp.annualRevenueNT || 0;
+    const yieldKg = inp.annualYieldKg || 0;
+    const totalBills = cost.total;
+    const subsidies = computeSubsidyTotal(inp, r).total;
+    const totalRevenue = revenue + subsidies;
+    const grossMargin = revenue > 0 ? totalRevenue - totalBills : null;
+    const grossMarginPct = (revenue > 0 && totalRevenue > 0) ? grossMargin / totalRevenue : null;
+    const costPerKg = yieldKg > 0 && totalBills > 0 ? totalBills / yieldKg : null;
+    const breakEvenPricePerKg = costPerKg;
+    const sustainableFloor = costPerKg !== null ? costPerKg / (1 - 0.40) : null;
+
+    const isZh = currentLang !== 'en';
+    let html = '';
+
+    // Margin analysis — only if revenue is provided
+    if (revenue > 0) {
+      const marginColor = grossMarginPct < 0 ? '#dc2626' : (grossMarginPct < 0.15 ? '#d97706' : '#059669');
+      const verdict = grossMarginPct < 0
+        ? (isZh ? '⚠️ 目前帳面虧損 — 你的營收還不夠付帳單。建議：先確認 ERP 帳本資料完整，再決定是調高售價、降低成本、還是申請更多補助。' : '⚠️ Currently in the red — revenue isn\'t covering bills. First check ledger completeness, then decide: raise prices, cut costs, or apply for more subsidies.')
+        : grossMarginPct < 0.15
+        ? (isZh ? '⚠️ 毛利偏低（<15%）— 永續農場應該至少達到 30-40%。沒有足夠毛利就無法投資土壤改良、不敢留現金應急、也不敢拒絕壞客戶。' : '⚠️ Margin is thin (<15%). A sustainable farm needs 30-40% to invest in soil, build a cash buffer, and walk away from bad buyers.')
+        : grossMarginPct < 0.30
+        ? (isZh ? '✓ 毛利合格 — 但還沒到「真正永續」的水位。下一步：把售價往「永續地板價」推。' : '✓ Margin OK — but not at the "truly sustainable" level yet. Next: nudge price toward the sustainable floor.')
+        : (isZh ? '✓ 健康毛利水位 — 你有空間投資土壤、留緩衝金、議價時走得開。' : '✓ Healthy margin — you have room to invest in soil, hold a buffer, and walk away from bad deals.');
+
+      html += `
+        <div class="panel" style="background: var(--bg); margin-bottom: 16px; border: 1px solid var(--border);">
+          <div class="panel-title" style="font-size: 12px;" data-zh="實際毛利分析" data-en="Actual margin analysis">${isZh ? '實際毛利分析' : 'Actual margin analysis'}</div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-top: 10px;">
+            <div><div class="u" style="font-size: 11px;">${isZh ? '營收 (含補助)' : 'Revenue (incl. subsidy)'}</div><div style="font-size: 18px; font-weight: 700; margin-top: 2px;">NT$ ${fmt0(totalRevenue)}</div></div>
+            <div><div class="u" style="font-size: 11px;">${isZh ? '總成本 (帳單)' : 'Total cost (bills)'}</div><div style="font-size: 18px; font-weight: 700; margin-top: 2px;">NT$ ${fmt0(totalBills)}</div></div>
+            <div><div class="u" style="font-size: 11px;">${isZh ? '毛利' : 'Gross margin'}</div><div style="font-size: 18px; font-weight: 700; margin-top: 2px; color: ${marginColor};">NT$ ${fmt0(grossMargin)}</div></div>
+            <div><div class="u" style="font-size: 11px;">${isZh ? '毛利率' : 'Margin %'}</div><div style="font-size: 18px; font-weight: 700; margin-top: 2px; color: ${marginColor};">${(grossMarginPct * 100).toFixed(1)}%</div></div>
+          </div>
+          ${costPerKg ? `
+            <div style="margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--border); display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px;">
+              <div><div class="u" style="font-size: 11px;">${isZh ? '每公斤成本' : 'Cost per kg'}</div><div style="font-size: 16px; font-weight: 600; margin-top: 2px;">NT$ ${fmt(costPerKg, 1)}</div></div>
+              <div><div class="u" style="font-size: 11px;">${isZh ? '損益兩平價' : 'Break-even price'}</div><div style="font-size: 16px; font-weight: 600; margin-top: 2px;">NT$ ${fmt(breakEvenPricePerKg, 1)}/kg</div></div>
+              <div><div class="u" style="font-size: 11px;">${isZh ? '永續地板價 (40% 毛利)' : 'Sustainable floor (40% margin)'}</div><div style="font-size: 16px; font-weight: 700; margin-top: 2px; color: #059669;">NT$ ${fmt(sustainableFloor, 1)}/kg</div></div>
+            </div>
+          ` : ''}
+          <div style="margin-top: 12px; padding: 10px 12px; background: var(--bg-elev); border-radius: 6px; font-size: 13px; line-height: 1.55;">${verdict}</div>
+        </div>
+      `;
+    } else {
+      html += `
+        <div style="padding: 10px 14px; background: var(--bg); border: 1px dashed var(--border); border-radius: 6px; font-size: 13px; margin-bottom: 16px; color: var(--muted);">
+          ${isZh ? '💡 在編輯抽屜輸入「年營收」後，這裡會自動算出實際毛利、損益兩平價、永續地板價。沒輸入也沒關係 — 下方心法照樣適用。' : '💡 Enter "annual revenue" in the editor drawer to auto-compute real margin, break-even, and sustainable floor pricing. Skip it and the mindset cards below still apply.'}
+        </div>
+      `;
+    }
+
+    // 7 mindset shifts
+    html += '<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px;">';
+    BUSINESS_MINDSET.forEach(m => {
+      const bg = m.tone === 'good' ? 'rgba(5, 150, 105, 0.06)' : 'rgba(217, 119, 6, 0.06)';
+      const border = m.tone === 'good' ? 'rgba(5, 150, 105, 0.25)' : 'rgba(217, 119, 6, 0.25)';
+      html += `
+        <div style="padding: 14px 16px; background: ${bg}; border: 1px solid ${border}; border-radius: 8px;">
+          <div style="font-size: 14px; font-weight: 700; margin-bottom: 6px;"><span style="font-size: 18px; margin-right: 6px;">${m.icon}</span><span data-zh="${m.title.zh}" data-en="${m.title.en}">${isZh ? m.title.zh : m.title.en}</span></div>
+          <div style="font-size: 13px; line-height: 1.6; color: var(--text);" data-zh="${m.body.zh}" data-en="${m.body.en}">${isZh ? m.body.zh : m.body.en}</div>
+        </div>
+      `;
+    });
+    html += '</div>';
+
+    host.innerHTML = html;
+  }
+
   function render() {
     const inp = readInputs();
     const r = calcFromInputs(inp);
@@ -5085,6 +5204,7 @@
     renderSubsidies(inp, r);
     renderMarket(inp, r);
     renderSurvival(inp, r);
+    renderBusinessMindset(inp, r);
     renderRoadmap(inp, r);
     renderFarmStatusBadge();
   }
@@ -5218,7 +5338,7 @@
     applyConfigToDom();
 
     const liveInputs = [
-      'farmSize', 'region', 'address', 'cropType', 'annualYieldKg', 'productCategory',
+      'farmSize', 'region', 'address', 'cropType', 'annualYieldKg', 'annualRevenueNT', 'productCategory',
       'diesel', 'gasoline', 'lpg', 'heatingOil',
       'nFert', 'riceMgmt', 'cattle', 'pigs', 'poultry', 'manure',
     'cattleDairy', 'cattleBeef', 'sowHead', 'growerPigHead', 'poultryLayer', 'poultryBroiler',

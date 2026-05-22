@@ -290,7 +290,7 @@
 <main>
   <section class="hero container">
     <h1 data-zh="設定你的農場永續經營儀表板" data-en="Set up your farm operations dashboard">設定你的農場永續經營儀表板</h1>
-    <p data-zh="3 步驟、約 5 分鐘。所有欄位都是選填 — 只填你知道的。碳追蹤是選配，主要在供應鏈、補助、認證、市場、ERP 與 AI 顧問。" data-en="3 steps, ~5 minutes. All fields optional — fill in only what you know. Carbon tracking is optional; the main value is supply chain, subsidies, certifications, market routing, ERP, and AI advisor.">3 步驟、約 5 分鐘。所有欄位都是選填 — 只填你知道的。碳追蹤是選配，主要在供應鏈、補助、認證、市場、ERP 與 AI 顧問。</p>
+    <p data-zh="這個工具是為了幫永續農戶在「有心」之外，也建立「經營頭腦」 — 知道自己的毛利、定價地板、議價籌碼、現金流缺口、可申請的補助。3 步驟、約 5 分鐘，所有欄位選填、碳追蹤選配。" data-en="This tool helps sustainable farmers add a business brain on top of their heart — real margin, price floor, negotiation leverage, cash-flow gaps, subsidies. 3 steps, ~5 minutes, all fields optional, carbon tracking optional.">這個工具是為了幫永續農戶在「有心」之外，也建立「經營頭腦」 — 知道自己的毛利、定價地板、議價籌碼、現金流缺口、可申請的補助。3 步驟、約 5 分鐘，所有欄位選填、碳追蹤選配。</p>
   </section>
 
   <section class="container">
@@ -361,6 +361,10 @@
           <div class="field">
             <label data-zh="年產量 (kg)" data-en="Annual yield (kg)">年產量 <span class="u">(kg)</span></label>
             <input type="number" id="annualYieldKg" min="0" step="100" value="10000">
+          </div>
+          <div class="field">
+            <label data-zh="年營收 (NT$ · 用於毛利分析)" data-en="Annual revenue (NT$ · margin analysis)">年營收 <span class="u">(NT$, 選填)</span></label>
+            <input type="number" id="annualRevenueNT" min="0" step="10000" placeholder="500000">
           </div>
           <div class="field">
             <label data-zh="產品類別 (per-kg)" data-en="Product category (per-kg)">產品類別 <span class="u">(per-kg)</span></label>
@@ -612,6 +616,7 @@
         residue:   document.getElementById('p-residue').checked
       },
       annualYieldKg: num('annualYieldKg'),
+      annualRevenueNT: num('annualRevenueNT'),
       productCategory: val('productCategory') || 'mixed'
     };
 
@@ -729,6 +734,7 @@
     setNum('farmSize', inp.farmSize);
     setSel('cropType', inp.cropType);
     setNum('annualYieldKg', inp.annualYieldKg);
+    setNum('annualRevenueNT', inp.annualRevenueNT);
     setSel('productCategory', inp.productCategory);
     setNum('diesel', inp.diesel); setNum('gasoline', inp.gasoline);
     setNum('lpg', inp.lpg); setNum('heatingOil', inp.heatingOil);
