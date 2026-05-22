@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>農場儀表板設定 · Farm Dashboard Onboarding</title>
-<meta name="description" content="3 步驟設定你的農場碳儀表板。輸入帳單與耕作管理，匯出可直接部署的 JSON 設定檔。">
+<title>農場永續經營儀表板設定 · Farm Operations Dashboard Setup</title>
+<meta name="description" content="3 步驟設定你的農場永續經營儀表板。供應鏈、補助、認證、市場、ERP — 碳追蹤為選配。所有欄位都是選填。">
 <meta name="theme-color" content="#1D9E75">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -289,8 +289,8 @@
 
 <main>
   <section class="hero container">
-    <h1 data-zh="設定你的農場儀表板" data-en="Set up your farm dashboard">設定你的農場儀表板</h1>
-    <p data-zh="3 步驟、約 5 分鐘。完成後可下載 JSON 設定檔，交給顧問部署或自行上傳。" data-en="3 steps, ~5 minutes. Outputs a JSON file the advisor can deploy, or you can upload yourself.">3 步驟、約 5 分鐘。完成後可下載 JSON 設定檔，交給顧問部署或自行上傳。</p>
+    <h1 data-zh="設定你的農場永續經營儀表板" data-en="Set up your farm operations dashboard">設定你的農場永續經營儀表板</h1>
+    <p data-zh="3 步驟、約 5 分鐘。所有欄位都是選填 — 只填你知道的。碳追蹤是選配，主要在供應鏈、補助、認證、市場、ERP 與 AI 顧問。" data-en="3 steps, ~5 minutes. All fields optional — fill in only what you know. Carbon tracking is optional; the main value is supply chain, subsidies, certifications, market routing, ERP, and AI advisor.">3 步驟、約 5 分鐘。所有欄位都是選填 — 只填你知道的。碳追蹤是選配，主要在供應鏈、補助、認證、市場、ERP 與 AI 顧問。</p>
   </section>
 
   <section class="container">
@@ -378,7 +378,7 @@
       </div>
 
       <div class="panel">
-        <div class="panel-title" data-zh="範疇一：燃料（年）" data-en="Scope 1: fuels (annual)">範疇一：燃料（年）</div>
+        <div class="panel-title" data-zh="燃料 (碳追蹤用 · 全部選填)" data-en="Fuels (for carbon tracking · all optional)">燃料 (碳追蹤用 · 全部選填)</div>
         <div class="grid">
           <div class="field"><label>柴油 <span class="u">(L)</span></label><input type="number" id="diesel" min="0" step="10" value="0"></div>
           <div class="field"><label>汽油 <span class="u">(L)</span></label><input type="number" id="gasoline" min="0" step="10" value="0"></div>
@@ -415,7 +415,7 @@
       </div>
 
       <div class="panel">
-        <div class="panel-title" data-zh="範疇二 + 三（年）" data-en="Scope 2 + 3 (annual)">範疇二 + 三（年）</div>
+        <div class="panel-title" data-zh="電力與其他 (碳追蹤用 · 全部選填)" data-en="Electricity + others (carbon tracking · all optional)">電力與其他 (碳追蹤用 · 全部選填)</div>
         <div class="grid">
           <div class="field"><label data-zh="灌溉電 (kWh)" data-en="Irrigation (kWh)">灌溉電 <span class="u">(kWh)</span></label><input type="number" id="irrigation" min="0" step="50" value="0"></div>
           <div class="field"><label data-zh="冷藏電 (kWh)" data-en="Cold storage (kWh)">冷藏電 <span class="u">(kWh)</span></label><input type="number" id="coldStorage" min="0" step="50" value="0"></div>
