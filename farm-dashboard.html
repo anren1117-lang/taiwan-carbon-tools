@@ -1958,6 +1958,13 @@
     <div id="marketList"></div>
   </section>
 
+  <!-- ── Pricing Studio: what should you charge, where, how ─ -->
+  <section class="panel" id="sec-pricing">
+    <div class="panel-title" data-zh="定價工作室：你該收多少、向誰收、怎麼開口" data-en="Pricing Studio: what to charge, where, and how to ask">定價工作室：你該收多少、向誰收、怎麼開口</div>
+    <div class="panel-sub" data-zh="從你的實際成本出發，算出 3 個價位（地板價、永續價、故事溢價），對應到 7 種通路，附建議出價、現金時程、需要準備的證據、可複製的開場白。" data-en="From your actual cost, computed 3 price tiers (floor / sustainable / story-premium) mapped to 7 channels — with suggested price, cash terms, required evidence, and copy-paste outreach openers.">從你的實際成本出發，算出 3 個價位（地板價、永續價、故事溢價），對應到 7 種通路，附建議出價、現金時程、需要準備的證據、可複製的開場白。</div>
+    <div id="pricingStudioContent"></div>
+  </section>
+
   <!-- ── Sustainable Survival Guide ────────────────────────── -->
   <section class="panel" id="sec-survival">
     <div class="panel-title" data-zh="永續生存指引：為什麼這些做法能幫你的農場活下去" data-en="Sustainable survival guide: how these practices keep your farm viable">永續生存指引：為什麼這些做法能幫你的農場活下去</div>
@@ -5145,6 +5152,183 @@
     host.innerHTML = html;
   }
 
+  // ── Pricing Studio: cost-up + tier-mapped channel pricing ────────
+  // Converts the margin analysis into actionable per-channel price
+  // recommendations + copy-paste outreach openers. This is the most
+  // concrete expression of the heart→business-mindset mission:
+  // the farmer leaves with an actual price and a written first message.
+  const PRICING_CHANNELS = [
+    { id: 'wholesale', tier: 'floor', marginTarget: 0.05,
+      name: { zh: '批發拍賣市場', en: 'Wholesale auction market' },
+      cashTiming: { zh: '當日結清現金', en: 'Same-day cash' },
+      pros: { zh: '出貨快、無議價門檻、不挑包裝', en: 'Fast clearance, no negotiation, no packaging requirements' },
+      cons: { zh: '價格波動、無溢價、賺現金流但無利潤', en: 'Volatile pricing, no premium, cash flow without profit' },
+      evidence: { zh: '無需特別證據', en: 'No specific evidence required' },
+      opener: null,
+      verdict: { zh: '只在現金緊急時用，不要當常態通路。', en: 'Use only for cash emergencies — not your default channel.' }
+    },
+    { id: 'school_meal', tier: 'sustainable', marginTarget: 0.25,
+      name: { zh: '學校午餐 / 公部門採購', en: 'School lunch / government procurement' },
+      cashTiming: { zh: '月結 45-60 天', en: '45-60 day terms' },
+      pros: { zh: '量大穩定、補助加成、公務採購有保障', en: 'Large stable volume, subsidy-eligible, payment guaranteed' },
+      cons: { zh: '行政繁瑣、付款週期長、量價競標', en: 'Heavy paperwork, slow payment, competitive bidding' },
+      evidence: { zh: 'TGAP / 吉園圃 / 有機驗證、農糧署登記、三級溯源', en: 'TGAP / JGP / organic cert, COA registration, three-tier traceability' },
+      opener: {
+        zh: '您好，我們是 [縣市] 在地友善農場，持有 [認證]，可穩定供應 [作物] [年產量] 公斤。希望了解貴單位在地食材採購評選機制與年度合約窗口。',
+        en: 'Hello, we are a local farm in [county] with [cert], capable of supplying [crop] at [annual yield] kg/year. Wanted to inquire about your local-procurement evaluation process and annual contract window.'
+      }
+    },
+    { id: 'local_market', tier: 'sustainable', marginTarget: 0.30,
+      name: { zh: '區域物流 / 在地超市 / 連鎖通路', en: 'Regional distributor / local supermarket / retail chain' },
+      cashTiming: { zh: '月結 15-30 天', en: '15-30 day terms' },
+      pros: { zh: '穩定通路、可預測量、單一聯絡窗口', en: 'Stable channel, predictable volume, single point of contact' },
+      cons: { zh: '須通過 GAP/吉園圃、退貨風險、上架費', en: 'GAP/JGP required, return risk, listing fees' },
+      evidence: { zh: 'GAP / 吉園圃驗證、量能證明、冷鏈相容', en: 'GAP/JGP cert, capacity proof, cold-chain compatibility' },
+      opener: {
+        zh: '您好，我是 [姓名]，在 [地區] 經營 [面積] 公頃的 [作物] 農場，[實踐年數] 年實踐 [認證/做法]。年穩定產量 [年產量] kg，目前通路為 [現有通路]。想了解貴公司是否有新供應商評估窗口。',
+        en: 'Hello, I run a [area]-ha [crop] farm in [region] with [years] years of [cert/practice]. Annual stable yield [yield] kg, currently supplying [existing channels]. Open to evaluating a new supplier?'
+      }
+    },
+    { id: 'organic_retail', tier: 'premium', marginTarget: 0.50,
+      name: { zh: '主婦聯盟 / GREEN & SAFE / 有機商店', en: 'Homemakers Union / GREEN & SAFE / organic retail' },
+      cashTiming: { zh: '月結 30-45 天', en: '30-45 day terms' },
+      pros: { zh: '通路品牌加持、客群成熟、願意付故事溢價', en: 'Channel brand carries over, mature audience, willing to pay story premium' },
+      cons: { zh: '強制有機驗證、上架費、包裝規格嚴', en: 'Organic cert mandatory, listing fees, strict packaging spec' },
+      evidence: { zh: '有機驗證（必要）、量能證明、包裝規格符合', en: 'Organic cert (mandatory), volume proof, packaging compliance' },
+      opener: {
+        zh: '您好，我們持有 [驗證機構] 有機驗證，主力作物 [作物]，年產量 [年產量] kg，已實踐 [實踐年數] 年。土壤碳含量趨勢可查（[儀表板URL]）。想了解貴通路新供應商評估流程與年度上架窗口。',
+        en: 'Hello, we hold [body] organic cert, primary crop [crop], annual yield [yield] kg, [years] years of practice. Soil C trend is published ([dashboard URL]). Wanted to inquire about new-supplier evaluation and listing windows.'
+      }
+    },
+    { id: 'csa', tier: 'premium', marginTarget: 0.55,
+      name: { zh: 'CSA 直銷 / 訂閱箱 / 團購', en: 'CSA / subscription box / community group buy' },
+      cashTiming: { zh: '預收，現金流最好', en: 'Pre-paid — best cash flow' },
+      pros: { zh: '預收現金、客戶忠誠、可說故事、無上架費', en: 'Pre-paid cash, loyal customers, story-driven, no listing fees' },
+      cons: { zh: '需自建客群、配送成本高、品項要多樣', en: 'Must build own audience, high logistics cost, requires variety' },
+      evidence: { zh: '農場故事、實踐時間軸、現場照片、文宣能力', en: 'Farm story, practice timeline, on-site photos, newsletter capacity' },
+      opener: {
+        zh: '我們的 [作物] 每週採收 [週產量] kg，提供 NT$ [週費] / 週訂閱箱。[實踐年數] 年實踐 [認證/做法]，每箱附產地故事卡與當週農忙紀錄。首批 30 位試吃會員享首月 8 折。',
+        en: 'Our [crop] is harvested weekly at [weekly yield] kg, NT$ [weekly fee]/week subscription. [years] years of [practice/cert], each box includes a farm-story card + that-week\'s log. First 30 trial members get 20% off month 1.'
+      }
+    },
+    { id: 'restaurant', tier: 'premium', marginTarget: 0.60,
+      name: { zh: '主廚餐廳直供', en: 'Chef-direct restaurant' },
+      cashTiming: { zh: '兩週結清', en: 'Two-week terms' },
+      pros: { zh: '高單價、廚師代你說故事、口碑放大', en: 'High unit price, chef tells your story, word-of-mouth amplification' },
+      cons: { zh: '量少、品質要求極高、需配合菜單與季節', en: 'Small volume, very high QA bar, must match seasonal menu' },
+      evidence: { zh: '認證、土壤碳趨勢、現場照片、樣品試菜、品質一致性紀錄', en: 'Cert, soil C trend, on-site photos, sample tasting, QA record' },
+      opener: {
+        zh: '[主廚名] 您好，看到貴餐廳菜單重視在地食材。我們在 [地區] 種植 [作物] [實踐年數] 年，持有 [認證]，土壤碳趨勢已公開（[儀表板URL]）。可寄樣品給您試菜，並安排農場拜訪。',
+        en: '[Chef], I noticed your menu prioritizes local sourcing. We grow [crop] in [region] for [years] years with [cert]; soil C trend is published ([dashboard URL]). Happy to send a sample for menu trial and arrange a farm visit.'
+      }
+    },
+    { id: 'gift_box', tier: 'premium', marginTarget: 0.65,
+      name: { zh: '節慶禮盒 / 企業禮品', en: 'Seasonal gift box / corporate gifts' },
+      cashTiming: { zh: '預付 / 短期高峰', en: 'Pre-paid / short seasonal spike' },
+      pros: { zh: '單價最高、預收現金、品牌曝光最大', en: 'Highest unit price, pre-paid cash, maximum brand exposure' },
+      cons: { zh: '僅節慶、包裝成本、需要美感經營', en: 'Seasonal only, packaging cost, requires aesthetic management' },
+      evidence: { zh: '品牌識別、包裝設計、認證標章、農場拜訪/體驗', en: 'Brand identity, packaging design, cert label, farm visit/experience' },
+      opener: {
+        zh: '中秋 / 春節限量禮盒：[作物] 1 公斤 + 農場故事卡 + 收成現場照片 + [認證標章]。NT$ [禮盒價] / 盒，30 盒起訂，企業客製化可加印 LOGO。歡迎索取試吃樣品。',
+        en: 'Mid-Autumn / CNY limited gift box: 1kg [crop] + farm story card + harvest photos + [cert label]. NT$ [box price]/box, MOQ 30, corporate customization with logo available. Samples on request.'
+      }
+    }
+  ];
+
+  const TIER_META = {
+    floor:       { color: '#dc2626', bg: 'rgba(220, 38, 38, 0.08)',  border: 'rgba(220, 38, 38, 0.3)',  emoji: '🟥', zh: '地板價（生存區）',   en: 'Floor (survival)' },
+    sustainable: { color: '#d97706', bg: 'rgba(217, 119, 6, 0.08)',  border: 'rgba(217, 119, 6, 0.3)',  emoji: '🟧', zh: '永續價（40% 毛利）', en: 'Sustainable (40% margin)' },
+    premium:     { color: '#059669', bg: 'rgba(5, 150, 105, 0.08)',  border: 'rgba(5, 150, 105, 0.3)',  emoji: '🟩', zh: '故事溢價（≥50%）',   en: 'Story premium (≥50%)' }
+  };
+
+  function renderPricingStudio(inp, r) {
+    const host = document.getElementById('pricingStudioContent');
+    if (!host) return;
+    const cost = computeAnnualCost();
+    const yieldKg = inp.annualYieldKg || 0;
+    const costPerKg = (yieldKg > 0 && cost.total > 0) ? cost.total / yieldKg : null;
+    const isZh = currentLang !== 'en';
+
+    if (!costPerKg) {
+      host.innerHTML = `
+        <div style="padding: 14px 16px; background: var(--bg); border: 1px dashed var(--border); border-radius: 8px; color: var(--muted); font-size: 13px;">
+          ${isZh ? '💡 需要「年產量」和帳單資料（在「資料來源」面板輸入電費 / 燃料費）才能算每公斤成本，進而給出定價建議。' : '💡 Need annual yield + bill data (enter electricity / fuel costs in the Data Sources panel) before per-kg cost and pricing can be computed.'}
+        </div>`;
+      return;
+    }
+
+    // Group channels by tier
+    const byTier = { floor: [], sustainable: [], premium: [] };
+    PRICING_CHANNELS.forEach(c => byTier[c.tier].push(c));
+
+    let html = '';
+
+    // Cost-up summary header
+    html += `
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 14px; padding: 14px 16px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 18px;">
+        <div><div class="u" style="font-size: 11px;">${isZh ? '每公斤實際成本' : 'Cost per kg'}</div><div style="font-size: 18px; font-weight: 700; margin-top: 2px;">NT$ ${fmt(costPerKg, 1)}</div></div>
+        <div><div class="u" style="font-size: 11px; color: ${TIER_META.floor.color};">${isZh ? TIER_META.floor.zh : TIER_META.floor.en}</div><div style="font-size: 16px; font-weight: 700; margin-top: 2px; color: ${TIER_META.floor.color};">NT$ ${fmt(costPerKg / (1 - 0.05), 1)}/kg</div></div>
+        <div><div class="u" style="font-size: 11px; color: ${TIER_META.sustainable.color};">${isZh ? TIER_META.sustainable.zh : TIER_META.sustainable.en}</div><div style="font-size: 16px; font-weight: 700; margin-top: 2px; color: ${TIER_META.sustainable.color};">NT$ ${fmt(costPerKg / (1 - 0.40), 1)}/kg</div></div>
+        <div><div class="u" style="font-size: 11px; color: ${TIER_META.premium.color};">${isZh ? TIER_META.premium.zh : TIER_META.premium.en}</div><div style="font-size: 16px; font-weight: 700; margin-top: 2px; color: ${TIER_META.premium.color};">NT$ ${fmt(costPerKg / (1 - 0.55), 1)}/kg ${isZh ? '起' : '+'}</div></div>
+      </div>
+    `;
+
+    // Channels grouped by tier
+    ['floor', 'sustainable', 'premium'].forEach(tier => {
+      const meta = TIER_META[tier];
+      html += `<div style="margin-bottom: 18px;">
+        <div style="font-size: 13px; font-weight: 700; color: ${meta.color}; margin-bottom: 10px; padding-left: 4px;">${meta.emoji} ${isZh ? meta.zh : meta.en}</div>
+        <div style="display: grid; gap: 12px;">`;
+
+      byTier[tier].forEach(c => {
+        const suggestedPrice = costPerKg / (1 - c.marginTarget);
+        const channelMargin = (c.marginTarget * 100).toFixed(0);
+        const openerText = c.opener ? (isZh ? c.opener.zh : c.opener.en) : null;
+        const openerId = 'opener-' + c.id;
+
+        html += `
+          <div style="padding: 14px 16px; background: ${meta.bg}; border: 1px solid ${meta.border}; border-radius: 8px;">
+            <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 8px;">
+              <div style="font-size: 15px; font-weight: 700;">${isZh ? c.name.zh : c.name.en}</div>
+              <div style="font-size: 18px; font-weight: 800; color: ${meta.color};">NT$ ${fmt(suggestedPrice, 1)}<span style="font-size: 12px; font-weight: 500; color: var(--muted);">/kg · ${channelMargin}% ${isZh ? '毛利' : 'margin'}</span></div>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px 18px; font-size: 12px; line-height: 1.55; margin-bottom: 10px;">
+              <div><span class="u">${isZh ? '現金時程' : 'Cash terms'}：</span>${isZh ? c.cashTiming.zh : c.cashTiming.en}</div>
+              <div><span class="u">${isZh ? '優勢' : 'Pros'}：</span>${isZh ? c.pros.zh : c.pros.en}</div>
+              <div><span class="u">${isZh ? '劣勢' : 'Cons'}：</span>${isZh ? c.cons.zh : c.cons.en}</div>
+              <div><span class="u">${isZh ? '需要證據' : 'Required evidence'}：</span>${isZh ? c.evidence.zh : c.evidence.en}</div>
+            </div>
+            ${c.verdict ? `<div style="font-size: 12px; font-style: italic; color: var(--muted); margin-bottom: 8px;">${isZh ? c.verdict.zh : c.verdict.en}</div>` : ''}
+            ${openerText ? `
+              <details style="margin-top: 8px;">
+                <summary style="cursor: pointer; font-size: 12px; font-weight: 600; color: ${meta.color};">${isZh ? '📋 開場白（可複製）' : '📋 Outreach opener (copy-paste)'}</summary>
+                <div style="margin-top: 8px; padding: 10px 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; font-size: 13px; line-height: 1.6; white-space: pre-wrap; font-family: ui-monospace, monospace;" id="${openerId}">${openerText}</div>
+                <button onclick="copyOpener('${openerId}', this)" style="margin-top: 8px; padding: 5px 12px; background: ${meta.color}; color: #fff; border: none; border-radius: 5px; font-size: 12px; font-weight: 600; cursor: pointer;">${isZh ? '複製' : 'Copy'}</button>
+              </details>
+            ` : ''}
+          </div>
+        `;
+      });
+      html += `</div></div>`;
+    });
+
+    host.innerHTML = html;
+  }
+
+  // Global helper so the inline onclick can reach it
+  window.copyOpener = function(id, btn) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const text = el.textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      const original = btn.textContent;
+      btn.textContent = currentLang === 'en' ? '✓ Copied' : '✓ 已複製';
+      setTimeout(() => { btn.textContent = original; }, 1800);
+    }).catch(() => {
+      btn.textContent = currentLang === 'en' ? 'Copy failed' : '複製失敗';
+    });
+  };
+
   function render() {
     const inp = readInputs();
     const r = calcFromInputs(inp);
@@ -5203,6 +5387,7 @@
     renderScenarios(inp, r);
     renderSubsidies(inp, r);
     renderMarket(inp, r);
+    renderPricingStudio(inp, r);
     renderSurvival(inp, r);
     renderBusinessMindset(inp, r);
     renderRoadmap(inp, r);
