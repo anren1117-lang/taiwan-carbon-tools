@@ -149,6 +149,25 @@
   .farm-tier.top      { background: rgba(29,158,117,0.10); color: var(--top); }
   .farm-tier.avg      { background: rgba(156,163,175,0.18); color: var(--text-muted); }
   .farm-tier.below    { background: rgba(180,83,9,0.15); color: var(--below); }
+  .farm-certs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 14px;
+  }
+  .farm-cert {
+    display: inline-block;
+    padding: 3px 8px;
+    background: var(--accent-tint);
+    color: var(--accent-dark);
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .farm-cert.premium {
+    background: rgba(217, 119, 6, 0.15);
+    color: var(--below);
+  }
   .farm-actions {
     display: flex;
     gap: 8px;
@@ -283,9 +302,20 @@
     const bench = PRODUCT_BENCHMARKS[inp.productCategory] || PRODUCT_BENCHMARKS.mixed;
     const tier = tierFor(intensity, bench);
 
+    const cropIcons = { rice: '🌾', vegetables: '🥬', fruit: '🍎', livestock: '🐄', mixed: '🌱' };
+    const cropIcon = cropIcons[inp.cropType] || '🌱';
+    const certs = cfg.certifications || [];
+    const certChips = certs.length
+      ? `<div class="farm-certs">${certs.slice(0, 4).map(c => {
+          const label = (c.label && (currentLang === 'zh' ? c.label.zh : c.label.en)) || c.id;
+          const isPremium = c.tier === 'premium';
+          return `<span class="farm-cert${isPremium ? ' premium' : ''}">${label}</span>`;
+        }).join('')}${certs.length > 4 ? `<span class="farm-cert" style="opacity:0.6">+${certs.length - 4}</span>` : ''}</div>`
+      : '';
+
     return `<div class="farm-card">
       <div class="farm-eyebrow">${trObj(farm.tag)}</div>
-      <div class="farm-name">${trObj(cfg.clientName)}</div>
+      <div class="farm-name">${cropIcon} ${trObj(cfg.clientName)}</div>
       <div class="farm-meta">${trObj(cfg.clientLocation)} · ${fmt(inp.farmSize, 1)} ${tr('公頃', 'ha')}</div>
       <div class="farm-stats">
         <div class="farm-stat">
@@ -298,9 +328,10 @@
         </div>
       </div>
       <span class="farm-tier ${tier.cls}">${trObj(tier.label)}</span>
+      ${certChips}
       <div class="farm-actions">
-        <a class="farm-action primary" href="farm-dashboard.html?id=${encodeURIComponent(farm.id)}">${tr('顧問儀表板', 'Dashboard')} →</a>
-        <a class="farm-action secondary" href="farm-buyer.html?id=${encodeURIComponent(farm.id)}">${tr('買方分享頁', 'Buyer view')} →</a>
+        <a class="farm-action primary" href="farm-dashboard.html?id=${encodeURIComponent(farm.id)}">${tr('完整儀表板', 'Dashboard')} →</a>
+        <a class="farm-action secondary" href="farm-pitch.html?id=${encodeURIComponent(farm.id)}">${tr('買家提案單', 'Pitch sheet')} →</a>
       </div>
     </div>`;
   }
