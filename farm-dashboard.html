@@ -7210,14 +7210,35 @@ Applicant: ${ownerName} (signature)
       }
     }
 
-    // 2. PRICING BELOW SUSTAINABLE FLOOR — high priority if margin is thin
+    // 2. PRICING BELOW SUSTAINABLE FLOOR — but distinguish "thin margin"
+    // from "losing money this year" because they call for different action.
     if (revenue > 0 && yieldKg > 0 && cost > 0) {
       const totalRev = revenue + subsidies;
       const margin = totalRev > 0 ? (totalRev - cost) / totalRev : 0;
       const costPerKg = cost / yieldKg;
       const currentPrice = revenue / yieldKg;
       const floorPrice = costPerKg / 0.6;
-      if (margin < 0 || currentPrice < floorPrice * 0.8) {
+      const annualLoss = cost - totalRev;
+      if (margin < 0) {
+        // EXISTENTIAL: losing money on every kg. Top priority, framed as
+        // an emergency that needs revenue AND cost action immediately.
+        candidates.push({
+          priority: 99,
+          urgency: 'urgent',
+          title: isZh
+            ? `🚨 你的農場今年帳面虧損 NT$ ${fmt0(annualLoss)} — 需要立刻雙線行動`
+            : `🚨 Farm is losing NT$ ${fmt0(annualLoss)} this year — emergency action required`,
+          why: isZh
+            ? `年總成本 NT$ ${fmt0(cost)} 超過總收入 NT$ ${fmt0(totalRev)}（含補助）。每公斤實際成本 NT$ ${costPerKg.toFixed(1)}，但只賣 NT$ ${currentPrice.toFixed(1)}。沒有買家承擔虧損，這個缺口會吃進你的存款 / 信用 / 土地。`
+            : `Annual cost NT$ ${fmt0(cost)} exceeds revenue + subsidies NT$ ${fmt0(totalRev)}. Cost per kg is NT$ ${costPerKg.toFixed(1)} but you're selling at NT$ ${currentPrice.toFixed(1)}. No buyer covers this — it comes out of your savings, credit, or land.`,
+          impact: isZh
+            ? `雙線：(1) 升價到至少損益兩平 NT$ ${costPerKg.toFixed(1)}/kg (2) 砍掉年支出 ${(annualLoss/cost*100).toFixed(0)}%。建議先做定價，比砍成本快。`
+            : `Two-track: (1) raise price to break-even NT$ ${costPerKg.toFixed(1)}/kg minimum, (2) cut ${(annualLoss/cost*100).toFixed(0)}% from annual costs. Pricing first — faster than cutting.`,
+          link: '#sec-pricing',
+          linkLabel: isZh ? '🆘 立即看定價' : '🆘 Open Pricing Studio'
+        });
+      } else if (currentPrice < floorPrice * 0.8) {
+        // Profitable but margin thin — push toward sustainable floor.
         const gap = floorPrice - currentPrice;
         candidates.push({
           priority: 95,
