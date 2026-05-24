@@ -1852,6 +1852,7 @@
     <a href="#sec-cashflow" class="sn-link" data-zh="現金流月曆" data-en="Cash flow">現金流月曆</a>
     <a href="#sec-pricing" class="sn-link" data-zh="定價工作室" data-en="Pricing">定價工作室</a>
     <a href="#sec-goals" class="sn-link" data-zh="年度目標" data-en="Goals">年度目標</a>
+    <a href="#sec-compare" class="sn-link" data-zh="同儕比較" data-en="Peer compare">同儕比較</a>
     <a href="#sec-roi" class="sn-link" data-zh="投資回收" data-en="Practice ROI">投資回收</a>
     <a href="#sec-income" class="sn-link" data-zh="補助收益" data-en="Subsidies">補助收益</a>
     <a href="#sec-agent" class="sn-link" data-zh="顧問建議" data-en="Advisor">顧問建議</a>
@@ -1951,6 +1952,13 @@
     <div class="panel-title" data-zh="定價工作室：你該收多少、向誰收、怎麼開口" data-en="Pricing Studio: what to charge, where, and how to ask">定價工作室：你該收多少、向誰收、怎麼開口</div>
     <div class="panel-sub" data-zh="從你的實際成本出發，算出 3 個價位（地板價、永續價、故事溢價），對應到 7 種通路，附建議出價、現金時程、需要準備的證據、可複製的開場白。" data-en="From your actual cost, computed 3 price tiers (floor / sustainable / story-premium) mapped to 7 channels — with suggested price, cash terms, required evidence, and copy-paste outreach openers.">從你的實際成本出發，算出 3 個價位（地板價、永續價、故事溢價），對應到 7 種通路，附建議出價、現金時程、需要準備的證據、可複製的開場白。</div>
     <div id="pricingStudioContent"></div>
+  </section>
+
+  <!-- ── Peer Comparison: vs 4 sample farms ────────────────── -->
+  <section class="panel" id="sec-compare">
+    <div class="panel-title" data-zh="同儕比較：你 vs 4 個示範農場" data-en="Peer comparison: you vs 4 sample farms">同儕比較：你 vs 4 個示範農場</div>
+    <div class="panel-sub" data-zh="把你的數字跟 4 個不同型態的台灣示範農場放在一起，看你在哪裡領先、哪裡落後 — 「我做得好不好？」的具體答案。" data-en="Compare your numbers against 4 representative Taiwan farms — concrete answer to 'how am I doing?' with leading vs lagging breakdown.">把你的數字跟 4 個不同型態的台灣示範農場放在一起，看你在哪裡領先、哪裡落後 — 「我做得好不好？」的具體答案。</div>
+    <div id="peerCompareContent"></div>
   </section>
 
   <!-- ── Goal Tracker: set targets, track progress ─────────── -->
@@ -5982,6 +5990,189 @@ Applicant: ${ownerName} (signature)
     });
   };
 
+  // ── Peer Comparison: load 4 sample farms, compute, compare ───────
+  const SAMPLE_FARM_IDS = ['demo', 'chen-rice-yilan', 'wei-dairy-changhua', 'lai-mango-pingtung'];
+  let peerSamplesCache = null;
+
+  async function loadPeerSamples() {
+    if (peerSamplesCache) return peerSamplesCache;
+    try {
+      const samples = await Promise.all(SAMPLE_FARM_IDS.map(async id => {
+        try {
+          const res = await fetch(`farms/${id}.json`);
+          if (!res.ok) return null;
+          const cfg = await res.json();
+          cfg._id = id;
+          return cfg;
+        } catch (e) { return null; }
+      }));
+      peerSamplesCache = samples.filter(Boolean);
+    } catch (e) {
+      peerSamplesCache = [];
+    }
+    return peerSamplesCache;
+  }
+
+  function computePeerMetrics(cfg) {
+    const inp = cfg.inputs || {};
+    const r = calcFromInputs(inp);
+    // Bills from dataSources
+    let totalCost = 0;
+    (cfg.dataSources || []).forEach(d => {
+      if (d.billAmount && d.billRate) {
+        totalCost += d.billPeriod === 'month' ? d.billAmount * 12 : d.billAmount;
+      }
+    });
+    const yieldKg = inp.annualYieldKg || 0;
+    const revenue = inp.annualRevenueNT || 0;
+    const intensity = yieldKg > 0 ? r.gross / yieldKg : null;
+    const costPerKg = yieldKg > 0 && totalCost > 0 ? totalCost / yieldKg : null;
+    const margin = (revenue + 0 > 0 && totalCost > 0) ? (revenue - totalCost) / revenue : null;
+    const soc = (cfg.soilTest || {}).socPercent || null;
+    const practicesCount = ['coverCrop','noTill','compost','residue'].filter(k => (inp.practices || {})[k]).length;
+    return {
+      name: cfg.clientName,
+      location: cfg.clientLocation,
+      region: cfg.region,
+      cropType: inp.cropType,
+      farmSize: inp.farmSize,
+      yieldKg, revenue,
+      intensity, costPerKg, margin, soc, practicesCount,
+      gross: r.gross,
+      sinkTotal: r.sinkTotal,
+      net: r.gross - r.sinkTotal
+    };
+  }
+
+  function renderPeerCompare(inp, r) {
+    const host = document.getElementById('peerCompareContent');
+    if (!host) return;
+    const isZh = currentLang !== 'en';
+
+    if (!peerSamplesCache) {
+      host.innerHTML = `<div style="padding: 14px; color: var(--muted); font-size: 13px;">${isZh ? '載入示範農場資料中…' : 'Loading sample farms…'}</div>`;
+      loadPeerSamples().then(() => render());
+      return;
+    }
+
+    if (peerSamplesCache.length === 0) {
+      host.innerHTML = `<div style="padding: 14px; color: var(--muted); font-size: 13px;">${isZh ? '無法載入示範農場（離線或路徑錯誤）。' : 'Could not load sample farms (offline or path error).'}</div>`;
+      return;
+    }
+
+    // Compute this farm's metrics inline using the same pattern
+    const thisFarmMetrics = {
+      name: CLIENT_CONFIG.clientName || { zh: '本農場', en: 'This farm' },
+      location: CLIENT_CONFIG.clientLocation,
+      region: CLIENT_CONFIG.region,
+      cropType: inp.cropType,
+      farmSize: inp.farmSize,
+      yieldKg: inp.annualYieldKg,
+      revenue: inp.annualRevenueNT,
+      intensity: inp.annualYieldKg > 0 ? r.gross / inp.annualYieldKg : null,
+      costPerKg: (inp.annualYieldKg > 0 && computeAnnualCost().total > 0) ? computeAnnualCost().total / inp.annualYieldKg : null,
+      margin: (inp.annualRevenueNT > 0 && computeAnnualCost().total > 0) ? (inp.annualRevenueNT - computeAnnualCost().total) / inp.annualRevenueNT : null,
+      soc: (CLIENT_CONFIG.soilTest || {}).socPercent,
+      practicesCount: ['coverCrop','noTill','compost','residue'].filter(k => (inp.practices || {})[k]).length,
+      gross: r.gross,
+      sinkTotal: r.sinkTotal,
+      net: r.gross - r.sinkTotal,
+      isYou: true
+    };
+
+    const peerMetrics = peerSamplesCache.map(computePeerMetrics);
+    const allFarms = [thisFarmMetrics, ...peerMetrics];
+
+    // Compute ranking for each metric (lower=better for intensity, cost, net; higher=better for soc, practicesCount, margin)
+    function rankBy(metric, lowerBetter) {
+      const vals = allFarms.map(f => f[metric]).filter(v => v != null);
+      if (vals.length < 2) return { best: null, worst: null };
+      const sorted = [...vals].sort((a, b) => lowerBetter ? a - b : b - a);
+      return { best: sorted[0], worst: sorted[sorted.length - 1] };
+    }
+    const ranks = {
+      intensity: rankBy('intensity', true),
+      costPerKg: rankBy('costPerKg', true),
+      margin: rankBy('margin', false),
+      soc: rankBy('soc', false),
+      practicesCount: rankBy('practicesCount', false)
+    };
+
+    function cellClass(metric, value) {
+      const r = ranks[metric];
+      if (!r || value == null) return '';
+      if (value === r.best) return 'best';
+      if (value === r.worst) return 'worst';
+      return '';
+    }
+
+    const cropZh = { rice: '稻米', vegetables: '蔬菜', fruit: '水果', livestock: '畜牧', mixed: '綜合' };
+    const cropEn = { rice: 'Rice', vegetables: 'Vegetables', fruit: 'Fruit', livestock: 'Livestock', mixed: 'Mixed' };
+
+    let html = `
+      <style>
+        .pc-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        .pc-table th { padding: 8px 10px; text-align: left; font-weight: 700; color: var(--muted); border-bottom: 2px solid var(--border); font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; }
+        .pc-table td { padding: 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+        .pc-table .farm-name { font-weight: 700; color: var(--text); }
+        .pc-table .farm-name.you { color: var(--accent); }
+        .pc-table .farm-meta { font-size: 11px; color: var(--muted); margin-top: 2px; }
+        .pc-table td.best { background: rgba(5, 150, 105, 0.10); font-weight: 700; color: #059669; }
+        .pc-table td.worst { background: rgba(217, 119, 6, 0.08); color: #d97706; }
+        .pc-table tr.you { background: var(--accent-tint); }
+        .pc-table tr.you td { font-weight: 600; }
+        .pc-wrap { overflow-x: auto; }
+      </style>
+      <div class="pc-wrap">
+      <table class="pc-table">
+        <thead>
+          <tr>
+            <th>${isZh ? '農場' : 'Farm'}</th>
+            <th>${isZh ? '作物' : 'Crop'}</th>
+            <th>${isZh ? '面積' : 'Area'}</th>
+            <th>${isZh ? '碳強度' : 'Intensity'}<br><span style="font-size:10px; text-transform:none;">${isZh ? 'kg CO₂e/kg' : 'kg CO₂e/kg'}</span></th>
+            <th>${isZh ? '每公斤成本' : 'Cost/kg'}<br><span style="font-size:10px; text-transform:none;">NT$</span></th>
+            <th>${isZh ? '毛利率' : 'Margin'}<br><span style="font-size:10px; text-transform:none;">%</span></th>
+            <th>${isZh ? '土壤碳' : 'SOC'}<br><span style="font-size:10px; text-transform:none;">%</span></th>
+            <th>${isZh ? '採用做法' : 'Practices'}<br><span style="font-size:10px; text-transform:none;">/ 4</span></th>
+          </tr>
+        </thead>
+        <tbody>
+    `;
+
+    allFarms.forEach(f => {
+      const rowClass = f.isYou ? 'you' : '';
+      const name = isZh ? (f.name?.zh || (f.isYou ? '本農場' : '—')) : (f.name?.en || (f.isYou ? 'This farm' : '—'));
+      const loc = isZh ? (f.location?.zh || '') : (f.location?.en || '');
+      html += `
+        <tr class="${rowClass}">
+          <td>
+            <div class="farm-name ${f.isYou ? 'you' : ''}">${f.isYou ? (isZh ? '👉 ' + name : '👉 ' + name) : name}</div>
+            <div class="farm-meta">${loc}</div>
+          </td>
+          <td>${(isZh ? cropZh : cropEn)[f.cropType] || '—'}</td>
+          <td>${f.farmSize ? f.farmSize.toFixed(1) + ' ha' : '—'}</td>
+          <td class="${cellClass('intensity', f.intensity)}">${f.intensity != null ? f.intensity.toFixed(2) : '—'}</td>
+          <td class="${cellClass('costPerKg', f.costPerKg)}">${f.costPerKg != null ? fmt0(f.costPerKg) : '—'}</td>
+          <td class="${cellClass('margin', f.margin)}">${f.margin != null ? (f.margin * 100).toFixed(1) + '%' : '—'}</td>
+          <td class="${cellClass('soc', f.soc)}">${f.soc != null ? f.soc.toFixed(1) : '—'}</td>
+          <td class="${cellClass('practicesCount', f.practicesCount)}">${f.practicesCount}</td>
+        </tr>
+      `;
+    });
+
+    html += `
+        </tbody>
+      </table>
+      </div>
+      <div style="margin-top: 14px; padding: 10px 14px; background: var(--bg-subtle, var(--bg)); border: 1px dashed var(--border); border-radius: 6px; font-size: 11.5px; color: var(--muted); line-height: 1.55;">
+        ${isZh ? '<strong style="color: #059669;">綠色＝該指標最佳</strong>　<strong style="color: #d97706;">橘色＝該指標最差</strong>　示範農場可在 <a href="farms.html" style="color: var(--accent);">farms.html</a> 看完整資料。' : '<strong style="color: #059669;">Green = best</strong> · <strong style="color: #d97706;">Amber = worst</strong> · Full sample farm data at <a href="farms.html" style="color: var(--accent);">farms.html</a>.'}
+      </div>
+    `;
+
+    host.innerHTML = html;
+  }
+
   // ── Goal Tracker: annual targets with live progress ──────────────
   // Goals stored per farm-id in localStorage. Progress = current value
   // (from dashboard data) ÷ target. Pace verdict considers calendar
@@ -6630,6 +6821,7 @@ Applicant: ${ownerName} (signature)
     renderSubsidies(inp, r);
     renderMarket(inp, r);
     renderPricingStudio(inp, r);
+    renderPeerCompare(inp, r);
     renderGoalTracker(inp, r);
     renderPracticeROI(inp, r);
     renderCashFlow(inp, r);
