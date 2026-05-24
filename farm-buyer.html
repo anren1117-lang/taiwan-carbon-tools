@@ -589,6 +589,17 @@
 </header>
 
 <main>
+  <!-- ── Newer-view notice (link to farm-pitch.html, the modern artifact) ── -->
+  <div class="container" style="margin: 14px auto;">
+    <div id="pitchNotice" style="padding: 12px 16px; background: var(--accent-tint, rgba(29,158,117,0.10)); border-left: 4px solid var(--accent, #1D9E75); border-radius: 8px; display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; font-size: 14px;">
+      <div>
+        <strong data-zh="📄 已更新：A4 買家提案單" data-en="📄 New: A4 buyer pitch sheet">📄 已更新：A4 買家提案單</strong>
+        <span data-zh=" — 含建議定價、認證、土壤碳趨勢、承諾條款，可直接列印。" data-en=" — includes suggested pricing, certs, soil C trend, commitment terms; print-ready."> — 含建議定價、認證、土壤碳趨勢、承諾條款，可直接列印。</span>
+      </div>
+      <a id="pitchLinkBtn" href="farm-pitch.html" style="background: var(--accent, #1D9E75); color: #fff; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-weight: 600; white-space: nowrap;" data-zh="開啟提案單 →" data-en="Open pitch sheet →">開啟提案單 →</a>
+    </div>
+  </div>
+
   <!-- ── Hero ─────────────────────────────────────────────── -->
   <section class="b-hero">
     <div class="container">
@@ -1088,9 +1099,18 @@
     render();
   }
 
+  // Wire the pitch-link button to preserve URL state (id/fragment/token)
+  function wirePitchLink() {
+    const btn = document.getElementById('pitchLinkBtn');
+    if (!btn) return;
+    const hashPass = window.location.hash && window.location.hash.startsWith('#data=') ? window.location.hash : '';
+    btn.href = 'farm-pitch.html' + window.location.search + hashPass;
+  }
+
   // ── Init ─────────────────────────────────────────────────────────
   (async function init() {
     CONFIG = await loadConfig();
+    wirePitchLink();
     let savedLang = 'zh';
     try {
       const s = localStorage.getItem('tct_lang');
