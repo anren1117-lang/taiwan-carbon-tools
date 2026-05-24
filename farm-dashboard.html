@@ -3214,6 +3214,28 @@ My cost ledger is transparent (${costPerKg ? `actual cost NT$ ${costPerKg}/kg` :
   // Eligibility rules below are STRUCTURAL ESTIMATES based on common
   // criteria for each program — actual rules at agency level differ.
   // Treat as a consulting starting point, not authoritative.
+  // Application window metadata per program. Used to surface "next
+  // deadline N months away" cues so farmers don't miss the annual
+  // window and lose a year of subsidy income.
+  // - openMonths: months (1-12) when applications are accepted; empty array = rolling
+  // - typicalDeadlineDay: last day of the window (default 30)
+  function nextDeadline(openMonths) {
+    if (!openMonths || openMonths.length === 0) return { rolling: true };
+    const now = new Date();
+    const thisYear = now.getFullYear();
+    const thisMonth = now.getMonth() + 1; // 1-12
+    // Find next open month >= now
+    let target = null;
+    for (const m of openMonths) {
+      if (m >= thisMonth) { target = { year: thisYear, month: m }; break; }
+    }
+    if (!target) target = { year: thisYear + 1, month: openMonths[0] };
+    const deadline = new Date(target.year, target.month - 1, 28); // safe day for any month
+    const daysAway = Math.ceil((deadline - now) / (1000 * 60 * 60 * 24));
+    const isOpen = openMonths.includes(thisMonth);
+    return { rolling: false, daysAway, isOpen, deadline, month: target.month, year: target.year };
+  }
+
   const SUBSIDY_PROGRAMS = [
     {
       id: "friendly-farming",
@@ -3224,6 +3246,7 @@ My cost ledger is transparent (${costPerKg ? `actual cost NT$ ${costPerKg}/kg` :
       // the consultant should confirm the current PDF / application URL
       // per engagement and override per-client if needed.
       url:     "https://www.moa.gov.tw/",
+      openMonths: [], // rolling — friendly farming accepts year-round
       eligibility: (inp) =>
         inp.practices.coverCrop &&
         (inp.practices.compost || inp.practices.residue) &&
@@ -3249,6 +3272,7 @@ All practices logged in the farm operations dashboard, audit-ready.`
       agency:  { zh: "農業部農糧署", en: "MOA Agriculture and Food Agency" },
       rateNTPerHa: 45000,
       url:     "https://www.moa.gov.tw/",
+      openMonths: [3, 4], // spring application window
       eligibility: (inp) =>
         ['coverCrop', 'noTill', 'compost', 'residue'].filter(p => inp.practices[p]).length >= 3,
       note: { zh: "三項以上土地管理（覆蓋作物 / 免耕 / 堆肥 / 殘體還田）",
@@ -3282,6 +3306,7 @@ Each practice has a timeline + annual observation record, meeting the "3+ practi
       agency:  { zh: "農業部 + 環境部", en: "MOA + MOENV" },
       rateNTPerHa: 20000,
       url:     "https://www.moenv.gov.tw/",
+      openMonths: [5, 6], // mid-year pilot announcement
       eligibility: (inp, r) =>
         r.sinkTotal > 1000 &&
         CLIENT_CONFIG.soilTest && CLIENT_CONFIG.soilTest.socPercent != null,
@@ -3316,6 +3341,7 @@ Current practices (cover crop / residue / on-farm trees) have a scientific basis
       agency:  { zh: "農業部資訊司", en: "MOA Information Department" },
       flatRate: 50000,
       url:     "https://www.moa.gov.tw/",
+      openMonths: [4, 5], // spring batch
       eligibility: () =>
         CLIENT_CONFIG.dataSources &&
         CLIENT_CONFIG.dataSources.some(d => d.method === 'sensor'),
@@ -3342,6 +3368,7 @@ Data continuity meets the "data-enabled baseline" requirement; this application 
       agency:  { zh: "農業部農糧署 + 經濟部能源署", en: "MOA AFA + MOEA Energy Administration" },
       flatRate: 100000,
       url:     "https://www.moa.gov.tw/",
+      openMonths: [1, 2, 3], // Q1 annual batch
       eligibility: (inp) => inp.diesel > 300 || inp.gasoline > 50,
       note: { zh: "現有柴油/汽油機具符合電動化轉換評估",
               en: "Existing diesel/gasoline equipment qualifies for electrification review" },
@@ -3366,6 +3393,7 @@ Application target: purchase 1 electric tractor (model/brand TBD).`
       agency:  { zh: "農業部農糧署", en: "MOA Agriculture and Food Agency" },
       rateNTPerHa: 15000,
       url:     "https://www.moa.gov.tw/",
+      openMonths: [], // rolling — cert support is application-based year-round
       eligibility: (inp) => inp.chemicals === 0 && inp.nFert <= 80 * Math.max(inp.farmSize, 0.1),
       note: { zh: "零化學農藥/複肥 + 低合成氮肥 → 申請有機驗證輔導",
               en: "Zero chemicals + low synthetic N → organic certification support" },
@@ -4461,7 +4489,19 @@ This application supports starting organic-transition certification for ≥1 ha.
     const ownerEmail = contact.email || tr('（請填寫電子郵件）', '(email)');
     const dashUrl = location.origin + location.pathname + location.search + (location.hash.startsWith('#data=') ? location.hash : '');
 
-    const subsidyHtml = SUBSIDY_PROGRAMS.map(p => {
+    // Sort: open-now first, then closest deadline, then ineligible last
+    const sortedPrograms = [...SUBSIDY_PROGRAMS].sort((a, b) => {
+      let aEl = false, bEl = false;
+      try { aEl = a.eligibility(inp, r); } catch (e) {}
+      try { bEl = b.eligibility(inp, r); } catch (e) {}
+      if (aEl !== bEl) return aEl ? -1 : 1;
+      const aDl = nextDeadline(a.openMonths);
+      const bDl = nextDeadline(b.openMonths);
+      // Open now > rolling > by days-away
+      const score = d => d.isOpen ? -1000 : (d.rolling ? -500 : d.daysAway);
+      return score(aDl) - score(bDl);
+    });
+    const subsidyHtml = sortedPrograms.map(p => {
       let eligible = false;
       try { eligible = p.eligibility(inp, r); } catch (e) {}
       const amount = p.rateNTPerHa
@@ -4549,12 +4589,28 @@ Applicant: ${ownerName} (signature)
           </details>`;
       }
 
+      // Deadline cue: when does this open / how soon
+      const dl = nextDeadline(p.openMonths);
+      let deadlineBadge = '';
+      if (eligible) {
+        if (dl.rolling) {
+          deadlineBadge = `<div style="display:inline-block; margin-top: 6px; padding: 3px 9px; background: rgba(5, 150, 105, 0.10); color: #059669; font-size: 11px; font-weight: 700; border-radius: 999px;">📅 ${tr('隨時可申請', 'Rolling — apply anytime')}</div>`;
+        } else if (dl.isOpen) {
+          deadlineBadge = `<div style="display:inline-block; margin-top: 6px; padding: 3px 9px; background: rgba(220, 38, 38, 0.10); color: #dc2626; font-size: 11px; font-weight: 700; border-radius: 999px;">🔥 ${tr('申請窗口開啟中 — 本月內送件', 'Window OPEN now — submit this month')}</div>`;
+        } else if (dl.daysAway <= 60) {
+          deadlineBadge = `<div style="display:inline-block; margin-top: 6px; padding: 3px 9px; background: rgba(217, 119, 6, 0.12); color: #d97706; font-size: 11px; font-weight: 700; border-radius: 999px;">⏰ ${tr(`下次窗口 ${dl.daysAway} 天後（${dl.month} 月）`, `Next window in ${dl.daysAway} days (month ${dl.month})`)}</div>`;
+        } else {
+          deadlineBadge = `<div style="display:inline-block; margin-top: 6px; padding: 3px 9px; background: var(--bg-subtle, var(--bg)); color: var(--muted); font-size: 11px; font-weight: 600; border-radius: 999px;">📅 ${tr(`下次窗口 ${dl.month} 月（${dl.daysAway} 天後）`, `Next window month ${dl.month} (${dl.daysAway} days)`)}</div>`;
+        }
+      }
+
       return `
         <div class="sub-card ${eligible ? 'eligible' : 'partial'}">
           <div>
             <span class="sc-status ${eligible ? 'eligible' : 'partial'}">${eligible ? tr('符合', 'eligible') : tr('條件未滿足', 'criteria unmet')}</span>
             <div class="sc-name">${trObj(p.name)}<span class="sc-agency">· ${trObj(p.agency)}</span></div>
             <div class="sc-note">${trObj(p.note)}</div>
+            ${deadlineBadge}
             ${p.url ? `<div class="sc-link"><a href="${p.url}" target="_blank" rel="noopener">${tr('主管機關公告', 'Agency information')} →</a></div>` : ''}
             ${draftBlock}
           </div>
@@ -7013,14 +7069,23 @@ Applicant: ${ownerName} (signature)
     // 3. UNCLAIMED SUBSIDIES — easy money on the table
     if (subsidies >= 30000) {
       const eligibleCount = subsidyResult.eligible.length;
+      // Check if any eligible subsidy has its window OPEN right now -> bump priority
+      const openNow = subsidyResult.eligible.some(e => {
+        const dl = nextDeadline(e.program.openMonths);
+        return dl.isOpen;
+      });
       candidates.push({
-        priority: 85,
-        urgency: 'high',
-        title: isZh ? `申請 ${eligibleCount} 項符合條件的補助，年收益 NT$ ${fmt0(subsidies)}` : `Apply for ${eligibleCount} eligible subsidies, NT$ ${fmt0(subsidies)} annual income`,
-        why: isZh ? '你目前的耕作做法已符合，但帳上看不到這筆收入 — 等於沒申請。' : 'You qualify based on current practices, but dashboard shows no claimed income — i.e., not yet applied.',
+        priority: openNow ? 92 : 85,
+        urgency: openNow ? 'urgent' : 'high',
+        title: openNow
+          ? (isZh ? `🔥 補助申請窗口開啟中 — 立刻送件，年收益 NT$ ${fmt0(subsidies)}` : `🔥 Subsidy window OPEN now — submit immediately, NT$ ${fmt0(subsidies)}/yr`)
+          : (isZh ? `申請 ${eligibleCount} 項符合條件的補助，年收益 NT$ ${fmt0(subsidies)}` : `Apply for ${eligibleCount} eligible subsidies, NT$ ${fmt0(subsidies)} annual income`),
+        why: openNow
+          ? (isZh ? '本月有資格的補助申請窗口開啟中。錯過要等明年。' : 'Eligible subsidy window is open THIS month. Miss it and wait a full year.')
+          : (isZh ? '你目前的耕作做法已符合，但帳上看不到這筆收入 — 等於沒申請。' : 'You qualify based on current practices, but dashboard shows no claimed income — i.e., not yet applied.'),
         impact: isZh ? `若全申請：現金流多 NT$ ${fmt0(subsidies / 12)} / 月` : `If all claimed: +NT$ ${fmt0(subsidies / 12)}/mo cash flow`,
         link: '#sec-income',
-        linkLabel: isZh ? '看補助清單' : 'See subsidy list'
+        linkLabel: isZh ? (openNow ? '立刻申請' : '看補助清單') : (openNow ? 'Apply now' : 'See subsidy list')
       });
     }
 
