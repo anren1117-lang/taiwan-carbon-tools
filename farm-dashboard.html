@@ -2156,12 +2156,17 @@
     <div id="top3Content"></div>
   </section>
 
-  <!-- ── Weekly Check-in: turn dashboard into a habit ─────── -->
-  <section class="panel" id="sec-weekly">
-    <div class="panel-title" data-zh="本週回顧（每週花 2 分鐘）" data-en="Weekly check-in (2 minutes per week)">本週回顧（每週花 2 分鐘）</div>
-    <div class="panel-sub" data-zh="把儀表板變成週習慣。每週點選 4 個快問 + 留 1 行筆記，連續紀錄能讓你 12 週後看到「自己的軌跡」。" data-en="Make the dashboard a weekly habit. Tick 4 quick questions + 1 line of notes; consistent logging lets you see 'your own trajectory' after 12 weeks.">把儀表板變成週習慣。每週點選 4 個快問 + 留 1 行筆記，連續紀錄能讓你 12 週後看到「自己的軌跡」。</div>
-    <div id="weeklyCheckinContent"></div>
-  </section>
+  <!-- ── Weekly Check-in: collapsible (secondary to Top 3 Done) ─── -->
+  <details class="panel weekly-panel" id="sec-weekly">
+    <summary style="cursor: pointer; list-style: none; padding: 0; margin: 0; outline: none;">
+      <div class="panel-title" style="display: flex; align-items: center; gap: 10px;">
+        <span data-zh="📅 週記日誌（選用，2 分鐘）" data-en="📅 Weekly journal (optional, 2 min)">📅 週記日誌（選用，2 分鐘）</span>
+        <span style="font-size: 11px; color: var(--text-muted); font-weight: 500;" data-zh="點開展開" data-en="click to expand">點開展開</span>
+      </div>
+      <div class="panel-sub" data-zh="如果你想記錄每週軌跡。注意：「本月該做的 3 件事」的「✓ 完成了」按鈕已經是更具體的進度追蹤，這裡是補充用的「日誌式」紀錄。" data-en="Optional weekly journal. Note: the Top 3 Actions 'Done' buttons already track concrete progress; this is a supplementary free-form log.">如果你想記錄每週軌跡。注意：「本月該做的 3 件事」的「✓ 完成了」按鈕已經是更具體的進度追蹤，這裡是補充用的「日誌式」紀錄。</div>
+    </summary>
+    <div id="weeklyCheckinContent" style="margin-top: 12px;"></div>
+  </details>
 
   <!-- ── Group divider: Business Decisions ───────────────── -->
   <div class="group-divider">
