@@ -6427,6 +6427,76 @@ Applicant: ${ownerName} (signature)
     premium:     { color: '#059669', bg: 'rgba(5, 150, 105, 0.08)',  border: 'rgba(5, 150, 105, 0.3)',  emoji: '🟩', zh: '故事溢價（≥50%）',   en: 'Story premium (≥50%)' }
   };
 
+  // Substitute [姓名]/[認證]/etc placeholders in opener templates with
+  // the farm's actual data so the farmer can copy-paste a ready-to-
+  // send message instead of one with manual fill-in fields.
+  function fillOpenerPlaceholders(text, inp, r, isZh) {
+    const ph = CLIENT_CONFIG.practiceHistory || {};
+    const contact = CLIENT_CONFIG.contact || {};
+    const years = Object.values(ph).filter(y => y && /^\d{4}$/.test(y)).map(y => parseInt(y));
+    const earliestYear = years.length ? Math.min(...years) : null;
+    const yearsRun = earliestYear ? (new Date().getFullYear() - earliestYear) : null;
+    const certs = (CLIENT_CONFIG.certifications || []).map(c => (c.label && (isZh ? c.label.zh : c.label.en)) || c.id).filter(Boolean);
+    const cropMap = isZh
+      ? { rice: '稻米', vegetables: '蔬菜', fruit: '水果', livestock: '畜產', mixed: '綜合農產' }
+      : { rice: 'rice', vegetables: 'vegetables', fruit: 'fruit', livestock: 'livestock', mixed: 'mixed produce' };
+    const ownerName = (contact.name && (isZh ? contact.name.zh : contact.name.en))
+      || (isZh ? CLIENT_CONFIG.clientName?.zh : CLIENT_CONFIG.clientName?.en)
+      || (isZh ? '（請填寫姓名）' : '(your name)');
+    const region = (isZh ? CLIENT_CONFIG.clientLocation?.zh : CLIENT_CONFIG.clientLocation?.en) || (isZh ? '台灣' : 'Taiwan');
+    const yieldKg = inp.annualYieldKg || 0;
+    const weeklyKg = yieldKg > 0 ? Math.floor(yieldKg / 52) : null;
+    const dashUrl = location.origin + location.pathname + location.search + (location.hash.startsWith('#data=') ? location.hash : '');
+    const cost = computeAnnualCost().total;
+    const costPerKg = (yieldKg > 0 && cost > 0) ? cost / yieldKg : null;
+    const csaWeekly = costPerKg ? Math.round(costPerKg * 1.6 * (weeklyKg || 5) / 100) * 100 : null;
+    const giftPrice = costPerKg ? Math.round(costPerKg * 2.5 / 50) * 50 : null;
+
+    const replacements = {
+      '\\[姓名\\]': ownerName,
+      '\\[認證(?:/做法)?\\]': certs.length ? certs.join('、') : (isZh ? '友善耕作做法' : 'friendly farming practices'),
+      '\\[實踐年數\\]': yearsRun != null ? String(yearsRun) : (isZh ? '多' : 'several'),
+      '\\[年產量\\]': yieldKg > 0 ? yieldKg.toLocaleString() : (isZh ? '（產量待填）' : '(yield TBD)'),
+      '\\[地區\\]': region,
+      '\\[縣市\\]': region.split(/[ ·,]/)[0],
+      '\\[作物\\]': cropMap[inp.cropType] || (isZh ? '農產' : 'produce'),
+      '\\[面積\\]': inp.farmSize ? String(inp.farmSize) : '?',
+      '\\[現有通路\\]': (isZh ? '（現有通路，例：在地市集 / 朋友訂購）' : '(existing channel, e.g. local market / friends)'),
+      '\\[儀表板URL\\]': dashUrl.length > 120 ? dashUrl.slice(0, 80) + '…' : dashUrl,
+      '\\[驗證機構\\]': certs.find(c => /有機|organic/i.test(c)) || (isZh ? '（驗證機構名稱）' : '(certifying body)'),
+      '\\[週產量\\]': weeklyKg ? weeklyKg.toLocaleString() : '?',
+      '\\[週費\\]': csaWeekly ? csaWeekly.toLocaleString() : '500',
+      '\\[禮盒價\\]': giftPrice ? giftPrice.toLocaleString() : '800',
+      '\\[學校/區域\\]': region.split(/[ ·,]/)[0] + (isZh ? '區內' : ' area'),
+      '\\[主廚名\\]': isZh ? '（主廚姓名，請填寫）' : '(Chef name, please fill in)',
+      '\\[縣市政府\\]': region.split(/[ ·,]/)[0] + (isZh ? '縣 / 市政府' : ' County/City Govt'),
+      '\\[area\\]': inp.farmSize ? String(inp.farmSize) : '?',
+      '\\[crop\\]': cropMap[inp.cropType] || 'produce',
+      '\\[region\\]': region,
+      '\\[county\\]': region.split(/[ ·,]/)[0],
+      '\\[cert(?:/practice)?\\]': certs.length ? certs.join(', ') : 'friendly farming practices',
+      '\\[years\\]': yearsRun != null ? String(yearsRun) : 'several',
+      '\\[yield\\]': yieldKg > 0 ? yieldKg.toLocaleString() : '(TBD)',
+      '\\[annual yield\\]': yieldKg > 0 ? yieldKg.toLocaleString() : '(TBD)',
+      '\\[existing channels\\]': '(existing channel, e.g. local market)',
+      '\\[dashboard URL\\]': dashUrl.length > 120 ? dashUrl.slice(0, 80) + '…' : dashUrl,
+      '\\[body\\]': certs.find(c => /organic|MOA|TOAF/i.test(c)) || '(certifying body)',
+      '\\[weekly yield\\]': weeklyKg ? weeklyKg.toLocaleString() : '?',
+      '\\[weekly fee\\]': csaWeekly ? csaWeekly.toLocaleString() : '500',
+      '\\[box price\\]': giftPrice ? giftPrice.toLocaleString() : '800',
+      '\\[name\\]': ownerName,
+      '\\[Chef\\]': '(Chef name, please fill in)',
+      '\\[county\\] County/City Govt': region.split(/[ ·,]/)[0] + ' County/City Govt',
+      '\\[school district\\]': region.split(/[ ·,]/)[0] + ' school district',
+      '\\[area\\]-ha': inp.farmSize ? inp.farmSize + '-ha' : '?-ha'
+    };
+    let out = text;
+    for (const [pattern, value] of Object.entries(replacements)) {
+      out = out.replace(new RegExp(pattern, 'g'), value);
+    }
+    return out;
+  }
+
   function renderPricingStudio(inp, r) {
     const host = document.getElementById('pricingStudioContent');
     if (!host) return;
@@ -6469,7 +6539,8 @@ Applicant: ${ownerName} (signature)
       byTier[tier].forEach(c => {
         const suggestedPrice = costPerKg / (1 - c.marginTarget);
         const channelMargin = (c.marginTarget * 100).toFixed(0);
-        const openerText = c.opener ? (isZh ? c.opener.zh : c.opener.en) : null;
+        const rawOpener = c.opener ? (isZh ? c.opener.zh : c.opener.en) : null;
+        const openerText = rawOpener ? fillOpenerPlaceholders(rawOpener, inp, r, isZh) : null;
         const openerId = 'opener-' + c.id;
 
         html += `
