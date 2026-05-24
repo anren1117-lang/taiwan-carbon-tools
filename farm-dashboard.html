@@ -94,6 +94,31 @@
   }
   .lang-toggle:hover { border-color: var(--accent); }
 
+  /* ── Touch targets: enforce 44px min on coarse pointers ─── */
+  /* Apple HIG + Material both recommend 44px minimum for tappable
+     elements. Default desktop styles are tighter for mouse precision;
+     this block expands them only on touch devices (phones/tablets). */
+  @media (pointer: coarse) {
+    button, .ta-link, .farm-action, .mobile-jumper-cta,
+    .mobile-jumper select, .agent-chip,
+    .top-action-card .ta-link, .top-action-card button,
+    .agent-reset, .farm-action.primary, .farm-action.secondary {
+      min-height: 44px;
+      padding-top: 10px;
+      padding-bottom: 10px;
+    }
+    /* Forms */
+    input[type="text"], input[type="number"], input[type="email"],
+    input[type="tel"], input[type="date"], select, textarea {
+      min-height: 44px;
+      font-size: 16px; /* prevents iOS zoom-on-focus */
+    }
+    /* Smaller utility buttons that are next-to-each-other (don't
+       balloon them, but ensure 36px minimum for spacing) */
+    summary, .sn-link, .erp-export-btn {
+      min-height: 36px;
+    }
+  }
   /* ── Mobile sticky bottom jumper (mobile only) ─────────── */
   .mobile-jumper {
     display: none;
