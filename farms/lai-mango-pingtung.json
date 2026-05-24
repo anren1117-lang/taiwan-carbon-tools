@@ -98,5 +98,17 @@
 
   "soilHistory": [
     { "date": "2022-02", "socPercent": 1.4, "bulkDensity": 1.30, "depthCm": 30 }
+  ],
+
+  "contact": {
+    "name":  { "zh": "賴家芒果園 (示範)", "en": "Lai Family Mango Orchard (demo)" },
+    "phone": "08-xxx-xxxx",
+    "email": "lai-mango@example.tw"
+  },
+
+  "certifications": [
+    { "id": "organic", "label": { "zh": "慈心有機驗證",  "en": "TOAF organic cert" }, "tier": "premium" },
+    { "id": "tgap",    "label": { "zh": "TGAP 產銷履歷", "en": "TGAP traceability" }, "tier": "standard" },
+    { "id": "carbon",  "label": { "zh": "農林碳匯先行區",  "en": "Agroforestry carbon pilot" }, "tier": "premium" }
   ]
 }

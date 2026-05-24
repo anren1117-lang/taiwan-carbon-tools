@@ -98,5 +98,16 @@
 
   "soilHistory": [
     { "date": "2022-03", "socPercent": 1.5, "bulkDensity": 1.3, "depthCm": 30 }
+  ],
+
+  "contact": {
+    "name":  { "zh": "（示範資料）", "en": "(Demo data)" },
+    "phone": "05-xxx-xxxx",
+    "email": "demo@example.tw"
+  },
+
+  "certifications": [
+    { "id": "tgap",     "label": { "zh": "TGAP 產銷履歷", "en": "TGAP traceability" },     "tier": "standard" },
+    { "id": "friendly", "label": { "zh": "友善耕作登錄",   "en": "Friendly farming registered" }, "tier": "standard" }
   ]
 }

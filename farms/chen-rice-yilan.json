@@ -86,5 +86,17 @@
 
   "soilHistory": [
     { "date": "2022-03", "socPercent": 2.1, "bulkDensity": 1.25, "depthCm": 30 }
+  ],
+
+  "contact": {
+    "name":  { "zh": "陳家米農 (示範)", "en": "Chen Family Rice (demo)" },
+    "phone": "03-xxx-xxxx",
+    "email": "chen-rice@example.tw"
+  },
+
+  "certifications": [
+    { "id": "tgap",     "label": { "zh": "TGAP 產銷履歷",         "en": "TGAP traceability" },        "tier": "standard" },
+    { "id": "moa",      "label": { "zh": "MOA 有機驗證",           "en": "MOA organic cert" },         "tier": "premium" },
+    { "id": "awd",      "label": { "zh": "AWD 節水稻作示範",       "en": "AWD water-mgmt demo" },      "tier": "standard" }
   ]
 }

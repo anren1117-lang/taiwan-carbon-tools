@@ -102,5 +102,16 @@
 
   "soilHistory": [
     { "date": "2021-11", "socPercent": 1.8, "bulkDensity": 1.35, "depthCm": 30 }
+  ],
+
+  "contact": {
+    "name":  { "zh": "魏家酪農場 (示範)", "en": "Wei Family Dairy (demo)" },
+    "phone": "04-xxx-xxxx",
+    "email": "wei-dairy@example.tw"
+  },
+
+  "certifications": [
+    { "id": "tgap",          "label": { "zh": "TGAP 產銷履歷",           "en": "TGAP traceability" },          "tier": "standard" },
+    { "id": "happy-cow",     "label": { "zh": "動物福祉乳業標章 (申請中)", "en": "Animal welfare cert (pending)" }, "tier": "premium" }
   ]
 }
