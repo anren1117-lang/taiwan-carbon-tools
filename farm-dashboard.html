@@ -2004,6 +2004,7 @@
     <select id="mobileJumpSelect" aria-label="Jump to section">
       <option value="" data-zh="跳至區段…" data-en="Jump to section…">跳至區段…</option>
       <option value="sec-top3" data-zh="🎯 本月該做的 3 件事" data-en="🎯 Top 3 actions">🎯 本月該做的 3 件事</option>
+      <option value="sec-weekly" data-zh="📅 本週回顧" data-en="📅 Weekly check-in">📅 本週回顧</option>
       <option value="sec-cashflow" data-zh="💧 現金流月曆" data-en="💧 Cash flow">💧 現金流月曆</option>
       <option value="sec-pricing" data-zh="💰 定價工作室" data-en="💰 Pricing">💰 定價工作室</option>
       <option value="sec-roi" data-zh="📈 投資回收" data-en="📈 Practice ROI">📈 投資回收</option>
@@ -2028,6 +2029,7 @@
     <div class="sn-title" data-zh="跳至" data-en="Jump to">跳至</div>
     <a href="#sec-overview" class="sn-link active" data-zh="概覽" data-en="Overview">概覽</a>
     <a href="#sec-top3" class="sn-link" data-zh="本月 3 件事" data-en="Top 3 actions">本月 3 件事</a>
+    <a href="#sec-weekly" class="sn-link" data-zh="本週回顧" data-en="Weekly">本週回顧</a>
     <div class="sn-group-label" data-zh="01 經營決策" data-en="01 Business">01 經營決策</div>
     <a href="#sec-cashflow" class="sn-link" data-zh="現金流月曆" data-en="Cash flow">現金流月曆</a>
     <a href="#sec-pricing" class="sn-link" data-zh="定價工作室" data-en="Pricing">定價工作室</a>
@@ -2133,6 +2135,13 @@
     <div class="panel-title" data-zh="本月該做的 3 件事（依你的資料即時生成）" data-en="This month's top 3 actions (derived live from your data)">本月該做的 3 件事（依你的資料即時生成）</div>
     <div class="panel-sub" data-zh="顧問會做的事：把你 12 個面板的資料消化過，挑出本月「最該做」的 3 件。每件都有資料依據和對應的面板連結。" data-en="What a consultant would do: digest all 12 panels of your data, pick the 3 highest-priority moves for this month. Each is backed by your numbers and linked to the relevant panel.">顧問會做的事：把你 12 個面板的資料消化過，挑出本月「最該做」的 3 件。每件都有資料依據和對應的面板連結。</div>
     <div id="top3Content"></div>
+  </section>
+
+  <!-- ── Weekly Check-in: turn dashboard into a habit ─────── -->
+  <section class="panel" id="sec-weekly">
+    <div class="panel-title" data-zh="本週回顧（每週花 2 分鐘）" data-en="Weekly check-in (2 minutes per week)">本週回顧（每週花 2 分鐘）</div>
+    <div class="panel-sub" data-zh="把儀表板變成週習慣。每週點選 4 個快問 + 留 1 行筆記，連續紀錄能讓你 12 週後看到「自己的軌跡」。" data-en="Make the dashboard a weekly habit. Tick 4 quick questions + 1 line of notes; consistent logging lets you see 'your own trajectory' after 12 weeks.">把儀表板變成週習慣。每週點選 4 個快問 + 留 1 行筆記，連續紀錄能讓你 12 週後看到「自己的軌跡」。</div>
+    <div id="weeklyCheckinContent"></div>
   </section>
 
   <!-- ── Group divider: Business Decisions ───────────────── -->
@@ -6396,6 +6405,133 @@ Applicant: ${ownerName} (signature)
     });
   };
 
+  // ── Weekly Check-in: ritual loop, stored per-farm in localStorage ─
+  function weeklyStorageKey() {
+    const id = (CLIENT_CONFIG && CLIENT_CONFIG.id) || 'demo';
+    return 'tct_weekly_' + id;
+  }
+
+  // ISO week-year string for current date (e.g., "2026-W21")
+  function isoWeekKey(d = new Date()) {
+    const date = new Date(d.getTime());
+    date.setHours(0, 0, 0, 0);
+    date.setDate(date.getDate() + 4 - (date.getDay() || 7));
+    const yearStart = new Date(date.getFullYear(), 0, 1);
+    const weekNum = Math.ceil((((date - yearStart) / 86400000) + 1) / 7);
+    return `${date.getFullYear()}-W${String(weekNum).padStart(2, '0')}`;
+  }
+
+  function loadWeeklyEntries() {
+    try {
+      const raw = localStorage.getItem(weeklyStorageKey());
+      return raw ? JSON.parse(raw) : {};
+    } catch (e) { return {}; }
+  }
+
+  function computeStreak(entries) {
+    let streak = 0;
+    let cursor = new Date();
+    for (let i = 0; i < 52; i++) {
+      const key = isoWeekKey(cursor);
+      if (entries[key]) { streak++; cursor.setDate(cursor.getDate() - 7); }
+      else break;
+    }
+    return streak;
+  }
+
+  function renderWeeklyCheckin() {
+    const host = document.getElementById('weeklyCheckinContent');
+    if (!host) return;
+    const isZh = currentLang !== 'en';
+    const entries = loadWeeklyEntries();
+    const currentWeek = isoWeekKey();
+    const currentEntry = entries[currentWeek] || {};
+    const streak = computeStreak(entries);
+
+    const questions = [
+      { id: 'q_sales', zh: '本週有出貨 / 銷售嗎？', en: 'Made any sales this week?' },
+      { id: 'q_buyer', zh: '本週接觸了新買家 / 通路嗎？', en: 'Contacted any new buyers / channels?' },
+      { id: 'q_action', zh: '完成了「本月 3 件事」其中之一？', en: 'Completed one of the Top 3 Actions?' },
+      { id: 'q_issue', zh: '本週有任何天氣 / 病蟲 / 設備問題？', en: 'Any weather / pest / equipment issues?' }
+    ];
+
+    // Render current week form
+    let html = `
+      <div style="display: flex; flex-wrap: wrap; gap: 14px; align-items: baseline; margin-bottom: 14px;">
+        <div style="font-size: 14px; font-weight: 700; color: var(--accent);">📅 ${isZh ? '本週' : 'This week'}: ${currentWeek}</div>
+        ${streak > 0 ? `<div style="font-size: 13px; padding: 4px 12px; background: rgba(217, 119, 6, 0.12); color: #d97706; border-radius: 999px; font-weight: 700;">🔥 ${isZh ? `連續紀錄 ${streak} 週` : `${streak}-week streak`}</div>` : ''}
+        ${currentEntry.savedAt ? `<div style="font-size: 12px; color: var(--muted);">${isZh ? '✓ 本週已紀錄' : '✓ logged'}</div>` : ''}
+      </div>
+      <div style="display: grid; gap: 8px; margin-bottom: 12px;">
+    `;
+
+    questions.forEach(q => {
+      const value = currentEntry[q.id] || '';
+      html += `
+        <div style="display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; padding: 10px 14px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px;">
+          <div style="font-size: 13px;">${isZh ? q.zh : q.en}</div>
+          <div style="display: flex; gap: 6px;">
+            <button onclick="setWeeklyAnswer('${q.id}', 'yes')" class="wc-btn ${value === 'yes' ? 'active yes' : ''}" style="padding: 5px 14px; border: 1px solid ${value === 'yes' ? '#059669' : 'var(--border)'}; background: ${value === 'yes' ? '#059669' : 'var(--bg-card)'}; color: ${value === 'yes' ? '#fff' : 'var(--text)'}; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer;">${isZh ? '是' : 'Yes'}</button>
+            <button onclick="setWeeklyAnswer('${q.id}', 'no')" class="wc-btn ${value === 'no' ? 'active no' : ''}" style="padding: 5px 14px; border: 1px solid ${value === 'no' ? '#6b7280' : 'var(--border)'}; background: ${value === 'no' ? '#6b7280' : 'var(--bg-card)'}; color: ${value === 'no' ? '#fff' : 'var(--text)'}; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer;">${isZh ? '否' : 'No'}</button>
+          </div>
+        </div>
+      `;
+    });
+
+    html += `
+      </div>
+      <div style="margin-bottom: 12px;">
+        <textarea id="weeklyNote" placeholder="${isZh ? '一句話：本週最值得記錄的是什麼？（會出貨數量、定價突破、學到的事、買家回饋…）' : 'One line: what is worth remembering this week? (volume, pricing breakthrough, learning, buyer feedback…)'}" style="width: 100%; min-height: 70px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); font-size: 13px; font-family: inherit; resize: vertical; box-sizing: border-box;">${currentEntry.note || ''}</textarea>
+      </div>
+      <button onclick="saveWeeklyCheckin()" style="padding: 8px 18px; background: var(--accent); color: #fff; border: none; border-radius: 6px; font-size: 13px; font-weight: 700; cursor: pointer;">${isZh ? (currentEntry.savedAt ? '更新本週紀錄' : '儲存本週紀錄') : (currentEntry.savedAt ? 'Update this week' : 'Save this week')}</button>
+    `;
+
+    // Recent history (last 4 weeks)
+    const sorted = Object.keys(entries).sort().reverse().slice(0, 4);
+    if (sorted.length > 0) {
+      html += `
+        <div style="margin-top: 24px; padding-top: 14px; border-top: 1px solid var(--border);">
+          <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 10px;">${isZh ? '最近 4 週' : 'Last 4 weeks'}</div>
+          <div style="display: grid; gap: 8px;">
+      `;
+      sorted.forEach(wk => {
+        const e = entries[wk];
+        const yesCount = questions.filter(q => e[q.id] === 'yes').length;
+        const verdict = yesCount >= 3 ? '🟢' : (yesCount >= 1 ? '🟡' : '⚪');
+        html += `
+          <div style="display: grid; grid-template-columns: auto auto 1fr; gap: 12px; align-items: start; padding: 8px 12px; background: var(--bg); border-radius: 6px; font-size: 12.5px;">
+            <div style="font-weight: 700; color: var(--muted);">${wk}</div>
+            <div>${verdict} <span style="color: var(--muted);">${yesCount}/4 yes</span></div>
+            <div style="color: var(--text); ${e.note ? '' : 'font-style: italic; color: var(--muted);'}">${e.note || (isZh ? '（無筆記）' : '(no notes)')}</div>
+          </div>
+        `;
+      });
+      html += `</div></div>`;
+    }
+
+    host.innerHTML = html;
+  }
+
+  window.setWeeklyAnswer = function(qid, value) {
+    const entries = loadWeeklyEntries();
+    const week = isoWeekKey();
+    if (!entries[week]) entries[week] = {};
+    entries[week][qid] = value;
+    try { localStorage.setItem(weeklyStorageKey(), JSON.stringify(entries)); } catch (e) {}
+    renderWeeklyCheckin();
+  };
+
+  window.saveWeeklyCheckin = function() {
+    const entries = loadWeeklyEntries();
+    const week = isoWeekKey();
+    if (!entries[week]) entries[week] = {};
+    const noteEl = document.getElementById('weeklyNote');
+    if (noteEl) entries[week].note = noteEl.value.trim();
+    entries[week].savedAt = new Date().toISOString();
+    try { localStorage.setItem(weeklyStorageKey(), JSON.stringify(entries)); } catch (e) {}
+    renderWeeklyCheckin();
+  };
+
   // ── Mobile section jumper (sticky bottom bar) ────────────────────
   function initMobileJumper() {
     const sel = document.getElementById('mobileJumpSelect');
@@ -7252,6 +7388,7 @@ Applicant: ${ownerName} (signature)
     renderClientBanner(inp);
     renderMoneyHero(inp, r);
     renderTopActions(inp, r);
+    renderWeeklyCheckin();
     renderKPIs(inp, r);
     renderNarrative(inp, r);
     renderElectricityChart();
