@@ -6022,7 +6022,34 @@ My cost ledger is transparent (${costPerKg ? `actual cost NT$ ${costPerKg}/kg` :
       });
     }
 
-    // 5. CONCENTRATION RISK — single crop type
+    // 5. SEVERELY BEHIND ON A GOAL — surface as top action
+    const goals = loadGoals();
+    const monthOfYear = (new Date().getMonth() + 1);
+    const paceFraction = monthOfYear / 12;
+    const goalChecks = [
+      { id: 'revenueGoal', current: revenue + subsidies, label: { zh: '年營收', en: 'annual revenue' }, link: '#sec-goals', linkLabel: { zh: '看目標追蹤', en: 'See goals' } },
+      { id: 'marginGoal',  current: (revenue + subsidies) > 0 ? (((revenue + subsidies) - cost) / (revenue + subsidies)) * 100 : 0, label: { zh: '毛利率', en: 'margin %' }, link: '#sec-pricing', linkLabel: { zh: '看定價工作室', en: 'See Pricing Studio' } },
+      { id: 'soilGoal',    current: (CLIENT_CONFIG.soilTest || {}).socPercent || 0, label: { zh: '土壤碳', en: 'soil organic carbon' }, link: '#sec-roi', linkLabel: { zh: '看投資回收', en: 'See Practice ROI' } }
+    ];
+    goalChecks.forEach(g => {
+      const target = parseFloat(goals[g.id]) || 0;
+      if (target <= 0) return;
+      const pct = (g.current / target);
+      const expected = paceFraction;
+      if (pct < expected * 0.5) {
+        candidates.push({
+          priority: 78,
+          urgency: 'medium',
+          title: isZh ? `「${g.label.zh}」目標嚴重落後 — 已 ${(pct * 100).toFixed(0)}%，本月應該 ${(expected * 100).toFixed(0)}%` : `"${g.label.en}" goal severely behind — at ${(pct * 100).toFixed(0)}%, should be ${(expected * 100).toFixed(0)}%`,
+          why: isZh ? `按目前進度，年底無法達成目標。需要重新規劃或加速關鍵動作。` : `At this pace, year-end target won't be met. Need to replan or accelerate key actions.`,
+          impact: isZh ? '影響：年度目標達成率 + 自我問責' : 'Impact: annual goal completion + self-accountability',
+          link: g.link,
+          linkLabel: isZh ? g.linkLabel.zh : g.linkLabel.en
+        });
+      }
+    });
+
+    // 6. CONCENTRATION RISK — single crop type
     if (inp.cropType && inp.cropType !== 'mixed' && !adopted.agroforestry) {
       candidates.push({
         priority: 60,
