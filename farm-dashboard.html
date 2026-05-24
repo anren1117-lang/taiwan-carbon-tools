@@ -5955,7 +5955,9 @@ Applicant: ${ownerName} (signature)
         const c = inp.cropType;
         return (c === 'vegetables' || c === 'mixed' || c === 'fruit') ? 90 : (c === 'rice' ? 50 : 30);
       },
-      why: { zh: '蔬菜 / 混合 / 水果適合每週配送；稻米可整合為「米 + 季節農產組合」。', en: 'Vegetables / mixed / fruit suit weekly delivery; rice can bundle as "rice + seasonal" combo.' }
+      why: { zh: '蔬菜 / 混合 / 水果適合每週配送；稻米可整合為「米 + 季節農產組合」。', en: 'Vegetables / mixed / fruit suit weekly delivery; rice can bundle as "rice + seasonal" combo.' },
+      firstWeek: { zh: '本週做：在 LINE 群 / Facebook 個人頁發一篇「徵 30 位試吃會員」，免費試吃 2 週換取真實回饋。', en: 'This week: post to LINE group / personal Facebook recruiting 30 trial members, free for 2 weeks in exchange for honest feedback.' },
+      pitfall: { zh: '常見失敗：太早投入專業網站 / 物流。先用試算表 + 自家送貨驗證需求。', en: 'Common failure: investing in pro website / logistics too early. Validate demand first with spreadsheet + self-delivery.' }
     },
     {
       id: 'farm_stay',
@@ -5972,7 +5974,9 @@ Applicant: ${ownerName} (signature)
         if (tourist) return 70;
         return 50;
       },
-      why: { zh: '東部 / 南部 / 中部 / 離島觀光區基本盤強；果園 / 混合農場最容易做體驗活動。', en: 'East / south / central / offshore tourism regions have strong baseline; orchards / mixed farms are easiest for experience activities.' }
+      why: { zh: '東部 / 南部 / 中部 / 離島觀光區基本盤強；果園 / 混合農場最容易做體驗活動。', en: 'East / south / central / offshore tourism regions have strong baseline; orchards / mixed farms are easiest for experience activities.' },
+      firstWeek: { zh: '本週做：找縣政府觀光科 / 農業處詢問「休閒農業區登記」流程，看自家是否在範圍內。', en: 'This week: contact county tourism / agriculture dept about leisure-ag zone registration and whether your land qualifies.' },
+      pitfall: { zh: '常見失敗：先投資民宿改建，沒先驗證「真的有人會來」。先做半日體驗 3 個月，數據說話再投資。', en: 'Common failure: building lodging before validating "people will actually come". Run half-day experiences for 3 months first; data first, then invest.' }
     },
     {
       id: 'processing',
@@ -5985,7 +5989,9 @@ Applicant: ${ownerName} (signature)
         const c = inp.cropType;
         return (c === 'fruit') ? 90 : (c === 'rice' ? 80 : (c === 'vegetables' ? 65 : 55));
       },
-      why: { zh: '水果 / 稻米最有經典加工品 (果乾 / 果醬 / 米麩 / 米果 / 米油)。蔬菜可做漬物、醬料。', en: 'Fruit / rice have classic value-add SKUs (dried, jam, rice flour / crackers / oil). Vegetables work as pickles / sauces.' }
+      why: { zh: '水果 / 稻米最有經典加工品 (果乾 / 果醬 / 米麩 / 米果 / 米油)。蔬菜可做漬物、醬料。', en: 'Fruit / rice have classic value-add SKUs (dried, jam, rice flour / crackers / oil). Vegetables work as pickles / sauces.' },
+      firstWeek: { zh: '本週做：選 1 個你最常剩 / 醜果最多的品項，用家裡的鍋子試做 5 罐。給朋友試吃要真實回饋。', en: 'This week: pick 1 SKU made from your most-common surplus / ugly produce. Make 5 jars at home; give to friends for honest tasting.' },
+      pitfall: { zh: '常見失敗：未取得食品工廠登記 / HACCP 就大量販售。先小量試水，再決定是否申請。違法販售會被檢舉。', en: 'Common failure: selling at volume without food-factory registration / HACCP. Start small to test demand, then decide on certification. Illegal sales get reported.' }
     },
     {
       id: 'agroforestry_timber',
@@ -6001,7 +6007,9 @@ Applicant: ${ownerName} (signature)
         if (farmSize >= 0.5) return 70;
         return 40;
       },
-      why: { zh: '面積 ≥ 1 ha 最划算；現有樹木不到 30 棵的農場有最大新增空間。', en: 'Most cost-effective at ≥1 ha; farms with <30 trees have most expansion headroom.' }
+      why: { zh: '面積 ≥ 1 ha 最划算；現有樹木不到 30 棵的農場有最大新增空間。', en: 'Most cost-effective at ≥1 ha; farms with <30 trees have most expansion headroom.' },
+      firstWeek: { zh: '本週做：到林業署官網查「造林獎勵」當年申請窗口，並向縣林管處諮詢適合本場的樹種。', en: 'This week: check Forestry Bureau website for current-year afforestation grant window; ask county forest office about tree species suited to your land.' },
+      pitfall: { zh: '常見失敗：種錯樹種 (生長慢、不耐當地氣候、與作物搶水)。先諮詢林管處，免費。', en: 'Common failure: wrong species (slow-growing, poor climate fit, competes with crops for water). Consult forest office first — it\'s free.' }
     },
     {
       id: 'rooftop_solar',
@@ -6014,7 +6022,9 @@ Applicant: ${ownerName} (signature)
         const hasRenewables = (cfg.renewables || []).some(rn => rn.status === 'active');
         return hasRenewables ? 30 : 80;
       },
-      why: { zh: '回本期 8-10 年 + 25 年保固 = 長期穩定現金流。已裝者優先升級電池。', en: 'Payback 8-10 yrs + 25-yr warranty = stable long-term cash flow. Already-installed should consider battery upgrade.' }
+      why: { zh: '回本期 8-10 年 + 25 年保固 = 長期穩定現金流。已裝者優先升級電池。', en: 'Payback 8-10 yrs + 25-yr warranty = stable long-term cash flow. Already-installed should consider battery upgrade.' },
+      firstWeek: { zh: '本週做：找 2-3 家在地光電承包商現場勘查（多數免費）。比較報價、保固、維護條款。', en: 'This week: get 2-3 local solar contractors to do site survey (usually free). Compare quote, warranty, maintenance terms.' },
+      pitfall: { zh: '常見失敗：簽 20 年「免費屋頂出租」給開發商，自己拿不到收益。寧可貸款買，現金流自己拿。', en: 'Common failure: signing 20-yr "free roof rental" to developer, getting zero cashflow yourself. Better to borrow + own — capture the cash flow.' }
     },
     {
       id: 'beekeeping',
@@ -6029,7 +6039,9 @@ Applicant: ${ownerName} (signature)
         if (chemicalUse > 0) return 20; // bees hate pesticides
         return (c === 'fruit' || c === 'mixed') ? 80 : 60;
       },
-      why: { zh: '果園 / 混合農場有充足蜜源；無化學農藥使用是必要條件。', en: 'Orchards / mixed farms have ample nectar; zero-chemical use is a prerequisite.' }
+      why: { zh: '果園 / 混合農場有充足蜜源；無化學農藥使用是必要條件。', en: 'Orchards / mixed farms have ample nectar; zero-chemical use is a prerequisite.' },
+      firstWeek: { zh: '本週做：聯絡當地農會「養蜂班」報名（一年 1-2 期）。同時確認鄰近 3 公里內無大規模化學農場。', en: 'This week: register for the local farmer\'s association beekeeping course (held 1-2× per year). Also verify no large chemical-using farms within 3km.' },
+      pitfall: { zh: '常見失敗：未訓練就買蜜箱，蜂群大量死亡。先上完課程，再從 2 箱開始。', en: 'Common failure: buying hives without training → mass colony loss. Complete the course first, start with 2 hives.' }
     },
     {
       id: 'workshops',
@@ -6043,7 +6055,9 @@ Applicant: ${ownerName} (signature)
         const practiceCount = Object.values(practices).filter(Boolean).length;
         return practiceCount >= 3 ? 85 : (practiceCount >= 1 ? 60 : 30);
       },
-      why: { zh: '已實踐 3+ 項做法 = 有「能教的內容」。也順便建立個人品牌。', en: 'With 3+ practices adopted = you have content to teach. Also builds personal brand.' }
+      why: { zh: '已實踐 3+ 項做法 = 有「能教的內容」。也順便建立個人品牌。', en: 'With 3+ practices adopted = you have content to teach. Also builds personal brand.' },
+      firstWeek: { zh: '本週做：選 1 個你最熟悉的主題（例：友善耕作入門）寫 3-5 篇 Facebook 貼文。看哪篇互動最高 → 那就是第一場工作坊主題。', en: 'This week: pick your most-familiar topic (e.g., friendly-farming intro) and write 3-5 Facebook posts. The one with most engagement = your first workshop topic.' },
+      pitfall: { zh: '常見失敗：太早收費，朋友不好意思付。前 2-3 場「自由樂捐」累積口碑，第 4 場才正式收費。', en: 'Common failure: charging too early — friends feel awkward paying. Run 2-3 "donation-based" sessions first, then charge from the 4th.' }
     },
     {
       id: 'compost_sale',
@@ -6056,7 +6070,9 @@ Applicant: ${ownerName} (signature)
         const composting = inp.practices && inp.practices.compost;
         return composting ? 75 : 30;
       },
-      why: { zh: '已堆肥 = 已有原料和經驗；只需把多餘的拿出去賣。', en: 'If already composting = you have the inputs and know-how; just sell the surplus.' }
+      why: { zh: '已堆肥 = 已有原料和經驗；只需把多餘的拿出去賣。', en: 'If already composting = you have the inputs and know-how; just sell the surplus.' },
+      firstWeek: { zh: '本週做：盤點 1 個月的堆肥產量；確認自家用量；超出部分裝 5 包試賣給鄰近 2 戶農場。', en: 'This week: measure 1 month of compost output, subtract own use, bag the surplus into 5 sample packs to sell to 2 neighboring farms.' },
+      pitfall: { zh: '常見失敗：未做 C/N 比 / 含氮量檢驗就大量販售。買家發現品質不一致會回頭找便宜替代品。先送一次第三方檢驗。', en: 'Common failure: selling at volume without C/N ratio + N% testing. Buyers find inconsistency → switch to cheap substitutes. Get one third-party test first.' }
     },
     {
       id: 'gift_box',
@@ -6069,7 +6085,9 @@ Applicant: ${ownerName} (signature)
         const c = inp.cropType;
         return (c === 'fruit') ? 90 : (c === 'rice' ? 75 : (c === 'mixed' ? 70 : 50));
       },
-      why: { zh: '水果禮盒文化最強；稻米可做精品米禮盒；蔬菜可組合「在地野菜禮籃」。', en: 'Fruit-gift culture is strongest; rice can be premium-rice boxed; vegetables can bundle as "local wild-vegetable basket".' }
+      why: { zh: '水果禮盒文化最強；稻米可做精品米禮盒；蔬菜可組合「在地野菜禮籃」。', en: 'Fruit-gift culture is strongest; rice can be premium-rice boxed; vegetables can bundle as "local wild-vegetable basket".' },
+      firstWeek: { zh: '本週做：盤點明年最近的節慶（中秋 / 春節），倒推 2 個月準備期，找 1 家在地包裝設計師 (預算 NT$ 15-30k) 報價。', en: 'This week: identify next major holiday (Mid-Autumn / CNY), count back 2 months for prep window, get a quote from 1 local packaging designer (budget NT$ 15-30k).' },
+      pitfall: { zh: '常見失敗：「我自己做包裝就好」— 包裝決定 70% 禮盒銷售。專業設計值得花 1-2 萬。', en: 'Common failure: "I\'ll design the packaging myself" — packaging drives 70% of gift-box sales. Pro design is worth NT$ 15-30k.' }
     },
     {
       id: 'seed_saving',
@@ -6082,7 +6100,9 @@ Applicant: ${ownerName} (signature)
         const c = inp.cropType;
         return (c === 'vegetables' || c === 'mixed') ? 70 : 35;
       },
-      why: { zh: '蔬菜 / 混合農場品系多，最有保種潛力。原生種市場小但忠誠度高。', en: 'Vegetable / mixed farms have variety diversity = best heritage-seed potential. Niche market but high loyalty.' }
+      why: { zh: '蔬菜 / 混合農場品系多，最有保種潛力。原生種市場小但忠誠度高。', en: 'Vegetable / mixed farms have variety diversity = best heritage-seed potential. Niche market but high loyalty.' },
+      firstWeek: { zh: '本週做：盤點你今年種過、市面買不到的 3-5 個品種。加入「台灣藏種於民」社團（Facebook），先學文化再賣。', en: 'This week: list 3-5 unavailable varieties you grew this year. Join "Taiwan Seed Saving" Facebook group — learn community culture before selling.' },
+      pitfall: { zh: '常見失敗：未注意品種純度（隔離不足 / 雜交），賣出去的種子發芽不一致。先學保種技術。', en: 'Common failure: variety purity not maintained (poor isolation / cross-pollination) → inconsistent germination from sold seed. Learn seed-saving technique first.' }
     }
   ];
 
@@ -6091,10 +6111,13 @@ Applicant: ${ownerName} (signature)
     if (!host) return;
     const isZh = currentLang !== 'en';
 
+    // Cut from top-5 to top-3 to reduce choice paralysis. A farmer
+    // who sees 5 options picks none; 3 options + deep how-to gives
+    // them a real choice they can act on this month.
     const scored = DIVERSIFICATION_OPPORTUNITIES.map(o => ({
       ...o,
       score: o.fit(inp, r, CLIENT_CONFIG)
-    })).sort((a, b) => b.score - a.score).slice(0, 5);
+    })).sort((a, b) => b.score - a.score).slice(0, 3);
 
     let html = '<div style="display: grid; gap: 12px;">';
     scored.forEach((o, idx) => {
@@ -6115,6 +6138,8 @@ Applicant: ${ownerName} (signature)
             <div><div class="u" style="font-size: 10px;">${isZh ? '年潛在收入' : 'Annual potential'}</div><div style="font-weight: 600; margin-top: 2px; color: ${tierColor};">${isZh ? o.income.zh : o.income.en}</div></div>
           </div>
           <div style="margin-top: 8px; padding: 8px 10px; background: var(--bg); border-radius: 6px; font-size: 12px; line-height: 1.6;"><strong>${isZh ? '怎麼開始：' : 'How to start: '}</strong>${isZh ? o.how.zh : o.how.en}</div>
+          ${o.firstWeek ? `<div style="margin-top: 6px; padding: 8px 10px; background: rgba(29, 158, 117, 0.08); border-radius: 6px; font-size: 12px; line-height: 1.6;"><strong style="color: var(--accent);">${isZh ? '🚀 本週做：' : '🚀 This week: '}</strong>${isZh ? o.firstWeek.zh : o.firstWeek.en}</div>` : ''}
+          ${o.pitfall ? `<div style="margin-top: 6px; padding: 8px 10px; background: rgba(220, 38, 38, 0.06); border-radius: 6px; font-size: 12px; line-height: 1.6;"><strong style="color: #dc2626;">${isZh ? '⚠️ 別這樣：' : '⚠️ Avoid: '}</strong>${isZh ? o.pitfall.zh : o.pitfall.en}</div>` : ''}
         </div>
       `;
     });
