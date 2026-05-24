@@ -1,60 +1,101 @@
-# Taiwan Carbon Tools · 台灣碳排工具
+# Taiwan Carbon Tools · 台灣永續經營儀表板
 
-> Free, open-source carbon footprint tools for Taiwan — built with official emission factors.
-> 採用台灣官方排放係數的免費開源碳足跡工具。
+> Free, browser-based **business + carbon** tools for Taiwan sustainable farmers — built with official emission factors and a "heart → business mindset" mission.
+> 為台灣永續農戶打造的免費、純瀏覽器、經營決策 + 碳追蹤工具。
 
 [Live · 線上版本](https://anren1117-lang.github.io/taiwan-carbon-tools/) · MIT License
 
 ---
 
-## English
+## What this is
 
-This repository now hosts two related-but-distinct things:
+Sustainable farmers in Taiwan often have the heart (passion, ecological care) but get crushed on the business side. This project is a free toolkit that gives them a **business brain on top of their heart**: pricing, cash flow, margin, subsidies, negotiation prep, peer comparison, and yes — carbon tracking too, but carbon is just one input into business decisions, not the goal.
 
-### A. Free public calculators
+Everything runs in the browser. Zero backend. Zero data collection. URL fragment encoding (`#data=<base64>`) acts as a free, no-account "save" mechanism.
 
-Zero-dependency, browser-based, Traditional Chinese + English:
+---
+
+## The toolkit
+
+### Public calculators (everyone)
 
 | File | What it does |
 |---|---|
-| [`index.html`](index.html) | Landing page linking to all tools |
+| [`index.html`](index.html) | Landing page |
 | [`household.html`](household.html) | Household carbon footprint — bills, fuel, flights, diet |
 | [`business.html`](business.html) | SME inventory — Scope 1/2/3 + 2026 carbon fee simulator |
-| [`farm.html`](farm.html) | Farm inventory — Scope 1/2/3 + soil organic carbon sinks |
+| [`farm.html`](farm.html) | Farm carbon inventory — Scope 1/2/3 + soil organic carbon sinks |
 
-All four use only Taiwan-government emission factors and run entirely in the browser. No data is collected.
+### Farm Sustainability + Operations Dashboard
 
-### B. Per-client consulting dashboards
+The flagship. Run `farm-dashboard.html` with a farm config (URL fragment, `?id=<sample>`, or local edits in the drawer) and you get:
 
-A multi-tenant carbon dashboard system the advisor (An-Ren Ho) uses with paying consulting clients.
+#### 🎯 At the top
+- **Welcome guide** (first-time, dismissible)
+- **Money Hero** — cost / income / per-kg intensity
+- **Top 3 Actions** — synthesized priorities for this month, with priority cards + CTA links
+- **Weekly Check-in** — 4 quick toggles + 1 line of notes per week, with streak counter
+
+#### 📈 Group 01: Business Decisions
+- **Sustainable Operations Advisor** — buyer negotiation role-play + carbon priority planner
+- **Cash Flow Calendar** — monthly income/expense by crop seasonality, gap-month detection
+- **Pricing Studio** — cost-up × 7 channels × 3 tiers + copy-paste outreach openers
+- **Goal Tracker** — 4 annual goals with calendar-pace verdict (stored per-farm in localStorage)
+- **Peer Comparison** — your numbers vs the 4 sample farms, best/worst highlighted
+- **Practice ROI Switchboard** — 8 practices ranked by payback months for your farm size
+- **Subsidies & Carbon Income** — 6 Taiwan programs with eligibility check + draft application generator for each eligible one
+- **Resource & Market Matching** — channels you can access today
+- **Survival Guide** — viability scorecard + cert ladder + supply chain + market routes + concentration risk + diversification opportunities + 7 business mindset cards
+- **Reduction Roadmap** — actions with ROI
+- **Farm ERP** — daily log + inventory + ledger + contacts (local-only)
+
+#### 🌿 Group 02: Carbon Deep Dive
+- KPIs / narrative / electricity chart / per-kg intensity / data sources / scope breakdown / sinks / fuels + scope 3 / renewables / what-if scenarios
+
+### Buyer-facing outputs
 
 | File | What it does |
 |---|---|
-| [`consulting.html`](consulting.html) | Public consulting offer + pricing |
+| [`farm-pitch.html`](farm-pitch.html) | A4 print-ready buyer pitch sheet: story, practices, certs, soil C, suggested prices, QR to live dashboard |
+| [`farm-buyer.html`](farm-buyer.html) | Verified carbon footprint share view (with QR + printable) |
 | [`farms.html`](farms.html) | Public gallery of sample dashboards |
-| [`farm-onboard.html`](farm-onboard.html) | Self-serve 3-step wizard that outputs a farm JSON |
-| [`farm-dashboard.html?id=<farm>`](farm-dashboard.html) | Consulting view of one specific farm |
-| [`farm-buyer.html?id=<farm>`](farm-buyer.html) | Buyer-facing share view (with QR + printable) |
-| [`farm-carbon-engine.js`](farm-carbon-engine.js) | Shared math, factors, calc — used by both pages |
-| `farms/<id>.json` | One file per client/farm. Drop a new one, get a working dashboard. |
+| [`farm-onboard.html`](farm-onboard.html) | Self-serve 3-step wizard — fill in once, get a URL "account" |
 
-#### Adding a new farm
+### Shared engine
+
+| File | What it does |
+|---|---|
+| [`farm-carbon-engine.js`](farm-carbon-engine.js) | Shared math, emission factors, calc — used by every farm page |
+| `farms/<id>.json` | One file per sample farm |
+
+---
+
+## Two ways to "register" a farm
+
+### Self-serve (URL as account)
+
+The `farm-onboard.html` wizard outputs a base64-encoded JSON appended to `farm-dashboard.html#data=<...>`. **The URL IS the account.** Bookmark it = saved. Share it = shared. No backend, no signup, no password.
+
+Optional: add a `token` field to the JSON for URL-guess protection (`?t=<token>` required to load).
+
+### File-based (consulting / demo farms)
 
 1. Either fill in [`farm-onboard.html`](farm-onboard.html) and download the JSON, **or** copy an existing `farms/*.json` and edit
-2. Save as `farms/<some-id>.json` (use lowercase letters, digits, hyphens — matches the URL slug)
-3. Visit `farm-dashboard.html?id=<some-id>&t=<token>` and `farm-buyer.html?id=<some-id>&t=<token>` — both URLs are listed in the wizard's step 3
-4. Send the buyer URL to the client / their buyers
+2. Save as `farms/<some-id>.json` (lowercase letters / digits / hyphens)
+3. Visit `farm-dashboard.html?id=<some-id>` — works without `?t=` if no token set (this is how the 4 sample farms work)
 
-If the JSON has no `token` field, the URLs work without `&t=` — that's the demo / public-showcase pattern used for the four sample farms.
+### Sample farms shipped in this repo
 
-#### Sample farms shipped in this repo
+- [`farms/demo.json`](farms/demo.json) — Yunlin leafy vegetables, central region
+- [`farms/chen-rice-yilan.json`](farms/chen-rice-yilan.json) — Yilan rice with AWD water management (north)
+- [`farms/wei-dairy-changhua.json`](farms/wei-dairy-changhua.json) — Changhua dairy + layers (central)
+- [`farms/lai-mango-pingtung.json`](farms/lai-mango-pingtung.json) — Pingtung Aiwen mango, carbon-negative (south)
 
-- [`farms/demo.json`](farms/demo.json) — Yunlin leafy vegetables (2.5 ha)
-- [`farms/chen-rice-yilan.json`](farms/chen-rice-yilan.json) — Yilan rice with AWD water mgmt (1.8 ha)
-- [`farms/wei-dairy-changhua.json`](farms/wei-dairy-changhua.json) — Changhua dairy, 8 cows + 200 layers (1.5 ha)
-- [`farms/lai-mango-pingtung.json`](farms/lai-mango-pingtung.json) — Pingtung Aiwen mango orchard, carbon-negative (2.2 ha)
+---
 
-### Emission factors (in `farm-carbon-engine.js`)
+## Emission factors
+
+All factors live in `farm-carbon-engine.js`. Provenance:
 
 | Source | Factor | Provenance |
 |---|---|---|
@@ -72,7 +113,9 @@ If the JSON has no `token` field, the URLs work without `&t=` — that's the dem
 | Trees | 22 kg CO₂e/tree-yr | mature mixed-species mean |
 | Stacking penalty | 2 practices ×0.80 / 3+ ×0.65 | SOC saturation |
 
-### Local dev
+---
+
+## Local dev
 
 ```bash
 git clone https://github.com/anren1117-lang/taiwan-carbon-tools.git
@@ -81,113 +124,37 @@ python3 -m http.server 8000
 # visit http://localhost:8000
 ```
 
-No build step, no npm, no backend. All HTML/CSS/JS.
+No build step, no npm, no backend. Edit any `.html`, refresh.
 
-### Disclaimer
+---
 
-**This is an educational + consulting estimator.** It is *not* a substitute for:
+## Disclaimer
+
+**This is an educational + decision-support estimator.** It is *not* a substitute for:
 
 - A formal **ISO 14064-1** organisational GHG inventory
 - Third-party verification by an accredited body
 - Statutory reporting under Taiwan's *氣候變遷因應法* or the Carbon Fee regulations
 - Carbon credit issuance under Verra VM0042 / Gold Standard / Taiwan's voluntary mechanism
 
-For those purposes, engage a qualified verification body. The dashboard does the data-collection, methodology-transparency, and decision-support layers that *precede* formal verification.
-
-### License
-
-MIT — see [LICENSE](LICENSE).
-
-### Author
-
-Built by **何安仁 An-Ren Ho** (18, Taiwan). Contact: [anren.carbon@gmail.com](mailto:anren.carbon@gmail.com)
+The subsidy application drafts, pricing recommendations, ROI projections, and per-channel margin estimates are conservative starting points — verify with the relevant agency / buyer / supplier before acting.
 
 ---
 
-## 中文
+## License & Author
 
-本專案目前含兩個彼此相關但目的不同的部分：
+MIT — see [LICENSE](LICENSE).
 
-### A. 免費公開計算器
+Built by **何安仁 An-Ren Ho** (Taiwan). Contact: [anren.carbon@gmail.com](mailto:anren.carbon@gmail.com)
 
-零相依、純瀏覽器、繁中 + 英文：
+---
 
-| 檔案 | 功能 |
-|---|---|
-| [`index.html`](index.html) | 首頁，連結所有工具 |
-| [`household.html`](household.html) | 家庭碳足跡 — 帳單、油費、航班、飲食 |
-| [`business.html`](business.html) | 中小企業盤查 — 範疇一二三 + 2026 碳費試算 |
-| [`farm.html`](farm.html) | 農場盤查 — 範疇一二三 + 土壤有機碳匯估算 |
+## 中文簡介
 
-四個工具都僅使用台灣官方排放係數，全程在瀏覽器執行，零資料蒐集。
+這是為台灣永續農戶設計的免費網頁工具。除了碳足跡計算，重點是把「永續耕作」變成可營運的「永續事業」：實際毛利、定價地板、議價籌碼、現金流缺口、補助申請草稿、買家對話劇本、年度目標追蹤、同儕比較、副業多元化建議、本月該做的 3 件事。
 
-### B. 諮詢端的客戶儀表板系統
+**不需要註冊**：URL 就是你的帳號。在 `farm-onboard.html` 填一次資料，產出的網址用書籤存下來就好。
 
-由顧問（何安仁）對付費客戶提供的多租戶碳儀表板系統。
+**不收集任何資料**：所有運算在你的瀏覽器執行，無後端、無 cookie、無分析。
 
-| 檔案 | 功能 |
-|---|---|
-| [`consulting.html`](consulting.html) | 公開的諮詢方案與定價 |
-| [`farms.html`](farms.html) | 公開的示範儀表板畫廊 |
-| [`farm-onboard.html`](farm-onboard.html) | 自助 3 步驟設定精靈，輸出農場 JSON |
-| [`farm-dashboard.html?id=<farm>`](farm-dashboard.html) | 單一農場的顧問端儀表板 |
-| [`farm-buyer.html?id=<farm>`](farm-buyer.html) | 對買方的分享頁（含 QR、可列印） |
-| [`farm-carbon-engine.js`](farm-carbon-engine.js) | 兩個頁面共用的數學引擎與排放係數 |
-| `farms/<id>.json` | 每個客戶一份 JSON。新增即生效。 |
-
-#### 新增一個農場
-
-1. 填寫 [`farm-onboard.html`](farm-onboard.html) 並下載 JSON，**或**複製既有的 `farms/*.json` 編輯
-2. 存檔為 `farms/<某代號>.json`（小寫英數字與連字號）
-3. 開啟 `farm-dashboard.html?id=<代號>&t=<token>` 與 `farm-buyer.html?id=<代號>&t=<token>` — 精靈的第 3 步會列出兩個完整 URL
-4. 把買方分享頁的 URL 傳給客戶或其下游買方
-
-JSON 沒有 `token` 欄位時，URL 不需要 `&t=` 也能載入 — 那是公開示範模式（本專案的四個示範農場即是如此）。
-
-#### 本專案內附的示範農場
-
-- [`farms/demo.json`](farms/demo.json) — 雲林葉菜農場（2.5 公頃）
-- [`farms/chen-rice-yilan.json`](farms/chen-rice-yilan.json) — 宜蘭水稻 + AWD 間歇灌溉（1.8 公頃）
-- [`farms/wei-dairy-changhua.json`](farms/wei-dairy-changhua.json) — 彰化酪農，8 頭乳牛 + 200 隻蛋雞（1.5 公頃）
-- [`farms/lai-mango-pingtung.json`](farms/lai-mango-pingtung.json) — 屏東愛文芒果園，淨碳負（2.2 公頃）
-
-### 排放係數（位於 `farm-carbon-engine.js`）
-
-詳細英文表格如上。主要包括：
-
-- 電力 0.474 kg CO₂e/kWh — 經濟部能源署 2024 年
-- 燃料係數 — 環境部排放係數管理表 v7.0.4
-- 氮肥 N₂O — IPCC Tier 1 預設值（1% × GWP100 273）
-- 水稻 CH₄ — IPCC 2019 Refinement，含水管理係數
-- 牲畜 — IPCC Vol 4 表 10.10 / 10.16（依乳牛/肉牛/母豬/育成豬/蛋雞/肉雞分類）
-- 土壤碳匯 — IPCC 2019 Refinement Tier 1（亞熱帶濕潤）
-
-### 本機開發
-
-```bash
-git clone https://github.com/anren1117-lang/taiwan-carbon-tools.git
-cd taiwan-carbon-tools
-python3 -m http.server 8000
-# 瀏覽 http://localhost:8000
-```
-
-無 build、無 npm、無後端。純 HTML / CSS / JS。
-
-### 重要聲明
-
-**本工具僅供教育用途與顧問估算**，不能取代：
-
-- 依 **ISO 14064-1** 進行的正式組織型溫室氣體盤查
-- 經認證機構之第三方查證
-- 依台灣《氣候變遷因應法》或碳費徵收辦法之法定申報
-- Verra VM0042、Gold Standard、台灣自願減量機制等碳權方法學申請
-
-如需上述用途，請委由合格查驗機構執行。本儀表板處理的是這些正式驗證**之前**的資料收集、方法學透明化、決策支援。
-
-### 授權
-
-MIT — 詳見 [LICENSE](LICENSE)。
-
-### 作者
-
-由 **何安仁 An-Ren Ho**（18，台灣）獨立開發。聯絡：[anren.carbon@gmail.com](mailto:anren.carbon@gmail.com)
+打開 [`farm-dashboard.html`](farm-dashboard.html) 看完整面板，或 [`farm-pitch.html`](farm-pitch.html) 產出 A4 列印的買家提案單。
