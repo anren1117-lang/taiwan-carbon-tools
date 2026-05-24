@@ -404,6 +404,25 @@
     letter-spacing: 0.04em;
   }
   .group-divider.muted .gd-tag { background: var(--text-muted); }
+  .group-divider.collapsible {
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s;
+  }
+  .group-divider.collapsible:hover {
+    background: linear-gradient(90deg, var(--bg-subtle, var(--bg)) 0%, transparent 100%);
+  }
+  .group-divider.collapsible .gd-toggle {
+    margin-left: auto;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-muted);
+    transition: transform 0.2s;
+    padding-left: 12px;
+  }
+  .group-divider.collapsible.expanded .gd-toggle {
+    transform: rotate(180deg);
+  }
   .group-divider .gd-zh {
     font-size: 18px;
     font-weight: 700;
@@ -2199,12 +2218,15 @@
     <div id="practiceROIContent"></div>
   </section>
 
-  <!-- ── Group divider: Carbon Deep Dive ────────────────────── -->
-  <div class="group-divider muted">
+  <!-- ── Group divider: Carbon Deep Dive (collapsible) ──────── -->
+  <div class="group-divider muted collapsible" id="carbonGroupHeader" onclick="toggleCarbonGroup()" role="button" tabindex="0">
     <span class="gd-tag">02</span>
     <span class="gd-zh" data-zh="碳追蹤（深入細節）" data-en="Carbon deep dive">碳追蹤（深入細節）</span>
-    <span class="gd-sub" data-zh="碳數據主要是供 ESG 報告、買家提案、補助申請使用。沒興趣可跳過直接看「行動路徑」。" data-en="Carbon data feeds ESG reports, buyer pitches, and subsidy applications. Skip ahead to 'Actions' if not relevant.">碳數據主要是供 ESG 報告、買家提案、補助申請使用。沒興趣可跳過直接看「行動路徑」。</span>
+    <span class="gd-sub" data-zh="碳數據主要供 ESG 報告、買家提案、補助申請使用。預設收合 — 需要時點開。" data-en="Carbon data feeds ESG reports, buyer pitches, subsidy applications. Collapsed by default — expand when needed.">碳數據主要供 ESG 報告、買家提案、補助申請使用。預設收合 — 需要時點開。</span>
+    <span class="gd-toggle" id="carbonGroupToggle">▼</span>
   </div>
+
+  <div id="carbonGroup" class="collapsible-group" style="display: none;">
 
   <!-- ── KPI cards ─────────────────────────────────────────── -->
   <section class="kpis">
@@ -2341,6 +2363,8 @@
       </div>
     </div>
   </section>
+
+  </div><!-- /carbonGroup -->
 
   <!-- ── Subsidies & carbon income ────────────────────────── -->
   <section class="panel" id="sec-income">
@@ -6405,6 +6429,46 @@ Applicant: ${ownerName} (signature)
     });
   };
 
+  // ── Carbon group collapsible: default collapsed, state per-farm ─
+  function carbonGroupStorageKey() {
+    const id = (CLIENT_CONFIG && CLIENT_CONFIG.id) || 'demo';
+    return 'tct_carbon_group_' + id;
+  }
+  window.toggleCarbonGroup = function() {
+    const group = document.getElementById('carbonGroup');
+    const header = document.getElementById('carbonGroupHeader');
+    if (!group || !header) return;
+    const isExpanded = group.style.display !== 'none';
+    if (isExpanded) {
+      group.style.display = 'none';
+      header.classList.remove('expanded');
+      try { localStorage.setItem(carbonGroupStorageKey(), 'collapsed'); } catch (e) {}
+    } else {
+      group.style.display = '';
+      header.classList.add('expanded');
+      try { localStorage.setItem(carbonGroupStorageKey(), 'expanded'); } catch (e) {}
+      render(); // re-render carbon panels with current data
+    }
+  };
+  function initCarbonGroupState() {
+    const group = document.getElementById('carbonGroup');
+    const header = document.getElementById('carbonGroupHeader');
+    if (!group || !header) return;
+    let state = 'collapsed';
+    try { state = localStorage.getItem(carbonGroupStorageKey()) || 'collapsed'; } catch (e) {}
+    if (state === 'expanded') {
+      group.style.display = '';
+      header.classList.add('expanded');
+    } else {
+      group.style.display = 'none';
+      header.classList.remove('expanded');
+    }
+    // Keyboard accessibility
+    header.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleCarbonGroup(); }
+    });
+  }
+
   // ── Weekly Check-in: ritual loop, stored per-farm in localStorage ─
   function weeklyStorageKey() {
     const id = (CLIENT_CONFIG && CLIENT_CONFIG.id) || 'demo';
@@ -7555,6 +7619,7 @@ Applicant: ${ownerName} (signature)
     applyConfigToDom();
     maybeShowWelcome();
     initMobileJumper();
+    initCarbonGroupState();
 
     const liveInputs = [
       'farmSize', 'region', 'address', 'cropType', 'annualYieldKg', 'annualRevenueNT', 'productCategory',
