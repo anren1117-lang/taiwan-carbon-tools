@@ -2955,7 +2955,7 @@ My cost ledger is transparent (${costPerKg ? `actual cost NT$ ${costPerKg}/kg` :
     {
       id: "friendly-farming",
       name:    { zh: "友善耕作補助", en: "Friendly Farming Subsidy" },
-      agency:  { zh: "農業部", en: "Ministry of Agriculture" },
+      agency:  { zh: "農業部農糧署", en: "MOA Agriculture and Food Agency" },
       rateNTPerHa: 30000,
       // Agency homepage — specific program pages move year-to-year;
       // the consultant should confirm the current PDF / application URL
@@ -2966,18 +2966,52 @@ My cost ledger is transparent (${costPerKg ? `actual cost NT$ ${costPerKg}/kg` :
         (inp.practices.compost || inp.practices.residue) &&
         inp.chemicals < 50 * Math.max(inp.farmSize, 0.1),
       note: { zh: "覆蓋作物 + 堆肥/殘體還田 + 低化學品使用",
-              en: "Cover crop + compost/residue + low chemical use" }
+              en: "Cover crop + compost/residue + low chemical use" },
+      evidence: {
+        zh: (i, ph) => `本農場長期實踐友善耕作，具體做法包括：
+- 覆蓋作物${ph.coverCrop ? `（自 ${ph.coverCrop} 年起持續）` : ''}
+- ${i.practices.compost ? `堆肥施用${ph.compost ? `（自 ${ph.compost} 年起）` : ''}` : ''}${i.practices.residue ? (i.practices.compost ? '、' : '') + `殘株還田${ph.residue ? `（自 ${ph.residue} 年起）` : ''}` : ''}
+- 化學投入物年使用量約 ${i.chemicals || 0} kg（總場，低於 50 kg/ha 門檻）
+所有實踐紀錄均納入農場永續經營儀表板，可供查驗。`,
+        en: (i, ph) => `Long-term friendly-farming practices:
+- Cover crop${ph.coverCrop ? ` (since ${ph.coverCrop})` : ''}
+- ${i.practices.compost ? `Compost${ph.compost ? ` (since ${ph.compost})` : ''}` : ''}${i.practices.residue ? (i.practices.compost ? ', ' : '') + `residue retention${ph.residue ? ` (since ${ph.residue})` : ''}` : ''}
+- Chemical inputs ~${i.chemicals || 0} kg/year (whole farm, below 50 kg/ha threshold)
+All practices logged in the farm operations dashboard, audit-ready.`
+      }
     },
     {
       id: "green-payment",
       name:    { zh: "綠色友善環境給付", en: "Green Environment Payment" },
-      agency:  { zh: "農業部", en: "MOA" },
+      agency:  { zh: "農業部農糧署", en: "MOA Agriculture and Food Agency" },
       rateNTPerHa: 45000,
       url:     "https://www.moa.gov.tw/",
       eligibility: (inp) =>
         ['coverCrop', 'noTill', 'compost', 'residue'].filter(p => inp.practices[p]).length >= 3,
       note: { zh: "三項以上土地管理（覆蓋作物 / 免耕 / 堆肥 / 殘體還田）",
-              en: "≥3 land practices (cover crop / no-till / compost / residue)" }
+              en: "≥3 land practices (cover crop / no-till / compost / residue)" },
+      evidence: {
+        zh: (i, ph) => {
+          const list = [];
+          if (i.practices.coverCrop) list.push(`覆蓋作物${ph.coverCrop ? `（自 ${ph.coverCrop} 年）` : ''}`);
+          if (i.practices.noTill) list.push(`少/免耕${ph.noTill ? `（自 ${ph.noTill} 年）` : ''}`);
+          if (i.practices.compost) list.push(`堆肥施用${ph.compost ? `（自 ${ph.compost} 年）` : ''}`);
+          if (i.practices.residue) list.push(`殘株還田${ph.residue ? `（自 ${ph.residue} 年）` : ''}`);
+          return `本農場現行採用 ${list.length} 項土地管理做法：
+${list.map(x => '- ' + x).join('\n')}
+每項做法均有時間軸紀錄與年度觀察，符合本給付計畫之「三項以上實踐」門檻。`;
+        },
+        en: (i, ph) => {
+          const list = [];
+          if (i.practices.coverCrop) list.push(`Cover crop${ph.coverCrop ? ` (since ${ph.coverCrop})` : ''}`);
+          if (i.practices.noTill) list.push(`No-till${ph.noTill ? ` (since ${ph.noTill})` : ''}`);
+          if (i.practices.compost) list.push(`Compost${ph.compost ? ` (since ${ph.compost})` : ''}`);
+          if (i.practices.residue) list.push(`Residue retention${ph.residue ? ` (since ${ph.residue})` : ''}`);
+          return `Farm currently practices ${list.length} land-management methods:
+${list.map(x => '- ' + x).join('\n')}
+Each practice has a timeline + annual observation record, meeting the "3+ practices" threshold.`;
+        }
+      }
     },
     {
       id: "carbon-pilot",
@@ -2989,39 +3023,103 @@ My cost ledger is transparent (${costPerKg ? `actual cost NT$ ${costPerKg}/kg` :
         r.sinkTotal > 1000 &&
         CLIENT_CONFIG.soilTest && CLIENT_CONFIG.soilTest.socPercent != null,
       note: { zh: "需有土壤採樣基準 + 可量測 SOC 累積",
-              en: "Requires baseline soil test + measurable SOC accumulation" }
+              en: "Requires baseline soil test + measurable SOC accumulation" },
+      evidence: {
+        zh: (i, ph, r2) => {
+          const s = CLIENT_CONFIG.soilTest || {};
+          return `本農場已建立土壤碳基準並可提供量測證據：
+- 土壤採樣日期：${s.date || '（請更新）'}
+- 土壤有機碳含量：${s.socPercent || '—'}%
+- 容重 (Bulk density)：${s.bulkDensity || 1.3} g/cm³
+- 採樣深度：${s.depthCm || 30} cm
+- 目前年度碳匯量估算：${fmt0((r2 && r2.sinkTotal || 0) / 1000)} tCO₂e
+本農場目前實踐之做法（覆蓋作物 / 殘株還田 / 樹木種植）均具備可量化 SOC 累積之科學基礎。`;
+        },
+        en: (i, ph, r2) => {
+          const s = CLIENT_CONFIG.soilTest || {};
+          return `Baseline soil carbon established, measurement evidence available:
+- Sampling date: ${s.date || '(please update)'}
+- Soil organic carbon: ${s.socPercent || '—'}%
+- Bulk density: ${s.bulkDensity || 1.3} g/cm³
+- Sampling depth: ${s.depthCm || 30} cm
+- Estimated annual carbon sink: ${fmt0((r2 && r2.sinkTotal || 0) / 1000)} tCO₂e
+Current practices (cover crop / residue / on-farm trees) have a scientific basis for measurable SOC accumulation.`;
+        }
+      }
     },
     {
       id: "smart-ag",
       name:    { zh: "智慧農業計畫", en: "Smart Agriculture Grants" },
-      agency:  { zh: "農業部", en: "MOA" },
+      agency:  { zh: "農業部資訊司", en: "MOA Information Department" },
       flatRate: 50000,
       url:     "https://www.moa.gov.tw/",
       eligibility: () =>
         CLIENT_CONFIG.dataSources &&
         CLIENT_CONFIG.dataSources.some(d => d.method === 'sensor'),
       note: { zh: "已部署 IoT 感測器（如即時電表）符合智慧化方向",
-              en: "Active IoT sensor(s) align with smart-ag direction" }
+              en: "Active IoT sensor(s) align with smart-ag direction" },
+      evidence: {
+        zh: () => {
+          const sensors = (CLIENT_CONFIG.dataSources || []).filter(d => d.method === 'sensor');
+          return `本農場已導入即時感測資料蒐集，具體部署：
+${sensors.map(s => '- ' + (s.name || s.id) + (s.endpoint ? `（${s.endpoint}）` : '')).join('\n') || '（請補充感測器清單）'}
+資料連續性可滿足智慧農業計畫之「具備數據化基礎」要求，後續可申請補助擴大部署（土壤水分、氣象、自動灌溉等）。`;
+        },
+        en: () => {
+          const sensors = (CLIENT_CONFIG.dataSources || []).filter(d => d.method === 'sensor');
+          return `Farm has implemented real-time sensor data collection:
+${sensors.map(s => '- ' + (s.name || s.id) + (s.endpoint ? ` (${s.endpoint})` : '')).join('\n') || '(please add sensor inventory)'}
+Data continuity meets the "data-enabled baseline" requirement; this application supports expansion (soil moisture, weather, auto-irrigation, etc.).`;
+        }
+      }
     },
     {
       id: "electric-machinery",
       name:    { zh: "農機具電動化補助", en: "Electric Farm Equipment Grant" },
-      agency:  { zh: "農業部 + 經濟部", en: "MOA + MOEA" },
+      agency:  { zh: "農業部農糧署 + 經濟部能源署", en: "MOA AFA + MOEA Energy Administration" },
       flatRate: 100000,
       url:     "https://www.moa.gov.tw/",
       eligibility: (inp) => inp.diesel > 300 || inp.gasoline > 50,
       note: { zh: "現有柴油/汽油機具符合電動化轉換評估",
-              en: "Existing diesel/gasoline equipment qualifies for electrification review" }
+              en: "Existing diesel/gasoline equipment qualifies for electrification review" },
+      evidence: {
+        zh: (i) => `本農場現行燃料使用具備電動化轉換之經濟與環境效益：
+- 年度柴油使用量：${i.diesel || 0} 公升
+- 年度汽油使用量：${i.gasoline || 0} 公升
+- 主要使用機具：曳引機 / 中耕機 / 噴霧機 / 抽水機 (擇實際填寫)
+換成電動機具後，預估年度燃料費可降約 30-50%，碳排亦同步減少。
+擬申請補助：購置電動曳引機 1 台（型號 / 廠牌可後續討論）。`,
+        en: (i) => `Current fuel usage justifies the economic + environmental case for electrification:
+- Annual diesel: ${i.diesel || 0} L
+- Annual gasoline: ${i.gasoline || 0} L
+- Main equipment: tractor / cultivator / sprayer / pump (specify actual)
+After electrification, fuel cost estimated to drop 30-50% with concurrent CO₂ reduction.
+Application target: purchase 1 electric tractor (model/brand TBD).`
+      }
     },
     {
       id: "organic-cert",
       name:    { zh: "有機驗證輔導", en: "Organic Certification Support" },
-      agency:  { zh: "農業部", en: "MOA" },
+      agency:  { zh: "農業部農糧署", en: "MOA Agriculture and Food Agency" },
       rateNTPerHa: 15000,
       url:     "https://www.moa.gov.tw/",
       eligibility: (inp) => inp.chemicals === 0 && inp.nFert <= 80 * Math.max(inp.farmSize, 0.1),
       note: { zh: "零化學農藥/複肥 + 低合成氮肥 → 申請有機驗證輔導",
-              en: "Zero chemicals + low synthetic N → organic certification support" }
+              en: "Zero chemicals + low synthetic N → organic certification support" },
+      evidence: {
+        zh: (i) => `本農場目前已達啟動有機驗證之基本條件：
+- 化學農藥使用量：0 kg（已停用 / 從未使用）
+- 合成氮肥年使用量：${i.nFert || 0} kg（每公頃 ${(i.nFert / Math.max(i.farmSize, 0.1)).toFixed(0)} kg，低於 80 kg/ha）
+- 主要施肥來源：${i.practices.compost ? '堆肥施用、' : ''}${i.practices.residue ? '殘株還田、' : ''}有機質肥料
+- 田區規劃符合有機驗證之隔離與緩衝帶要求（如非，可後續調整）
+擬透過本輔導計畫，啟動 1 公頃以上面積之有機轉型期驗證程序。`,
+        en: (i) => `Farm meets the baseline for starting organic certification:
+- Chemical pesticide use: 0 kg (discontinued/never used)
+- Synthetic N fertilizer: ${i.nFert || 0} kg/year (${(i.nFert / Math.max(i.farmSize, 0.1)).toFixed(0)} kg/ha, below 80 kg/ha)
+- Primary fertility sources: ${i.practices.compost ? 'compost, ' : ''}${i.practices.residue ? 'residue, ' : ''}organic amendments
+- Field layout meets isolation/buffer requirements (adjustable if not)
+This application supports starting organic-transition certification for ≥1 ha.`
+      }
     }
   ];
   // SINK, PRACTICES — provided by farm-carbon-engine.js
@@ -4090,6 +4188,16 @@ My cost ledger is transparent (${costPerKg ? `actual cost NT$ ${costPerKg}/kg` :
 
   // ── Subsidies & carbon income panel ──────────────────────────────
   function renderSubsidies(inp, r) {
+    const ph = CLIENT_CONFIG.practiceHistory || {};
+    const contact = CLIENT_CONFIG.contact || {};
+    const farmName = trObj(CLIENT_CONFIG.clientName) || tr('未命名農場', 'Unnamed farm');
+    const farmLoc = trObj(CLIENT_CONFIG.clientLocation) || tr('台灣', 'Taiwan');
+    const farmAddr = CLIENT_CONFIG.address || farmLoc;
+    const ownerName = trObj(contact.name) || tr('（農場負責人）', '(Farm owner)');
+    const ownerPhone = contact.phone || tr('（請填寫聯絡電話）', '(phone)');
+    const ownerEmail = contact.email || tr('（請填寫電子郵件）', '(email)');
+    const dashUrl = location.origin + location.pathname + location.search + (location.hash.startsWith('#data=') ? location.hash : '');
+
     const subsidyHtml = SUBSIDY_PROGRAMS.map(p => {
       let eligible = false;
       try { eligible = p.eligibility(inp, r); } catch (e) {}
@@ -4099,6 +4207,85 @@ My cost ledger is transparent (${costPerKg ? `actual cost NT$ ${costPerKg}/kg` :
       const amountLabel = p.rateNTPerHa
         ? `NT$ ${fmt0(p.rateNTPerHa)} / ha`
         : tr('一次性 / 案件審查', 'one-time / case-by-case');
+
+      // Build the draft application template if eligible
+      let draftBlock = '';
+      if (eligible && p.evidence) {
+        const evidenceText = trObj(p.evidence)(inp, ph, r);
+        const draftId = 'draft-' + p.id;
+        const todayStr = new Date().toISOString().slice(0, 10);
+        const draftBody = tr(
+`受文者：${trObj(p.agency)}
+申請日期：${todayStr}
+主旨：申請「${trObj(p.name)}」補助案
+
+說明：
+一、申請人基本資料：
+   ‧ 農場名稱：${farmName}
+   ‧ 負責人：${ownerName}
+   ‧ 農場地址：${farmAddr}
+   ‧ 經營面積：${inp.farmSize || 0} 公頃
+   ‧ 主要作物：${({rice:'稻米',vegetables:'蔬菜',fruit:'水果',livestock:'畜牧',mixed:'綜合'})[inp.cropType] || inp.cropType || '—'}
+
+二、符合本補助計畫資格之具體事證：
+${evidenceText}
+
+三、本次申請金額估算：NT$ ${fmt0(amount)}
+   （依${p.rateNTPerHa ? `${inp.farmSize || 0} 公頃 × NT$ ${fmt0(p.rateNTPerHa)}/ha` : '一次性核定金額'}計算）
+
+四、配合文件（已備齊或可補件）：
+   1. 農場土地使用權證明（地籍謄本 / 租約）
+   2. 國民身分證影本
+   3. 銀行存摺封面影本
+   4. 耕作管理紀錄（本農場永續經營儀表板，可線上查閱：${dashUrl}）
+   5. 第三方檢驗報告（土壤 / 水質 / 產品，視計畫要求）
+
+五、聯絡方式：
+   電話：${ownerPhone}
+   電子郵件：${ownerEmail}
+
+申請人：${ownerName}（簽章）
+
+—— 此為儀表板自動產出之草稿。請核對資料、補齊缺漏欄位、依主管機關當年度公告之申請格式提交。——`,
+`To: ${trObj(p.agency)}
+Date: ${todayStr}
+Subject: Application for "${trObj(p.name)}" subsidy
+
+1. Applicant information:
+   - Farm name: ${farmName}
+   - Owner: ${ownerName}
+   - Address: ${farmAddr}
+   - Area: ${inp.farmSize || 0} ha
+   - Primary crop: ${inp.cropType || '—'}
+
+2. Specific evidence of eligibility:
+${evidenceText}
+
+3. Estimated application amount: NT$ ${fmt0(amount)}
+   (Calculated as ${p.rateNTPerHa ? `${inp.farmSize || 0} ha × NT$ ${fmt0(p.rateNTPerHa)}/ha` : 'one-time approved amount'})
+
+4. Supporting documents (ready or available on request):
+   1. Land use proof (cadastral / lease)
+   2. National ID copy
+   3. Bank account front-page copy
+   4. Practice record (live dashboard: ${dashUrl})
+   5. Third-party test reports (soil / water / product, as required)
+
+5. Contact:
+   Phone: ${ownerPhone}
+   Email: ${ownerEmail}
+
+Applicant: ${ownerName} (signature)
+
+—— Auto-generated dashboard draft. Verify data, fill gaps, submit per the agency's current-year application format. ——`);
+        draftBlock = `
+          <details style="margin-top: 10px;">
+            <summary style="cursor: pointer; font-size: 12px; font-weight: 700; color: var(--accent); padding: 6px 10px; background: var(--accent-tint); border-radius: 6px; display: inline-block;">${tr('📋 產生申請草稿（可複製）', '📋 Generate application draft (copy-able)')}</summary>
+            <div style="margin-top: 10px; padding: 12px 14px; background: var(--bg-elev, var(--bg)); border: 1px solid var(--border); border-radius: 6px; font-size: 12.5px; line-height: 1.65; white-space: pre-wrap; font-family: ui-monospace, 'Noto Sans TC', monospace; max-height: 420px; overflow-y: auto;" id="${draftId}">${draftBody}</div>
+            <button onclick="copyOpener('${draftId}', this)" style="margin-top: 8px; padding: 6px 14px; background: var(--accent); color: #fff; border: none; border-radius: 5px; font-size: 12px; font-weight: 600; cursor: pointer;">${tr('複製草稿', 'Copy draft')}</button>
+          </details>`;
+      }
+
       return `
         <div class="sub-card ${eligible ? 'eligible' : 'partial'}">
           <div>
@@ -4106,6 +4293,7 @@ My cost ledger is transparent (${costPerKg ? `actual cost NT$ ${costPerKg}/kg` :
             <div class="sc-name">${trObj(p.name)}<span class="sc-agency">· ${trObj(p.agency)}</span></div>
             <div class="sc-note">${trObj(p.note)}</div>
             ${p.url ? `<div class="sc-link"><a href="${p.url}" target="_blank" rel="noopener">${tr('主管機關公告', 'Agency information')} →</a></div>` : ''}
+            ${draftBlock}
           </div>
           <div class="sc-amount">
             <strong>${eligible ? 'NT$ ' + fmt0(amount) : '—'}</strong>
