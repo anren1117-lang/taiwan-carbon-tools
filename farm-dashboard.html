@@ -94,6 +94,55 @@
   }
   .lang-toggle:hover { border-color: var(--accent); }
 
+  /* ── Mobile sticky bottom jumper (mobile only) ─────────── */
+  .mobile-jumper {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: var(--bg-card);
+    border-top: 1px solid var(--border);
+    box-shadow: 0 -4px 16px rgba(0,0,0,0.08);
+    padding: 8px 12px;
+    gap: 8px;
+    align-items: center;
+  }
+  .mobile-jumper select {
+    flex: 1;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 600;
+    -webkit-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%236b7280' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 32px;
+  }
+  .mobile-jumper-cta {
+    background: var(--accent);
+    color: #fff;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  @media (max-width: 1340px) {
+    .mobile-jumper { display: flex; }
+    body { padding-bottom: 70px; } /* avoid content hidden behind jumper */
+  }
+  @media print {
+    .mobile-jumper { display: none !important; }
+    body { padding-bottom: 0 !important; }
+  }
   /* ── Floating section navigator (desktop) ──────────────── */
   html { scroll-behavior: smooth; scroll-padding-top: 60px; }
   .section-nav {
@@ -1949,6 +1998,30 @@
 </header>
 
 <main class="container">
+
+  <!-- ── Mobile section jumper (sticky bottom bar) ───────────── -->
+  <div class="mobile-jumper" id="mobileJumper">
+    <select id="mobileJumpSelect" aria-label="Jump to section">
+      <option value="" data-zh="跳至區段…" data-en="Jump to section…">跳至區段…</option>
+      <option value="sec-top3" data-zh="🎯 本月該做的 3 件事" data-en="🎯 Top 3 actions">🎯 本月該做的 3 件事</option>
+      <option value="sec-cashflow" data-zh="💧 現金流月曆" data-en="💧 Cash flow">💧 現金流月曆</option>
+      <option value="sec-pricing" data-zh="💰 定價工作室" data-en="💰 Pricing">💰 定價工作室</option>
+      <option value="sec-roi" data-zh="📈 投資回收" data-en="📈 Practice ROI">📈 投資回收</option>
+      <option value="sec-goals" data-zh="🎯 年度目標" data-en="🎯 Goals">🎯 年度目標</option>
+      <option value="sec-compare" data-zh="🔀 同儕比較" data-en="🔀 Peer compare">🔀 同儕比較</option>
+      <option value="sec-income" data-zh="💵 補助收益" data-en="💵 Subsidies">💵 補助收益</option>
+      <option value="sec-agent" data-zh="🌱 顧問建議" data-en="🌱 Advisor">🌱 顧問建議</option>
+      <option value="sec-survival" data-zh="🛡 生存與心法" data-en="🛡 Survival">🛡 生存與心法</option>
+      <option value="sec-actions" data-zh="🚀 行動路徑" data-en="🚀 Actions">🚀 行動路徑</option>
+      <option value="sec-erp" data-zh="📊 營運紀錄" data-en="📊 ERP">📊 營運紀錄</option>
+      <option value="sec-intensity" data-zh="📉 碳強度" data-en="📉 Intensity">📉 碳強度</option>
+      <option value="sec-electricity" data-zh="⚡ 用電趨勢" data-en="⚡ Electricity">⚡ 用電趨勢</option>
+      <option value="sec-scope" data-zh="📋 排放分項" data-en="📋 Scope breakdown">📋 排放分項</option>
+      <option value="sec-scenarios" data-zh="🔮 情境模擬" data-en="🔮 Scenarios">🔮 情境模擬</option>
+      <option value="sec-editor" data-zh="⚙️ 設定" data-en="⚙️ Settings">⚙️ 設定</option>
+    </select>
+    <a href="farm-pitch.html" class="mobile-jumper-cta" target="_blank" rel="noopener" id="mobilePitchBtn" data-zh="📄 提案單" data-en="📄 Pitch">📄 提案單</a>
+  </div>
 
   <!-- ── Floating section navigator (desktop only) ─────────── -->
   <nav class="section-nav" id="sectionNav" aria-label="Section navigation">
@@ -6323,6 +6396,26 @@ Applicant: ${ownerName} (signature)
     });
   };
 
+  // ── Mobile section jumper (sticky bottom bar) ────────────────────
+  function initMobileJumper() {
+    const sel = document.getElementById('mobileJumpSelect');
+    if (sel) {
+      sel.addEventListener('change', () => {
+        const id = sel.value;
+        if (id) {
+          const el = document.getElementById(id);
+          if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          sel.value = ''; // reset to placeholder
+        }
+      });
+    }
+    const pitchBtn = document.getElementById('mobilePitchBtn');
+    if (pitchBtn) {
+      const hashPass = location.hash && location.hash.startsWith('#data=') ? location.hash : '';
+      pitchBtn.href = 'farm-pitch.html' + location.search + hashPass;
+    }
+  }
+
   // ── First-time welcome banner (dismissible, localStorage) ────────
   window.dismissWelcome = function() {
     try { localStorage.setItem('tct_welcome_dismissed', '1'); } catch (e) {}
@@ -7320,6 +7413,7 @@ Applicant: ${ownerName} (signature)
     await loadFarmFromUrl();
     applyConfigToDom();
     maybeShowWelcome();
+    initMobileJumper();
 
     const liveInputs = [
       'farmSize', 'region', 'address', 'cropType', 'annualYieldKg', 'annualRevenueNT', 'productCategory',
