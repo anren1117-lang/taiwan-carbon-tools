@@ -2582,6 +2582,13 @@
       <div class="editor-section">
         <h4 data-zh="農場資料" data-en="Farm profile">農場資料</h4>
         <div class="editor-grid">
+          <div><label data-zh="負責人姓名" data-en="Owner / contact name">負責人姓名 <span class="u">(name)</span></label><input type="text" id="contactName" placeholder="王大明"></div>
+          <div><label data-zh="聯絡電話" data-en="Phone">聯絡電話 <span class="u">(phone)</span></label><input type="tel" id="contactPhone" placeholder="0912-345-678"></div>
+          <div><label data-zh="電子郵件" data-en="Email">電子郵件 <span class="u">(email)</span></label><input type="email" id="contactEmail" placeholder="farm@example.com"></div>
+          <div style="grid-column: 1 / -1;">
+            <label data-zh="已取得認證（用逗號分隔；補助申請與買家提案會用到）" data-en="Certifications (comma-separated; used in subsidy drafts + buyer pitch)">已取得認證 <span class="u">(comma-separated)</span></label>
+            <input type="text" id="certificationsText" placeholder="TGAP, 友善耕作, 有機轉型期">
+          </div>
           <div><label data-zh="耕作面積 " data-en="Farm size ">耕作面積 <span class="u">(ha)</span></label><input type="number" id="farmSize" min="0" step="0.1"></div>
           <div style="grid-column: 1 / -1;">
             <label data-zh="實際地址（用於市場路徑、就近通路推薦）" data-en="Actual address (drives market routing + nearest channels)">實際地址 <span class="u">(address)</span></label>
@@ -3637,6 +3644,16 @@ This application supports starting organic-transition certification for ≥1 ha.
     if (CLIENT_CONFIG.region) document.getElementById('region').value = CLIENT_CONFIG.region;
     // Address (read from top-level CLIENT_CONFIG)
     if (CLIENT_CONFIG.address) document.getElementById('address').value = CLIENT_CONFIG.address;
+    // Contact (top-level)
+    const ct = CLIENT_CONFIG.contact || {};
+    document.getElementById('contactName').value = (ct.name && (ct.name.zh || ct.name.en)) || '';
+    document.getElementById('contactPhone').value = ct.phone || '';
+    document.getElementById('contactEmail').value = ct.email || '';
+    // Certifications (top-level array → comma-separated text)
+    const certs = CLIENT_CONFIG.certifications || [];
+    document.getElementById('certificationsText').value = certs
+      .map(c => (c.label && (c.label.zh || c.label.en)) || c.id || '')
+      .filter(Boolean).join(', ');
 
     // Practice history (read from top-level CLIENT_CONFIG)
     const ph = CLIENT_CONFIG.practiceHistory || {};
@@ -7663,6 +7680,33 @@ Applicant: ${ownerName} (signature)
     const addressEl = document.getElementById('address');
     if (addressEl) CLIENT_CONFIG.address = addressEl.value || '';
 
+    // Contact editor → CLIENT_CONFIG.contact sync.
+    const cn = document.getElementById('contactName')?.value || '';
+    const cp = document.getElementById('contactPhone')?.value || '';
+    const ce = document.getElementById('contactEmail')?.value || '';
+    if (cn || cp || ce) {
+      CLIENT_CONFIG.contact = CLIENT_CONFIG.contact || {};
+      if (cn) CLIENT_CONFIG.contact.name = { zh: cn, en: cn };
+      else delete CLIENT_CONFIG.contact.name;
+      if (cp) CLIENT_CONFIG.contact.phone = cp;
+      else delete CLIENT_CONFIG.contact.phone;
+      if (ce) CLIENT_CONFIG.contact.email = ce;
+      else delete CLIENT_CONFIG.contact.email;
+    }
+
+    // Certifications editor → CLIENT_CONFIG.certifications sync.
+    const certStr = document.getElementById('certificationsText')?.value || '';
+    if (certStr.trim()) {
+      const items = certStr.split(/[,，]/).map(s => s.trim()).filter(Boolean);
+      CLIENT_CONFIG.certifications = items.map((c, idx) => ({
+        id: 'cert-' + idx,
+        label: { zh: c, en: c },
+        tier: /有機|organic|MOA|TOAF|biodynamic/i.test(c) ? 'premium' : 'standard'
+      }));
+    } else {
+      CLIENT_CONFIG.certifications = [];
+    }
+
     // Practice history editor → CLIENT_CONFIG.practiceHistory sync.
     ['coverCrop', 'noTill', 'compost', 'residue'].forEach(k => {
       const el = document.getElementById('ph-' + k);
@@ -7860,6 +7904,7 @@ Applicant: ${ownerName} (signature)
 
     const liveInputs = [
       'farmSize', 'region', 'address', 'cropType', 'annualYieldKg', 'annualRevenueNT', 'productCategory',
+      'contactName', 'contactPhone', 'contactEmail', 'certificationsText',
       'diesel', 'gasoline', 'lpg', 'heatingOil',
       'nFert', 'riceMgmt', 'cattle', 'pigs', 'poultry', 'manure',
     'cattleDairy', 'cattleBeef', 'sowHead', 'growerPigHead', 'poultryLayer', 'poultryBroiler',
