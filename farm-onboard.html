@@ -341,6 +341,22 @@
             <input type="text" id="locEn" placeholder="Fangliao, Pingtung, Taiwan">
           </div>
           <div class="field">
+            <label data-zh="負責人 / 聯絡人" data-en="Owner / contact name">負責人 / 聯絡人 <span class="u">(選填)</span></label>
+            <input type="text" id="contactName" placeholder="王大明">
+          </div>
+          <div class="field">
+            <label data-zh="聯絡電話" data-en="Phone">電話 <span class="u">(選填)</span></label>
+            <input type="tel" id="contactPhone" placeholder="0912-345-678">
+          </div>
+          <div class="field">
+            <label data-zh="電子郵件" data-en="Email">電子郵件 <span class="u">(選填)</span></label>
+            <input type="email" id="contactEmail" placeholder="farm@example.com">
+          </div>
+          <div class="field">
+            <label data-zh="已取得認證 (用逗號分隔)" data-en="Certifications (comma-separated)">已取得認證 <span class="u">(用逗號分隔，選填)</span></label>
+            <input type="text" id="certifications" placeholder="TGAP, 友善耕作, 有機轉型期">
+          </div>
+          <div class="field">
             <label data-zh="報告年度" data-en="Reporting year">報告年度</label>
             <input type="number" id="period" min="2020" max="2030" value="2025">
           </div>
@@ -628,6 +644,34 @@
       inputs
     };
 
+    // Contact (only include if any field is set)
+    const contactName = val('contactName');
+    const contactPhone = val('contactPhone');
+    const contactEmail = val('contactEmail');
+    if (contactName || contactPhone || contactEmail) {
+      cfg.contact = {};
+      if (contactName) cfg.contact.name = { zh: contactName, en: contactName };
+      if (contactPhone) cfg.contact.phone = contactPhone;
+      if (contactEmail) cfg.contact.email = contactEmail;
+    }
+
+    // Certifications (split comma-separated input into chip array)
+    const certStr = val('certifications');
+    if (certStr) {
+      const certs = certStr.split(/[,，]/).map(s => s.trim()).filter(Boolean);
+      if (certs.length) {
+        cfg.certifications = certs.map((c, idx) => {
+          // Heuristic: "有機" or "organic" → premium tier
+          const isPremium = /有機|organic|MOA|biodynamic/i.test(c);
+          return {
+            id: 'cert-' + idx,
+            label: { zh: c, en: c },
+            tier: isPremium ? 'premium' : 'standard'
+          };
+        });
+      }
+    }
+
     // Practice history (only include set dates)
     const ph = {};
     ['coverCrop', 'noTill', 'compost', 'residue'].forEach(k => {
@@ -727,6 +771,12 @@
     document.getElementById('locZh').value  = (cfg.clientLocation && cfg.clientLocation.zh) || '';
     document.getElementById('locEn').value  = (cfg.clientLocation && cfg.clientLocation.en) || '';
     document.getElementById('period').value = cfg.reportingPeriod || '2025';
+    const contact = cfg.contact || {};
+    document.getElementById('contactName').value = (contact.name && (contact.name.zh || contact.name.en)) || '';
+    document.getElementById('contactPhone').value = contact.phone || '';
+    document.getElementById('contactEmail').value = contact.email || '';
+    const certs = cfg.certifications || [];
+    document.getElementById('certifications').value = certs.map(c => (c.label && (c.label.zh || c.label.en)) || c.id || '').join(', ');
 
     const inp = cfg.inputs || {};
     const setNum = (id, v) => { document.getElementById(id).value = (v != null ? v : 0); };
@@ -775,7 +825,7 @@
 
   function clearForm() {
     document.querySelectorAll('#step-1 input[type="number"]').forEach(el => { el.value = 0; });
-    document.querySelectorAll('#step-1 input[type="text"]').forEach(el => { el.value = ''; });
+    document.querySelectorAll('#step-1 input[type="text"], #step-1 input[type="email"], #step-1 input[type="tel"]').forEach(el => { el.value = ''; });
     document.getElementById('period').value = '2025';
     document.getElementById('farmSize').value = 1.0;
     document.getElementById('annualYieldKg').value = 10000;
