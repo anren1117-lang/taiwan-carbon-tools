@@ -2209,12 +2209,17 @@
     <div id="peerCompareContent"></div>
   </section>
 
-  <!-- ── Goal Tracker: set targets, track progress ─────────── -->
-  <section class="panel" id="sec-goals">
-    <div class="panel-title" data-zh="今年目標：設定 + 追蹤" data-en="This year's goals: set + track">今年目標：設定 + 追蹤</div>
-    <div class="panel-sub" data-zh="把「永續經營」變成可量化的目標。設定四個年度目標，儀表板會依資料即時算進度，並依目前的「達標步調」給你回饋。" data-en="Turn 'sustainable operations' into measurable targets. Set four annual goals — dashboard computes progress live and rates whether you're on pace.">把「永續經營」變成可量化的目標。設定四個年度目標，儀表板會依資料即時算進度，並依目前的「達標步調」給你回饋。</div>
-    <div id="goalTrackerContent"></div>
-  </section>
+  <!-- ── Goal Tracker: collapsible (without periodic check-in, low ROI) -->
+  <details class="panel goals-panel" id="sec-goals">
+    <summary style="cursor: pointer; list-style: none; padding: 0; margin: 0; outline: none;">
+      <div class="panel-title" style="display: flex; align-items: center; gap: 10px;">
+        <span data-zh="🎯 年度目標追蹤（選用）" data-en="🎯 Annual goal tracker (optional)">🎯 年度目標追蹤（選用）</span>
+        <span style="font-size: 11px; color: var(--text-muted); font-weight: 500;" data-zh="點開設定" data-en="click to set">點開設定</span>
+      </div>
+      <div class="panel-sub" data-zh="設定 4 個年度目標（營收 / 毛利 / 土壤碳 / 新客戶），儀表板算進度與步調。若你不會定期回來更新，意義不大；建議搭配「本月該做的 3 件事」的「✓ 完成了」按鈕一起使用。" data-en="Set 4 annual goals (revenue / margin / soil C / new buyers); dashboard tracks pace. Low value unless you'll come back regularly — use alongside Top 3 Actions' "Done" buttons.">設定 4 個年度目標（營收 / 毛利 / 土壤碳 / 新客戶），儀表板算進度與步調。若你不會定期回來更新，意義不大；建議搭配「本月該做的 3 件事」的「✓ 完成了」按鈕一起使用。</div>
+    </summary>
+    <div id="goalTrackerContent" style="margin-top: 12px;"></div>
+  </details>
 
   <!-- ── Practice ROI Switchboard: should I adopt X? ────────── -->
   <section class="panel" id="sec-roi">
