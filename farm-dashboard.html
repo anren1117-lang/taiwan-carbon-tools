@@ -7120,23 +7120,75 @@ Applicant: ${ownerName} (signature)
     return candidates.sort((a, b) => b.priority - a.priority).slice(0, 3);
   }
 
+  // Stable per-action ID derived from link + first 40 chars of title so
+  // marking "done" persists across renders even as priorities re-rank.
+  function actionId(a) {
+    return ((a.link || '') + '|' + (a.title || '').slice(0, 40))
+      .replace(/[^a-zA-Z0-9_-]/g, '_').slice(0, 80);
+  }
+  function doneStorageKey() {
+    const id = (CLIENT_CONFIG && CLIENT_CONFIG.id) || 'demo';
+    return 'tct_top3_done_' + id;
+  }
+  function loadDoneThisWeek() {
+    const week = isoWeekKey();
+    try {
+      const raw = localStorage.getItem(doneStorageKey());
+      const all = raw ? JSON.parse(raw) : {};
+      return new Set(all[week] || []);
+    } catch (e) { return new Set(); }
+  }
+  function saveDoneThisWeek(set) {
+    const week = isoWeekKey();
+    try {
+      const raw = localStorage.getItem(doneStorageKey());
+      const all = raw ? JSON.parse(raw) : {};
+      all[week] = Array.from(set);
+      // Keep only last 8 weeks of history (purge older)
+      const allWeeks = Object.keys(all).sort().slice(-8);
+      const trimmed = {};
+      allWeeks.forEach(w => { trimmed[w] = all[w]; });
+      localStorage.setItem(doneStorageKey(), JSON.stringify(trimmed));
+    } catch (e) {}
+  }
+  window.markTopActionDone = function(aid) {
+    const done = loadDoneThisWeek();
+    done.add(aid);
+    saveDoneThisWeek(done);
+    render();
+  };
+  window.unmarkTopActionDone = function(aid) {
+    const done = loadDoneThisWeek();
+    done.delete(aid);
+    saveDoneThisWeek(done);
+    render();
+  };
+
   function renderTopActions(inp, r) {
     const host = document.getElementById('top3Content');
     if (!host) return;
     const isZh = currentLang !== 'en';
-    const actions = deriveTopActions(inp, r);
+    const allActions = deriveTopActions(inp, r);
+    const done = loadDoneThisWeek();
+    // Annotate each action with its stable ID and split into pending / done
+    const annotated = allActions.map(a => ({ ...a, _id: actionId(a) }));
+    const pending = annotated.filter(a => !done.has(a._id)).slice(0, 3);
+    const completed = annotated.filter(a => done.has(a._id));
 
-    if (actions.length === 0) {
-      host.innerHTML = `
+    let html = '';
+
+    if (pending.length === 0 && completed.length === 0) {
+      html = `
         <div style="padding: 14px 16px; background: rgba(5, 150, 105, 0.08); border-radius: 8px; font-size: 13px;">
           ${isZh ? '✓ 你的儀表板狀況看起來不錯 — 沒有立刻要處理的危機。下一步：到「投資回收計算機」找下一個長期投資。' : '✓ Dashboard looks healthy — no immediate fires. Next: check Practice ROI for your next long-term investment.'}
         </div>`;
-      return;
-    }
-
-    host.innerHTML = actions.map((a, i) => {
-      const target = a.external ? '_blank' : '_self';
-      return `
+    } else if (pending.length === 0) {
+      html = `
+        <div style="padding: 14px 16px; background: rgba(5, 150, 105, 0.10); border: 1px solid rgba(5, 150, 105, 0.3); border-radius: 8px; font-size: 14px; font-weight: 600; color: #059669; margin-bottom: 12px;">
+          🎉 ${isZh ? `本週已完成 ${completed.length} 項行動 — 沒有新的緊急事項。` : `${completed.length} actions completed this week — no new urgent items.`}
+        </div>`;
+    } else {
+      html = pending.map((a, i) => `
         <div class="top-action-card priority-${i + 1}">
           <div class="ta-num">${i + 1}</div>
           <div class="ta-body">
@@ -7144,10 +7196,29 @@ Applicant: ${ownerName} (signature)
             <div class="ta-why">${a.why}</div>
             <div class="ta-impact">${a.impact}</div>
           </div>
-          <a href="${a.link}" target="${target}" class="ta-link">${a.linkLabel}</a>
+          <div style="display: flex; flex-direction: column; gap: 6px; align-self: center;">
+            <a href="${a.link}" target="${a.external ? '_blank' : '_self'}" class="ta-link">${a.linkLabel}</a>
+            <button onclick="markTopActionDone('${a._id}')" style="background: transparent; color: #059669; border: 1px solid #059669; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; white-space: nowrap;">${isZh ? '✓ 完成了' : '✓ Done'}</button>
+          </div>
         </div>
-      `;
-    }).join('');
+      `).join('');
+    }
+
+    // Footer: this-week wins (collapsed list of completed actions)
+    if (completed.length > 0) {
+      html += `
+        <div style="margin-top: 14px; padding: 10px 14px; background: rgba(5, 150, 105, 0.06); border: 1px dashed rgba(5, 150, 105, 0.3); border-radius: 8px; font-size: 12px;">
+          <div style="font-weight: 700; color: #059669; margin-bottom: 6px;">🏆 ${isZh ? `本週已完成 ${completed.length} 項` : `${completed.length} action${completed.length > 1 ? 's' : ''} completed this week`}</div>
+          ${completed.map(a => `
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 4px 0; font-size: 12px;">
+              <div style="color: var(--text); text-decoration: line-through; opacity: 0.75;">${a.title}</div>
+              <button onclick="unmarkTopActionDone('${a._id}')" style="background: transparent; color: var(--muted); border: none; cursor: pointer; font-size: 11px; padding: 2px 6px;" title="${isZh ? '取消標記' : 'Unmark'}">↺</button>
+            </div>
+          `).join('')}
+        </div>`;
+    }
+
+    host.innerHTML = html;
   }
 
   // ── Practice ROI Switchboard: payback analysis per practice ──────
