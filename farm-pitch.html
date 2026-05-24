@@ -274,6 +274,12 @@
     <div class="ps-evidence-grid" id="evidenceGrid"></div>
   </div>
 
+  <!-- Commitment block — what the farmer promises the buyer -->
+  <div class="ps-block" style="margin-bottom: 14px; border-color: var(--accent); background: rgba(29, 158, 117, 0.04);">
+    <h3 style="color: var(--accent-dark);" data-zh="我能承諾的 · What I Commit To" data-en="What I Commit To">我能承諾的 · What I Commit To</h3>
+    <div id="commitmentList" style="display: grid; gap: 6px; font-size: 11pt; line-height: 1.5;"></div>
+  </div>
+
   <!-- Pricing tier -->
   <div class="ps-pricing">
     <h3 data-zh="建議出貨價（依通路）· Suggested Prices by Channel" data-en="Suggested Prices by Channel">建議出貨價（依通路）· Suggested Prices by Channel</h3>
@@ -344,12 +350,15 @@ function escapeHtml(s) { return (s || '').replace(/[&<>"']/g, c => ({ '&': '&amp
 function pick(obj, lang) { if (!obj) return ''; return obj[lang] || obj.zh || obj.en || ''; }
 
 // ── Pricing channels (subset matching the dashboard) ───────────────
+// Each channel tagged with crop-type fit so the pitch only shows the
+// 3 most-relevant channels (a 5-row pricing table is too noisy for
+// a 1-page sales sheet).
 const PITCH_CHANNELS = [
-  { id: 'school',     marginTarget: 0.25, zh: '學校午餐 / 公部門', en: 'School / govt procurement' },
-  { id: 'local',      marginTarget: 0.30, zh: '在地超市 / 區域物流',  en: 'Local supermarket / distributor' },
-  { id: 'organic',    marginTarget: 0.50, zh: '有機商店 / GREEN & SAFE / 主婦聯盟', en: 'Organic retail / GREEN & SAFE / Homemakers' },
-  { id: 'csa',        marginTarget: 0.55, zh: 'CSA 直銷 / 訂閱箱',  en: 'CSA / subscription box' },
-  { id: 'restaurant', marginTarget: 0.60, zh: '主廚餐廳直供',      en: 'Chef-direct restaurant' }
+  { id: 'school',     marginTarget: 0.25, fitCrops: ['vegetables','rice','mixed'], zh: '學校午餐 / 公部門', en: 'School / govt procurement' },
+  { id: 'local',      marginTarget: 0.30, fitCrops: ['vegetables','rice','fruit','mixed','livestock'], zh: '在地超市 / 區域物流',  en: 'Local supermarket / distributor' },
+  { id: 'organic',    marginTarget: 0.50, fitCrops: ['vegetables','rice','fruit','mixed'], zh: '有機商店 / GREEN & SAFE / 主婦聯盟', en: 'Organic retail / GREEN & SAFE / Homemakers' },
+  { id: 'csa',        marginTarget: 0.55, fitCrops: ['vegetables','fruit','mixed'], zh: 'CSA 直銷 / 訂閱箱',  en: 'CSA / subscription box' },
+  { id: 'restaurant', marginTarget: 0.60, fitCrops: ['vegetables','fruit','mixed','livestock'], zh: '主廚餐廳直供',      en: 'Chef-direct restaurant' }
 ];
 
 function render() {
@@ -372,11 +381,23 @@ function render() {
     ? (isZh ? `經營 ${yearsRun} 年` : `${yearsRun} years operating`)
     : (isZh ? '新進農場' : 'New operation');
 
-  // Contact (optional fields)
+  // Contact (optional) — hide the whole block if no real data, since
+  // a buyer pitch with "Phone —" looks unprofessional.
   const contact = cfg.contact || {};
-  document.getElementById('contactName').textContent = pick(contact.name, currentLang) || (isZh ? '農場主' : 'Farm owner');
-  document.getElementById('contactPhone').textContent = contact.phone || (isZh ? '電話 —' : 'Phone —');
-  document.getElementById('contactEmail').textContent = contact.email || (isZh ? '信箱 —' : 'Email —');
+  const hasContact = contact.name || contact.phone || contact.email;
+  const contactBlock = document.getElementById('contactBlock');
+  if (hasContact) {
+    document.getElementById('contactName').textContent = pick(contact.name, currentLang) || '';
+    document.getElementById('contactPhone').textContent = contact.phone || '';
+    document.getElementById('contactEmail').textContent = contact.email || '';
+    // Hide rows that have no content
+    document.getElementById('contactName').style.display = contact.name ? '' : 'none';
+    document.getElementById('contactPhone').style.display = contact.phone ? '' : 'none';
+    document.getElementById('contactEmail').style.display = contact.email ? '' : 'none';
+    contactBlock.style.display = '';
+  } else {
+    contactBlock.style.display = 'none';
+  }
 
   // ── Hero pitch line
   const cropZh = ({ vegetables: '蔬菜', rice: '稻米', fruit: '水果', livestock: '畜產', mixed: '綜合' })[inp.cropType] || '農產';
@@ -420,9 +441,14 @@ function render() {
 
   const certChips = document.getElementById('certChips');
   const certs = cfg.certifications || [];
-  certChips.innerHTML = certs.length
-    ? certs.map(c => `<span class="chip ${c.tier === 'premium' ? 'premium' : ''}">${escapeHtml(pick(c.label, currentLang) || c.id)}</span>`).join('')
-    : `<span class="chip" style="background: var(--bg-soft); color: var(--muted);">${isZh ? '未取得認證 (可協助申請)' : 'No cert yet (can support application)'}</span>`;
+  // Hide the chips row entirely if no certs — a pitch sheet shouldn't
+  // advertise "no cert yet" to a buyer, that defeats the purpose.
+  if (certs.length) {
+    certChips.innerHTML = certs.map(c => `<span class="chip ${c.tier === 'premium' ? 'premium' : ''}">${escapeHtml(pick(c.label, currentLang) || c.id)}</span>`).join('');
+    certChips.style.display = '';
+  } else {
+    certChips.style.display = 'none';
+  }
 
   // ── Production
   const prodRows = document.getElementById('productionRows');
@@ -434,6 +460,24 @@ function render() {
     <div class="row"><span class="label">${isZh ? '年產量' : 'Annual yield'}</span><span class="value">${yieldKg > 0 ? yieldKg.toLocaleString() + ' kg' : '—'}</span></div>
     <div class="row"><span class="label">${isZh ? '年營收' : 'Annual revenue'}</span><span class="value">${revenue > 0 ? 'NT$ ' + revenue.toLocaleString() : '—'}</span></div>
   `;
+
+  // ── Commitments (what the farmer promises the buyer)
+  // Auto-generated from yield + crop type + practices. These are
+  // promises a buyer can actually hold the farmer to -- the whole
+  // point of having a written pitch sheet.
+  const commitList = document.getElementById('commitmentList');
+  const weeklyKg = yieldKg > 0 ? Math.floor(yieldKg / 52) : null;
+  const commitments = [];
+  if (weeklyKg) {
+    commitments.push(isZh ? `✓ <strong>穩定供應</strong>：每週基本量 ${weeklyKg.toLocaleString()} kg（年產 ${yieldKg.toLocaleString()} kg ÷ 52 週），高峰季可加量。` : `✓ <strong>Stable supply</strong>: baseline ${weeklyKg.toLocaleString()} kg/week (${yieldKg.toLocaleString()} kg/yr ÷ 52), with peak-season uplift.`);
+  }
+  commitments.push(isZh ? `✓ <strong>透明溯源</strong>：每批貨附批次編號，可於即時儀表板查詢生產紀錄、土壤與碳數據。` : `✓ <strong>Transparent traceability</strong>: every batch tagged, full production / soil / carbon record viewable in real-time dashboard.`);
+  commitments.push(isZh ? `✓ <strong>缺貨預警</strong>：天氣 / 病害造成供應缺口時，提前 7 天主動通知並提供替代品項。` : `✓ <strong>Stockout early-warning</strong>: 7-day advance notice if weather/pest impacts supply, with substitute suggestions.`);
+  commitments.push(isZh ? `✓ <strong>品質一致性</strong>：每批採收登錄 ERP（外觀、重量、批次），連續退貨率 > 5% 主動暫停檢討。` : `✓ <strong>QA discipline</strong>: every batch logged in ERP (appearance, weight, batch ID); >5% return rate triggers self-audit pause.`);
+  if (inp.cropType === 'fruit' || inp.cropType === 'vegetables') {
+    commitments.push(isZh ? `✓ <strong>季節彈性</strong>：依貴公司菜單需求調整品項組合，最小起訂 50 kg/週。` : `✓ <strong>Seasonal flexibility</strong>: adjust mix to match your menu needs, MOQ 50 kg/week.`);
+  }
+  commitList.innerHTML = commitments.map(c => `<div>${c}</div>`).join('');
 
   // ── Evidence panel
   const r = calcFromInputs(inp);
@@ -463,7 +507,15 @@ function render() {
   const costPerKg = (yieldKg > 0 && totalCost > 0) ? totalCost / yieldKg : null;
   const pricingRows = document.getElementById('pricingRows');
   if (costPerKg) {
-    pricingRows.innerHTML = PITCH_CHANNELS.map(c => {
+    // Filter to channels that fit this crop type, then sort by margin
+    // (highest first — pitch the premium option, not the floor) and
+    // take top 3. A 5-row pricing table is too noisy for a 1-page pitch.
+    const cropFilter = (inp.cropType || 'mixed');
+    const fittedChannels = PITCH_CHANNELS
+      .filter(c => !c.fitCrops || c.fitCrops.includes(cropFilter))
+      .sort((a, b) => b.marginTarget - a.marginTarget)
+      .slice(0, 3);
+    pricingRows.innerHTML = fittedChannels.map(c => {
       const price = costPerKg / (1 - c.marginTarget);
       return `<div class="price-row"><span class="ch">${isZh ? c.zh : c.en}</span><span class="pr">NT$ ${price.toFixed(1)}<span style="font-size:9pt; font-weight: 500; color: var(--muted);">/kg</span></span></div>`;
     }).join('');
