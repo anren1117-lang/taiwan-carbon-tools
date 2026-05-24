@@ -164,6 +164,63 @@
     padding: 0 6px;
     opacity: 0.85;
   }
+  .top-actions-panel {
+    background: linear-gradient(135deg, var(--accent-tint) 0%, var(--bg-card) 60%);
+    border: 1.5px solid var(--accent);
+    box-shadow: 0 4px 16px rgba(29, 158, 117, 0.08);
+  }
+  .top-actions-panel .panel-title { color: var(--accent); }
+  .top-action-card {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 14px;
+    align-items: start;
+    padding: 14px 16px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 10px;
+  }
+  .top-action-card.priority-1 { border-left: 4px solid #dc2626; }
+  .top-action-card.priority-2 { border-left: 4px solid #d97706; }
+  .top-action-card.priority-3 { border-left: 4px solid var(--accent); }
+  .top-action-card .ta-num {
+    font-size: 24px;
+    font-weight: 800;
+    line-height: 1;
+    min-width: 28px;
+  }
+  .top-action-card.priority-1 .ta-num { color: #dc2626; }
+  .top-action-card.priority-2 .ta-num { color: #d97706; }
+  .top-action-card.priority-3 .ta-num { color: var(--accent); }
+  .top-action-card .ta-body { min-width: 0; }
+  .top-action-card .ta-title { font-size: 15px; font-weight: 700; line-height: 1.35; margin-bottom: 6px; }
+  .top-action-card .ta-why { font-size: 12.5px; color: var(--text-muted); line-height: 1.55; }
+  .top-action-card .ta-impact {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 6px;
+    padding: 3px 8px;
+    background: var(--bg-subtle);
+    border-radius: 5px;
+    display: inline-block;
+  }
+  .top-action-card .ta-link {
+    background: var(--accent);
+    color: #fff;
+    padding: 7px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+    align-self: center;
+  }
+  .top-action-card .ta-link:hover { background: var(--accent-dark, var(--accent)); opacity: 0.9; }
+  @media (max-width: 720px) {
+    .top-action-card { grid-template-columns: auto 1fr; gap: 10px; padding: 12px; }
+    .top-action-card .ta-link { grid-column: 1 / -1; text-align: center; margin-top: 8px; }
+  }
   .group-divider {
     max-width: 1100px;
     margin: 28px auto 16px;
@@ -1790,6 +1847,7 @@
   <nav class="section-nav" id="sectionNav" aria-label="Section navigation">
     <div class="sn-title" data-zh="跳至" data-en="Jump to">跳至</div>
     <a href="#sec-overview" class="sn-link active" data-zh="概覽" data-en="Overview">概覽</a>
+    <a href="#sec-top3" class="sn-link" data-zh="本月 3 件事" data-en="Top 3 actions">本月 3 件事</a>
     <div class="sn-group-label" data-zh="01 經營決策" data-en="01 Business">01 經營決策</div>
     <a href="#sec-cashflow" class="sn-link" data-zh="現金流月曆" data-en="Cash flow">現金流月曆</a>
     <a href="#sec-pricing" class="sn-link" data-zh="定價工作室" data-en="Pricing">定價工作室</a>
@@ -1851,6 +1909,13 @@
       <div class="money-unit" id="moneyIntensityUnit" data-zh="kg CO₂e / kg 產品" data-en="kg CO₂e / kg product">kg CO₂e / kg 產品</div>
       <div class="money-breakdown" id="moneyIntensityContext"></div>
     </div>
+  </section>
+
+  <!-- ── This Month's Top 3 Actions: synthesizer at the top ─ -->
+  <section class="panel top-actions-panel" id="sec-top3">
+    <div class="panel-title" data-zh="本月該做的 3 件事（依你的資料即時生成）" data-en="This month's top 3 actions (derived live from your data)">本月該做的 3 件事（依你的資料即時生成）</div>
+    <div class="panel-sub" data-zh="顧問會做的事：把你 12 個面板的資料消化過，挑出本月「最該做」的 3 件。每件都有資料依據和對應的面板連結。" data-en="What a consultant would do: digest all 12 panels of your data, pick the 3 highest-priority moves for this month. Each is backed by your numbers and linked to the relevant panel.">顧問會做的事：把你 12 個面板的資料消化過，挑出本月「最該做」的 3 件。每件都有資料依據和對應的面板連結。</div>
+    <div id="top3Content"></div>
   </section>
 
   <!-- ── Group divider: Business Decisions ───────────────── -->
@@ -5721,6 +5786,176 @@ My cost ledger is transparent (${costPerKg ? `actual cost NT$ ${costPerKg}/kg` :
     });
   };
 
+  // ── This Month's Top 3 Actions: cross-panel synthesizer ──────────
+  // Scans the dashboard's full state and surfaces the 3 highest-impact
+  // actions for THIS month, with each one backed by the farmer's
+  // actual numbers and linked to the relevant panel.
+  function deriveTopActions(inp, r) {
+    const isZh = currentLang !== 'en';
+    const candidates = [];
+    const cost = computeAnnualCost().total;
+    const subsidyResult = computeSubsidyTotal(inp, r);
+    const subsidies = subsidyResult.total;
+    const revenue = inp.annualRevenueNT || 0;
+    const yieldKg = inp.annualYieldKg || 0;
+    const farmSize = Math.max(inp.farmSize || 0, 0.1);
+    const adopted = inp.practices || {};
+    const monthsZh = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+    const monthsEn = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const monthNames = isZh ? monthsZh : monthsEn;
+
+    // 1. CASH FLOW GAP — top priority if exists (survival)
+    if (revenue > 0 && cost > 0) {
+      const cf = computeCashFlow(revenue, cost, subsidies, inp.cropType || 'mixed');
+      if (cf.minBalance < 0) {
+        const need = Math.abs(cf.minBalance) * 1.3;
+        const byMonth = monthNames[Math.max(0, cf.minMonth - 1)];
+        candidates.push({
+          priority: 100,
+          urgency: 'urgent',
+          title: isZh ? `安排 NT$ ${fmt0(need)} 周轉，最晚 ${byMonth} 前要到位` : `Arrange NT$ ${fmt0(need)} bridge financing, in place by ${byMonth}`,
+          why: isZh ? `現金累積餘額預估會在 ${monthNames[cf.minMonth]} 跌至 NT$ ${fmt0(cf.minBalance)}。沒有周轉就會出貨款支付不出。` : `Cash will hit NT$ ${fmt0(cf.minBalance)} in ${monthNames[cf.minMonth]}. Without a bridge, you can't pay suppliers.`,
+          impact: isZh ? '影響：避免斷鏈 / 信用毀損' : 'Impact: prevent supplier disruption / credit damage',
+          link: '#sec-cashflow',
+          linkLabel: isZh ? '看現金流月曆' : 'See cash flow'
+        });
+      }
+    }
+
+    // 2. PRICING BELOW SUSTAINABLE FLOOR — high priority if margin is thin
+    if (revenue > 0 && yieldKg > 0 && cost > 0) {
+      const totalRev = revenue + subsidies;
+      const margin = totalRev > 0 ? (totalRev - cost) / totalRev : 0;
+      const costPerKg = cost / yieldKg;
+      const currentPrice = revenue / yieldKg;
+      const floorPrice = costPerKg / 0.6;
+      if (margin < 0 || currentPrice < floorPrice * 0.8) {
+        const gap = floorPrice - currentPrice;
+        candidates.push({
+          priority: 95,
+          urgency: 'urgent',
+          title: isZh ? `把售價往「永續地板價」推 — 目前 NT$ ${currentPrice.toFixed(1)}/kg，需到 NT$ ${floorPrice.toFixed(1)}/kg` : `Raise price toward sustainable floor — now NT$ ${currentPrice.toFixed(1)}/kg, target NT$ ${floorPrice.toFixed(1)}/kg`,
+          why: isZh ? `毛利率 ${(margin*100).toFixed(1)}%，低於 40% 永續水位。每公斤要再賺 NT$ ${gap.toFixed(1)} 才能維持。` : `Margin is ${(margin*100).toFixed(1)}%, below the 40% sustainable threshold. Need NT$ ${gap.toFixed(1)}/kg more.`,
+          impact: isZh ? `年收益可增加 NT$ ${fmt0(gap * yieldKg)}` : `Could add NT$ ${fmt0(gap * yieldKg)} annual revenue`,
+          link: '#sec-pricing',
+          linkLabel: isZh ? '看定價工作室' : 'See Pricing Studio'
+        });
+      }
+    }
+
+    // 3. UNCLAIMED SUBSIDIES — easy money on the table
+    if (subsidies >= 30000) {
+      const eligibleCount = subsidyResult.eligible.length;
+      candidates.push({
+        priority: 85,
+        urgency: 'high',
+        title: isZh ? `申請 ${eligibleCount} 項符合條件的補助，年收益 NT$ ${fmt0(subsidies)}` : `Apply for ${eligibleCount} eligible subsidies, NT$ ${fmt0(subsidies)} annual income`,
+        why: isZh ? '你目前的耕作做法已符合，但帳上看不到這筆收入 — 等於沒申請。' : 'You qualify based on current practices, but dashboard shows no claimed income — i.e., not yet applied.',
+        impact: isZh ? `若全申請：現金流多 NT$ ${fmt0(subsidies / 12)} / 月` : `If all claimed: +NT$ ${fmt0(subsidies / 12)}/mo cash flow`,
+        link: '#sec-income',
+        linkLabel: isZh ? '看補助清單' : 'See subsidy list'
+      });
+    }
+
+    // 4. FAST-PAYBACK PRACTICE — adopt the cheapest fastest payback
+    const isRice = inp.cropType === 'rice';
+    const usingAWD = inp.riceMgmt === 'awd';
+    const roiCandidates = PRACTICE_INVESTMENTS.filter(p => {
+      if (p.id === 'awd') return isRice && !usingAWD;
+      if (['coverCrop','noTill','compost','residue'].includes(p.id) && adopted[p.id]) return false;
+      if (p.cropApplicable && !p.cropApplicable.includes(inp.cropType || 'mixed')) return false;
+      return true;
+    }).map(p => {
+      const totalSetup = p.fixedSetup ? p.setupNT : p.setupNT * farmSize;
+      const netAnnual = (p.savingNT - p.ongoingNT) * (p.fixedSetup ? 1 : farmSize);
+      const paybackMonths = netAnnual > 0 ? (totalSetup / netAnnual * 12) : Infinity;
+      return { ...p, totalSetup, netAnnual, paybackMonths };
+    }).filter(p => p.paybackMonths < 24).sort((a, b) => a.paybackMonths - b.paybackMonths);
+    if (roiCandidates.length > 0) {
+      const top = roiCandidates[0];
+      candidates.push({
+        priority: 75,
+        urgency: 'medium',
+        title: isZh ? `採用「${top.label.zh}」 — 預估 ${top.paybackMonths.toFixed(0)} 個月回本` : `Adopt "${top.label.en}" — ${top.paybackMonths.toFixed(0)}-month payback`,
+        why: isZh ? `建置成本 NT$ ${fmt0(top.totalSetup)}，年淨節省 NT$ ${fmt0(top.netAnnual)}。是你下一個最划算的做法投資。` : `Setup NT$ ${fmt0(top.totalSetup)}, saves NT$ ${fmt0(top.netAnnual)}/yr. Your single best practice investment right now.`,
+        impact: isZh ? `5 年累積淨收：NT$ ${fmt0(top.netAnnual * 5 - top.totalSetup)}` : `5-yr net gain: NT$ ${fmt0(top.netAnnual * 5 - top.totalSetup)}`,
+        link: '#sec-roi',
+        linkLabel: isZh ? '看投資回收' : 'See Practice ROI'
+      });
+    }
+
+    // 5. CONCENTRATION RISK — single crop type
+    if (inp.cropType && inp.cropType !== 'mixed' && !adopted.agroforestry) {
+      candidates.push({
+        priority: 60,
+        urgency: 'medium',
+        title: isZh ? `分散作物風險 — 你目前 100% 依賴單一作物` : `Diversify crop risk — currently 100% single-crop`,
+        why: isZh ? '一次颱風、一個病害、一個市場崩盤，整年收入歸零。永續農場最常因為「太集中」而倒。' : 'One typhoon, one disease, one market crash → full year wiped out. Most sustainable farms fail from over-concentration.',
+        impact: isZh ? '影響：年度收入韌性 +30~50%' : 'Impact: +30-50% annual income resilience',
+        link: '#sec-survival',
+        linkLabel: isZh ? '看集中度分析' : 'See concentration risk'
+      });
+    }
+
+    // 6. BUYER PITCH NOT YET GENERATED — soft action
+    candidates.push({
+      priority: 40,
+      urgency: 'low',
+      title: isZh ? '製作買家提案單 — 開始接觸 2 個新通路' : 'Build a buyer pitch sheet — reach out to 2 new channels',
+      why: isZh ? '你的儀表板已經有所有需要的資料。一頁 A4 加上「定價工作室」的開場白，就是一個完整的銷售套件。' : 'Your dashboard already has all the evidence. A 1-page PDF + Pricing Studio openers = a complete sales toolkit.',
+      impact: isZh ? '影響：開啟更高毛利通路' : 'Impact: open higher-margin channels',
+      link: 'farm-pitch.html' + location.search + (location.hash.startsWith('#data=') ? location.hash : ''),
+      linkLabel: isZh ? '產生提案單 →' : 'Build pitch →',
+      external: true
+    });
+
+    // 7. SOIL BASELINE MISSING — if no soil test, this is critical for cert + premium
+    const soil = CLIENT_CONFIG.soilTest || {};
+    if (!soil.socPercent) {
+      candidates.push({
+        priority: 70,
+        urgency: 'medium',
+        title: isZh ? '做一次土壤採樣建立 SOC 基準' : 'Get a soil sample for baseline SOC',
+        why: isZh ? '沒有土壤碳基準 = 無法量化你的「土壤改良」價值 = 進不了溢價通路、申請不了碳匯。約 NT$ 1,500-3,000，1 次測。' : 'No baseline SOC = can\'t quantify your "soil improvement" value = locked out of premium channels and carbon credit eligibility. ~NT$ 1,500-3,000, one-time.',
+        impact: isZh ? '解鎖：認證 + 碳信用 + 買家 ESG 採購' : 'Unlocks: cert + carbon credit + ESG procurement',
+        link: '#sec-editor',
+        linkLabel: isZh ? '輸入土壤基準' : 'Enter soil baseline'
+      });
+    }
+
+    return candidates.sort((a, b) => b.priority - a.priority).slice(0, 3);
+  }
+
+  function renderTopActions(inp, r) {
+    const host = document.getElementById('top3Content');
+    if (!host) return;
+    const isZh = currentLang !== 'en';
+    const actions = deriveTopActions(inp, r);
+
+    if (actions.length === 0) {
+      host.innerHTML = `
+        <div style="padding: 14px 16px; background: rgba(5, 150, 105, 0.08); border-radius: 8px; font-size: 13px;">
+          ${isZh ? '✓ 你的儀表板狀況看起來不錯 — 沒有立刻要處理的危機。下一步：到「投資回收計算機」找下一個長期投資。' : '✓ Dashboard looks healthy — no immediate fires. Next: check Practice ROI for your next long-term investment.'}
+        </div>`;
+      return;
+    }
+
+    host.innerHTML = actions.map((a, i) => {
+      const target = a.external ? '_blank' : '_self';
+      return `
+        <div class="top-action-card priority-${i + 1}">
+          <div class="ta-num">${i + 1}</div>
+          <div class="ta-body">
+            <div class="ta-title">${a.title}</div>
+            <div class="ta-why">${a.why}</div>
+            <div class="ta-impact">${a.impact}</div>
+          </div>
+          <a href="${a.link}" target="${target}" class="ta-link">${a.linkLabel}</a>
+        </div>
+      `;
+    }).join('');
+  }
+
   // ── Practice ROI Switchboard: payback analysis per practice ──────
   // All NT$ figures are per-hectare conservative estimates from Taiwan
   // ag extension data. Final adoption requires farmer's own diligence.
@@ -6026,6 +6261,7 @@ My cost ledger is transparent (${costPerKg ? `actual cost NT$ ${costPerKg}/kg` :
     }
     renderClientBanner(inp);
     renderMoneyHero(inp, r);
+    renderTopActions(inp, r);
     renderKPIs(inp, r);
     renderNarrative(inp, r);
     renderElectricityChart();
