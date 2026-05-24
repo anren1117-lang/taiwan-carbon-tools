@@ -212,6 +212,23 @@
     margin-bottom: 6px;
     letter-spacing: -0.01em;
   }
+  .consult-banner .value-list {
+    list-style: none;
+    padding: 0;
+    margin: 12px 0 0;
+    display: grid;
+    gap: 8px;
+  }
+  .consult-banner .value-list li {
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.06);
+    border-left: 3px solid rgba(255,255,255,0.4);
+    border-radius: 6px;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+  .consult-banner .value-list strong { font-weight: 700; }
+  .consult-banner .value-list span { font-weight: 400; opacity: 0.92; }
   .consult-banner p {
     font-size: 14px;
     color: rgba(255,255,255,0.85);
@@ -307,11 +324,26 @@
 
     <div class="consult-banner">
       <div class="consult-banner-text">
-        <span class="eyebrow" data-zh="100% 免費 · 所有欄位選填" data-en="100% Free · All fields optional">100% 免費 · 所有欄位選填</span>
+        <span class="eyebrow" data-zh="100% 免費 · 無需註冊 · 所有欄位選填" data-en="100% Free · No signup · All fields optional">100% 免費 · 無需註冊 · 所有欄位選填</span>
         <h3 data-zh="讓有「心」的永續農戶，也擁有「經營頭腦」" data-en="Where sustainable heart meets business brain">讓有「心」的永續農戶，也擁有「經營頭腦」</h3>
-        <p data-zh="永續農業不缺熱情，缺的是把這件事當生意做的思考方式。實際毛利分析、永續地板價、議價籌碼、現金流缺口、補助申請、市場媒合、ERP — 把心法變成可執行的決策。碳追蹤是選配。" data-en="Sustainable farming isn't short on passion — it's short on the business mindset to make it pay. Real margin analysis, sustainable floor pricing, negotiation leverage, cash-flow gaps, subsidy applications, market routing, ERP. Carbon tracking is optional.">永續農業不缺熱情，缺的是把這件事當生意做的思考方式。實際毛利分析、永續地板價、議價籌碼、現金流缺口、補助申請、市場媒合、ERP — 把心法變成可執行的決策。碳追蹤是選配。</p>
+        <p data-zh="5 分鐘填完，當天就有 3 個可用的成果：" data-en="5 minutes to fill in, and you walk away with 3 ready-to-use outputs the same day:">5 分鐘填完，當天就有 3 個可用的成果：</p>
+        <ul class="value-list">
+          <li>
+            <strong data-zh="🎯 本月該做的 3 件事" data-en="🎯 Top 3 actions this month">🎯 本月該做的 3 件事</strong>
+            <span data-zh="依你的資料自動生成，每件附 CTA 跳到對應工具。" data-en=": auto-generated from your data, each with a CTA jumping to the relevant tool.">依你的資料自動生成，每件附 CTA 跳到對應工具。</span>
+          </li>
+          <li>
+            <strong data-zh="📋 補助申請草稿" data-en="📋 Subsidy application drafts">📋 補助申請草稿</strong>
+            <span data-zh="每張你符合的補助一鍵生成可複製的正式申請函（含你的耕作做法、土壤資料、聯絡資訊）。" data-en=": every subsidy you qualify for, one click → copy-paste formal application letter (pre-filled with your practices, soil data, contact).">每張你符合的補助一鍵生成可複製的正式申請函（含你的耕作做法、土壤資料、聯絡資訊）。</span>
+          </li>
+          <li>
+            <strong data-zh="📄 A4 買家提案單" data-en="📄 A4 buyer pitch sheet">📄 A4 買家提案單</strong>
+            <span data-zh="可直接列印 / 存 PDF 的單頁買家提案，含故事、認證、土壤碳趨勢、建議定價、承諾條款。" data-en=": printable / PDF-export single page with story, certs, soil C trend, suggested pricing, commitment terms.">可直接列印 / 存 PDF 的單頁買家提案，含故事、認證、土壤碳趨勢、建議定價、承諾條款。</span>
+          </li>
+        </ul>
+        <p style="font-size: 13px; color: var(--text-muted); margin-top: 8px;" data-zh="加上：現金流缺口偵測、定價工作室、投資回收計算機、買家議價演練、同儕比較、營運紀錄 ERP — 都不收費，沒有後端，網址就是你的「帳號」。" data-en="Plus: cash flow gap detection, pricing studio, practice ROI, buyer negotiation rehearsal, peer comparison, operations ERP — all free, zero backend, the URL IS your account.">加上：現金流缺口偵測、定價工作室、投資回收計算機、買家議價演練、同儕比較、營運紀錄 ERP — 都不收費，沒有後端，網址就是你的「帳號」。</p>
       </div>
-      <a href="farm-onboard.html" class="cta" data-zh="立即註冊 →" data-en="Register now →">立即註冊 →</a>
+      <a href="farm-onboard.html" class="cta" data-zh="5 分鐘設定 →" data-en="5-min setup →">5 分鐘設定 →</a>
     </div>
     <div style="text-align: center; margin: -16px 0 24px; font-size: 13px;">
       <a href="farms.html" style="color: var(--text-muted); text-decoration: none;" data-zh="或 先看 4 個示範農場 →" data-en="Or browse 4 sample farms first →">或 先看 4 個示範農場 →</a>
