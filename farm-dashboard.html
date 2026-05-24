@@ -2323,6 +2323,13 @@
       <div id="concentrationRisk"></div>
     </div>
 
+    <!-- Diversification opportunities: specific second-stream ideas -->
+    <div style="margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--border);">
+      <div class="panel-title" style="font-size: 13px; margin-bottom: 4px;" data-zh="多元收益機會：依你的條件可開的第二、第三條財源" data-en="Diversification opportunities: 2nd/3rd revenue streams that fit your farm">多元收益機會：依你的條件可開的第二、第三條財源</div>
+      <div class="panel-sub" style="margin-bottom: 14px;" data-zh="依你的作物、面積、區域、認證狀態，篩出 5 個你最有機會啟動的副業 / 第二收益管道。每個都附建置成本、年潛在收入、起步方法。" data-en="Based on your crop, area, region, and cert status — 5 side businesses / 2nd revenue streams you have the highest chance to start. Each includes setup cost, potential annual income, and how to begin.">依你的作物、面積、區域、認證狀態，篩出 5 個你最有機會啟動的副業 / 第二收益管道。每個都附建置成本、年潛在收入、起步方法。</div>
+      <div id="diversifyContent"></div>
+    </div>
+
     <!-- Business mindset — turn heart into business -->
     <div style="margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--border);">
       <div class="panel-title" style="font-size: 13px; margin-bottom: 4px;" data-zh="經營心法：把「心」變成「事業」" data-en="Business mindset: turn heart into a viable business">經營心法：把「心」變成「事業」</div>
@@ -5765,6 +5772,190 @@ Applicant: ${ownerName} (signature)
                en: 'The four ERP modules (log / inventory / ledger / contacts) aren\'t paperwork — they\'re your decision-making infrastructure. Log three months and you\'ll find the "loss-making" crop is actually your cash cow.' } }
   ];
 
+  // ── Diversification Opportunities: 2nd/3rd revenue streams ───────
+  // Each opportunity has a fit() predicate against (inp, r, cfg) and
+  // a fit score (0-100). Top 5 by fit are surfaced. Income estimates
+  // are conservative; setup costs scaled where applicable.
+  const DIVERSIFICATION_OPPORTUNITIES = [
+    {
+      id: 'csa_box',
+      name: { zh: 'CSA / 訂閱箱直銷', en: 'CSA / subscription box direct sales' },
+      icon: '📦',
+      setup: { zh: 'NT$ 15,000-30,000 (網頁 + 包裝 + 配送試行)', en: 'NT$ 15,000-30,000 (page + packaging + delivery trial)' },
+      income: { zh: 'NT$ 300,000-800,000/年 (50-150 戶 × NT$ 5,000/月)', en: 'NT$ 300k-800k/yr (50-150 households × NT$ 5k/mo)' },
+      how: { zh: '從 30 戶試吃會員開始（朋友圈、社群） → 4 週後問願意付費的人 → 簽季合約。', en: 'Start with 30 trial members (friends + community) → after 4 weeks ask who\'ll pay → sign quarterly contracts.' },
+      fit: (inp) => {
+        const c = inp.cropType;
+        return (c === 'vegetables' || c === 'mixed' || c === 'fruit') ? 90 : (c === 'rice' ? 50 : 30);
+      },
+      why: { zh: '蔬菜 / 混合 / 水果適合每週配送；稻米可整合為「米 + 季節農產組合」。', en: 'Vegetables / mixed / fruit suit weekly delivery; rice can bundle as "rice + seasonal" combo.' }
+    },
+    {
+      id: 'farm_stay',
+      name: { zh: '農場體驗 / 民宿 / 一日遊', en: 'Farm-stay / experience / day trip' },
+      icon: '🏡',
+      setup: { zh: 'NT$ 50,000-300,000 (依改建程度)', en: 'NT$ 50,000-300,000 (depends on refit scope)' },
+      income: { zh: 'NT$ 200,000-600,000/年 (週末 + 國定假日)', en: 'NT$ 200k-600k/yr (weekends + holidays)' },
+      how: { zh: '先從「半日採收體驗」開始（NT$ 600/人），驗證需求再投資住宿改建。可申請休閒農業輔導。', en: 'Start with "half-day harvest experience" (NT$ 600/person), validate demand before refitting for lodging. Eligible for leisure-ag grant.' },
+      fit: (inp, r, cfg) => {
+        const region = cfg.region;
+        const fruitOrMixed = ['fruit', 'mixed'].includes(inp.cropType);
+        const tourist = ['east', 'south', 'central', 'offshore'].includes(region);
+        if (fruitOrMixed && tourist) return 88;
+        if (tourist) return 70;
+        return 50;
+      },
+      why: { zh: '東部 / 南部 / 中部 / 離島觀光區基本盤強；果園 / 混合農場最容易做體驗活動。', en: 'East / south / central / offshore tourism regions have strong baseline; orchards / mixed farms are easiest for experience activities.' }
+    },
+    {
+      id: 'processing',
+      name: { zh: '農產加工 (果乾、果醬、米製品、發酵品)', en: 'Value-added processing (dried fruit, jam, rice products, fermented)' },
+      icon: '🥫',
+      setup: { zh: 'NT$ 20,000-100,000 (家庭工坊) / NT$ 500,000+ (申請 HACCP)', en: 'NT$ 20-100k (home workshop) / NT$ 500k+ (HACCP certified)' },
+      income: { zh: '產品毛利可達 60-80% (vs 鮮品 30-40%)', en: 'Gross margin 60-80% (vs 30-40% for fresh)' },
+      how: { zh: '盤點滯銷 / 醜果 / 副產品 → 選 1 個加工品試做 → 用 CSA / 市集試銷 → 達 100 罐/月再投資設備。', en: 'Inventory unsold / ugly / by-products → pick 1 SKU to trial → test-sell via CSA / market → invest in equipment after 100 units/mo.' },
+      fit: (inp) => {
+        const c = inp.cropType;
+        return (c === 'fruit') ? 90 : (c === 'rice' ? 80 : (c === 'vegetables' ? 65 : 55));
+      },
+      why: { zh: '水果 / 稻米最有經典加工品 (果乾 / 果醬 / 米麩 / 米果 / 米油)。蔬菜可做漬物、醬料。', en: 'Fruit / rice have classic value-add SKUs (dried, jam, rice flour / crackers / oil). Vegetables work as pickles / sauces.' }
+    },
+    {
+      id: 'agroforestry_timber',
+      name: { zh: '農林複合 (果樹 / 木材 / 防風林長期收益)', en: 'Agroforestry (fruit trees / timber / windbreak long-term income)' },
+      icon: '🌳',
+      setup: { zh: 'NT$ 3,000-15,000/ha (種苗 + 防護)', en: 'NT$ 3,000-15,000/ha (saplings + protection)' },
+      income: { zh: '果樹 NT$ 30,000-80,000/ha (5-7 年後)、木材 50 年後一次性 NT$ 200k+', en: 'Fruit NT$ 30-80k/ha (after 5-7 yrs), timber NT$ 200k+ one-time after 50 yrs' },
+      how: { zh: '從田埂 / 防風林帶開始種 30 棵/ha → 1-2 年後評估擴大。可申請林業署造林獎勵。', en: 'Start with 30 trees/ha on bunds / windbreaks → evaluate expansion 1-2 yrs later. Eligible for Forestry Bureau afforestation grant.' },
+      fit: (inp) => {
+        const trees = inp.trees || 0;
+        const farmSize = inp.farmSize || 0;
+        if (farmSize >= 1 && trees < 30) return 85;
+        if (farmSize >= 0.5) return 70;
+        return 40;
+      },
+      why: { zh: '面積 ≥ 1 ha 最划算；現有樹木不到 30 棵的農場有最大新增空間。', en: 'Most cost-effective at ≥1 ha; farms with <30 trees have most expansion headroom.' }
+    },
+    {
+      id: 'rooftop_solar',
+      name: { zh: '屋頂光電 (倉庫 / 雞舍 / 育苗房頂)', en: 'Rooftop solar (warehouse / coop / nursery roof)' },
+      icon: '☀️',
+      setup: { zh: 'NT$ 50,000/kWp (3 kWp 試裝 NT$ 150k)', en: 'NT$ 50k/kWp (3 kWp pilot NT$ 150k)' },
+      income: { zh: '躉售台電 NT$ 6,000/kWp/年 (3 kWp = NT$ 18,000/年)', en: 'Feed-in to Taipower NT$ 6k/kWp/yr (3 kWp = NT$ 18k/yr)' },
+      how: { zh: '先確認屋頂結構承重 → 找 2 家承包商報價 → 申請地方政府綠能補助。', en: 'Check roof load capacity → get 2 contractor quotes → apply for local govt green-energy grant.' },
+      fit: (inp, r, cfg) => {
+        const hasRenewables = (cfg.renewables || []).some(rn => rn.status === 'active');
+        return hasRenewables ? 30 : 80;
+      },
+      why: { zh: '回本期 8-10 年 + 25 年保固 = 長期穩定現金流。已裝者優先升級電池。', en: 'Payback 8-10 yrs + 25-yr warranty = stable long-term cash flow. Already-installed should consider battery upgrade.' }
+    },
+    {
+      id: 'beekeeping',
+      name: { zh: '養蜂 / 蜂蜜副業', en: 'Beekeeping / honey side business' },
+      icon: '🐝',
+      setup: { zh: 'NT$ 25,000-50,000 (3-5 箱 + 採蜜工具)', en: 'NT$ 25,000-50,000 (3-5 hives + extraction equipment)' },
+      income: { zh: 'NT$ 30,000-80,000/年 (5 箱 × 30 kg × NT$ 400/kg)', en: 'NT$ 30k-80k/yr (5 hives × 30kg × NT$ 400/kg)' },
+      how: { zh: '農會養蜂班報名 (NT$ 3,000) → 從 2 箱開始 → 第 2 年若無病害再擴。', en: 'Sign up for farmer\'s assoc. beekeeping class (NT$ 3,000) → start with 2 hives → expand year 2 if disease-free.' },
+      fit: (inp) => {
+        const c = inp.cropType;
+        const chemicalUse = inp.chemicals || 0;
+        if (chemicalUse > 0) return 20; // bees hate pesticides
+        return (c === 'fruit' || c === 'mixed') ? 80 : 60;
+      },
+      why: { zh: '果園 / 混合農場有充足蜜源；無化學農藥使用是必要條件。', en: 'Orchards / mixed farms have ample nectar; zero-chemical use is a prerequisite.' }
+    },
+    {
+      id: 'workshops',
+      name: { zh: '農法工作坊 / 教學收益', en: 'Workshops / teaching income' },
+      icon: '🎓',
+      setup: { zh: 'NT$ 5,000-15,000 (教學材料 + 場地佈置)', en: 'NT$ 5,000-15,000 (materials + venue setup)' },
+      income: { zh: 'NT$ 60,000-180,000/年 (月辦 2 場 × 10 人 × NT$ 1,500)', en: 'NT$ 60k-180k/yr (2 workshops/mo × 10 ppl × NT$ 1.5k)' },
+      how: { zh: '主題：友善耕作入門、堆肥製作、種子保存。透過 Facebook / Instagram 招生。', en: 'Topics: friendly-farming intro, composting, seed-saving. Recruit via Facebook / Instagram.' },
+      fit: (inp) => {
+        const practices = inp.practices || {};
+        const practiceCount = Object.values(practices).filter(Boolean).length;
+        return practiceCount >= 3 ? 85 : (practiceCount >= 1 ? 60 : 30);
+      },
+      why: { zh: '已實踐 3+ 項做法 = 有「能教的內容」。也順便建立個人品牌。', en: 'With 3+ practices adopted = you have content to teach. Also builds personal brand.' }
+    },
+    {
+      id: 'compost_sale',
+      name: { zh: '高品質堆肥 / 有機資材對外販售', en: 'High-quality compost / organic input sales' },
+      icon: '♻️',
+      setup: { zh: 'NT$ 30,000-80,000 (粉碎機 + 翻堆設備)', en: 'NT$ 30,000-80,000 (shredder + turning equipment)' },
+      income: { zh: 'NT$ 50,000-150,000/年 (5-15 噸 × NT$ 10,000/噸)', en: 'NT$ 50k-150k/yr (5-15 tons × NT$ 10k/t)' },
+      how: { zh: '盤點農場副產品（落葉、果皮、糞肥）→ 標準化配方 → 包裝成 20 kg 袋 → 賣給鄰近農場 / 園藝店。', en: 'Inventory by-products (leaves, peels, manure) → standardize recipe → bag in 20kg → sell to nearby farms / garden stores.' },
+      fit: (inp) => {
+        const composting = inp.practices && inp.practices.compost;
+        return composting ? 75 : 30;
+      },
+      why: { zh: '已堆肥 = 已有原料和經驗；只需把多餘的拿出去賣。', en: 'If already composting = you have the inputs and know-how; just sell the surplus.' }
+    },
+    {
+      id: 'gift_box',
+      name: { zh: '節慶禮盒 (中秋、春節、企業客製)', en: 'Seasonal gift boxes (Mid-Autumn, CNY, corporate)' },
+      icon: '🎁',
+      setup: { zh: 'NT$ 20,000-60,000 (包裝設計 + 第一批材料)', en: 'NT$ 20,000-60,000 (packaging design + first batch)' },
+      income: { zh: 'NT$ 100,000-300,000/年 (節慶高峰 ~6 週)', en: 'NT$ 100k-300k/yr (~6 wks seasonal peak)' },
+      how: { zh: '中秋前 2 個月開放預訂 → 朋友 / 客戶試吃 → 企業團購（10 盒以上免運）。預收現金。', en: 'Open pre-orders 2 mo before Mid-Autumn → friend / customer tasting → corporate bulk orders (10+ box free shipping). Pre-paid cash.' },
+      fit: (inp) => {
+        const c = inp.cropType;
+        return (c === 'fruit') ? 90 : (c === 'rice' ? 75 : (c === 'mixed' ? 70 : 50));
+      },
+      why: { zh: '水果禮盒文化最強；稻米可做精品米禮盒；蔬菜可組合「在地野菜禮籃」。', en: 'Fruit-gift culture is strongest; rice can be premium-rice boxed; vegetables can bundle as "local wild-vegetable basket".' }
+    },
+    {
+      id: 'seed_saving',
+      name: { zh: '原生種 / 留種育種', en: 'Heritage seed / breeding income' },
+      icon: '🌱',
+      setup: { zh: 'NT$ 5,000-20,000 (留種容器 + 標籤系統)', en: 'NT$ 5,000-20,000 (seed containers + labeling)' },
+      income: { zh: 'NT$ 20,000-80,000/年 (小眾但高溢價)', en: 'NT$ 20k-80k/yr (niche but high-premium)' },
+      how: { zh: '選 3-5 個你最熟悉、買不到的品種 → 隔離保種 → 透過種子交換社團 / Pinkoi / Etsy 販售。', en: 'Pick 3-5 unavailable varieties you know best → isolate-and-save → sell via seed-exchange groups / Pinkoi / Etsy.' },
+      fit: (inp) => {
+        const c = inp.cropType;
+        return (c === 'vegetables' || c === 'mixed') ? 70 : 35;
+      },
+      why: { zh: '蔬菜 / 混合農場品系多，最有保種潛力。原生種市場小但忠誠度高。', en: 'Vegetable / mixed farms have variety diversity = best heritage-seed potential. Niche market but high loyalty.' }
+    }
+  ];
+
+  function renderDiversification(inp, r) {
+    const host = document.getElementById('diversifyContent');
+    if (!host) return;
+    const isZh = currentLang !== 'en';
+
+    const scored = DIVERSIFICATION_OPPORTUNITIES.map(o => ({
+      ...o,
+      score: o.fit(inp, r, CLIENT_CONFIG)
+    })).sort((a, b) => b.score - a.score).slice(0, 5);
+
+    let html = '<div style="display: grid; gap: 12px;">';
+    scored.forEach((o, idx) => {
+      const tier = o.score >= 80 ? 'good' : (o.score >= 60 ? 'medium' : 'low');
+      const tierColor = tier === 'good' ? '#059669' : (tier === 'medium' ? '#d97706' : '#6b7280');
+      const tierBg = tier === 'good' ? 'rgba(5,150,105,0.05)' : (tier === 'medium' ? 'rgba(217,119,6,0.05)' : 'var(--bg)');
+      const fitLabel = tier === 'good' ? (isZh ? '極吻合' : 'Strong fit') : (tier === 'medium' ? (isZh ? '可行' : 'Workable') : (isZh ? '需評估' : 'Evaluate'));
+
+      html += `
+        <div style="padding: 14px 16px; background: ${tierBg}; border: 1px solid ${tierColor}; border-left-width: 4px; border-radius: 8px;">
+          <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 8px;">
+            <div style="font-size: 14px; font-weight: 700;"><span style="margin-right: 6px;">${o.icon}</span>${idx + 1}. ${isZh ? o.name.zh : o.name.en}</div>
+            <div style="font-size: 11px; padding: 3px 10px; border-radius: 999px; background: ${tierColor}; color: #fff; font-weight: 700;">${fitLabel} · ${o.score}/100</div>
+          </div>
+          <div style="font-size: 12px; color: var(--muted); margin-bottom: 10px; font-style: italic;">${isZh ? o.why.zh : o.why.en}</div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; padding: 10px 0; border-top: 1px dashed var(--border); font-size: 12px;">
+            <div><div class="u" style="font-size: 10px;">${isZh ? '建置成本' : 'Setup cost'}</div><div style="font-weight: 600; margin-top: 2px;">${isZh ? o.setup.zh : o.setup.en}</div></div>
+            <div><div class="u" style="font-size: 10px;">${isZh ? '年潛在收入' : 'Annual potential'}</div><div style="font-weight: 600; margin-top: 2px; color: ${tierColor};">${isZh ? o.income.zh : o.income.en}</div></div>
+          </div>
+          <div style="margin-top: 8px; padding: 8px 10px; background: var(--bg); border-radius: 6px; font-size: 12px; line-height: 1.6;"><strong>${isZh ? '怎麼開始：' : 'How to start: '}</strong>${isZh ? o.how.zh : o.how.en}</div>
+        </div>
+      `;
+    });
+    html += '</div>';
+
+    host.innerHTML = html;
+  }
+
   // ── Concentration Risk: 4-dimension single-point-of-failure check ─
   function renderConcentrationRisk(inp, r) {
     const host = document.getElementById('concentrationRisk');
@@ -6989,6 +7180,7 @@ Applicant: ${ownerName} (signature)
     renderCashFlow(inp, r);
     renderSurvival(inp, r);
     renderConcentrationRisk(inp, r);
+    renderDiversification(inp, r);
     renderBusinessMindset(inp, r);
     renderRoadmap(inp, r);
     renderFarmStatusBadge();
