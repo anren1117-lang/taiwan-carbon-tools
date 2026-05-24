@@ -6722,15 +6722,19 @@ Applicant: ${ownerName} (signature)
         <tbody>
     `;
 
-    allFarms.forEach(f => {
+    allFarms.forEach((f, idx) => {
       const rowClass = f.isYou ? 'you' : '';
       const name = isZh ? (f.name?.zh || (f.isYou ? '本農場' : '—')) : (f.name?.en || (f.isYou ? 'This farm' : '—'));
       const loc = isZh ? (f.location?.zh || '') : (f.location?.en || '');
+      // For non-user rows, link to the sample farm dashboard
+      const sampleId = !f.isYou && peerSamplesCache[idx - 1] ? peerSamplesCache[idx - 1]._id : null;
+      const linkOpen = sampleId ? `<a href="farm-dashboard.html?id=${encodeURIComponent(sampleId)}" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">` : '';
+      const linkClose = sampleId ? '</a>' : '';
       html += `
-        <tr class="${rowClass}">
+        <tr class="${rowClass}" ${sampleId ? `style="cursor: pointer;" onclick="window.open('farm-dashboard.html?id=${encodeURIComponent(sampleId)}', '_blank')"` : ''}>
           <td>
-            <div class="farm-name ${f.isYou ? 'you' : ''}">${f.isYou ? (isZh ? '👉 ' + name : '👉 ' + name) : name}</div>
-            <div class="farm-meta">${loc}</div>
+            ${linkOpen}<div class="farm-name ${f.isYou ? 'you' : ''}">${f.isYou ? (isZh ? '👉 ' + name : '👉 ' + name) : name}${sampleId ? ' <span style="font-size: 10px; color: var(--accent); margin-left: 4px;">↗</span>' : ''}</div>
+            <div class="farm-meta">${loc}</div>${linkClose}
           </td>
           <td>${(isZh ? cropZh : cropEn)[f.cropType] || '—'}</td>
           <td>${f.farmSize ? f.farmSize.toFixed(1) + ' ha' : '—'}</td>
