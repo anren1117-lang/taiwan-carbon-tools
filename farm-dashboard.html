@@ -164,6 +164,113 @@
     padding: 0 6px;
     opacity: 0.85;
   }
+  .welcome-banner {
+    max-width: 1100px;
+    margin: 0 auto 20px;
+    padding: 24px 28px;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark, #157a59) 100%);
+    color: #fff;
+    border-radius: 14px;
+    position: relative;
+    box-shadow: 0 8px 28px rgba(29, 158, 117, 0.18);
+  }
+  .welcome-banner .wb-dismiss {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    background: rgba(255,255,255,0.18);
+    color: #fff;
+    border: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    font-weight: 700;
+  }
+  .welcome-banner .wb-dismiss:hover { background: rgba(255,255,255,0.3); }
+  .welcome-banner .wb-eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.85;
+    margin-bottom: 6px;
+  }
+  .welcome-banner .wb-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 18px;
+    line-height: 1.3;
+  }
+  .welcome-banner .wb-steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+  .welcome-banner .wb-step {
+    display: flex;
+    gap: 12px;
+    padding: 14px 14px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 10px;
+    text-decoration: none;
+    color: #fff;
+    transition: background 0.15s, transform 0.15s;
+  }
+  .welcome-banner .wb-step:hover {
+    background: rgba(255,255,255,0.22);
+    transform: translateY(-2px);
+  }
+  .welcome-banner .wb-step-num {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    background: #fff;
+    color: var(--accent);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 16px;
+  }
+  .welcome-banner .wb-step-title {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .welcome-banner .wb-step-desc {
+    font-size: 12px;
+    line-height: 1.55;
+    opacity: 0.9;
+  }
+  .welcome-banner .wb-footer {
+    font-size: 12px;
+    opacity: 0.85;
+  }
+  .welcome-banner .wb-skip {
+    background: transparent;
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.4);
+    padding: 5px 12px;
+    border-radius: 5px;
+    margin-left: 8px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .welcome-banner .wb-skip:hover { background: rgba(255,255,255,0.15); }
+  @media (max-width: 760px) {
+    .welcome-banner { padding: 20px; }
+    .welcome-banner .wb-title { font-size: 18px; }
+    .welcome-banner .wb-steps { grid-template-columns: 1fr; gap: 10px; }
+  }
+  @media print {
+    .welcome-banner { display: none !important; }
+  }
   .top-actions-panel {
     background: linear-gradient(135deg, var(--accent-tint) 0%, var(--bg-card) 60%);
     border: 1.5px solid var(--accent);
@@ -1868,7 +1975,42 @@
     <a href="#sec-scenarios" class="sn-link" data-zh="情境模擬" data-en="Scenarios">情境模擬</a>
     <div class="sn-divider"></div>
     <a href="#sec-editor" class="sn-link" data-zh="設定" data-en="Settings">設定</a>
+    <a href="javascript:showWelcome()" class="sn-link" data-zh="❔ 顯示新手指引" data-en="❔ Show welcome">❔ 顯示新手指引</a>
   </nav>
+
+  <!-- ── First-time welcome / orientation (dismissible) ───── -->
+  <section id="welcomeBanner" class="welcome-banner" style="display:none;">
+    <button class="wb-dismiss" onclick="dismissWelcome()" aria-label="Dismiss">×</button>
+    <div class="wb-eyebrow" data-zh="第一次來？" data-en="First time here?">第一次來？</div>
+    <h2 class="wb-title" data-zh="3 步驟，把這份儀表板變成你的經營顧問" data-en="3 steps to turn this dashboard into your business advisor">3 步驟，把這份儀表板變成你的經營顧問</h2>
+    <div class="wb-steps">
+      <a href="#sec-editor" class="wb-step">
+        <div class="wb-step-num">1</div>
+        <div>
+          <div class="wb-step-title" data-zh="輸入你的資料" data-en="Enter your data">輸入你的資料</div>
+          <div class="wb-step-desc" data-zh="到「設定」面板填農場規模、作物、年產量、年營收（選填）。所有欄位都選填，越多越準。" data-en="Open the Settings panel and fill in farm size, crop, yield, revenue (optional). Everything is optional — more data = better recommendations.">到「設定」面板填農場規模、作物、年產量、年營收（選填）。所有欄位都選填，越多越準。</div>
+        </div>
+      </a>
+      <a href="#sec-top3" class="wb-step">
+        <div class="wb-step-num">2</div>
+        <div>
+          <div class="wb-step-title" data-zh="看「本月該做的 3 件事」" data-en="Check 'This month's top 3 actions'">看「本月該做的 3 件事」</div>
+          <div class="wb-step-desc" data-zh="儀表板會根據你的資料挑出最緊急的 3 件事。每件都有資料依據、可點到對應面板執行。" data-en="The dashboard picks the 3 most urgent moves for this month based on your numbers. Each has supporting data + click-through to the relevant panel.">儀表板會根據你的資料挑出最緊急的 3 件事。每件都有資料依據、可點到對應面板執行。</div>
+        </div>
+      </a>
+      <a href="farm-pitch.html" class="wb-step" target="_blank" rel="noopener">
+        <div class="wb-step-num">3</div>
+        <div>
+          <div class="wb-step-title" data-zh="產出可用的成果" data-en="Produce something you can use">產出可用的成果</div>
+          <div class="wb-step-desc" data-zh="買家提案單（A4 列印）、補助申請草稿、議價對話劇本、定價開場白 — 都可直接複製拿去用。" data-en="Buyer pitch sheet (A4 print), subsidy draft applications, negotiation scripts, pricing outreach openers — all copy-paste ready.">買家提案單（A4 列印）、補助申請草稿、議價對話劇本、定價開場白 — 都可直接複製拿去用。</div>
+        </div>
+      </a>
+    </div>
+    <div class="wb-footer">
+      <span data-zh="沒興趣指引？" data-en="Skip the guide?">沒興趣指引？</span>
+      <button class="wb-skip" onclick="dismissWelcome()" data-zh="關閉並開始使用" data-en="Dismiss and start using">關閉並開始使用</button>
+    </div>
+  </section>
 
   <!-- ── Client banner ─────────────────────────────────────── -->
   <section class="client-banner" id="sec-overview">
@@ -5990,6 +6132,26 @@ Applicant: ${ownerName} (signature)
     });
   };
 
+  // ── First-time welcome banner (dismissible, localStorage) ────────
+  window.dismissWelcome = function() {
+    try { localStorage.setItem('tct_welcome_dismissed', '1'); } catch (e) {}
+    const wb = document.getElementById('welcomeBanner');
+    if (wb) wb.style.display = 'none';
+  };
+  window.showWelcome = function() {
+    try { localStorage.removeItem('tct_welcome_dismissed'); } catch (e) {}
+    const wb = document.getElementById('welcomeBanner');
+    if (wb) wb.style.display = '';
+    wb.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+  function maybeShowWelcome() {
+    const wb = document.getElementById('welcomeBanner');
+    if (!wb) return;
+    let dismissed = false;
+    try { dismissed = localStorage.getItem('tct_welcome_dismissed') === '1'; } catch (e) {}
+    wb.style.display = dismissed ? 'none' : '';
+  }
+
   // ── Peer Comparison: load 4 sample farms, compute, compare ───────
   const SAMPLE_FARM_IDS = ['demo', 'chen-rice-yilan', 'wei-dairy-changhua', 'lai-mango-pingtung'];
   let peerSamplesCache = null;
@@ -6965,6 +7127,7 @@ Applicant: ${ownerName} (signature)
   async function init() {
     await loadFarmFromUrl();
     applyConfigToDom();
+    maybeShowWelcome();
 
     const liveInputs = [
       'farmSize', 'region', 'address', 'cropType', 'annualYieldKg', 'annualRevenueNT', 'productCategory',
