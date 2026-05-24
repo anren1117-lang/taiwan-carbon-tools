@@ -1793,6 +1793,7 @@
     <div class="sn-group-label" data-zh="01 經營決策" data-en="01 Business">01 經營決策</div>
     <a href="#sec-cashflow" class="sn-link" data-zh="現金流月曆" data-en="Cash flow">現金流月曆</a>
     <a href="#sec-pricing" class="sn-link" data-zh="定價工作室" data-en="Pricing">定價工作室</a>
+    <a href="#sec-roi" class="sn-link" data-zh="投資回收" data-en="Practice ROI">投資回收</a>
     <a href="#sec-income" class="sn-link" data-zh="補助收益" data-en="Subsidies">補助收益</a>
     <a href="#sec-agent" class="sn-link" data-zh="顧問建議" data-en="Advisor">顧問建議</a>
     <a href="#sec-survival" class="sn-link" data-zh="生存與心法" data-en="Survival">生存與心法</a>
@@ -1884,6 +1885,13 @@
     <div class="panel-title" data-zh="定價工作室：你該收多少、向誰收、怎麼開口" data-en="Pricing Studio: what to charge, where, and how to ask">定價工作室：你該收多少、向誰收、怎麼開口</div>
     <div class="panel-sub" data-zh="從你的實際成本出發，算出 3 個價位（地板價、永續價、故事溢價），對應到 7 種通路，附建議出價、現金時程、需要準備的證據、可複製的開場白。" data-en="From your actual cost, computed 3 price tiers (floor / sustainable / story-premium) mapped to 7 channels — with suggested price, cash terms, required evidence, and copy-paste outreach openers.">從你的實際成本出發，算出 3 個價位（地板價、永續價、故事溢價），對應到 7 種通路，附建議出價、現金時程、需要準備的證據、可複製的開場白。</div>
     <div id="pricingStudioContent"></div>
+  </section>
+
+  <!-- ── Practice ROI Switchboard: should I adopt X? ────────── -->
+  <section class="panel" id="sec-roi">
+    <div class="panel-title" data-zh="投資回收計算機：每個做法多久回本" data-en="Practice ROI Switchboard: how long until each practice pays back">投資回收計算機：每個做法多久回本</div>
+    <div class="panel-sub" data-zh="對每個尚未採用的永續做法，算出本農場的建置成本、年淨節省、回本月數、五年累積收益。依回本期排序，最快回本的排前面 — 這是你下一個該做的決定。" data-en="For each sustainable practice you haven't adopted yet, compute setup cost, net annual saving, payback months, and 5-year cumulative gain — for *your* farm size. Sorted by fastest payback. This is your next decision.">對每個尚未採用的永續做法，算出本農場的建置成本、年淨節省、回本月數、五年累積收益。依回本期排序，最快回本的排前面 — 這是你下一個該做的決定。</div>
+    <div id="practiceROIContent"></div>
   </section>
 
   <!-- ── Group divider: Carbon Deep Dive ────────────────────── -->
@@ -5589,6 +5597,143 @@ My cost ledger is transparent (${costPerKg ? `actual cost NT$ ${costPerKg}/kg` :
     });
   };
 
+  // ── Practice ROI Switchboard: payback analysis per practice ──────
+  // All NT$ figures are per-hectare conservative estimates from Taiwan
+  // ag extension data. Final adoption requires farmer's own diligence.
+  const PRACTICE_INVESTMENTS = [
+    { id: 'coverCrop',
+      label: { zh: '覆蓋作物 (Cover crop)', en: 'Cover crop' },
+      setupNT: 3000, ongoingNT: 2000, savingNT: 8000,
+      cropApplicable: ['vegetables', 'fruit', 'mixed'],
+      why: { zh: '減少氮肥支出 + 抑制雜草 + 防止土壤流失（雨季關鍵）', en: 'Cuts N-fert spending + suppresses weeds + prevents soil loss (critical in rainy season)' },
+      subsidy: { zh: '可疊加友善耕作補助 NT$ 30,000/ha', en: 'Stackable with friendly-farming subsidy NT$ 30,000/ha' }
+    },
+    { id: 'noTill',
+      label: { zh: '少 / 免耕', en: 'No-till' },
+      setupNT: 0, ongoingNT: -1500, savingNT: 4500,
+      cropApplicable: ['rice', 'vegetables', 'fruit', 'mixed'],
+      why: { zh: '減少柴油與機具時數，土壤水分與氮保留，長期 SOC 增', en: 'Cuts diesel + machinery hours, retains soil moisture + N, long-term SOC gain' }
+    },
+    { id: 'compost',
+      label: { zh: '堆肥施用 (Compost)', en: 'Compost application' },
+      setupNT: 5000, ongoingNT: -800, savingNT: 6000,
+      cropApplicable: ['rice', 'vegetables', 'fruit', 'mixed'],
+      why: { zh: '取代化學肥料、改善土壤結構、農場副產品再利用', en: 'Replaces synthetic fert, improves soil structure, reuses on-farm by-products' }
+    },
+    { id: 'residue',
+      label: { zh: '殘株還田 (Residue retention)', en: 'Residue retention' },
+      setupNT: 0, ongoingNT: 0, savingNT: 3000,
+      cropApplicable: ['rice', 'vegetables', 'fruit', 'mixed'],
+      why: { zh: '直接回收作物殘留的氮素，第二期作物可少買 10-15% 肥料', en: 'Direct N return from crop residue — next crop needs 10-15% less fertilizer' }
+    },
+    { id: 'awd',
+      label: { zh: 'AWD 稻田間歇灌溉', en: 'AWD rice irrigation' },
+      setupNT: 8000, ongoingNT: -2000, savingNT: 5000,
+      cropApplicable: ['rice'],
+      why: { zh: '節水 30% + 減 CH4 排放 45% + 未來碳信用機會', en: 'Saves 30% water + cuts CH4 by 45% + future carbon credit potential' },
+      subsidy: { zh: '可申請農田水資源管理示範補助', en: 'Eligible for water-management demo grant' }
+    },
+    { id: 'biochar',
+      label: { zh: '生物炭施用 (試驗規模)', en: 'Biochar (trial scale)' },
+      setupNT: 25000, ongoingNT: 0, savingNT: 4000,
+      cropApplicable: ['rice', 'vegetables', 'fruit', 'mixed'],
+      why: { zh: '長期土壤改良 (10+ 年) + 可申請碳匯 + 高效益但資本密集', en: 'Long-term soil improvement (10+ years) + carbon credit eligibility + capital-intensive' },
+      note: { zh: '建議先以 0.1 ha 試驗 (約 NT$ 2,500)，成功再擴大', en: 'Start with 0.1 ha trial (~NT$ 2,500) before scaling' }
+    },
+    { id: 'solar',
+      label: { zh: '屋頂光電 (3 kWp 試裝)', en: 'Rooftop solar PV (3 kWp pilot)' },
+      setupNT: 150000, ongoingNT: 0, savingNT: 18000, fixedSetup: true,
+      cropApplicable: ['rice', 'vegetables', 'fruit', 'mixed', 'livestock'],
+      why: { zh: '降低電費 + 餘電躉售台電 + 帳面資產增值', en: 'Cuts power bill + sells excess to grid + adds book asset value' },
+      subsidy: { zh: '可申請農業設施綠能補助 (各地方政府)', en: 'Eligible for agricultural facility green-energy grant (local govt)' }
+    },
+    { id: 'agroforestry',
+      label: { zh: '農林複合 (種 30 棵樹/ha)', en: 'Agroforestry (30 trees/ha)' },
+      setupNT: 4500, ongoingNT: 500, savingNT: 2500,
+      cropApplicable: ['vegetables', 'fruit', 'mixed'],
+      why: { zh: '防風林 + 永久碳匯 + 副產品 (果實 / 木材) + 抗極端氣候', en: 'Windbreak + permanent carbon sink + side products (fruit/timber) + climate buffer' }
+    }
+  ];
+
+  function renderPracticeROI(inp, r) {
+    const host = document.getElementById('practiceROIContent');
+    if (!host) return;
+    const isZh = currentLang !== 'en';
+    const adopted = inp.practices || {};
+    const isRice = inp.cropType === 'rice';
+    const usingAWD = inp.riceMgmt === 'awd';
+    const farmSize = Math.max(inp.farmSize || 0, 0.1);
+
+    const candidates = PRACTICE_INVESTMENTS.filter(p => {
+      if (p.id === 'awd') return isRice && !usingAWD;
+      if (['coverCrop', 'noTill', 'compost', 'residue'].includes(p.id) && adopted[p.id]) return false;
+      if (p.cropApplicable && !p.cropApplicable.includes(inp.cropType || 'mixed')) return false;
+      return true;
+    }).map(p => {
+      const totalSetup = p.fixedSetup ? p.setupNT : p.setupNT * farmSize;
+      const netAnnual = (p.savingNT - p.ongoingNT) * (p.fixedSetup ? 1 : farmSize);
+      const paybackMonths = netAnnual > 0 ? (totalSetup / netAnnual * 12) : Infinity;
+      const fiveYearNet = netAnnual * 5 - totalSetup;
+      return { ...p, totalSetup, netAnnual, paybackMonths, fiveYearNet };
+    });
+
+    candidates.sort((a, b) => a.paybackMonths - b.paybackMonths);
+
+    if (candidates.length === 0) {
+      host.innerHTML = `
+        <div style="padding: 14px 16px; background: rgba(5, 150, 105, 0.08); border: 1px solid rgba(5, 150, 105, 0.3); border-radius: 8px; font-size: 13px; line-height: 1.6;">
+          <strong style="color: #059669;">${isZh ? '✓ 你已採用所有適用的做法' : '✓ You\'ve adopted every applicable practice'}</strong> — ${isZh ? '下一步可考慮再投資設備（屋頂光電、滴灌、自動化），或申請進階補助（碳匯、ESG 採購）。' : 'next step: consider equipment investments (rooftop PV, drip irrigation, automation) or apply for advanced subsidies (carbon credits, ESG procurement).'}
+        </div>`;
+      return;
+    }
+
+    let html = `
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 16px; padding: 12px 14px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px;">
+        <div><div class="u" style="font-size: 11px;">${isZh ? '農場規模' : 'Farm size'}</div><div style="font-size: 16px; font-weight: 700;">${farmSize.toFixed(1)} ha</div></div>
+        <div><div class="u" style="font-size: 11px;">${isZh ? '可考慮投資' : 'Investments to consider'}</div><div style="font-size: 16px; font-weight: 700;">${candidates.length}</div></div>
+        <div><div class="u" style="font-size: 11px;">${isZh ? '最快回本' : 'Fastest payback'}</div><div style="font-size: 16px; font-weight: 700; color: #059669;">${candidates[0].paybackMonths < Infinity ? `${candidates[0].paybackMonths.toFixed(0)} ${isZh ? '個月' : 'mo'}` : '—'}</div></div>
+        <div><div class="u" style="font-size: 11px;">${isZh ? '若全採用 5 年淨收' : 'If all adopted, 5-yr net'}</div><div style="font-size: 16px; font-weight: 700; color: #059669;">NT$ ${fmt0(candidates.reduce((sum, p) => sum + Math.max(0, p.fiveYearNet), 0))}</div></div>
+      </div>
+    `;
+
+    html += '<div style="display: grid; gap: 12px;">';
+    candidates.forEach((p, idx) => {
+      const isFast = p.paybackMonths <= 12;
+      const isMedium = p.paybackMonths <= 36;
+      const tierColor = isFast ? '#059669' : (isMedium ? '#d97706' : '#6b7280');
+      const tierBg = isFast ? 'rgba(5,150,105,0.05)' : (isMedium ? 'rgba(217,119,6,0.05)' : 'var(--bg)');
+      const tierLabel = isFast ? (isZh ? '⚡ 一年內回本' : '⚡ Payback < 1 year') : (isMedium ? (isZh ? '💸 三年內回本' : '💸 Payback < 3 years') : (isZh ? '⏳ 長期投資' : '⏳ Long-term play'));
+      html += `
+        <div style="padding: 14px 16px; background: ${tierBg}; border: 1px solid ${tierColor}; border-left-width: 4px; border-radius: 8px;">
+          <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 8px;">
+            <div style="font-size: 15px; font-weight: 700;"><span style="color: ${tierColor}; margin-right: 6px;">#${idx + 1}</span>${isZh ? p.label.zh : p.label.en}</div>
+            <div style="font-size: 11px; padding: 3px 10px; border-radius: 999px; background: ${tierColor}; color: #fff; font-weight: 700;">${tierLabel}</div>
+          </div>
+          <div style="font-size: 12.5px; color: var(--muted); line-height: 1.55; margin-bottom: 10px;">${isZh ? p.why.zh : p.why.en}</div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; padding-top: 10px; border-top: 1px dashed var(--border);">
+            <div><div class="u" style="font-size: 10px;">${isZh ? '建置成本' : 'Setup cost'}</div><div style="font-weight: 700; font-size: 14px;">NT$ ${fmt0(p.totalSetup)}</div></div>
+            <div><div class="u" style="font-size: 10px;">${isZh ? '年淨節省' : 'Net annual saving'}</div><div style="font-weight: 700; font-size: 14px; color: ${p.netAnnual > 0 ? '#059669' : 'var(--muted)'};">NT$ ${fmt0(p.netAnnual)}</div></div>
+            <div><div class="u" style="font-size: 10px;">${isZh ? '回本期' : 'Payback'}</div><div style="font-weight: 700; font-size: 14px; color: ${tierColor};">${p.paybackMonths < Infinity ? `${p.paybackMonths.toFixed(0)} ${isZh ? '個月' : 'mo'}` : '—'}</div></div>
+            <div><div class="u" style="font-size: 10px;">${isZh ? '5 年淨收' : '5-yr net'}</div><div style="font-weight: 700; font-size: 14px; color: ${p.fiveYearNet > 0 ? '#059669' : '#dc2626'};">NT$ ${fmt0(p.fiveYearNet)}</div></div>
+          </div>
+          ${p.subsidy ? `<div style="margin-top: 10px; padding: 8px 12px; background: rgba(5,150,105,0.08); border-radius: 6px; font-size: 12px; color: #059669;"><strong>${isZh ? '💰 補助加成：' : '💰 Subsidy stack: '}</strong>${isZh ? p.subsidy.zh : p.subsidy.en}</div>` : ''}
+          ${p.note ? `<div style="margin-top: 8px; font-size: 11.5px; color: var(--muted); font-style: italic;">${isZh ? p.note.zh : p.note.en}</div>` : ''}
+        </div>
+      `;
+    });
+    html += '</div>';
+
+    html += `
+      <div style="margin-top: 16px; padding: 10px 14px; background: var(--bg-elev, var(--bg)); border: 1px dashed var(--border); border-radius: 6px; font-size: 11.5px; color: var(--muted); line-height: 1.6;">
+        ${isZh
+          ? '* 估算為台灣農業推廣資料的保守值，依本農場規模換算。實際成本可能因地區、勞動力、設備而異。建議從「⚡ 一年內回本」開始，現金流壓力最小。'
+          : '* Conservative estimates from Taiwan ag extension data, scaled to your farm size. Actual costs vary by region, labor, and equipment. Start with "⚡ Payback < 1 year" — lowest cash-flow pressure.'}
+      </div>
+    `;
+
+    host.innerHTML = html;
+  }
+
   // ── Cash Flow Calendar: monthly income/expense forecast ──────────
   // Seasonality patterns are rough but directionally correct for
   // Taiwan. Used to surface the gap month — the single biggest cause
@@ -5772,6 +5917,7 @@ My cost ledger is transparent (${costPerKg ? `actual cost NT$ ${costPerKg}/kg` :
     renderSubsidies(inp, r);
     renderMarket(inp, r);
     renderPricingStudio(inp, r);
+    renderPracticeROI(inp, r);
     renderCashFlow(inp, r);
     renderSurvival(inp, r);
     renderBusinessMindset(inp, r);
