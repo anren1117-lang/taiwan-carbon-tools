@@ -293,6 +293,23 @@
     <p data-zh="這個工具是為了幫永續農戶在「有心」之外，也建立「經營頭腦」 — 知道自己的毛利、定價地板、議價籌碼、現金流缺口、可申請的補助。3 步驟、約 5 分鐘，所有欄位選填、碳追蹤選配。" data-en="This tool helps sustainable farmers add a business brain on top of their heart — real margin, price floor, negotiation leverage, cash-flow gaps, subsidies. 3 steps, ~5 minutes, all fields optional, carbon tracking optional.">這個工具是為了幫永續農戶在「有心」之外，也建立「經營頭腦」 — 知道自己的毛利、定價地板、議價籌碼、現金流缺口、可申請的補助。3 步驟、約 5 分鐘，所有欄位選填、碳追蹤選配。</p>
   </section>
 
+  <!-- Restore banner: shown if a prior session's draft exists in localStorage -->
+  <div class="container" style="margin: 10px auto 0;">
+    <div id="restoreBanner" style="display: none; padding: 12px 16px; background: rgba(217, 119, 6, 0.08); border-left: 4px solid #d97706; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; font-size: 14px;">
+      <div>
+        <strong data-zh="📝 發現上次的草稿" data-en="📝 Found your previous draft">📝 發現上次的草稿</strong>
+        <span data-zh=" — 儲存於 " data-en=" — saved "> — 儲存於 </span>
+        <span id="restoreTime" style="font-weight: 600;">—</span>
+        <span data-zh="。要繼續上次的進度嗎？" data-en=". Resume where you left off?">。要繼續上次的進度嗎？</span>
+      </div>
+      <div style="display: flex; gap: 8px;">
+        <button id="restoreYes" style="background: #d97706; color: #fff; border: none; padding: 7px 14px; border-radius: 6px; font-weight: 600; cursor: pointer;" data-zh="繼續" data-en="Resume">繼續</button>
+        <button id="restoreNo" style="background: transparent; color: var(--text); border: 1px solid var(--border); padding: 7px 14px; border-radius: 6px; cursor: pointer;" data-zh="重新開始" data-en="Start fresh">重新開始</button>
+      </div>
+    </div>
+    <div id="autosaveIndicator" style="font-size: 11px; color: var(--text-muted); text-align: right; opacity: 0; transition: opacity 0.3s; margin-top: 4px; min-height: 14px;"></div>
+  </div>
+
   <section class="container">
     <div class="progress">
       <div class="progress-step active" id="p1"><span class="dot">1</span><span data-zh="基本" data-en="Basics">基本</span></div>
@@ -873,6 +890,68 @@
     });
   });
 
+  // ── Autosave: persist wizard state to localStorage so closing the
+  // tab mid-wizard doesn't lose progress. Saved on every input change
+  // (debounced 600ms). Cleared when farmer opens their dashboard.
+  const DRAFT_KEY = 'tct_onboard_draft_v1';
+  let saveDraftTimer = null;
+  function saveDraft() {
+    clearTimeout(saveDraftTimer);
+    saveDraftTimer = setTimeout(() => {
+      try {
+        const cfg = buildConfig();
+        const payload = { savedAt: new Date().toISOString(), cfg };
+        localStorage.setItem(DRAFT_KEY, JSON.stringify(payload));
+        const ind = document.getElementById('autosaveIndicator');
+        if (ind) {
+          ind.textContent = currentLang === 'zh' ? '✓ 已自動儲存' : '✓ Auto-saved';
+          ind.style.opacity = '1';
+          setTimeout(() => { ind.style.opacity = '0.5'; }, 1500);
+        }
+      } catch (e) {}
+    }, 600);
+  }
+  function loadDraft() {
+    try {
+      const raw = localStorage.getItem(DRAFT_KEY);
+      return raw ? JSON.parse(raw) : null;
+    } catch (e) { return null; }
+  }
+  function clearDraft() {
+    try { localStorage.removeItem(DRAFT_KEY); } catch (e) {}
+  }
+
+  // Wire autosave to every input/select/checkbox in the wizard
+  function wireAutosave() {
+    document.querySelectorAll('#step-1 input, #step-1 select, #step-2 input, #step-2 select').forEach(el => {
+      el.addEventListener('input', saveDraft);
+      el.addEventListener('change', saveDraft);
+    });
+  }
+
+  // Offer to restore on load if a draft exists
+  function maybeOfferRestore() {
+    const draft = loadDraft();
+    if (!draft || !draft.cfg) return;
+    const savedTime = new Date(draft.savedAt);
+    const minutesAgo = Math.round((Date.now() - savedTime.getTime()) / 60000);
+    const banner = document.getElementById('restoreBanner');
+    if (!banner) return;
+    const timeStr = minutesAgo < 60
+      ? (currentLang === 'zh' ? `${minutesAgo} 分鐘前` : `${minutesAgo} min ago`)
+      : (currentLang === 'zh' ? `${Math.round(minutesAgo/60)} 小時前` : `${Math.round(minutesAgo/60)}h ago`);
+    document.getElementById('restoreTime').textContent = timeStr;
+    banner.style.display = '';
+    document.getElementById('restoreYes').onclick = () => {
+      try { populateFromTemplate(draft.cfg, draft.cfg.id || 'my-farm'); } catch (e) {}
+      banner.style.display = 'none';
+    };
+    document.getElementById('restoreNo').onclick = () => {
+      clearDraft();
+      banner.style.display = 'none';
+    };
+  }
+
   // ── Wiring ───────────────────────────────────────────────────────
   // No validation gate — every field is optional. Empty fields fall
   // back to sensible defaults in buildConfig().
@@ -925,6 +1004,13 @@
   try { const s = localStorage.getItem('tct_lang'); if (s === 'zh' || s === 'en') savedLang = s; } catch (e) {}
   document.getElementById('langToggle').addEventListener('click', () => applyLang(currentLang === 'zh' ? 'en' : 'zh'));
   applyLang(savedLang);
+
+  // Autosave init: wire after lang is set so the indicator picks correct text
+  wireAutosave();
+  maybeOfferRestore();
+  // Clear draft once farmer opens their dashboard (commitment point)
+  const openBtn = document.getElementById('openDashUrl');
+  if (openBtn) openBtn.addEventListener('click', () => clearDraft());
 </script>
 </body>
 </html>
