@@ -7192,6 +7192,23 @@ Applicant: ${ownerName} (signature)
     const monthsEn = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     const monthNames = isZh ? monthsZh : monthsEn;
 
+    // 0. MISSING ANNUAL REVENUE — gates margin/cashflow/pricing/peer.
+    // Without it most of the dashboard's value is invisible. Surface as
+    // a clear "do this first" priority for new farmers.
+    if (!revenue || revenue <= 0) {
+      candidates.push({
+        priority: 88,
+        urgency: 'high',
+        title: isZh ? '輸入年營收 — 解鎖毛利分析、定價建議、現金流月曆、同儕比較' : 'Enter annual revenue — unlocks margin, pricing, cash flow, peer comparison',
+        why: isZh
+          ? '儀表板大部分的決策工具（定價地板、缺口月偵測、實際毛利、同儕比較）都需要年營收才能算。沒填 = 看不到。'
+          : 'Most of the dashboard\'s decision tools (pricing floor, cash gap detection, real margin, peer comparison) require annual revenue to compute. Without it, those panels stay empty.',
+        impact: isZh ? '一次輸入解鎖 5 個面板的具體建議' : 'Single input unlocks concrete recommendations across 5 panels',
+        link: '#sec-editor',
+        linkLabel: isZh ? '到「設定」輸入' : 'Open editor →'
+      });
+    }
+
     // 1. CASH FLOW GAP — top priority if exists (survival)
     if (revenue > 0 && cost > 0) {
       const cf = computeCashFlow(revenue, cost, subsidies, inp.cropType || 'mixed');
