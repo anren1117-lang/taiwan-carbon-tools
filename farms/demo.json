@@ -109,5 +109,10 @@
   "certifications": [
     { "id": "tgap",     "label": { "zh": "TGAP 產銷履歷", "en": "TGAP traceability" },     "tier": "standard" },
     { "id": "friendly", "label": { "zh": "友善耕作登錄",   "en": "Friendly farming registered" }, "tier": "standard" }
-  ]
+  ],
+
+  "pitchStory": {
+    "zh": "我們是雲林斗六的小型葉菜農場，2 公頃，從父親手上接過來時是慣行農法。2020 年開始轉型，現在每塊田都有覆蓋作物與堆肥輪作。我們不追求最低價，追求「下一代願意接的農場」— 土壤年年變好、買家年年回頭。",
+    "en": "We're a small 2-ha leafy-vegetable farm in Douliu, Yunlin. When I took over from my father it was conventional. We started the transition in 2020 — every plot now rotates with cover crops and compost. We don't compete on lowest price; we build a farm the next generation will want to inherit. Soil gets better year over year, and buyers keep coming back."
+  }
 }

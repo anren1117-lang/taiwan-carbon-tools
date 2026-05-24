@@ -110,5 +110,10 @@
     { "id": "organic", "label": { "zh": "慈心有機驗證",  "en": "TOAF organic cert" }, "tier": "premium" },
     { "id": "tgap",    "label": { "zh": "TGAP 產銷履歷", "en": "TGAP traceability" }, "tier": "standard" },
     { "id": "carbon",  "label": { "zh": "農林碳匯先行區",  "en": "Agroforestry carbon pilot" }, "tier": "premium" }
-  ]
+  ],
+
+  "pitchStory": {
+    "zh": "屏東枋寮的愛文芒果園，2.2 公頃。2019 年從父親手中接過時是慣行 — 噴 16 次藥、土壤板結。改用慈心有機 + 行間覆蓋作物 + 邊界 60 棵樹木 (防風 + 永久碳匯)，產量第一年掉 30%、第三年回到 95%。每年送土壤檢測，SOC 從 1.0% 升到 1.4%。本園是農林碳匯先行區之一，每年淨碳負 —— 樹吸收 + 土壤固碳 > 全年排放。",
+    "en": "Aiwen mango orchard in Fangliao, Pingtung — 2.2 ha. When I took over from my father in 2019, conventional management meant 16 spray applications and compacted soil. Switched to TOAF organic + alley cover crops + 60 boundary trees (windbreak + permanent carbon sink). Yield dropped 30% year one, back to 95% by year three. Annual soil testing — SOC up from 1.0% to 1.4%. This orchard is in the Agroforestry Carbon Pilot — net carbon negative every year (tree uptake + soil sink > total emissions)."
+  }
 }

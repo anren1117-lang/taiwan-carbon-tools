@@ -98,5 +98,10 @@
     { "id": "tgap",     "label": { "zh": "TGAP 產銷履歷",         "en": "TGAP traceability" },        "tier": "standard" },
     { "id": "moa",      "label": { "zh": "MOA 有機驗證",           "en": "MOA organic cert" },         "tier": "premium" },
     { "id": "awd",      "label": { "zh": "AWD 節水稻作示範",       "en": "AWD water-mgmt demo" },      "tier": "standard" }
-  ]
+  ],
+
+  "pitchStory": {
+    "zh": "宜蘭三星的第三代稻農。父親那一代用慣行兩期作，水費電費年年漲、雜草越來越強。2022 年導入 AWD 間歇灌溉 + 殘株還田 — 同樣產量、水費省 30%、甲烷排放近半，土壤碳含量從 1.8% 升到 2.1%。MOA 有機驗證 2024 年通過。歡迎來田裡走一趟，數據是真的，土也是真的。",
+    "en": "Third-generation rice farmer in Sanxing, Yilan. My father's generation ran double-crop continuous flooding — water and electricity costs rising yearly, weed pressure getting worse. In 2022 we adopted AWD (alternate wetting and drying) + residue retention. Same yield, 30% less water, methane down nearly half, soil organic carbon climbed from 1.8% to 2.1%. MOA organic cert came through in 2024. Come walk the field — the numbers are real and so is the soil."
+  }
 }

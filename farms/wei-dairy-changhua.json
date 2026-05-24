@@ -113,5 +113,10 @@
   "certifications": [
     { "id": "tgap",          "label": { "zh": "TGAP 產銷履歷",           "en": "TGAP traceability" },          "tier": "standard" },
     { "id": "happy-cow",     "label": { "zh": "動物福祉乳業標章 (申請中)", "en": "Animal welfare cert (pending)" }, "tier": "premium" }
-  ]
+  ],
+
+  "pitchStory": {
+    "zh": "彰化二林的小型酪農場，8 頭乳牛 + 200 隻蛋雞。我們不追求規模化 — 一頭牛我們認得每天的食量、產乳量、心情。糞肥不買化肥，自家做堆肥還田。蛋雞用稻穀混飼料、不關籠。動物福祉乳業標章 2025 年申請中，希望能成為彰化第一張。週供應 200-400 kg 鮮乳 + 30 dz 雞蛋。",
+    "en": "Small dairy farm in Erlin, Changhua: 8 cows + 200 layers. We don't scale up — with one cow we know her daily intake, milk yield, even her mood. We compost our own manure instead of buying synthetic fertilizer. Layers feed on rice grain + mixed feed, no cages. Animal welfare dairy cert pending in 2025 — hoping to be the first in Changhua. Weekly supply: 200-400 kg fresh milk + 30 dozen eggs."
+  }
 }
