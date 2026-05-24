@@ -4663,7 +4663,24 @@ Applicant: ${ownerName} (signature)
             <div class="sc-name">${trObj(p.name)}<span class="sc-agency">· ${trObj(p.agency)}</span></div>
             <div class="sc-note">${trObj(p.note)}</div>
             ${deadlineBadge}
-            ${p.url ? `<div class="sc-link"><a href="${p.url}" target="_blank" rel="noopener">${tr('主管機關公告', 'Agency information')} →</a></div>` : ''}
+            ${p.url ? (() => {
+              // Pre-build a Google search URL that includes the program name + "申請"
+              // + current year, so the farmer always lands on the latest application
+              // page even when agency PDFs are re-issued annually. More useful than
+              // a generic homepage link.
+              const programZh = (p.name && p.name.zh) || '';
+              const programEn = (p.name && p.name.en) || '';
+              const yr = new Date().getFullYear();
+              const queryZh = encodeURIComponent(`${programZh} 申請 ${yr}`);
+              const queryEn = encodeURIComponent(`Taiwan ${programEn} application ${yr}`);
+              const searchUrl = isZh
+                ? `https://www.google.com/search?q=${queryZh}`
+                : `https://www.google.com/search?q=${queryEn}`;
+              return `<div class="sc-link" style="display: flex; gap: 14px; flex-wrap: wrap;">
+                <a href="${p.url}" target="_blank" rel="noopener">${tr('主管機關官網', 'Agency homepage')} →</a>
+                <a href="${searchUrl}" target="_blank" rel="noopener" style="font-weight: 600;">${tr('🔍 搜尋今年最新申請辦法', '🔍 Find current-year application')} →</a>
+              </div>`;
+            })() : ''}
             ${draftBlock}
           </div>
           <div class="sc-amount">
