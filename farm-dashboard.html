@@ -1851,6 +1851,7 @@
     <div class="sn-group-label" data-zh="01 經營決策" data-en="01 Business">01 經營決策</div>
     <a href="#sec-cashflow" class="sn-link" data-zh="現金流月曆" data-en="Cash flow">現金流月曆</a>
     <a href="#sec-pricing" class="sn-link" data-zh="定價工作室" data-en="Pricing">定價工作室</a>
+    <a href="#sec-goals" class="sn-link" data-zh="年度目標" data-en="Goals">年度目標</a>
     <a href="#sec-roi" class="sn-link" data-zh="投資回收" data-en="Practice ROI">投資回收</a>
     <a href="#sec-income" class="sn-link" data-zh="補助收益" data-en="Subsidies">補助收益</a>
     <a href="#sec-agent" class="sn-link" data-zh="顧問建議" data-en="Advisor">顧問建議</a>
@@ -1950,6 +1951,13 @@
     <div class="panel-title" data-zh="定價工作室：你該收多少、向誰收、怎麼開口" data-en="Pricing Studio: what to charge, where, and how to ask">定價工作室：你該收多少、向誰收、怎麼開口</div>
     <div class="panel-sub" data-zh="從你的實際成本出發，算出 3 個價位（地板價、永續價、故事溢價），對應到 7 種通路，附建議出價、現金時程、需要準備的證據、可複製的開場白。" data-en="From your actual cost, computed 3 price tiers (floor / sustainable / story-premium) mapped to 7 channels — with suggested price, cash terms, required evidence, and copy-paste outreach openers.">從你的實際成本出發，算出 3 個價位（地板價、永續價、故事溢價），對應到 7 種通路，附建議出價、現金時程、需要準備的證據、可複製的開場白。</div>
     <div id="pricingStudioContent"></div>
+  </section>
+
+  <!-- ── Goal Tracker: set targets, track progress ─────────── -->
+  <section class="panel" id="sec-goals">
+    <div class="panel-title" data-zh="今年目標：設定 + 追蹤" data-en="This year's goals: set + track">今年目標：設定 + 追蹤</div>
+    <div class="panel-sub" data-zh="把「永續經營」變成可量化的目標。設定四個年度目標，儀表板會依資料即時算進度，並依目前的「達標步調」給你回饋。" data-en="Turn 'sustainable operations' into measurable targets. Set four annual goals — dashboard computes progress live and rates whether you're on pace.">把「永續經營」變成可量化的目標。設定四個年度目標，儀表板會依資料即時算進度，並依目前的「達標步調」給你回饋。</div>
+    <div id="goalTrackerContent"></div>
   </section>
 
   <!-- ── Practice ROI Switchboard: should I adopt X? ────────── -->
@@ -5786,6 +5794,136 @@ My cost ledger is transparent (${costPerKg ? `actual cost NT$ ${costPerKg}/kg` :
     });
   };
 
+  // ── Goal Tracker: annual targets with live progress ──────────────
+  // Goals stored per farm-id in localStorage. Progress = current value
+  // (from dashboard data) ÷ target. Pace verdict considers calendar
+  // month: by month X, you should be X/12 of the way there.
+  function goalStorageKey() {
+    const id = (CLIENT_CONFIG && CLIENT_CONFIG.id) || 'demo';
+    return 'tct_goals_' + id;
+  }
+
+  function loadGoals() {
+    try {
+      const raw = localStorage.getItem(goalStorageKey());
+      return raw ? JSON.parse(raw) : {};
+    } catch (e) { return {}; }
+  }
+
+  function saveGoals(goals) {
+    try { localStorage.setItem(goalStorageKey(), JSON.stringify(goals)); } catch (e) {}
+  }
+
+  function renderGoalTracker(inp, r) {
+    const host = document.getElementById('goalTrackerContent');
+    if (!host) return;
+    const isZh = currentLang !== 'en';
+    const goals = loadGoals();
+
+    // Current metric values from dashboard state
+    const cost = computeAnnualCost().total;
+    const subsidies = computeSubsidyTotal(inp, r).total;
+    const revenue = inp.annualRevenueNT || 0;
+    const totalRev = revenue + subsidies;
+    const marginPct = totalRev > 0 ? ((totalRev - cost) / totalRev) * 100 : 0;
+    const soilPct = (CLIENT_CONFIG.soilTest || {}).socPercent || 0;
+    const newBuyers = goals.newBuyersDone || 0;
+
+    // Calendar pace — by month M, you should be M/12 of the way to goal
+    const now = new Date();
+    const monthOfYear = now.getMonth() + 1; // 1-12
+    const paceFraction = monthOfYear / 12;
+
+    const goalDefs = [
+      { id: 'revenueGoal', current: totalRev, currentLabel: `NT$ ${fmt0(totalRev)}`,
+        title: { zh: '年營收 (含補助)', en: 'Annual revenue (incl. subsidy)' },
+        placeholder: '1500000', unit: 'NT$',
+        suggestion: () => goals.revenueGoal || Math.round(totalRev * 1.2 / 100000) * 100000,
+        format: v => `NT$ ${fmt0(v)}` },
+      { id: 'marginGoal', current: marginPct, currentLabel: `${marginPct.toFixed(1)}%`,
+        title: { zh: '毛利率 (%)', en: 'Margin (%)' },
+        placeholder: '40', unit: '%',
+        suggestion: () => goals.marginGoal || 40,
+        format: v => `${v}%`,
+        max: 100 },
+      { id: 'soilGoal', current: soilPct, currentLabel: `${soilPct}%`,
+        title: { zh: '土壤有機碳 (SOC %)', en: 'Soil organic carbon (SOC %)' },
+        placeholder: '3.0', unit: '%', step: 0.1,
+        suggestion: () => goals.soilGoal || Math.max(2.5, Math.round((soilPct + 0.5) * 10) / 10),
+        format: v => `${v}%`,
+        max: 10 },
+      { id: 'newBuyersGoal', current: newBuyers, currentLabel: String(newBuyers),
+        title: { zh: '新客戶 / 通路數', en: 'New buyers / channels' },
+        placeholder: '3', unit: isZh ? '位' : 'count',
+        suggestion: () => goals.newBuyersGoal || 3,
+        format: v => `${v}${isZh ? ' 位' : ''}`,
+        manualIncrement: true,
+        max: 50 }
+    ];
+
+    let html = '<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px;">';
+    goalDefs.forEach(g => {
+      const target = parseFloat(goals[g.id]) || 0;
+      const pct = target > 0 ? Math.min(100, (g.current / target) * 100) : 0;
+      const pacePct = paceFraction * 100;
+      const onPace = pct >= pacePct * 0.9;
+      const ahead = pct >= 100;
+      const verdict = ahead
+        ? { zh: '🎉 已達標！考慮提高目標', en: '🎉 Goal hit! Consider raising it', color: '#059669' }
+        : onPace
+        ? { zh: `✓ 達標步調中（已 ${pct.toFixed(0)}%，預期 ${pacePct.toFixed(0)}%）`, en: `✓ On pace (${pct.toFixed(0)}% done vs ${pacePct.toFixed(0)}% expected)`, color: '#059669' }
+        : pct >= pacePct * 0.5
+        ? { zh: `⚠️ 落後步調（已 ${pct.toFixed(0)}%，應該 ${pacePct.toFixed(0)}%） — 加速`, en: `⚠️ Behind pace (${pct.toFixed(0)}% vs expected ${pacePct.toFixed(0)}%) — push harder`, color: '#d97706' }
+        : { zh: `🚨 嚴重落後（${pct.toFixed(0)}% vs 應 ${pacePct.toFixed(0)}%） — 需要重新規劃`, en: `🚨 Severely behind (${pct.toFixed(0)}% vs ${pacePct.toFixed(0)}%) — replan needed`, color: '#dc2626' };
+
+      const barColor = ahead ? '#059669' : (onPace ? '#059669' : pct >= pacePct * 0.5 ? '#d97706' : '#dc2626');
+
+      html += `
+        <div style="padding: 14px 16px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px;">
+          <div style="font-size: 13px; font-weight: 700; margin-bottom: 8px;">${isZh ? g.title.zh : g.title.en}</div>
+          <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 10px;">
+            <div style="font-size: 11px; color: var(--muted);">${isZh ? '現況' : 'Current'}: <strong style="color: var(--text); font-size: 14px;">${g.currentLabel}</strong></div>
+            <div style="font-size: 11px; color: var(--muted);">${isZh ? '目標' : 'Target'}: <input type="number" id="goal-${g.id}" value="${target || g.suggestion()}" placeholder="${g.placeholder}" step="${g.step || 1}" style="width: 90px; padding: 4px 6px; border: 1px solid var(--border); border-radius: 4px; font-size: 12px; text-align: right; background: var(--bg-elev, var(--bg)); color: var(--text);"></div>
+          </div>
+          <div style="height: 10px; background: var(--bg-subtle, var(--border)); border-radius: 999px; overflow: hidden; margin-bottom: 8px;">
+            <div style="height: 100%; background: ${barColor}; width: ${pct}%; transition: width 0.3s, background 0.3s;"></div>
+            ${pct < 100 && pacePct > 0 ? `<div style="position: relative; top: -10px; left: ${pacePct}%; width: 2px; height: 10px; background: var(--muted); opacity: 0.5;"></div>` : ''}
+          </div>
+          <div style="font-size: 11.5px; color: ${verdict.color}; font-weight: 600; line-height: 1.5;">${isZh ? verdict.zh : verdict.en}</div>
+          ${g.manualIncrement ? `<button onclick="incrementGoalCounter('${g.id}')" style="margin-top: 8px; padding: 4px 10px; background: var(--accent); color: #fff; border: none; border-radius: 5px; font-size: 11px; font-weight: 600; cursor: pointer;">${isZh ? '+1 新客戶談成' : '+1 new buyer landed'}</button>` : ''}
+        </div>
+      `;
+    });
+    html += '</div>';
+
+    html += `
+      <div style="margin-top: 14px; padding: 10px 14px; background: var(--bg-subtle, var(--bg)); border-radius: 6px; font-size: 12px; color: var(--muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+        <div>${isZh ? `目前是 ${monthOfYear} 月 — 你應該完成年度目標的 ${(paceFraction * 100).toFixed(0)}%。` : `It's month ${monthOfYear} — you should be at ${(paceFraction * 100).toFixed(0)}% of annual goals.`}</div>
+        <button onclick="saveGoalsFromInputs()" style="padding: 5px 14px; background: var(--accent); color: #fff; border: none; border-radius: 5px; font-size: 12px; font-weight: 600; cursor: pointer;">${isZh ? '儲存目標' : 'Save goals'}</button>
+      </div>
+    `;
+
+    host.innerHTML = html;
+  }
+
+  window.saveGoalsFromInputs = function() {
+    const goals = loadGoals();
+    ['revenueGoal', 'marginGoal', 'soilGoal', 'newBuyersGoal'].forEach(id => {
+      const el = document.getElementById('goal-' + id);
+      if (el) goals[id] = parseFloat(el.value) || 0;
+    });
+    saveGoals(goals);
+    render();
+  };
+
+  window.incrementGoalCounter = function(id) {
+    const goals = loadGoals();
+    const key = id === 'newBuyersGoal' ? 'newBuyersDone' : id.replace('Goal', 'Done');
+    goals[key] = (goals[key] || 0) + 1;
+    saveGoals(goals);
+    render();
+  };
+
   // ── This Month's Top 3 Actions: cross-panel synthesizer ──────────
   // Scans the dashboard's full state and surfaces the 3 highest-impact
   // actions for THIS month, with each one backed by the farmer's
@@ -6277,6 +6415,7 @@ My cost ledger is transparent (${costPerKg ? `actual cost NT$ ${costPerKg}/kg` :
     renderSubsidies(inp, r);
     renderMarket(inp, r);
     renderPricingStudio(inp, r);
+    renderGoalTracker(inp, r);
     renderPracticeROI(inp, r);
     renderCashFlow(inp, r);
     renderSurvival(inp, r);
