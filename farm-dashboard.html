@@ -2093,6 +2093,13 @@
       <div id="supplyChain"></div>
     </div>
 
+    <!-- Concentration risk: are you a single-point-of-failure? -->
+    <div style="margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--border);">
+      <div class="panel-title" style="font-size: 13px; margin-bottom: 4px;" data-zh="集中度風險：你是不是太依賴單一某件事？" data-en="Concentration risk: are you a single-point-of-failure?">集中度風險：你是不是太依賴單一某件事？</div>
+      <div class="panel-sub" style="margin-bottom: 14px;" data-zh="一個颱風、一個買家換手、一個品項滯銷 — 永續農場最常因為「太集中」而倒。檢查作物、買家、收益、技能四個維度的集中度。" data-en="One typhoon, one buyer change, one bad product season — sustainable farms most often fail from over-concentration. Check crop / buyer / revenue / skill diversity.">一個颱風、一個買家換手、一個品項滯銷 — 永續農場最常因為「太集中」而倒。檢查作物、買家、收益、技能四個維度的集中度。</div>
+      <div id="concentrationRisk"></div>
+    </div>
+
     <!-- Business mindset — turn heart into business -->
     <div style="margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--border);">
       <div class="panel-title" style="font-size: 13px; margin-bottom: 4px;" data-zh="經營心法：把「心」變成「事業」" data-en="Business mindset: turn heart into a viable business">經營心法：把「心」變成「事業」</div>
@@ -5347,6 +5354,123 @@ My cost ledger is transparent (${costPerKg ? `actual cost NT$ ${costPerKg}/kg` :
                en: 'The four ERP modules (log / inventory / ledger / contacts) aren\'t paperwork — they\'re your decision-making infrastructure. Log three months and you\'ll find the "loss-making" crop is actually your cash cow.' } }
   ];
 
+  // ── Concentration Risk: 4-dimension single-point-of-failure check ─
+  function renderConcentrationRisk(inp, r) {
+    const host = document.getElementById('concentrationRisk');
+    if (!host) return;
+    const isZh = currentLang !== 'en';
+
+    // Heuristic dimensions:
+    // 1. Crop concentration — single crop type = high risk
+    // 2. Revenue source concentration — single revenue stream (no subsidies, no carbon income, no diversified product)
+    // 3. Buyer dependency — unknown from data; surface as a question
+    // 4. Skill / income redundancy — does farm have side income (renewables sell-back? agro-tourism? processing?)
+
+    const cropType = inp.cropType || 'mixed';
+    const cropDiverse = cropType === 'mixed';
+    const subsidies = computeSubsidyTotal(inp, r).total;
+    const revenue = inp.annualRevenueNT || 0;
+    const subsidiesShare = (revenue + subsidies) > 0 ? subsidies / (revenue + subsidies) : 0;
+    const trees = inp.trees || 0;
+    const hasRenewables = (CLIENT_CONFIG.renewables || []).some(rn => rn.status === 'active');
+    const hasAgroforestry = trees >= 20;
+
+    const dims = [
+      { id: 'crop',
+        score: cropDiverse ? 'good' : 'warn',
+        title: { zh: '作物多樣性', en: 'Crop diversity' },
+        finding: cropDiverse
+          ? { zh: `✓ 你已選擇「混合作物」 — 颱風 / 病害 / 滯銷影響有緩衝。`,
+              en: `✓ You're tagged "mixed" — typhoon / disease / market dips have a buffer.` }
+          : { zh: `⚠️ 整個農場依賴單一作物類型（${cropType === 'rice' ? '稻米' : cropType === 'vegetables' ? '蔬菜' : cropType === 'fruit' ? '水果' : '畜牧'}）。一次氣候災害或市場崩盤可能讓你整年收入歸零。`,
+              en: `⚠️ Entire farm depends on a single crop type (${cropType}). One climate event or market crash could wipe out a full year.` },
+        action: cropDiverse ? null
+          : (cropType === 'rice'
+              ? { zh: '建議加入：田埂副作物（毛豆、葛根）、農林複合（果樹間作）、稻 + 鴨 / 鴨蛋。',
+                  en: 'Consider: bund crops (soybeans, kudzu), agroforestry alley-cropped fruit, rice + duck integration.' }
+              : cropType === 'vegetables'
+              ? { zh: '建議加入：1-2 個全年穩定品項（如根莖類、葉菜輪作）+ 1 個季節高值品項（草莓 / 番茄 / 香草）。',
+                  en: 'Consider: 1-2 year-round staples (root veg, leafy rotations) + 1 high-value seasonal (strawberry, tomato, herbs).' }
+              : cropType === 'fruit'
+              ? { zh: '建議加入：覆地作物 / 草本香料間作、果園邊緣養蜂、副產品（果乾、果醬）。',
+                  en: 'Consider: ground cover / herb intercrops, beekeeping at orchard edge, processed by-products (dried fruit, jam).' }
+              : { zh: '建議加入：作物副產品（飼料）、加工品（乳製品 / 醃漬肉品）、有機糞肥外售。',
+                  en: 'Consider: crop by-products (feed), processed (dairy / cured meat), surplus manure sales.' })
+      },
+      { id: 'revenue',
+        score: subsidiesShare < 0.05 ? 'warn' : (subsidiesShare > 0.4 ? 'warn' : 'good'),
+        title: { zh: '收益來源分散度', en: 'Revenue source diversity' },
+        finding: subsidiesShare < 0.05
+          ? { zh: `⚠️ 補助佔總收入 ${(subsidiesShare * 100).toFixed(0)}% — 幾乎全靠賣產品。你錯過了該領的政府支持，也少了一條穩定收入。`,
+              en: `⚠️ Subsidies are only ${(subsidiesShare * 100).toFixed(0)}% of total revenue — you're nearly all-in on product sales. You're leaving govt support on the table and missing a stable income stream.` }
+          : subsidiesShare > 0.4
+          ? { zh: `⚠️ 補助佔總收入 ${(subsidiesShare * 100).toFixed(0)}% — 過度依賴政策補助。一旦補助縮減或制度改變，現金流會立刻緊張。`,
+              en: `⚠️ Subsidies are ${(subsidiesShare * 100).toFixed(0)}% of revenue — over-reliant on policy. Any cut or program change immediately squeezes cash flow.` }
+          : { zh: `✓ 補助 ${(subsidiesShare * 100).toFixed(0)}% + 銷售 ${((1 - subsidiesShare) * 100).toFixed(0)}% — 收益來源平衡。`,
+              en: `✓ Subsidies ${(subsidiesShare * 100).toFixed(0)}% + sales ${((1 - subsidiesShare) * 100).toFixed(0)}% — balanced revenue mix.` },
+        action: subsidiesShare < 0.05
+          ? { zh: '到「補助與碳匯收益」面板，把符合的全部申請。一年內現金流可以增加 NT$ ' + fmt0(computeSubsidyTotal(inp, r).total) + '。',
+              en: 'Go to "Subsidies & carbon income" panel and apply for everything you qualify for. Cash flow can grow by NT$ ' + fmt0(computeSubsidyTotal(inp, r).total) + ' within a year.' }
+          : subsidiesShare > 0.4
+          ? { zh: '降低補助依賴：提升售價（用「定價工作室」進入溢價通路）、或開發第二銷售管道（CSA、學校午餐）。',
+              en: 'Reduce subsidy dependence: raise prices (use Pricing Studio for premium channels), or open a second sales channel (CSA, school lunch).' }
+          : null
+      },
+      { id: 'buyer',
+        score: 'warn', // Always flag because we can't know from data
+        title: { zh: '買家集中度（需自評）', en: 'Buyer concentration (self-assess)' },
+        finding: { zh: '？ 從你的儀表板資料看不出買家結構。請自問：如果最大的買家明天斷單，下個月的營收會掉多少？超過 40% = 高風險。',
+                   en: '? We can\'t see your buyer mix from dashboard data. Self-check: if your largest buyer disappears tomorrow, what % of next month\'s revenue is gone? Over 40% = high risk.' },
+        action: { zh: '在 ERP「聯絡簿」紀錄每個買家的月銷售比例。如果單一買家 > 40%，立刻開發 2 個備援通路（建議從「定價工作室」中的高毛利通路著手）。',
+                  en: 'Log buyer-by-buyer monthly sales % in the ERP Contacts module. If any single buyer > 40%, open 2 backup channels immediately (start with high-margin ones in the Pricing Studio).' }
+      },
+      { id: 'asset',
+        score: (hasRenewables || hasAgroforestry) ? 'good' : 'warn',
+        title: { zh: '農場資產韌性（電 / 樹 / 加工）', en: 'Farm asset resilience (energy / trees / processing)' },
+        finding: (hasRenewables && hasAgroforestry)
+          ? { zh: '✓ 你已有再生能源 + 樹木 — 第二、第三條防線都存在。',
+              en: '✓ You have renewables + on-farm trees — second and third lines of defense are in place.' }
+          : hasRenewables
+          ? { zh: '✓ 已部署再生能源 — 電費衝擊可吸收。再加上樹木 / 加工副業會更穩。',
+              en: '✓ Renewables deployed — power-price shocks absorbed. Adding trees / processing side-income would harden further.' }
+          : hasAgroforestry
+          ? { zh: `✓ 已有 ${trees} 棵樹 — 防風 + 永久碳匯。加裝屋頂光電可進一步降低電費風險。`,
+              en: `✓ ${trees} on-farm trees — windbreak + permanent carbon sink. Rooftop PV would further reduce energy risk.` }
+          : { zh: '⚠️ 沒有再生能源、樹木不到 20 棵 — 一次颱風或電費漲價就會吃掉年度毛利。',
+              en: '⚠️ No renewables and fewer than 20 trees — one typhoon or power-price spike eats your annual margin.' },
+        action: (!hasRenewables && !hasAgroforestry)
+          ? { zh: '到「投資回收計算機」評估屋頂光電 + 農林複合 — 兩個都有政府補助，5 年內回本。',
+              en: 'Use the Practice ROI Switchboard to evaluate rooftop PV + agroforestry — both have grants, both pay back within 5 years.' }
+          : null
+      }
+    ];
+
+    const scoreColor = { good: '#059669', warn: '#d97706', poor: '#dc2626' };
+    const scoreBg = { good: 'rgba(5,150,105,0.05)', warn: 'rgba(217,119,6,0.05)', poor: 'rgba(220,38,38,0.05)' };
+
+    const warnings = dims.filter(d => d.score !== 'good').length;
+    let html = `
+      <div style="padding: 10px 14px; background: ${warnings === 0 ? 'rgba(5,150,105,0.08)' : 'rgba(217,119,6,0.08)'}; border-radius: 8px; margin-bottom: 14px; font-size: 13px; font-weight: 600;">
+        ${warnings === 0
+          ? (isZh ? '✓ 集中度風險低 — 你的農場有多條防線。' : '✓ Low concentration risk — your farm has multiple lines of defense.')
+          : (isZh ? `⚠️ ${warnings} 個維度需要注意 — 依下方優先順序處理。` : `⚠️ ${warnings} dimensions need attention — work through them in priority order below.`)}
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px;">`;
+
+    dims.forEach(d => {
+      html += `
+        <div style="padding: 12px 14px; background: ${scoreBg[d.score]}; border: 1px solid ${scoreColor[d.score]}; border-left-width: 4px; border-radius: 8px;">
+          <div style="font-size: 13px; font-weight: 700; color: ${scoreColor[d.score]}; margin-bottom: 6px;">${isZh ? d.title.zh : d.title.en}</div>
+          <div style="font-size: 13px; line-height: 1.6; margin-bottom: ${d.action ? '8px' : '0'};">${isZh ? d.finding.zh : d.finding.en}</div>
+          ${d.action ? `<div style="font-size: 12px; line-height: 1.55; padding: 8px 10px; background: var(--bg); border-radius: 6px;"><strong>${isZh ? '行動：' : 'Action: '}</strong>${isZh ? d.action.zh : d.action.en}</div>` : ''}
+        </div>
+      `;
+    });
+    html += '</div>';
+
+    host.innerHTML = html;
+  }
+
   function renderBusinessMindset(inp, r) {
     const host = document.getElementById('businessMindset');
     if (!host) return;
@@ -5920,6 +6044,7 @@ My cost ledger is transparent (${costPerKg ? `actual cost NT$ ${costPerKg}/kg` :
     renderPracticeROI(inp, r);
     renderCashFlow(inp, r);
     renderSurvival(inp, r);
+    renderConcentrationRisk(inp, r);
     renderBusinessMindset(inp, r);
     renderRoadmap(inp, r);
     renderFarmStatusBadge();
