@@ -149,6 +149,63 @@
     font-weight: 600;
   }
   .section-nav .sn-link.active::before { opacity: 1; }
+  .section-nav .sn-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 6px 6px;
+  }
+  .section-nav .sn-group-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    font-weight: 700;
+    margin-top: 4px;
+    padding: 0 6px;
+    opacity: 0.85;
+  }
+  .group-divider {
+    max-width: 1100px;
+    margin: 28px auto 16px;
+    padding: 14px 20px;
+    border-radius: 10px;
+    background: linear-gradient(90deg, var(--accent-tint) 0%, transparent 100%);
+    border-left: 4px solid var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .group-divider.muted {
+    background: linear-gradient(90deg, var(--bg-subtle) 0%, transparent 100%);
+    border-left-color: var(--text-muted);
+    opacity: 0.85;
+  }
+  .group-divider .gd-tag {
+    font-size: 11px;
+    font-weight: 800;
+    padding: 4px 10px;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 6px;
+    letter-spacing: 0.04em;
+  }
+  .group-divider.muted .gd-tag { background: var(--text-muted); }
+  .group-divider .gd-zh {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .group-divider .gd-sub {
+    font-size: 13px;
+    color: var(--text-muted);
+    flex: 1;
+    min-width: 200px;
+  }
+  @media (max-width: 720px) {
+    .group-divider { flex-direction: column; align-items: flex-start; gap: 8px; padding: 12px 16px; }
+    .group-divider .gd-zh { font-size: 16px; }
+  }
   @media (max-width: 1340px) {
     .section-nav { display: none; }
   }
@@ -1733,17 +1790,22 @@
   <nav class="section-nav" id="sectionNav" aria-label="Section navigation">
     <div class="sn-title" data-zh="跳至" data-en="Jump to">跳至</div>
     <a href="#sec-overview" class="sn-link active" data-zh="概覽" data-en="Overview">概覽</a>
-    <a href="#sec-electricity" class="sn-link" data-zh="用電趨勢" data-en="Electricity">用電趨勢</a>
+    <div class="sn-group-label" data-zh="01 經營決策" data-en="01 Business">01 經營決策</div>
+    <a href="#sec-cashflow" class="sn-link" data-zh="現金流月曆" data-en="Cash flow">現金流月曆</a>
+    <a href="#sec-pricing" class="sn-link" data-zh="定價工作室" data-en="Pricing">定價工作室</a>
+    <a href="#sec-income" class="sn-link" data-zh="補助收益" data-en="Subsidies">補助收益</a>
     <a href="#sec-agent" class="sn-link" data-zh="顧問建議" data-en="Advisor">顧問建議</a>
-    <a href="#sec-intensity" class="sn-link" data-zh="競爭力" data-en="Intensity">競爭力</a>
+    <a href="#sec-survival" class="sn-link" data-zh="生存與心法" data-en="Survival">生存與心法</a>
+    <a href="#sec-actions" class="sn-link" data-zh="行動路徑" data-en="Actions">行動路徑</a>
+    <a href="#sec-erp" class="sn-link" data-zh="營運紀錄" data-en="ERP">營運紀錄</a>
+    <div class="sn-group-label" data-zh="02 碳追蹤" data-en="02 Carbon">02 碳追蹤</div>
+    <a href="#sec-intensity" class="sn-link" data-zh="碳強度" data-en="Intensity">碳強度</a>
+    <a href="#sec-electricity" class="sn-link" data-zh="用電趨勢" data-en="Electricity">用電趨勢</a>
     <a href="#sec-sources" class="sn-link" data-zh="資料來源" data-en="Sources">資料來源</a>
     <a href="#sec-scope" class="sn-link" data-zh="排放分項" data-en="Breakdown">排放分項</a>
     <a href="#sec-renewables" class="sn-link" data-zh="能源系統" data-en="Energy">能源系統</a>
     <a href="#sec-scenarios" class="sn-link" data-zh="情境模擬" data-en="Scenarios">情境模擬</a>
-    <a href="#sec-income" class="sn-link" data-zh="收益機會" data-en="Income">收益機會</a>
-    <a href="#sec-survival" class="sn-link" data-zh="生存指引" data-en="Survival">生存指引</a>
-    <a href="#sec-actions" class="sn-link" data-zh="行動路徑" data-en="Actions">行動路徑</a>
-    <a href="#sec-erp" class="sn-link" data-zh="營運紀錄" data-en="ERP">營運紀錄</a>
+    <div class="sn-divider"></div>
     <a href="#sec-editor" class="sn-link" data-zh="設定" data-en="Settings">設定</a>
   </nav>
 
@@ -1763,6 +1825,7 @@
       <strong id="reportingPeriod">2025</strong>
       <span data-zh="顧問：" data-en="Advisor: ">顧問：</span><span>An-Ren Ho</span>
       <a id="buyerViewLink" href="#" target="_blank" rel="noopener" class="cb-buyer-link" style="display:none" data-zh="買方分享頁 ↗" data-en="Buyer share view ↗">買方分享頁 ↗</a>
+      <a id="pitchLink" href="#" target="_blank" rel="noopener" class="cb-buyer-link" style="margin-left: 4px;" data-zh="📄 買家提案單 ↗" data-en="📄 Buyer pitch sheet ↗">📄 買家提案單 ↗</a>
       <button id="copyUrlsBtn" class="cb-buyer-link" style="display:none; cursor:pointer; background:rgba(255,255,255,0.12); margin-left: 4px;" data-zh="📋 複製分享 URL" data-en="📋 Copy share URLs">📋 複製分享 URL</button>
     </div>
   </section>
@@ -1788,6 +1851,47 @@
       <div class="money-breakdown" id="moneyIntensityContext"></div>
     </div>
   </section>
+
+  <!-- ── Group divider: Business Decisions ───────────────── -->
+  <div class="group-divider">
+    <span class="gd-tag">01</span>
+    <span class="gd-zh" data-zh="經營決策" data-en="Business decisions">經營決策</span>
+    <span class="gd-sub" data-zh="現金流、定價、補助、市場、心法 — 這部分決定你的農場活不活得下去。" data-en="Cash flow, pricing, subsidies, market, mindset — this is what decides whether your farm survives.">現金流、定價、補助、市場、心法 — 這部分決定你的農場活不活得下去。</span>
+  </div>
+
+  <!-- ── Agent (moved up — entry point for business + role-play) ── -->
+  <section class="agent-panel" id="sec-agent">
+    <div class="agent-head">
+      <span class="agent-avatar">🌱</span>
+      <div>
+        <div class="agent-name" data-zh="永續經營顧問" data-en="Sustainable Operations Advisor">永續經營顧問</div>
+        <div class="agent-tag" data-zh="可演練買家議價、給生存建議、規劃減碳路徑" data-en="Buyer role-play, survival advice, decarbonization plan">可演練買家議價、給生存建議、規劃減碳路徑</div>
+      </div>
+      <button class="agent-reset" id="agentReset" style="display:none" data-zh="重新開始" data-en="Start over">重新開始</button>
+    </div>
+    <div id="agentBody"></div>
+  </section>
+
+  <!-- ── Cash Flow Calendar (moved up) ─────────────────────── -->
+  <section class="panel" id="sec-cashflow">
+    <div class="panel-title" data-zh="現金流月曆：找出你的缺口月" data-en="Cash Flow Calendar: find your gap month">現金流月曆：找出你的缺口月</div>
+    <div class="panel-sub" data-zh="帳面賺錢但 5 月差點付不出貨款 — 這是永續農場最常見的死法。把整年收入支出依季節攤開，找出哪個月是現金缺口、提前安排預售或周轉。" data-en="Profitable on paper but can't pay bills in May — that's how sustainable farms most often fail. Spread income and expense across the year by season, locate the gap month, plan pre-sales or a line of credit ahead.">帳面賺錢但 5 月差點付不出貨款 — 這是永續農場最常見的死法。把整年收入支出依季節攤開，找出哪個月是現金缺口、提前安排預售或周轉。</div>
+    <div id="cashFlowContent"></div>
+  </section>
+
+  <!-- ── Pricing Studio (moved up) ─────────────────────────── -->
+  <section class="panel" id="sec-pricing">
+    <div class="panel-title" data-zh="定價工作室：你該收多少、向誰收、怎麼開口" data-en="Pricing Studio: what to charge, where, and how to ask">定價工作室：你該收多少、向誰收、怎麼開口</div>
+    <div class="panel-sub" data-zh="從你的實際成本出發，算出 3 個價位（地板價、永續價、故事溢價），對應到 7 種通路，附建議出價、現金時程、需要準備的證據、可複製的開場白。" data-en="From your actual cost, computed 3 price tiers (floor / sustainable / story-premium) mapped to 7 channels — with suggested price, cash terms, required evidence, and copy-paste outreach openers.">從你的實際成本出發，算出 3 個價位（地板價、永續價、故事溢價），對應到 7 種通路，附建議出價、現金時程、需要準備的證據、可複製的開場白。</div>
+    <div id="pricingStudioContent"></div>
+  </section>
+
+  <!-- ── Group divider: Carbon Deep Dive ────────────────────── -->
+  <div class="group-divider muted">
+    <span class="gd-tag">02</span>
+    <span class="gd-zh" data-zh="碳追蹤（深入細節）" data-en="Carbon deep dive">碳追蹤（深入細節）</span>
+    <span class="gd-sub" data-zh="碳數據主要是供 ESG 報告、買家提案、補助申請使用。沒興趣可跳過直接看「行動路徑」。" data-en="Carbon data feeds ESG reports, buyer pitches, and subsidy applications. Skip ahead to 'Actions' if not relevant.">碳數據主要是供 ESG 報告、買家提案、補助申請使用。沒興趣可跳過直接看「行動路徑」。</span>
+  </div>
 
   <!-- ── KPI cards ─────────────────────────────────────────── -->
   <section class="kpis">
@@ -1837,19 +1941,6 @@
     </div>
     <svg class="chart-svg" id="electricityChart" preserveAspectRatio="none"></svg>
     <div class="chart-summary" id="chartSummary"></div>
-  </section>
-
-  <!-- ── Sustainable-ag agent ─────────────────────────────── -->
-  <section class="agent-panel" id="sec-agent">
-    <div class="agent-head">
-      <span class="agent-avatar">🌱</span>
-      <div>
-        <div class="agent-name" data-zh="永續農業顧問" data-en="Sustainable Agriculture Advisor">永續農業顧問</div>
-        <div class="agent-tag" data-zh="依你的儀表板狀況提供量身建議" data-en="Personalised next steps based on your dashboard">依你的儀表板狀況提供量身建議</div>
-      </div>
-      <button class="agent-reset" id="agentReset" style="display:none" data-zh="重新開始" data-en="Start over">重新開始</button>
-    </div>
-    <div id="agentBody"></div>
   </section>
 
   <!-- ── Per-kg product intensity panel ───────────────────── -->
@@ -1956,13 +2047,6 @@
     <div class="panel-sub" data-zh="依目前耕作狀況、認證進度與碳強度，列出本農場可進入的通路、可申請的資金、可獲取的訓練資源。依據符合程度標記「可進入 / 接近 / 待發展」。" data-en="Based on current practices, certification progress, and per-kg intensity — which channels, financing, and training programs this farm can actually access. Tier-tagged ready / close / develop.">依目前耕作狀況、認證進度與碳強度，列出本農場可進入的通路、可申請的資金、可獲取的訓練資源。依據符合程度標記「可進入 / 接近 / 待發展」。</div>
     <div class="mkt-summary" id="marketSummary"></div>
     <div id="marketList"></div>
-  </section>
-
-  <!-- ── Pricing Studio: what should you charge, where, how ─ -->
-  <section class="panel" id="sec-pricing">
-    <div class="panel-title" data-zh="定價工作室：你該收多少、向誰收、怎麼開口" data-en="Pricing Studio: what to charge, where, and how to ask">定價工作室：你該收多少、向誰收、怎麼開口</div>
-    <div class="panel-sub" data-zh="從你的實際成本出發，算出 3 個價位（地板價、永續價、故事溢價），對應到 7 種通路，附建議出價、現金時程、需要準備的證據、可複製的開場白。" data-en="From your actual cost, computed 3 price tiers (floor / sustainable / story-premium) mapped to 7 channels — with suggested price, cash terms, required evidence, and copy-paste outreach openers.">從你的實際成本出發，算出 3 個價位（地板價、永續價、故事溢價），對應到 7 種通路，附建議出價、現金時程、需要準備的證據、可複製的開場白。</div>
-    <div id="pricingStudioContent"></div>
   </section>
 
   <!-- ── Sustainable Survival Guide ────────────────────────── -->
@@ -2475,6 +2559,8 @@
 
   // ── Agent priorities & market resource library ──────────────────
   const AGENT_PRIORITIES = [
+    { id: 'negotiate', icon: '🎭', label: { zh: "跟買家對話演練", en: "Buyer negotiation role-play" },
+      blurb: { zh: "演練 5 種常見刁難，把你的數據變成議價籌碼", en: "Rehearse 5 common buyer objections — turn your data into leverage" } },
     { id: 'survival', icon: '🛡', label: { zh: "永續生存", en: "Long-term survival" },
       blurb: { zh: "成本上升 + 氣候風險 + 市場壓力下，如何撐下去", en: "How to keep going under rising costs + climate + market pressure" } },
     { id: 'cost',   icon: '💰', label: { zh: "降低成本", en: "Lower costs" },
@@ -2486,6 +2572,140 @@
     { id: 'carbon', icon: '🌱', label: { zh: "最大化減碳", en: "Max CO₂e reduction" },
       blurb: { zh: "為買方 ESG 或自身價值觀", en: "For buyer ESG or own values" } }
   ];
+
+  // Buyer role-play objections — render with the farmer's actual data
+  // so each response is specific, not generic.
+  function buildNegotiationScenarios(inp, r) {
+    const yieldKg = inp.annualYieldKg || 0;
+    const intensity = (yieldKg > 0 && r.gross) ? (r.gross / yieldKg).toFixed(2) : null;
+    const cost = computeAnnualCost().total;
+    const costPerKg = (yieldKg > 0 && cost > 0) ? (cost / yieldKg).toFixed(1) : null;
+    const floorPrice = costPerKg ? (cost / yieldKg / 0.6).toFixed(1) : null;
+    const ph = CLIENT_CONFIG.practiceHistory || {};
+    const years = Object.values(ph).filter(y => y && /^\d{4}$/.test(y)).map(y => parseInt(y));
+    const earliestYear = years.length ? Math.min(...years) : null;
+    const yearsRun = earliestYear ? (new Date().getFullYear() - earliestYear) : null;
+    const soil = CLIENT_CONFIG.soilTest || {};
+    const socPct = soil.socPercent || null;
+    const practices = inp.practices || {};
+    const practiceCount = Object.values(practices).filter(Boolean).length;
+    const region = pick(CLIENT_CONFIG.clientLocation, currentLang) || (currentLang === 'en' ? 'Taiwan' : '台灣');
+
+    return [
+      { id: 'too_expensive', icon: '💸',
+        buyer: { zh: '「你的價格比 X 商行貴 30%，為什麼我要買你的？」', en: '"You\'re 30% more expensive than X. Why should I buy from you?"' },
+        why: { zh: '這是「價格錨點」攻擊 — 買家把你跟最便宜的供應商比。回應的關鍵是「我們不是同類產品」。', en: 'This is "price anchoring" — buyer compares you to the cheapest. Reframe: we are not the same product.' },
+        response: {
+          zh: `我理解價格差異看起來大。但我們做的是「不一樣的東西」：
+${yearsRun ? `• 我們在 ${region} 經營 ${yearsRun} 年` : `• 我們在 ${region} 經營`}，${practiceCount > 0 ? `已實踐 ${practiceCount} 項永續做法` : '採友善耕作'}${earliestYear ? `（自 ${earliestYear} 開始）` : ''}
+${socPct ? `• 土壤有機碳 ${socPct}%，逐年公開趨勢資料` : '• 土壤數據公開可查'}
+${intensity ? `• 每公斤碳排 ${intensity} kg，買家 ESG 報告可直接引用` : ''}
+• ${floorPrice ? `我們的成本地板價是 NT$ ${costPerKg}/kg，目前報價 NT$ ${floorPrice}/kg 是合理 40% 毛利` : '我們的定價以實際成本為基礎'}
+您要比的不是價格，是「同樣產品系列的單位故事密度」。要不要我寄一份完整的證據包過來，您再判斷？`,
+          en: `I understand the price gap looks large. But we're a different product:
+${yearsRun ? `• ${yearsRun} years operating in ${region}` : `• Operating in ${region}`}, ${practiceCount > 0 ? `${practiceCount} verified sustainable practices` : 'friendly farming'}${earliestYear ? ` (since ${earliestYear})` : ''}
+${socPct ? `• Soil organic carbon ${socPct}%, trend published yearly` : '• Soil data publicly traceable'}
+${intensity ? `• ${intensity} kg CO₂e/kg product — direct input for your ESG report` : ''}
+• ${floorPrice ? `Cost floor is NT$ ${costPerKg}/kg, current quote NT$ ${floorPrice}/kg = reasonable 40% margin` : 'Pricing is cost-based'}
+You're not comparing prices — you're comparing units of verifiable story. Want me to send the full evidence pack so you can judge?`
+        },
+        fallback: {
+          zh: '如果還是堅持比價：「我們不上拍賣市場、不打折戰。如果價格是唯一考量，我們可能不是您的合適供應商，但我可以推薦其他選擇給您。」',
+          en: 'If they still insist on price: "We don\'t play the auction game or discount wars. If price is your only criterion, we may not be the right supplier — happy to refer you elsewhere."'
+        }
+      },
+      { id: 'unstable_supply', icon: '📦',
+        buyer: { zh: '「你能保證每週穩定 X 公斤供應嗎？小農常常斷貨。」', en: '"Can you guarantee weekly X kg? Small farms are unreliable."' },
+        why: { zh: '對的擔憂 — 規模買家最怕缺貨。把它變成你的優勢：「我們小，但我們紀錄」。', en: 'Legitimate concern — scale buyers fear stockouts. Turn it around: "We\'re small, but we record."' },
+        response: {
+          zh: `這是真實的問題。我的承諾結構是：
+${yieldKg > 0 ? `• 年穩定產量 ${yieldKg.toLocaleString()} kg，可保證每週 ${Math.floor(yieldKg / 52).toLocaleString()} kg 基本量` : '• 產量穩定，可基於三年資料保證最低週量'}
+• ERP 系統記錄每日採收、庫存、出貨 — 您可以隨時查詢
+• 缺貨風險（天氣、病蟲害）會在 7 天前主動通知，並提供替代品項建議
+• 如果連續 2 週未達合約量，我們承擔差額（與其他供應商成本差）
+我們的核心優勢就是「小而紀錄完整」 — 您要 1000 kg/週？我做不到。但 50 kg/週？我每一公斤都有故事，從種子到您的貨架。`,
+          en: `Fair concern. My commitment structure:
+${yieldKg > 0 ? `• Annual stable yield ${yieldKg.toLocaleString()} kg, can guarantee baseline ${Math.floor(yieldKg / 52).toLocaleString()} kg/week` : '• Stable yield, baseline guaranteed from 3-year history'}
+• ERP logs daily harvest, inventory, dispatch — query anytime
+• Stockout risk (weather, pests) flagged 7 days early with substitute suggestions
+• If we miss contract volume 2 weeks in a row, we cover the price difference with backup suppliers
+Our edge is "small but documented". You want 1000 kg/week? I can't. 50 kg/week, every kg with a story from seed to your shelf? That I can.`
+        },
+        fallback: {
+          zh: '如果他需要大量：「我可以幫您組一個 5 戶友善農場的協同供應網，總量到 X kg/週，每戶都用同樣的 ERP 系統，您只跟一個窗口溝通。」',
+          en: 'If they need volume: "I can assemble a 5-farm co-op supply network at X kg/week total, all on the same ERP, single point of contact for you."'
+        }
+      },
+      { id: 'no_brand', icon: '🏷️',
+        buyer: { zh: '「客戶不認識你這個牌子，上架賣不好怎麼辦？」', en: '"Customers don\'t know your brand — what if it doesn\'t sell?"' },
+        why: { zh: '這是「上架風險」恐嚇 — 通路要把風險推給你。回應：把「故事」當成行銷資產拿出來。', en: 'This is "shelf risk" intimidation — channel pushes risk to you. Response: bring story as a marketing asset.' },
+        response: {
+          zh: `我們知道品牌認知是上架的關鍵。所以我們的合作方案包含：
+${yearsRun ? `• 完整的農場故事卡 — ${yearsRun} 年實踐軌跡` : `• 完整的農場故事卡`}${earliestYear ? `（自 ${earliestYear}）` : ''}，可隨產品上架
+${socPct ? `• 即時儀表板 QR 碼 — 顧客掃了可以看到當週土壤、實踐紀錄、碳數據` : '• 即時儀表板 QR 碼 — 顧客可掃描查證'}
+• 試銷期前 4 週，我們每週提供 1 篇社群素材（圖片 + 故事）給您使用
+• 如果首批銷售低於合約預期 30%，剩餘庫存我們以「成本價回購」 — 您零庫存風險
+我們不是來上架賣不好的，我們是來「把您的有機 / 友善區帶到下個等級」的。您要不要先試 3 家門市，4 週數據出來再決定全國上架？`,
+          en: `Brand recognition matters — that's why our package includes:
+${yearsRun ? `• Full farm story card — ${yearsRun}-year practice trail` : '• Full farm story card'}${earliestYear ? ` (since ${earliestYear})` : ''}, shipped with product
+${socPct ? `• Live dashboard QR — customers scan and see current-week soil, practices, carbon data` : '• Live dashboard QR — customers verify directly'}
+• Trial-month first 4 weeks: we provide 1 piece of social content (photo + story) per week for your channels
+• If first-batch sales are 30% below contract, we buy back remaining inventory at cost — zero inventory risk for you
+We're not here to be deadstock. We're here to take your organic / friendly section to the next level. Want to start with 3 stores, 4 weeks of data, then decide on national rollout?`
+        },
+        fallback: {
+          zh: '如果他擔心退貨：「我可以提供前 8 週的『無條件退貨保證』，剩餘以成本價回收。您試試看，數據說話。」',
+          en: 'If they fear returns: "I\'ll offer unconditional return guarantee for the first 8 weeks, cost-price buyback on remainder. Let the data decide."'
+        }
+      },
+      { id: 'quality_inconsistent', icon: '⚖️',
+        buyer: { zh: '「你的品質會不會像其他小農一樣不穩定？」', en: '"Will your quality be inconsistent like other small farms?"' },
+        why: { zh: '把擔憂變成你的差異化：「不穩定的小農沒紀錄，我有紀錄。」', en: 'Turn fear into differentiation: "Inconsistent farms don\'t track. I track."' },
+        response: {
+          zh: `品質一致性是可被「測量」和「紀錄」的，不是運氣。我們的做法：
+• 每批採收都記錄在 ERP 系統：採收日、外觀、糖度（如適用）、重量、批次編號
+• 月度品質檢核：抽樣自家測 + 每季送第三方檢驗
+• 退貨資料即時回流到 ERP — 連續 2 批退貨率 > 5%，我會主動暫停出貨檢討
+${socPct ? `• 土壤每年複測（${socPct}% SOC，趨勢公開）— 養分穩定，產出就穩定` : '• 土壤定期複測，養分穩定才有穩定產出'}
+• 您可以隨時要求查我的 ERP 數據，連續 90 天都可看
+其他小農「沒紀錄」叫不穩定，我「有紀錄」叫可管理。要看一份過去 90 天的品質紀錄嗎？`,
+          en: `Quality consistency is *measured and recorded*, not luck. Our system:
+• Every harvest batch logged in ERP: date, appearance, brix (if relevant), weight, batch ID
+• Monthly QA: self-tested samples + quarterly third-party testing
+• Return data flows back to ERP — 2 consecutive batches with >5% return rate triggers a self-audit pause
+${socPct ? `• Annual soil retest (${socPct}% SOC, trend public) — stable nutrition = stable output` : '• Regular soil testing — stable nutrients drive stable yield'}
+• You can audit my ERP data anytime — full 90-day history visible
+Other small farms are "inconsistent" because they don't track. We track — that\'s called *manageable*. Want to see a 90-day QA log?`
+        },
+        fallback: {
+          zh: '如果他要更嚴：「我們可以設『規格容差』條款 — 超出容差的批次您拒收免費，連續超出兩批我們主動降價或停供整理問題。」',
+          en: 'If they want stricter: "We can define a spec-tolerance clause — out-of-spec batches free to reject, two-strike triggers price reduction or pause."'
+        }
+      },
+      { id: 'payment_terms', icon: '💳',
+        buyer: { zh: '「我們是月結 60 天，可以接受嗎？」', en: '"We pay net-60. Can you accept that?"' },
+        why: { zh: '永遠不要默認接受。60 天對你來說可能是現金缺口的根源。', en: 'Never accept by default. Net-60 may be the root of your cash gap.' },
+        response: {
+          zh: `60 天的付款條件對小型農場是現金流挑戰。我們的對應方案：
+• 願意接受 60 天，但需要 1-2% 早付折扣（25 天內付款）— 您也省成本
+• 或：基本量現金 / 30 天，超量部分 60 天
+• 或：年合約簽署 + 月度預付 30%、出貨後結 70%
+我的成本帳目可以給您看（${costPerKg ? `每公斤實際成本 NT$ ${costPerKg}` : '實際成本透明'}），60 天延遲對我來說等於借款 — 我寧可把那部分還您折扣。哪個方案最適合貴公司的會計流程？`,
+          en: `Net-60 is a cash-flow challenge for a small farm. Our options:
+• Accept 60-day terms, but require 1-2% early-payment discount (paid within 25 days) — saves you cost too
+• Or: baseline volume cash / net-30, overflow net-60
+• Or: annual contract + 30% monthly prepay, 70% on delivery
+My cost ledger is transparent (${costPerKg ? `actual cost NT$ ${costPerKg}/kg` : 'cost basis transparent'}). A 60-day delay is effectively a loan from me — I'd rather pass that as a discount to you. Which option fits your AP flow best?`
+        },
+        fallback: {
+          zh: '如果他堅持 60 天無折扣：「那我需要把資金成本（約 1.5%/月）含在報價內，新報價會是 NT$ X — 您要 net-30 原價，還是 net-60 加價？」',
+          en: 'If they insist net-60 no discount: "Then I need to bake the financing cost (~1.5%/mo) into the quote — new price NT$ X. Net-30 original price or net-60 marked up?"'
+        }
+      }
+    ];
+  }
+
+  function pick(obj, lang) { if (!obj) return ''; return obj[lang] || obj.zh || obj.en || ''; }
 
   // Market resource library — Taiwan-anchored. Tier eligibility uses
   // capability tags: 'friendly_or_organic', 'organic', 'low_chem',
@@ -3489,6 +3709,46 @@
           document.querySelector('.agent-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
       });
+    } else if (agentState.priority === 'negotiate') {
+      // Buyer negotiation role-play: interactive scenario cards
+      resetBtn.style.display = '';
+      const p = AGENT_PRIORITIES.find(x => x.id === agentState.priority);
+      const scenarios = buildNegotiationScenarios(inp, r);
+      body.innerHTML = `
+        <div style="display:flex;justify-content:flex-end">
+          <div class="agent-bubble user">${trObj(p.label)} ${p.icon}</div>
+        </div>
+        <div class="agent-bubble">
+          <strong>${tr('好 — 我們來演練 5 種最常見的買家刁難。', 'Good — let\'s rehearse the 5 most common buyer objections.')}</strong>
+          <div style="margin-top:8px;font-size:12.5px;line-height:1.6;color:var(--text-muted);">
+            ${tr(
+              '每一段都會根據你儀表板上的實際數據（年資、認證、碳強度、土壤碳、成本）量身寫出回應。點開卡片，把回應練到能脫稿。',
+              'Each response is tailored to your actual dashboard data (years, certs, carbon intensity, soil C, costs). Open a card and rehearse until you can speak it without notes.'
+            )}
+          </div>
+        </div>
+        ${scenarios.map((s, i) => `
+          <div class="agent-bubble" style="background: rgba(217, 119, 6, 0.04); border-left: 3px solid #d97706;">
+            <div style="font-weight: 700; color: #d97706; margin-bottom: 6px;">${s.icon} ${tr('情境', 'Scenario')} ${i + 1}: ${tr('買家說', 'Buyer says')}</div>
+            <div style="font-size: 14px; font-style: italic; padding: 8px 12px; background: rgba(220, 38, 38, 0.06); border-radius: 6px; margin-bottom: 8px;">${trObj(s.buyer)}</div>
+            <div style="font-size: 11.5px; color: var(--text-muted); margin-bottom: 8px;">${trObj(s.why)}</div>
+            <details>
+              <summary style="cursor: pointer; font-weight: 600; color: var(--accent); font-size: 13px;">${tr('▶ 你的回應（複製可用）', '▶ Your response (copy-able)')}</summary>
+              <div style="margin-top: 8px; padding: 10px 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; font-size: 13px; line-height: 1.7; white-space: pre-wrap;" id="neg-${s.id}">${trObj(s.response)}</div>
+              <button onclick="copyOpener('neg-${s.id}', this)" style="margin-top: 8px; padding: 5px 12px; background: var(--accent); color: #fff; border: none; border-radius: 5px; font-size: 12px; font-weight: 600; cursor: pointer;">${tr('複製', 'Copy')}</button>
+              <div style="margin-top: 10px; padding: 8px 12px; background: rgba(5, 150, 105, 0.06); border-radius: 6px; font-size: 12px; line-height: 1.55;">
+                <strong style="color: #059669;">${tr('如果他還是不接受：', 'If they still push back:')}</strong> ${trObj(s.fallback)}
+              </div>
+            </details>
+          </div>
+        `).join('')}
+        <div class="agent-bubble">
+          <strong>${tr('最後一句心法：', 'Final mindset reminder:')}</strong>
+          <div style="margin-top: 6px; font-size: 13px; line-height: 1.6;">${tr(
+            '每一次議價，你不是「請求買家」，是「在篩選買家」。如果對方不接受你的證據包，那他就不是你的客戶 — 找下一個。',
+            'Every negotiation, you\'re not *asking* the buyer — you\'re *screening* them. If they won\'t accept your evidence pack, they\'re not your customer. Move on.'
+          )}</div>
+        </div>`;
     } else {
       resetBtn.style.display = '';
       const p = AGENT_PRIORITIES.find(x => x.id === agentState.priority);
@@ -5329,6 +5589,130 @@
     });
   };
 
+  // ── Cash Flow Calendar: monthly income/expense forecast ──────────
+  // Seasonality patterns are rough but directionally correct for
+  // Taiwan. Used to surface the gap month — the single biggest cause
+  // of "profitable on paper, bankrupt in May" failures.
+  const SEASONALITY = {
+    rice:             { income: [0,0,0,0,0.05,0.55,0.05,0,0,0,0.30,0.05],          expense: [0.08,0.12,0.15,0.10,0.05,0.05,0.10,0.12,0.10,0.05,0.04,0.04] },
+    vegetables:       { income: [0.10,0.10,0.08,0.08,0.05,0.05,0.05,0.05,0.08,0.10,0.13,0.13], expense: [0.10,0.08,0.08,0.08,0.08,0.10,0.10,0.08,0.08,0.10,0.06,0.06] },
+    fruit:            { income: [0,0,0,0,0.10,0.20,0.30,0.25,0.10,0.05,0,0],       expense: [0.05,0.08,0.12,0.15,0.15,0.10,0.05,0.05,0.05,0.10,0.05,0.05] },
+    livestock:        { income: [0.083,0.083,0.083,0.083,0.083,0.083,0.083,0.083,0.083,0.083,0.083,0.087], expense: [0.085,0.085,0.083,0.083,0.083,0.083,0.083,0.083,0.083,0.083,0.083,0.083] },
+    mixed:            { income: [0.08,0.07,0.08,0.08,0.08,0.09,0.09,0.08,0.08,0.09,0.09,0.09], expense: [0.084,0.084,0.083,0.083,0.083,0.083,0.083,0.083,0.083,0.084,0.084,0.083] }
+  };
+
+  function computeCashFlow(revenue, cost, subsidies, crop) {
+    const pattern = SEASONALITY[crop] || SEASONALITY.mixed;
+    const months = [];
+    let runningBalance = 0;
+    let minBalance = Infinity, minMonth = 0;
+    let maxBalance = -Infinity, maxMonth = 0;
+    const subsidyPerMonth = subsidies / 12; // assume even subsidy receipt
+    for (let i = 0; i < 12; i++) {
+      const income = revenue * pattern.income[i] + subsidyPerMonth;
+      const expense = cost * pattern.expense[i];
+      runningBalance += income - expense;
+      if (runningBalance < minBalance) { minBalance = runningBalance; minMonth = i; }
+      if (runningBalance > maxBalance) { maxBalance = runningBalance; maxMonth = i; }
+      months.push({ month: i, income, expense, net: income - expense, runningBalance });
+    }
+    return { months, minBalance, minMonth, maxBalance, maxMonth };
+  }
+
+  function renderCashFlow(inp, r) {
+    const host = document.getElementById('cashFlowContent');
+    if (!host) return;
+    const isZh = currentLang !== 'en';
+    const revenue = inp.annualRevenueNT || 0;
+    const cost = computeAnnualCost().total;
+    const subsidies = computeSubsidyTotal(inp, r).total;
+
+    if (revenue <= 0) {
+      host.innerHTML = `
+        <div style="padding: 14px 16px; background: var(--bg); border: 1px dashed var(--border); border-radius: 8px; color: var(--muted); font-size: 13px;">
+          ${isZh ? '💡 輸入「年營收」（編輯抽屜）後，現金流月曆會自動展開，標出缺口月並提供周轉建議。' : '💡 Enter annual revenue (in the editor drawer) — the cash flow calendar will auto-expand, highlight the gap month, and suggest financing options.'}
+        </div>`;
+      return;
+    }
+
+    const cf = computeCashFlow(revenue, cost, subsidies, inp.cropType || 'mixed');
+    const monthsZh = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+    const monthsEn = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const monthNames = isZh ? monthsZh : monthsEn;
+
+    // Chart scale: use max abs of income & expense for bar height
+    const maxBar = Math.max(...cf.months.map(m => Math.max(m.income, m.expense)));
+    const minRB = Math.min(...cf.months.map(m => m.runningBalance), 0);
+    const maxRB = Math.max(...cf.months.map(m => m.runningBalance), 0);
+    const rbRange = maxRB - minRB || 1;
+    const inGap = cf.minBalance < 0;
+
+    // Bars: income above zero (green), expense below (red), running balance line
+    let bars = '';
+    cf.months.forEach((m, i) => {
+      const incH = maxBar > 0 ? (m.income / maxBar) * 70 : 0;
+      const expH = maxBar > 0 ? (m.expense / maxBar) * 70 : 0;
+      const isGapMonth = i === cf.minMonth && inGap;
+      const isPeakMonth = i === cf.maxMonth;
+      const labelColor = isGapMonth ? '#dc2626' : (isPeakMonth ? '#059669' : 'var(--muted)');
+      const labelWeight = (isGapMonth || isPeakMonth) ? 700 : 500;
+      bars += `
+        <div style="display: flex; flex-direction: column; align-items: center; min-width: 0; flex: 1;">
+          <div style="height: 80px; display: flex; align-items: flex-end; width: 100%; justify-content: center;">
+            <div style="width: 70%; background: #059669; height: ${incH}px; border-radius: 3px 3px 0 0; opacity: ${isGapMonth ? 0.5 : 1};" title="${isZh ? '收入' : 'Income'} NT$ ${fmt0(m.income)}"></div>
+          </div>
+          <div style="font-size: 10px; color: ${labelColor}; font-weight: ${labelWeight}; margin-top: 2px;">${monthNames[i]}</div>
+          <div style="height: 80px; display: flex; align-items: flex-start; width: 100%; justify-content: center; margin-top: 2px;">
+            <div style="width: 70%; background: #dc2626; height: ${expH}px; border-radius: 0 0 3px 3px; opacity: ${isGapMonth ? 1 : 0.7};" title="${isZh ? '支出' : 'Expense'} NT$ ${fmt0(m.expense)}"></div>
+          </div>
+          <div style="font-size: 9px; color: ${m.runningBalance < 0 ? '#dc2626' : 'var(--muted)'}; font-weight: ${m.runningBalance < 0 ? 700 : 500}; margin-top: 4px; text-align: center; line-height: 1.2;">${fmt0(m.runningBalance / 1000)}k</div>
+        </div>
+      `;
+    });
+
+    let advice = '';
+    if (inGap) {
+      const gapAmount = Math.abs(cf.minBalance);
+      advice = `
+        <div style="padding: 12px 14px; background: rgba(220, 38, 38, 0.08); border: 1px solid rgba(220, 38, 38, 0.3); border-radius: 8px; margin-top: 14px; font-size: 13px; line-height: 1.6;">
+          <div style="font-weight: 700; color: #dc2626; margin-bottom: 6px;">${isZh ? `⚠️ ${monthNames[cf.minMonth]} 是你的現金缺口月` : `⚠️ ${monthNames[cf.minMonth]} is your cash gap month`}</div>
+          <div style="margin-bottom: 8px;">${isZh ? `預估累積餘額將下探 NT$ -${fmt0(gapAmount)}。在這之前你需要安排周轉。` : `Running balance is projected to drop to NT$ -${fmt0(gapAmount)} that month. You need to arrange funding before then.`}</div>
+          <div style="font-weight: 600; margin-top: 8px; margin-bottom: 4px;">${isZh ? '三種選項：' : 'Three options:'}</div>
+          <div style="padding-left: 16px;">
+            <div>${isZh ? `1. <strong>提前 2-3 個月開放預售</strong>：CSA / 訂閱箱在 ${monthNames[Math.max(0, cf.minMonth - 2)]} 開始募集，預收 ${monthNames[cf.minMonth]} 出貨。` : `1. <strong>Open pre-sales 2-3 months early</strong>: CSA / subscription in ${monthNames[Math.max(0, cf.minMonth - 2)]} for ${monthNames[cf.minMonth]} delivery.`}</div>
+            <div>${isZh ? `2. <strong>農會 / 信用部周轉貸款</strong>：在 ${monthNames[Math.max(0, cf.minMonth - 1)]} 前申請額度 NT$ ${fmt0(gapAmount * 1.3)}（含緩衝）。` : `2. <strong>Farmers Association / credit-coop bridge loan</strong>: Apply for NT$ ${fmt0(gapAmount * 1.3)} line (incl. buffer) by ${monthNames[Math.max(0, cf.minMonth - 1)]}.`}</div>
+            <div>${isZh ? `3. <strong>遞延高峰月支出</strong>：把 ${monthNames[cf.maxMonth]} 才需要的採購延後付款（與供應商談月結 60-90 天）。` : `3. <strong>Defer peak-month spending</strong>: Negotiate 60-90 day terms with suppliers for goods only needed in ${monthNames[cf.maxMonth]}.`}</div>
+          </div>
+        </div>
+      `;
+    } else {
+      advice = `
+        <div style="padding: 12px 14px; background: rgba(5, 150, 105, 0.08); border: 1px solid rgba(5, 150, 105, 0.3); border-radius: 8px; margin-top: 14px; font-size: 13px; line-height: 1.55;">
+          <div style="font-weight: 700; color: #059669; margin-bottom: 4px;">${isZh ? '✓ 沒有缺口月 — 整年現金流為正' : '✓ No gap month — cash flow stays positive year-round'}</div>
+          <div>${isZh ? `最低點在 ${monthNames[cf.minMonth]}（NT$ ${fmt0(cf.minBalance)}）。下一步：把這筆「最低餘額」當作緊急預備金的下限，不要花掉。` : `Lowest point is ${monthNames[cf.minMonth]} (NT$ ${fmt0(cf.minBalance)}). Next: treat that minimum as your emergency reserve floor — don't spend it down.`}</div>
+        </div>
+      `;
+    }
+
+    host.innerHTML = `
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 14px;">
+        <div><div class="u" style="font-size: 11px;">${isZh ? '年營收 (含補助)' : 'Annual revenue (incl. subsidy)'}</div><div style="font-size: 16px; font-weight: 700;">NT$ ${fmt0(revenue + subsidies)}</div></div>
+        <div><div class="u" style="font-size: 11px;">${isZh ? '年支出' : 'Annual expense'}</div><div style="font-size: 16px; font-weight: 700;">NT$ ${fmt0(cost)}</div></div>
+        <div><div class="u" style="font-size: 11px;">${isZh ? '最低餘額月' : 'Lowest balance month'}</div><div style="font-size: 16px; font-weight: 700; color: ${inGap ? '#dc2626' : '#d97706'};">${monthNames[cf.minMonth]} · NT$ ${fmt0(cf.minBalance)}</div></div>
+        <div><div class="u" style="font-size: 11px;">${isZh ? '最高餘額月' : 'Highest balance month'}</div><div style="font-size: 16px; font-weight: 700; color: #059669;">${monthNames[cf.maxMonth]} · NT$ ${fmt0(cf.maxBalance)}</div></div>
+      </div>
+      <div style="padding: 14px 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; overflow-x: auto;">
+        <div style="display: flex; gap: 4px; min-width: 480px;">${bars}</div>
+        <div style="display: flex; justify-content: center; gap: 18px; margin-top: 12px; font-size: 11px; color: var(--muted);">
+          <span><span style="display: inline-block; width: 10px; height: 10px; background: #059669; border-radius: 2px; vertical-align: middle;"></span> ${isZh ? '月收入' : 'Monthly income'}</span>
+          <span><span style="display: inline-block; width: 10px; height: 10px; background: #dc2626; border-radius: 2px; vertical-align: middle;"></span> ${isZh ? '月支出' : 'Monthly expense'}</span>
+          <span style="color: var(--muted);">${isZh ? '下方數字＝累積餘額 (千)' : 'Bottom number = running balance (k)'}</span>
+        </div>
+      </div>
+      ${advice}
+    `;
+  }
+
   function render() {
     const inp = readInputs();
     const r = calcFromInputs(inp);
@@ -5388,6 +5772,7 @@
     renderSubsidies(inp, r);
     renderMarket(inp, r);
     renderPricingStudio(inp, r);
+    renderCashFlow(inp, r);
     renderSurvival(inp, r);
     renderBusinessMindset(inp, r);
     renderRoadmap(inp, r);
@@ -5488,6 +5873,12 @@
     // Both only show when a real farm JSON is loaded.
     const buyerLink = document.getElementById('buyerViewLink');
     const copyBtn = document.getElementById('copyUrlsBtn');
+    const pitchLink = document.getElementById('pitchLink');
+    // Pitch link always works — pass URL fragment or ?id= through
+    if (pitchLink) {
+      const hashPass = location.hash && location.hash.startsWith('#data=') ? location.hash : '';
+      pitchLink.href = 'farm-pitch.html' + location.search + hashPass;
+    }
     if (buyerLink && copyBtn) {
       if (farmStatus.id && farmStatus.loaded) {
         const params = new URLSearchParams(window.location.search);

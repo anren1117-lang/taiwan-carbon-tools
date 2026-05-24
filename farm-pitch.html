@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>農場買家提案單 · Buyer Pitch One-Pager</title>
+<meta name="description" content="一頁 A4 列印的買家提案 — 故事、證據、產量、定價、聯絡資訊。">
+<meta name="theme-color" content="#1D9E75">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --accent: #1D9E75;
+    --accent-dark: #157a59;
+    --accent-tint: rgba(29, 158, 117, 0.10);
+    --bg: #ffffff;
+    --bg-soft: #f7f8f7;
+    --text: #0e1410;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+    --premium: #d97706;
+    --good: #059669;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: var(--bg-soft);
+    color: var(--text);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .screen-bar {
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .screen-bar .left { font-size: 14px; color: var(--muted); }
+  .screen-bar .left a { color: var(--accent); text-decoration: none; font-weight: 600; }
+  .screen-bar .right { display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn {
+    padding: 7px 14px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn.ghost {
+    background: transparent;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+  }
+  .btn:hover { opacity: 0.9; }
+
+  .pitch-sheet {
+    background: #fff;
+    width: 210mm;
+    min-height: 297mm;
+    margin: 20px auto;
+    padding: 18mm 16mm;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    color: #0e1410;
+    font-size: 11pt;
+    line-height: 1.55;
+  }
+
+  .ps-head {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--accent);
+    margin-bottom: 14px;
+  }
+  .ps-head .farm-name { font-size: 22pt; font-weight: 800; color: var(--accent-dark); line-height: 1.15; }
+  .ps-head .farm-meta { font-size: 10pt; color: var(--muted); margin-top: 4px; }
+  .ps-head .contact { font-size: 9pt; color: var(--muted); text-align: right; line-height: 1.5; }
+
+  .ps-hero {
+    background: var(--accent-tint);
+    border-left: 4px solid var(--accent);
+    padding: 12px 16px;
+    margin-bottom: 14px;
+    font-size: 12pt;
+    font-weight: 600;
+    line-height: 1.5;
+    color: var(--accent-dark);
+  }
+
+  .ps-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+
+  .ps-block {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 14px;
+  }
+  .ps-block h3 {
+    font-size: 9pt;
+    font-weight: 700;
+    color: var(--accent-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 8px;
+  }
+  .ps-block .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 4px 0;
+    border-bottom: 1px dotted var(--border);
+    font-size: 10pt;
+  }
+  .ps-block .row:last-child { border-bottom: none; }
+  .ps-block .row .label { color: var(--muted); }
+  .ps-block .row .value { font-weight: 600; text-align: right; }
+
+  .ps-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .chip {
+    display: inline-block;
+    padding: 3px 9px;
+    background: var(--accent-tint);
+    color: var(--accent-dark);
+    border-radius: 999px;
+    font-size: 9pt;
+    font-weight: 600;
+  }
+  .chip.premium {
+    background: rgba(217, 119, 6, 0.12);
+    color: var(--premium);
+  }
+
+  .ps-evidence {
+    background: var(--bg-soft);
+    padding: 12px 14px;
+    border-radius: 6px;
+    margin-bottom: 14px;
+  }
+  .ps-evidence h3 { font-size: 9pt; font-weight: 700; color: var(--accent-dark); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
+  .ps-evidence-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+  .ev-cell {
+    text-align: center;
+  }
+  .ev-cell .num { font-size: 20pt; font-weight: 800; color: var(--accent-dark); line-height: 1.1; }
+  .ev-cell .lbl { font-size: 8pt; color: var(--muted); margin-top: 2px; line-height: 1.3; }
+
+  .ps-pricing {
+    border: 1px solid var(--premium);
+    border-radius: 6px;
+    padding: 12px 14px;
+    margin-bottom: 14px;
+    background: rgba(217, 119, 6, 0.05);
+  }
+  .ps-pricing h3 { font-size: 9pt; font-weight: 700; color: var(--premium); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
+  .ps-pricing .price-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 8px;
+    padding: 4px 0;
+    align-items: baseline;
+  }
+  .ps-pricing .price-row .ch { font-size: 10pt; color: var(--text); }
+  .ps-pricing .price-row .pr { font-size: 12pt; font-weight: 700; color: var(--premium); }
+
+  .ps-story {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 14px;
+    margin-bottom: 14px;
+    font-size: 10pt;
+    line-height: 1.65;
+  }
+  .ps-story h3 { font-size: 9pt; font-weight: 700; color: var(--accent-dark); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+
+  .ps-footer {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    align-items: center;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+    font-size: 9pt;
+    color: var(--muted);
+  }
+  .ps-footer .qr img { width: 80px; height: 80px; }
+  .ps-footer .url { font-family: ui-monospace, monospace; word-break: break-all; }
+
+  @media (max-width: 760px) {
+    .pitch-sheet { width: 100%; padding: 16px; box-shadow: none; }
+    .ps-grid-2 { grid-template-columns: 1fr; }
+    .ps-evidence-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media print {
+    html, body { background: #fff; }
+    .screen-bar { display: none !important; }
+    .pitch-sheet {
+      width: auto;
+      min-height: auto;
+      margin: 0;
+      padding: 12mm;
+      box-shadow: none;
+      page-break-inside: avoid;
+    }
+    @page { size: A4; margin: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="screen-bar">
+  <div class="left">
+    <a href="farm-dashboard.html" id="backLink">← 回到儀表板 · Back to dashboard</a>
+  </div>
+  <div class="right">
+    <button class="btn ghost" id="langToggle">English</button>
+    <button class="btn" onclick="window.print()" id="printBtn">列印 / 存成 PDF · Print / Save PDF</button>
+  </div>
+</div>
+
+<div class="pitch-sheet" id="pitchSheet">
+  <!-- Header -->
+  <div class="ps-head">
+    <div>
+      <div class="farm-name" id="farmName">永續農場示範</div>
+      <div class="farm-meta"><span id="farmRegion">台灣</span> · <span id="farmYears">經營 X 年</span> · <span id="reportPeriod">2025</span></div>
+    </div>
+    <div class="contact" id="contactBlock">
+      <div data-zh="聯絡 · Contact" data-en="Contact">聯絡 · Contact</div>
+      <div id="contactName" style="font-weight:600; color: var(--text);">—</div>
+      <div id="contactPhone">—</div>
+      <div id="contactEmail">—</div>
+    </div>
+  </div>
+
+  <!-- Hero pitch line -->
+  <div class="ps-hero" id="heroLine">為什麼這座農場值得你的貨架。</div>
+
+  <!-- Story -->
+  <div class="ps-story">
+    <h3 data-zh="農場故事 · Farm Story" data-en="Farm Story">農場故事 · Farm Story</h3>
+    <div id="storyText">—</div>
+  </div>
+
+  <!-- Two-col: practices + production -->
+  <div class="ps-grid-2">
+    <div class="ps-block">
+      <h3 data-zh="實踐 · Practices" data-en="Practices">實踐 · Practices</h3>
+      <div id="practicesList"></div>
+      <div class="ps-chips" id="certChips"></div>
+    </div>
+    <div class="ps-block">
+      <h3 data-zh="產能 · Production" data-en="Production">產能 · Production</h3>
+      <div id="productionRows"></div>
+    </div>
+  </div>
+
+  <!-- Evidence panel -->
+  <div class="ps-evidence">
+    <h3 data-zh="可驗證證據 · Verifiable Evidence" data-en="Verifiable Evidence">可驗證證據 · Verifiable Evidence</h3>
+    <div class="ps-evidence-grid" id="evidenceGrid"></div>
+  </div>
+
+  <!-- Pricing tier -->
+  <div class="ps-pricing">
+    <h3 data-zh="建議出貨價（依通路）· Suggested Prices by Channel" data-en="Suggested Prices by Channel">建議出貨價（依通路）· Suggested Prices by Channel</h3>
+    <div id="pricingRows"></div>
+    <div style="margin-top: 8px; font-size: 8pt; color: var(--muted); font-style: italic;" id="pricingNote">* 依實際年成本與目標毛利推算，含包裝、無含運。</div>
+  </div>
+
+  <!-- Footer with QR -->
+  <div class="ps-footer">
+    <div>
+      <div style="font-weight: 600; color: var(--text); margin-bottom: 4px;" data-zh="完整即時儀表板（含碳數據、土壤趨勢、實踐紀錄）" data-en="Full live dashboard (carbon data, soil trend, practice log)">完整即時儀表板（含碳數據、土壤趨勢、實踐紀錄）</div>
+      <div class="url" id="dashUrl">—</div>
+      <div style="margin-top: 6px; font-size: 8pt;" data-zh="本提案由農場永續經營儀表板生成 · 資料即時連動" data-en="Generated from Farm Sustainability + Operations Dashboard · live data">本提案由農場永續經營儀表板生成 · 資料即時連動</div>
+    </div>
+    <div class="qr"><img id="qrImg" src="" alt="QR"></div>
+  </div>
+</div>
+
+<script src="farm-carbon-engine.js?v=3"></script>
+<script>
+let CLIENT_CONFIG = null;
+let currentLang = 'zh';
+
+// ── Load from URL fragment (#data=base64) or farms/<id>.json ───────
+async function loadConfig() {
+  const hash = location.hash;
+  if (hash.startsWith('#data=')) {
+    try {
+      const b64 = hash.slice(6);
+      const json = decodeURIComponent(escape(atob(b64.replace(/-/g, '+').replace(/_/g, '/'))));
+      CLIENT_CONFIG = JSON.parse(json);
+      return;
+    } catch (e) { console.warn('Bad #data fragment', e); }
+  }
+  const params = new URLSearchParams(location.search);
+  const id = params.get('id');
+  if (id) {
+    try {
+      const res = await fetch(`farms/${id}.json`);
+      if (res.ok) {
+        CLIENT_CONFIG = await res.json();
+        return;
+      }
+    } catch (e) { console.warn('Farm load failed', e); }
+  }
+  // Fallback demo
+  CLIENT_CONFIG = {
+    clientName: { zh: '永續農場示範', en: 'Sample Sustainable Farm' },
+    clientLocation: { zh: '雲林斗六', en: 'Douliu, Yunlin' },
+    reportingPeriod: '2025',
+    practiceHistory: { coverCrop: '2022', noTill: '', compost: '2020', residue: '2023' },
+    inputs: {
+      farmSize: 3.0, cropType: 'vegetables', annualYieldKg: 50000,
+      annualRevenueNT: 1200000, productCategory: 'vegetables_leaf',
+      diesel: 800, gasoline: 400, lpg: 100, heatingOil: 0,
+      nFert: 200, riceMgmt: 'continuous_flood',
+      cattleDairy: 0, cattleBeef: 0, sowHead: 0, growerPigHead: 0, poultryLayer: 0, poultryBroiler: 0,
+      irrigation: 8000, coldStorage: 12000, otherElec: 3000,
+      chemicals: 500, feed: 0, transport: 2500, commute: 1800, packaging: 120, waste: 200,
+      biochar: 0, trees: 30,
+      practices: { coverCrop: true, noTill: false, compost: true, residue: true }
+    },
+    soilTest: { socPercent: 2.4, bulkDensity: 1.3, depthCm: 30, date: '2025-06-01' }
+  };
+}
+
+function escapeHtml(s) { return (s || '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]); }
+function pick(obj, lang) { if (!obj) return ''; return obj[lang] || obj.zh || obj.en || ''; }
+
+// ── Pricing channels (subset matching the dashboard) ───────────────
+const PITCH_CHANNELS = [
+  { id: 'school',     marginTarget: 0.25, zh: '學校午餐 / 公部門', en: 'School / govt procurement' },
+  { id: 'local',      marginTarget: 0.30, zh: '在地超市 / 區域物流',  en: 'Local supermarket / distributor' },
+  { id: 'organic',    marginTarget: 0.50, zh: '有機商店 / GREEN & SAFE / 主婦聯盟', en: 'Organic retail / GREEN & SAFE / Homemakers' },
+  { id: 'csa',        marginTarget: 0.55, zh: 'CSA 直銷 / 訂閱箱',  en: 'CSA / subscription box' },
+  { id: 'restaurant', marginTarget: 0.60, zh: '主廚餐廳直供',      en: 'Chef-direct restaurant' }
+];
+
+function render() {
+  const isZh = currentLang === 'zh';
+  const cfg = CLIENT_CONFIG;
+  const inp = cfg.inputs || {};
+
+  // ── Header
+  document.getElementById('farmName').textContent = pick(cfg.clientName, currentLang) || (isZh ? '未命名農場' : 'Unnamed farm');
+  document.getElementById('farmRegion').textContent = pick(cfg.clientLocation, currentLang) || (isZh ? '台灣' : 'Taiwan');
+  document.getElementById('reportPeriod').textContent = cfg.reportingPeriod || '2025';
+
+  // Years operating — derive from earliest practice year
+  const ph = cfg.practiceHistory || {};
+  const years = Object.values(ph).filter(y => y && /^\d{4}$/.test(y)).map(y => parseInt(y));
+  const earliestYear = years.length ? Math.min(...years) : null;
+  const thisYear = new Date().getFullYear();
+  const yearsRun = earliestYear ? (thisYear - earliestYear) : null;
+  document.getElementById('farmYears').textContent = yearsRun
+    ? (isZh ? `經營 ${yearsRun} 年` : `${yearsRun} years operating`)
+    : (isZh ? '新進農場' : 'New operation');
+
+  // Contact (optional fields)
+  const contact = cfg.contact || {};
+  document.getElementById('contactName').textContent = pick(contact.name, currentLang) || (isZh ? '農場主' : 'Farm owner');
+  document.getElementById('contactPhone').textContent = contact.phone || (isZh ? '電話 —' : 'Phone —');
+  document.getElementById('contactEmail').textContent = contact.email || (isZh ? '信箱 —' : 'Email —');
+
+  // ── Hero pitch line
+  const cropZh = ({ vegetables: '蔬菜', rice: '稻米', fruit: '水果', livestock: '畜產', mixed: '綜合' })[inp.cropType] || '農產';
+  const cropEn = ({ vegetables: 'vegetables', rice: 'rice', fruit: 'fruit', livestock: 'livestock', mixed: 'mixed' })[inp.cropType] || 'produce';
+  const heroZh = `${pick(cfg.clientLocation, 'zh')}${yearsRun ? ` · 經營 ${yearsRun} 年` : ''}的${cropZh}農場，已通過第三方驗證並公開實踐紀錄。我們不是「比較貴」，我們是「可被驗證的永續」。`;
+  const heroEn = `${pick(cfg.clientLocation, 'en') || 'Taiwan'} ${cropEn} farm${yearsRun ? `, ${yearsRun} years of operation` : ''}, third-party verified with a public practice record. We're not "expensive" — we're "verifiable sustainable".`;
+  document.getElementById('heroLine').textContent = isZh ? heroZh : heroEn;
+
+  // ── Story
+  let story = cfg.pitchStory ? pick(cfg.pitchStory, currentLang) : '';
+  if (!story) {
+    // Auto-generate a basic story from practices
+    const practices = inp.practices || {};
+    const adopted = [];
+    if (practices.coverCrop) adopted.push(isZh ? '覆蓋作物' : 'cover crops');
+    if (practices.noTill) adopted.push(isZh ? '少/免耕' : 'no-till');
+    if (practices.compost) adopted.push(isZh ? '堆肥施用' : 'composting');
+    if (practices.residue) adopted.push(isZh ? '殘株還田' : 'residue retention');
+    if (inp.riceMgmt === 'awd') adopted.push(isZh ? '稻田 AWD 間歇灌溉' : 'rice AWD irrigation');
+    if (isZh) {
+      story = `${pick(cfg.clientLocation, 'zh') || '我們'}的農場${earliestYear ? `自 ${earliestYear} 年` : ''}開始實踐${adopted.length ? `「${adopted.join('、')}」` : '永續耕作'}。我們相信好的食材來自健康的土壤、被尊重的水源、與被信任的供應關係。每一公斤產出，都有可查的紀錄。`;
+    } else {
+      story = `Our farm${earliestYear ? ` has practiced` : ' practices'} ${adopted.length ? adopted.join(', ') : 'sustainable agriculture'}${earliestYear ? ` since ${earliestYear}` : ''}. We believe good ingredients come from healthy soil, respected water, and trusted relationships. Every kilogram we ship has a record you can check.`;
+    }
+  }
+  document.getElementById('storyText').textContent = story;
+
+  // ── Practices + Certs
+  const practicesList = document.getElementById('practicesList');
+  const practiceLabels = { coverCrop: { zh: '覆蓋作物 (Cover crop)', en: 'Cover crop' }, noTill: { zh: '少/免耕 (No-till)', en: 'No-till' }, compost: { zh: '堆肥施用 (Compost)', en: 'Compost' }, residue: { zh: '殘株還田 (Residue)', en: 'Residue retention' } };
+  let pHtml = '';
+  Object.entries(practiceLabels).forEach(([k, l]) => {
+    const adopted = inp.practices && inp.practices[k];
+    if (adopted) {
+      const since = ph[k];
+      pHtml += `<div class="row"><span class="label">${pick(l, currentLang)}</span><span class="value">${since ? (isZh ? `自 ${since}` : `since ${since}`) : '✓'}</span></div>`;
+    }
+  });
+  if (!pHtml) pHtml = `<div class="row"><span class="label" style="color: var(--muted); font-style: italic;">${isZh ? '尚未紀錄' : 'Not recorded'}</span><span></span></div>`;
+  practicesList.innerHTML = pHtml;
+
+  const certChips = document.getElementById('certChips');
+  const certs = cfg.certifications || [];
+  certChips.innerHTML = certs.length
+    ? certs.map(c => `<span class="chip ${c.tier === 'premium' ? 'premium' : ''}">${escapeHtml(pick(c.label, currentLang) || c.id)}</span>`).join('')
+    : `<span class="chip" style="background: var(--bg-soft); color: var(--muted);">${isZh ? '未取得認證 (可協助申請)' : 'No cert yet (can support application)'}</span>`;
+
+  // ── Production
+  const prodRows = document.getElementById('productionRows');
+  const yieldKg = inp.annualYieldKg || 0;
+  const revenue = inp.annualRevenueNT || 0;
+  prodRows.innerHTML = `
+    <div class="row"><span class="label">${isZh ? '面積' : 'Area'}</span><span class="value">${inp.farmSize || 0} ha</span></div>
+    <div class="row"><span class="label">${isZh ? '主作物' : 'Primary crop'}</span><span class="value">${isZh ? cropZh : cropEn}</span></div>
+    <div class="row"><span class="label">${isZh ? '年產量' : 'Annual yield'}</span><span class="value">${yieldKg > 0 ? yieldKg.toLocaleString() + ' kg' : '—'}</span></div>
+    <div class="row"><span class="label">${isZh ? '年營收' : 'Annual revenue'}</span><span class="value">${revenue > 0 ? 'NT$ ' + revenue.toLocaleString() : '—'}</span></div>
+  `;
+
+  // ── Evidence panel
+  const r = calcFromInputs(inp);
+  const evGrid = document.getElementById('evidenceGrid');
+  const intensity = (yieldKg > 0 && r.gross) ? (r.gross / yieldKg).toFixed(2) : '—';
+  const soil = cfg.soilTest || {};
+  const socStr = soil.socPercent ? `${soil.socPercent}%` : '—';
+  const socT = (soil.socPercent && soil.bulkDensity && soil.depthCm)
+    ? ((soil.socPercent / 100) * soil.bulkDensity * soil.depthCm * 100).toFixed(1)
+    : null;
+  const treesNum = inp.trees || 0;
+  evGrid.innerHTML = `
+    <div class="ev-cell"><div class="num">${intensity}</div><div class="lbl">${isZh ? 'kg CO₂e / kg 產品' : 'kg CO₂e / kg product'}</div></div>
+    <div class="ev-cell"><div class="num">${socStr}</div><div class="lbl">${isZh ? '土壤有機碳 (SOC)' : 'Soil organic carbon (SOC)'}${socT ? `<br>${socT} t-C/ha` : ''}</div></div>
+    <div class="ev-cell"><div class="num">${yearsRun || '—'}</div><div class="lbl">${isZh ? '永續耕作年數' : 'Years of sustainable practice'}</div></div>
+    <div class="ev-cell"><div class="num">${treesNum}</div><div class="lbl">${isZh ? '農場樹木 (碳匯)' : 'On-farm trees (sink)'}</div></div>
+  `;
+
+  // ── Pricing
+  const dataSources = cfg.dataSources || [];
+  let totalCost = 0;
+  dataSources.forEach(d => {
+    if (d.billAmount && d.billRate) {
+      totalCost += d.billPeriod === 'month' ? d.billAmount * 12 : d.billAmount;
+    }
+  });
+  const costPerKg = (yieldKg > 0 && totalCost > 0) ? totalCost / yieldKg : null;
+  const pricingRows = document.getElementById('pricingRows');
+  if (costPerKg) {
+    pricingRows.innerHTML = PITCH_CHANNELS.map(c => {
+      const price = costPerKg / (1 - c.marginTarget);
+      return `<div class="price-row"><span class="ch">${isZh ? c.zh : c.en}</span><span class="pr">NT$ ${price.toFixed(1)}<span style="font-size:9pt; font-weight: 500; color: var(--muted);">/kg</span></span></div>`;
+    }).join('');
+  } else {
+    pricingRows.innerHTML = `<div style="font-size: 10pt; color: var(--muted); font-style: italic;">${isZh ? '價格需依貴單位需求量與時程個別評估，歡迎聯繫。' : 'Pricing on request based on volume and delivery schedule.'}</div>`;
+    document.getElementById('pricingNote').style.display = 'none';
+  }
+
+  // ── Footer QR
+  const dashUrl = location.href.replace('farm-pitch.html', 'farm-dashboard.html');
+  document.getElementById('dashUrl').textContent = dashUrl.length > 100 ? dashUrl.slice(0, 80) + '…' + dashUrl.slice(-15) : dashUrl;
+  document.getElementById('qrImg').src = `https://api.qrserver.com/v1/create-qr-code/?size=160x160&margin=4&data=${encodeURIComponent(dashUrl)}`;
+
+  // Back link preserves fragment so the dashboard reloads with same data
+  document.getElementById('backLink').href = 'farm-dashboard.html' + location.search + location.hash;
+
+  // Apply data-zh / data-en
+  document.querySelectorAll('[data-zh]').forEach(el => {
+    const v = el.dataset[currentLang];
+    if (v !== undefined) el.textContent = v;
+  });
+}
+
+document.getElementById('langToggle').addEventListener('click', () => {
+  currentLang = currentLang === 'zh' ? 'en' : 'zh';
+  document.documentElement.lang = currentLang === 'zh' ? 'zh-Hant' : 'en';
+  document.getElementById('langToggle').textContent = currentLang === 'zh' ? 'English' : '中文';
+  render();
+});
+
+(async () => {
+  await loadConfig();
+  render();
+})();
+</script>
+
+</body>
+</html>
