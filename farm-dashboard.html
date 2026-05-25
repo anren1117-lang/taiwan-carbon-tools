@@ -7371,7 +7371,9 @@ Applicant: ${ownerName} (signature)
       external: true
     });
 
-    // 7. SOIL BASELINE MISSING — if no soil test, this is critical for cert + premium
+    // 7. SOIL BASELINE MISSING OR STALE — soil test critical for cert + premium.
+    // Distinguish "never sampled" (unlocks features) from "stale >24mo"
+    // (existing data getting questioned by buyers / auditors).
     const soil = CLIENT_CONFIG.soilTest || {};
     if (!soil.socPercent) {
       candidates.push({
@@ -7383,6 +7385,23 @@ Applicant: ${ownerName} (signature)
         link: '#sec-editor',
         linkLabel: isZh ? '輸入土壤基準' : 'Enter soil baseline'
       });
+    } else if (soil.date) {
+      const sampleDate = new Date(soil.date);
+      const monthsAgo = (Date.now() - sampleDate.getTime()) / (1000 * 60 * 60 * 24 * 30);
+      if (monthsAgo > 24) {
+        const yearsAgo = (monthsAgo / 12).toFixed(1);
+        candidates.push({
+          priority: 65,
+          urgency: 'medium',
+          title: isZh ? `重新採樣土壤 — 上次資料已 ${yearsAgo} 年前` : `Re-sample soil — last test was ${yearsAgo} yrs ago`,
+          why: isZh
+            ? `土壤碳趨勢需要每 1-2 年更新一次。買家、ESG 採購、補助申請者會看資料新鮮度；超過 2 年的數據在 2026 年談判時會被質疑「還適用嗎？」`
+            : `Soil C trend needs refresh every 1-2 years. Buyers / ESG procurement / subsidy reviewers check freshness; data >2 yrs gets "is this still accurate?" pushback in 2026 negotiations.`,
+          impact: isZh ? '保住溢價通路議價籌碼 + 維持碳信用申請資格' : 'Preserves premium-channel negotiating power + carbon credit eligibility',
+          link: '#sec-editor',
+          linkLabel: isZh ? '更新土壤資料' : 'Update soil data'
+        });
+      }
     }
 
     return candidates.sort((a, b) => b.priority - a.priority).slice(0, 3);
