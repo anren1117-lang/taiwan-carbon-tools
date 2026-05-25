@@ -228,6 +228,7 @@
   </section>
 
   <section class="container">
+    <div id="farmsSummary" style="display: none; margin-bottom: 18px; padding: 14px 18px; background: var(--bg-subtle); border: 1px solid var(--border); border-radius: 12px;"></div>
     <div class="farms" id="farmsGrid"></div>
   </section>
 
@@ -339,6 +340,42 @@
   async function renderAll() {
     const entries = await Promise.all(FARMS.map(loadFarm));
     document.getElementById('farmsGrid').innerHTML = entries.map(renderCard).join('');
+    renderSummary(entries);
+  }
+
+  function renderSummary(entries) {
+    const loaded = entries.filter(e => e.cfg);
+    if (loaded.length === 0) return;
+    let totalHa = 0, totalNet = 0, organicCount = 0, premiumCertCount = 0, carbonNegCount = 0;
+    loaded.forEach(({ cfg }) => {
+      const inp = cfg.inputs || {};
+      totalHa += inp.farmSize || 0;
+      const r = calcFromInputs(inp);
+      totalNet += r.net / 1000; // tonnes
+      if (r.net < 0) carbonNegCount++;
+      const certs = cfg.certifications || [];
+      if (certs.some(c => /有機|organic|MOA|TOAF/i.test((c.label && (c.label.zh || c.label.en)) || c.id || ''))) organicCount++;
+      if (certs.some(c => c.tier === 'premium')) premiumCertCount++;
+    });
+    const host = document.getElementById('farmsSummary');
+    host.style.display = '';
+    const cells = [
+      { v: loaded.length,                  l: { zh: '示範農場', en: 'sample farms' } },
+      { v: totalHa.toFixed(1) + ' ha',     l: { zh: '總面積',   en: 'total area' } },
+      { v: organicCount,                   l: { zh: '取得有機驗證', en: 'with organic cert' } },
+      { v: premiumCertCount,               l: { zh: '具溢價認證',   en: 'with premium cert' } },
+      { v: carbonNegCount,                 l: { zh: '碳負農場',     en: 'carbon-negative' } }
+    ];
+    host.innerHTML = `
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 14px; align-items: center;">
+        ${cells.map(c => `
+          <div style="text-align: center;">
+            <div style="font-size: 20px; font-weight: 800; color: var(--accent); line-height: 1.1;">${c.v}</div>
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; margin-top: 4px;">${trObj(c.l)}</div>
+          </div>
+        `).join('')}
+      </div>
+    `;
   }
 
   function applyLang(lang) {
