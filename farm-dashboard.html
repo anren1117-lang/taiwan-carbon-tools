@@ -2497,10 +2497,15 @@
   </section>
 
   <!-- ── Farm ERP: activity log + inventory + ledger + contacts ─── -->
-  <section class="panel" id="sec-erp">
-    <div class="panel-title" data-zh="農場 ERP — 營運紀錄與管理" data-en="Farm ERP — operations management">農場 ERP — 營運紀錄與管理</div>
-    <div class="panel-sub" data-zh="日常田間紀錄、庫存、收支、聯絡簿 — 四個模組，全部本機儲存（依農場代號獨立）。記得用「匯出 JSON」備份。" data-en="Daily field log, inventory, ledger, contact book — four modules, all stored locally per farm-id. Use 'Export JSON' to back up.">日常田間紀錄、庫存、收支、聯絡簿 — 四個模組，全部本機儲存（依農場代號獨立）。記得用「匯出 JSON」備份。</div>
-
+  <details class="panel" id="sec-erp">
+    <summary style="cursor: pointer; list-style: none; padding: 0; margin: 0; outline: none;">
+      <div class="panel-title" style="display: flex; align-items: center; gap: 10px;">
+        <span data-zh="📊 農場 ERP — 營運紀錄（選用）" data-en="📊 Farm ERP — operations log (optional)">📊 農場 ERP — 營運紀錄（選用）</span>
+        <span style="font-size: 11px; color: var(--text-muted); font-weight: 500;" data-zh="點開使用" data-en="click to open">點開使用</span>
+      </div>
+      <div class="panel-sub" data-zh="日常田間紀錄、庫存、收支、聯絡簿 — 四個模組，全部本機儲存。適合每日 / 每週紀錄習慣已建立的農場使用；對於「先用儀表板看建議」的新手，預設收合。" data-en="Daily field log, inventory, ledger, contacts — four modules, all stored locally. For farms with established logging habits; for new users still exploring, collapsed by default.">日常田間紀錄、庫存、收支、聯絡簿 — 四個模組，全部本機儲存。適合每日 / 每週紀錄習慣已建立的農場使用；對於「先用儀表板看建議」的新手，預設收合。</div>
+    </summary>
+    <div style="margin-top: 14px;">
     <div class="erp-tabs">
       <button class="erp-tab active" data-tab="log"       data-zh="📋 農事日誌"  data-en="📋 Activity log">📋 農事日誌</button>
       <button class="erp-tab"        data-tab="inventory" data-zh="📦 庫存"      data-en="📦 Inventory">📦 庫存</button>
@@ -2601,7 +2606,8 @@
       </form>
       <div class="erp-table" id="conTable"></div>
     </div>
-  </section>
+    </div><!-- /erp inner wrapper -->
+  </details>
 
   <!-- ── Editor drawer ────────────────────────────────────── -->
   <a id="sec-editor" aria-hidden="true" style="position: relative; top: -60px;"></a>
