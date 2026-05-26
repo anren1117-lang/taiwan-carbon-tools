@@ -6421,7 +6421,9 @@ Applicant: ${ownerName} (signature)
       cons: { zh: '價格波動、無溢價、賺現金流但無利潤', en: 'Volatile pricing, no premium, cash flow without profit' },
       evidence: { zh: '無需特別證據', en: 'No specific evidence required' },
       opener: null,
-      verdict: { zh: '只在現金緊急時用，不要當常態通路。', en: 'Use only for cash emergencies — not your default channel.' }
+      verdict: { zh: '只在現金緊急時用，不要當常態通路。', en: 'Use only for cash emergencies — not your default channel.' },
+      firstWeek: { zh: '本週做：若真要進拍賣市場，先查當週各果菜批發價（農糧署網站 / FB 社團）— 別被市場價牌壓得開出底價。', en: 'This week: if you must use auction, first check this week\'s prevailing wholesale prices (COA site / FB groups) — don\'t let the market price-board anchor you below your floor.' },
+      pitfall: { zh: '別這樣：把拍賣市場當主力。一旦客戶看到你的貨在批發拍賣，再難跟他談「溢價通路」。', en: 'Avoid: making wholesale your default. Once buyers see your goods at auction, you can\'t credibly negotiate "premium channel" prices with them.' }
     },
     { id: 'school_meal', tier: 'sustainable', marginTarget: 0.25,
       name: { zh: '學校午餐 / 公部門採購', en: 'School lunch / government procurement' },
@@ -6432,7 +6434,9 @@ Applicant: ${ownerName} (signature)
       opener: {
         zh: '您好，我們是 [縣市] 在地友善農場，持有 [認證]，可穩定供應 [作物] [年產量] 公斤。希望了解貴單位在地食材採購評選機制與年度合約窗口。',
         en: 'Hello, we are a local farm in [county] with [cert], capable of supplying [crop] at [annual yield] kg/year. Wanted to inquire about your local-procurement evaluation process and annual contract window.'
-      }
+      },
+      firstWeek: { zh: '本週做：打電話到你所在縣市政府教育處（午餐業務）或農業處，問「在地食材採購評選機制」當年窗口時程。免費。', en: 'This week: call your county/city Education Bureau (lunch program) or Agriculture Bureau, ask for "local-procurement evaluation" annual window timing. Free.' },
+      pitfall: { zh: '別這樣：以為價格低就會中標。學校重「穩定供應 + 文書齊全」勝過低價 5%。把履歷準備整齊比削價有用。', en: 'Avoid: assuming lowest price wins. Schools weight "stable supply + complete paperwork" over 5% lower price. Tighten your records, not your margins.' }
     },
     { id: 'local_market', tier: 'sustainable', marginTarget: 0.30,
       name: { zh: '區域物流 / 在地超市 / 連鎖通路', en: 'Regional distributor / local supermarket / retail chain' },
@@ -6443,7 +6447,9 @@ Applicant: ${ownerName} (signature)
       opener: {
         zh: '您好，我是 [姓名]，在 [地區] 經營 [面積] 公頃的 [作物] 農場，[實踐年數] 年實踐 [認證/做法]。年穩定產量 [年產量] kg，目前通路為 [現有通路]。想了解貴公司是否有新供應商評估窗口。',
         en: 'Hello, I run a [area]-ha [crop] farm in [region] with [years] years of [cert/practice]. Annual stable yield [yield] kg, currently supplying [existing channels]. Open to evaluating a new supplier?'
-      }
+      },
+      firstWeek: { zh: '本週做：盤點在地（30 公里內）超市 + 區域物流商 3 家，找採購窗口。其次：確認你能否符合冷鏈規範（冷藏出貨 2-4°C）。', en: 'This week: list 3 local (within 30km) supermarkets + regional distributors, find procurement contact. Also: verify you can meet cold-chain spec (2-4°C delivery).' },
+      pitfall: { zh: '別這樣：簽合約沒看「退貨條款」。某些通路把銷不掉的全退給你 — 等於把通路風險推給農戶。要爭取「30 天試銷期」+「上限退貨率」。', en: 'Avoid: signing without reading return clauses. Some channels return all unsold goods to you — pushing channel risk onto the farmer. Negotiate "30-day trial period" + "max return rate" cap.' }
     },
     { id: 'organic_retail', tier: 'premium', marginTarget: 0.50,
       name: { zh: '主婦聯盟 / GREEN & SAFE / 有機商店', en: 'Homemakers Union / GREEN & SAFE / organic retail' },
@@ -6454,7 +6460,9 @@ Applicant: ${ownerName} (signature)
       opener: {
         zh: '您好，我們持有 [驗證機構] 有機驗證，主力作物 [作物]，年產量 [年產量] kg，已實踐 [實踐年數] 年。土壤碳含量趨勢可查（[儀表板URL]）。想了解貴通路新供應商評估流程與年度上架窗口。',
         en: 'Hello, we hold [body] organic cert, primary crop [crop], annual yield [yield] kg, [years] years of practice. Soil C trend is published ([dashboard URL]). Wanted to inquire about new-supplier evaluation and listing windows.'
-      }
+      },
+      firstWeek: { zh: '本週做：到主婦聯盟生活消費合作社官網或 GREEN & SAFE 客服信箱，索取「新進供應者申請書」。同時確認你包裝是否符合通路規格（多數要求 200-500g 小包裝）。', en: 'This week: request the "new supplier application form" from Homemakers Union Co-op website or GREEN & SAFE buyer email. Also verify packaging meets channel spec (most require 200-500g retail packs).' },
+      pitfall: { zh: '別這樣：以為「我有機」就會自動上架。每個通路有自己的審查週期（4-12 週）+ 上架費 + 包裝測試 + 試銷。預算 NT$ 5-15k 給上架成本。', en: 'Avoid: assuming "I am certified organic" guarantees shelving. Each channel has its own 4-12 week review + listing fees + packaging trials + test sales. Budget NT$ 5-15k for listing costs.' }
     },
     { id: 'csa', tier: 'premium', marginTarget: 0.55,
       name: { zh: 'CSA 直銷 / 訂閱箱 / 團購', en: 'CSA / subscription box / community group buy' },
@@ -6465,7 +6473,9 @@ Applicant: ${ownerName} (signature)
       opener: {
         zh: '我們的 [作物] 每週採收 [週產量] kg，提供 NT$ [週費] / 週訂閱箱。[實踐年數] 年實踐 [認證/做法]，每箱附產地故事卡與當週農忙紀錄。首批 30 位試吃會員享首月 8 折。',
         en: 'Our [crop] is harvested weekly at [weekly yield] kg, NT$ [weekly fee]/week subscription. [years] years of [practice/cert], each box includes a farm-story card + that-week\'s log. First 30 trial members get 20% off month 1.'
-      }
+      },
+      firstWeek: { zh: '本週做：開 Google Form 招募 30 位試吃會員，2 週免費，換 (a) 真實回饋 (b) 願不願意付費。發到 LINE / 朋友圈 / 在地媽媽社團。', en: 'This week: create a Google Form recruiting 30 trial members, 2 weeks free in exchange for (a) honest feedback (b) willingness-to-pay survey. Share via LINE / friends / local community FB groups.' },
+      pitfall: { zh: '別這樣：在沒驗證需求前先投資專業網站 / 物流。先用試算表 + 自家配送跑 3 個月，確認單週 20+ 戶穩定，再投資基礎建設。', en: 'Avoid: investing in pro website / logistics before validating demand. Run 3 months on spreadsheet + self-delivery first; confirm 20+ stable weekly households before infrastructure spend.' }
     },
     { id: 'restaurant', tier: 'premium', marginTarget: 0.60,
       name: { zh: '主廚餐廳直供', en: 'Chef-direct restaurant' },
@@ -6476,7 +6486,9 @@ Applicant: ${ownerName} (signature)
       opener: {
         zh: '[主廚名] 您好，看到貴餐廳菜單重視在地食材。我們在 [地區] 種植 [作物] [實踐年數] 年，持有 [認證]，土壤碳趨勢已公開（[儀表板URL]）。可寄樣品給您試菜，並安排農場拜訪。',
         en: '[Chef], I noticed your menu prioritizes local sourcing. We grow [crop] in [region] for [years] years with [cert]; soil C trend is published ([dashboard URL]). Happy to send a sample for menu trial and arrange a farm visit.'
-      }
+      },
+      firstWeek: { zh: '本週做：列出在地（30 公里內）3 家強調在地食材的餐廳。挑 1 家，週二 / 三下午 14-16 點（餐廳最閒）打電話請對方留 5 分鐘讓你介紹樣品。', en: 'This week: list 3 local (within 30km) restaurants emphasizing local sourcing. Pick 1, call Tue/Wed afternoon 2-4pm (kitchen\'s quietest) and request 5 minutes to drop off a sample.' },
+      pitfall: { zh: '別這樣：忽略「主廚換人」的風險。一個主廚轉職你的合約就斷。所以對單一餐廳的依賴最好不超過 15% 月營收。', en: 'Avoid: ignoring "chef churn" risk. One head-chef transition can kill the contract. Keep dependence on any single restaurant under 15% of monthly revenue.' }
     },
     { id: 'gift_box', tier: 'premium', marginTarget: 0.65,
       name: { zh: '節慶禮盒 / 企業禮品', en: 'Seasonal gift box / corporate gifts' },
@@ -6487,7 +6499,9 @@ Applicant: ${ownerName} (signature)
       opener: {
         zh: '中秋 / 春節限量禮盒：[作物] 1 公斤 + 農場故事卡 + 收成現場照片 + [認證標章]。NT$ [禮盒價] / 盒，30 盒起訂，企業客製化可加印 LOGO。歡迎索取試吃樣品。',
         en: 'Mid-Autumn / CNY limited gift box: 1kg [crop] + farm story card + harvest photos + [cert label]. NT$ [box price]/box, MOQ 30, corporate customization with logo available. Samples on request.'
-      }
+      },
+      firstWeek: { zh: '本週做：標記下一個節慶（中秋 9 月 / 春節 1-2 月），從那天倒推 8 週 — 那就是你包裝設計師要交件的最晚日。今天就找 1 家在地包裝設計師詢價。', en: 'This week: mark next holiday (Mid-Autumn Sep / CNY Jan-Feb), count back 8 weeks — that\'s your packaging designer\'s deadline. Today: contact 1 local packaging designer for a quote.' },
+      pitfall: { zh: '別這樣：自己做包裝設計。包裝決定 70% 禮盒銷售，專業設計（NT$ 15-30k）回本快過你想像。同時別忘了食品標示法規（保存期限、營養標示）。', en: 'Avoid: DIY packaging design. Packaging drives 70% of gift-box sales; pro design (NT$ 15-30k) pays back faster than you\'d guess. Also: comply with food-labeling regs (best-by, nutrition panel).' }
     }
   ];
 
@@ -6626,6 +6640,8 @@ Applicant: ${ownerName} (signature)
               <div><span class="u">${isZh ? '需要證據' : 'Required evidence'}：</span>${isZh ? c.evidence.zh : c.evidence.en}</div>
             </div>
             ${c.verdict ? `<div style="font-size: 12px; font-style: italic; color: var(--muted); margin-bottom: 8px;">${isZh ? c.verdict.zh : c.verdict.en}</div>` : ''}
+            ${c.firstWeek ? `<div style="margin-top: 6px; padding: 8px 10px; background: rgba(29, 158, 117, 0.08); border-radius: 6px; font-size: 12px; line-height: 1.6;"><strong style="color: var(--accent);">${isZh ? '🚀 本週做：' : '🚀 This week: '}</strong>${isZh ? c.firstWeek.zh : c.firstWeek.en}</div>` : ''}
+            ${c.pitfall ? `<div style="margin-top: 6px; padding: 8px 10px; background: rgba(220, 38, 38, 0.06); border-radius: 6px; font-size: 12px; line-height: 1.6;"><strong style="color: #dc2626;">${isZh ? '⚠️ 別這樣：' : '⚠️ Avoid: '}</strong>${isZh ? c.pitfall.zh : c.pitfall.en}</div>` : ''}
             ${openerText ? `
               <details style="margin-top: 8px;">
                 <summary style="cursor: pointer; font-size: 12px; font-weight: 600; color: ${meta.color};">${isZh ? '📋 開場白（可複製）' : '📋 Outreach opener (copy-paste)'}</summary>
