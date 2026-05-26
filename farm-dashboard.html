@@ -6648,13 +6648,21 @@ Applicant: ${ownerName} (signature)
             ${c.verdict ? `<div style="font-size: 12px; font-style: italic; color: var(--muted); margin-bottom: 8px;">${isZh ? c.verdict.zh : c.verdict.en}</div>` : ''}
             ${c.firstWeek ? `<div style="margin-top: 6px; padding: 8px 10px; background: rgba(29, 158, 117, 0.08); border-radius: 6px; font-size: 12px; line-height: 1.6;"><strong style="color: var(--accent);">${isZh ? '🚀 本週做：' : '🚀 This week: '}</strong>${isZh ? c.firstWeek.zh : c.firstWeek.en}</div>` : ''}
             ${c.pitfall ? `<div style="margin-top: 6px; padding: 8px 10px; background: rgba(220, 38, 38, 0.06); border-radius: 6px; font-size: 12px; line-height: 1.6;"><strong style="color: #dc2626;">${isZh ? '⚠️ 別這樣：' : '⚠️ Avoid: '}</strong>${isZh ? c.pitfall.zh : c.pitfall.en}</div>` : ''}
-            ${openerText ? `
+            ${openerText ? (() => {
+              const lineUrl = `https://line.me/R/share?text=${encodeURIComponent(openerText)}`;
+              const mailSubject = encodeURIComponent(isZh ? `關於 ${isZh ? c.name.zh : c.name.en} 通路合作` : `Inquiry — ${isZh ? c.name.zh : c.name.en} channel`);
+              const mailUrl = `mailto:?subject=${mailSubject}&body=${encodeURIComponent(openerText)}`;
+              return `
               <details style="margin-top: 8px;">
-                <summary style="cursor: pointer; font-size: 12px; font-weight: 600; color: ${meta.color};">${isZh ? '📋 開場白（可複製）' : '📋 Outreach opener (copy-paste)'}</summary>
+                <summary style="cursor: pointer; font-size: 12px; font-weight: 600; color: ${meta.color};">${isZh ? '📋 開場白（可複製 / LINE / Email）' : '📋 Outreach opener (copy / LINE / email)'}</summary>
                 <div style="margin-top: 8px; padding: 10px 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; font-size: 13px; line-height: 1.6; white-space: pre-wrap; font-family: ui-monospace, monospace;" id="${openerId}">${openerText}</div>
-                <button onclick="copyOpener('${openerId}', this)" style="margin-top: 8px; padding: 5px 12px; background: ${meta.color}; color: #fff; border: none; border-radius: 5px; font-size: 12px; font-weight: 600; cursor: pointer;">${isZh ? '複製' : 'Copy'}</button>
+                <div style="margin-top: 8px; display: flex; gap: 6px; flex-wrap: wrap;">
+                  <button onclick="copyOpener('${openerId}', this)" style="padding: 5px 12px; background: ${meta.color}; color: #fff; border: none; border-radius: 5px; font-size: 12px; font-weight: 600; cursor: pointer;">${isZh ? '📋 複製' : '📋 Copy'}</button>
+                  <a href="${lineUrl}" target="_blank" rel="noopener" style="padding: 5px 12px; background: #06C755; color: #fff; border-radius: 5px; font-size: 12px; font-weight: 600; text-decoration: none;">${isZh ? '💬 用 LINE 傳' : '💬 Share via LINE'}</a>
+                  <a href="${mailUrl}" style="padding: 5px 12px; background: var(--bg-card, var(--bg)); color: ${meta.color}; border: 1px solid ${meta.color}; border-radius: 5px; font-size: 12px; font-weight: 600; text-decoration: none;">${isZh ? '📧 寄 Email' : '📧 Email'}</a>
+                </div>
               </details>
-            ` : ''}
+            `; })() : ''}
           </div>
         `;
       });
