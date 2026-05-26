@@ -7381,6 +7381,38 @@ Applicant: ${ownerName} (signature)
       });
     }
 
+    // 6a. MISSING CONTACT — subsidy drafts + pitch sheet look unprofessional.
+    // A pitch sheet without a phone/email is not a sales tool — it's a flyer.
+    const contact = CLIENT_CONFIG.contact || {};
+    if (!contact.name && !contact.phone && !contact.email) {
+      candidates.push({
+        priority: 55,
+        urgency: 'medium',
+        title: isZh ? '填入聯絡資訊 — 補助申請草稿 + 買家提案單需要' : 'Add contact info — required for subsidy drafts + buyer pitch',
+        why: isZh ? '目前產出的補助申請草稿和買家提案單缺電話、信箱、負責人姓名，等於把「請改成正式版才能送」的工作丟給你。30 秒填好。' : 'Current subsidy drafts and buyer pitches lack phone/email/owner name — they look like template flyers. 30 seconds to fix.',
+        impact: isZh ? '解鎖：可直接寄出的補助申請、可印的買家提案' : 'Unlocks: ready-to-send subsidy applications + print-ready buyer pitch',
+        link: '#sec-editor',
+        linkLabel: isZh ? '到「設定」填寫' : 'Open editor →'
+      });
+    }
+
+    // 6b. NO PRACTICES ADOPTED — the dashboard is "sustainable ops" themed.
+    // A farmer with zero adopted practices won't get useful output from
+    // Survival Guide / Pitch / Subsidies / ROI / Concentration. Surface
+    // the lowest-effort starting practice.
+    const adoptedCount = Object.values(adopted).filter(Boolean).length;
+    if (adoptedCount === 0) {
+      candidates.push({
+        priority: 72,
+        urgency: 'medium',
+        title: isZh ? '至少採用 1 項永續做法 — 解鎖補助 + 認證 + 溢價通路' : 'Adopt at least 1 sustainable practice — unlocks subsidies + cert + premium channels',
+        why: isZh ? '目前儀表板顯示「零項做法」。最容易上手：殘株還田（零成本、第二期作物少買 10-15% 肥料）。或覆蓋作物 / 堆肥 / 免耕擇一。' : 'Dashboard shows zero practices adopted. Easiest start: residue retention (zero cost, next crop needs 10-15% less fertilizer). Or pick one of cover crop / compost / no-till.',
+        impact: isZh ? '解鎖：友善補助 NT$ 30k/ha + 多項溢價通路資格' : 'Unlocks: friendly farming subsidy NT$ 30k/ha + multiple premium channels',
+        link: '#sec-roi',
+        linkLabel: isZh ? '看回收計算機' : 'See Practice ROI'
+      });
+    }
+
     // 6. BUYER PITCH NOT YET GENERATED — soft action
     candidates.push({
       priority: 40,
