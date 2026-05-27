@@ -4268,9 +4268,13 @@ This application supports starting organic-transition certification for ≥1 ha.
             <div style="font-size: 14px; font-style: italic; padding: 8px 12px; background: rgba(220, 38, 38, 0.06); border-radius: 6px; margin-bottom: 8px;">${trObj(s.buyer)}</div>
             <div style="font-size: 11.5px; color: var(--text-muted); margin-bottom: 8px;">${trObj(s.why)}</div>
             <details>
-              <summary style="cursor: pointer; font-weight: 600; color: var(--accent); font-size: 13px;">${tr('▶ 你的回應（複製可用）', '▶ Your response (copy-able)')}</summary>
+              <summary style="cursor: pointer; font-weight: 600; color: var(--accent); font-size: 13px;">${tr('▶ 你的回應（可複製 / LINE / Email）', '▶ Your response (copy / LINE / email)')}</summary>
               <div style="margin-top: 8px; padding: 10px 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; font-size: 13px; line-height: 1.7; white-space: pre-wrap;" id="neg-${s.id}">${trObj(s.response)}</div>
-              <button onclick="copyOpener('neg-${s.id}', this)" style="margin-top: 8px; padding: 5px 12px; background: var(--accent); color: #fff; border: none; border-radius: 5px; font-size: 12px; font-weight: 600; cursor: pointer;">${tr('複製', 'Copy')}</button>
+              <div style="margin-top: 8px; display: flex; gap: 6px; flex-wrap: wrap;">
+                <button onclick="copyOpener('neg-${s.id}', this)" style="padding: 5px 12px; background: var(--accent); color: #fff; border: none; border-radius: 5px; font-size: 12px; font-weight: 600; cursor: pointer;">${tr('📋 複製', '📋 Copy')}</button>
+                <a href="https://line.me/R/share?text=${encodeURIComponent(trObj(s.response))}" target="_blank" rel="noopener" style="padding: 5px 12px; background: #06C755; color: #fff; border-radius: 5px; font-size: 12px; font-weight: 600; text-decoration: none;">${tr('💬 LINE', '💬 LINE')}</a>
+                <a href="mailto:?subject=${encodeURIComponent(tr('關於合作報價的補充說明', 'Follow-up: pricing context'))}&body=${encodeURIComponent(trObj(s.response))}" style="padding: 5px 12px; background: var(--bg-card, var(--bg)); color: var(--accent); border: 1px solid var(--accent); border-radius: 5px; font-size: 12px; font-weight: 600; text-decoration: none;">${tr('📧 Email', '📧 Email')}</a>
+              </div>
               <div style="margin-top: 10px; padding: 8px 12px; background: rgba(5, 150, 105, 0.06); border-radius: 6px; font-size: 12px; line-height: 1.55;">
                 <strong style="color: #059669;">${tr('如果他還是不接受：', 'If they still push back:')}</strong> ${trObj(s.fallback)}
               </div>
