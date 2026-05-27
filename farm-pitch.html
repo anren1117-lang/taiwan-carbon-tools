@@ -205,16 +205,44 @@
   }
 
   @media print {
-    html, body { background: #fff; }
+    html, body { background: #fff; font-size: 9.5pt; }
     .screen-bar { display: none !important; }
     .pitch-sheet {
       width: auto;
       min-height: auto;
       margin: 0;
-      padding: 12mm;
+      padding: 10mm 12mm;
       box-shadow: none;
-      page-break-inside: avoid;
     }
+    /* Each major block stays together — if overflow forces page 2,
+       it breaks between blocks not mid-block */
+    .ps-head, .ps-hero, .ps-story, .ps-grid-2, .ps-evidence,
+    .ps-block, .ps-pricing, .ps-footer {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+    /* Tighten vertical rhythm to fit A4 reliably */
+    .ps-hero { padding: 8px 12px; font-size: 10.5pt; margin-bottom: 10px; }
+    .ps-story { padding: 8px 12px; font-size: 9.5pt; margin-bottom: 10px; }
+    .ps-story h3 { margin-bottom: 4px; }
+    .ps-grid-2 { gap: 10px; margin-bottom: 10px; }
+    .ps-block { padding: 8px 12px; }
+    .ps-block h3 { margin-bottom: 4px; }
+    .ps-block .row { padding: 2px 0; font-size: 9pt; }
+    .ps-evidence { padding: 8px 12px; margin-bottom: 10px; }
+    .ps-evidence-grid { gap: 6px; }
+    .ev-cell .num { font-size: 16pt; }
+    .ev-cell .lbl { font-size: 7.5pt; }
+    .ps-pricing { padding: 8px 12px; margin-bottom: 10px; }
+    .ps-pricing h3 { margin-bottom: 4px; }
+    .ps-pricing .price-row { padding: 2px 0; }
+    .ps-pricing .price-row .pr { font-size: 11pt; }
+    .ps-footer { padding-top: 8px; font-size: 8pt; }
+    .ps-footer .qr img { width: 64px; height: 64px; }
+    /* Commitments block — pack tight */
+    #commitmentList { font-size: 9.5pt !important; gap: 3px !important; }
+    /* If still too tall, allow page break but never mid-block */
+    .pitch-sheet { page-break-inside: auto; }
     @page { size: A4; margin: 0; }
   }
 </style>
