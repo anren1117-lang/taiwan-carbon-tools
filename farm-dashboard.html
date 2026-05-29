@@ -7246,6 +7246,8 @@ Applicant: ${ownerName} (signature)
     // a clear "do this first" priority for new farmers.
     if (!revenue || revenue <= 0) {
       candidates.push({
+        kind: 'onboarding',
+        item: { zh: '年營收', en: 'Annual revenue' },
         priority: 88,
         urgency: 'high',
         title: isZh ? '輸入年營收 — 解鎖毛利分析、定價建議、現金流月曆、同儕比較' : 'Enter annual revenue — unlocks margin, pricing, cash flow, peer comparison',
@@ -7413,6 +7415,8 @@ Applicant: ${ownerName} (signature)
     const contact = CLIENT_CONFIG.contact || {};
     if (!contact.name && !contact.phone && !contact.email) {
       candidates.push({
+        kind: 'onboarding',
+        item: { zh: '聯絡資訊', en: 'Contact info' },
         priority: 55,
         urgency: 'medium',
         title: isZh ? '填入聯絡資訊 — 補助申請草稿 + 買家提案單需要' : 'Add contact info — required for subsidy drafts + buyer pitch',
@@ -7430,6 +7434,8 @@ Applicant: ${ownerName} (signature)
     const adoptedCount = Object.values(adopted).filter(Boolean).length;
     if (adoptedCount === 0) {
       candidates.push({
+        kind: 'onboarding',
+        item: { zh: '至少 1 項永續做法', en: 'At least 1 sustainable practice' },
         priority: 72,
         urgency: 'medium',
         title: isZh ? '至少採用 1 項永續做法 — 解鎖補助 + 認證 + 溢價通路' : 'Adopt at least 1 sustainable practice — unlocks subsidies + cert + premium channels',
@@ -7458,6 +7464,8 @@ Applicant: ${ownerName} (signature)
     const soil = CLIENT_CONFIG.soilTest || {};
     if (!soil.socPercent) {
       candidates.push({
+        kind: 'onboarding',
+        item: { zh: '土壤碳基準', en: 'Soil C baseline' },
         priority: 70,
         urgency: 'medium',
         title: isZh ? '做一次土壤採樣建立 SOC 基準' : 'Get a soil sample for baseline SOC',
@@ -7485,7 +7493,36 @@ Applicant: ${ownerName} (signature)
       }
     }
 
-    return candidates.sort((a, b) => b.priority - a.priority).slice(0, 3);
+    // Group onboarding-style candidates ("missing X") into one card
+    // when 2+ fire. A new farmer with no revenue + no contact + no
+    // practices + no soil would otherwise see 4 setup nudges crowding
+    // out real recommendations. Folded card lists each missing item
+    // as a bullet, single CTA to the editor.
+    const onboarding = candidates.filter(c => c.kind === 'onboarding');
+    const nonOnboarding = candidates.filter(c => c.kind !== 'onboarding');
+    let groupedSet = nonOnboarding;
+    if (onboarding.length >= 2) {
+      const items = onboarding.map(c => isZh ? c.item.zh : c.item.en).join(isZh ? '、' : ', ');
+      const topPriority = Math.max(...onboarding.map(c => c.priority));
+      groupedSet = [...nonOnboarding, {
+        priority: topPriority,
+        urgency: 'high',
+        title: isZh
+          ? `完成農場設定 — 還缺 ${onboarding.length} 項`
+          : `Complete farm setup — ${onboarding.length} items missing`,
+        why: isZh
+          ? `儀表板少了這些資料，許多面板無法計算：${items}。每項 30 秒到 5 分鐘，全部選填，但越多越準。`
+          : `Several panels can't compute without these: ${items}. Each takes 30 sec to 5 min; all optional but the more you fill, the better the recommendations.`,
+        impact: isZh
+          ? `解鎖：定價、毛利、補助草稿、買家提案、碳信用 等 ${onboarding.length}+ 項建議`
+          : `Unlocks: pricing, margin, subsidy drafts, buyer pitch, carbon credit + more`,
+        link: '#sec-editor',
+        linkLabel: isZh ? '到「設定」一次填好' : 'Open editor →'
+      }];
+    } else if (onboarding.length === 1) {
+      groupedSet = [...nonOnboarding, onboarding[0]];
+    }
+    return groupedSet.sort((a, b) => b.priority - a.priority).slice(0, 3);
   }
 
   // Stable per-action ID derived from link + first 40 chars of title so
