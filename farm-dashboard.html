@@ -1636,14 +1636,27 @@
     box-shadow: var(--shadow);
     position: relative;
     overflow: hidden;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .money-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.06);
   }
   .money-card.cost::before, .money-card.income::before, .money-card.intensity::before {
     content: "";
-    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    position: absolute; top: 0; left: 0; right: 0; height: 4px;
   }
   .money-card.cost::before      { background: linear-gradient(90deg, #d97706, #f59e0b); }
   .money-card.income::before    { background: linear-gradient(90deg, #1D9E75, #34d399); }
   .money-card.intensity::before { background: linear-gradient(90deg, #2563eb, #7c3aed); }
+  /* Icon emoji per money-card type — scannable at-a-glance */
+  .money-card.cost::after, .money-card.income::after, .money-card.intensity::after {
+    position: absolute; top: 18px; right: 22px;
+    font-size: 22px; opacity: 0.4; line-height: 1;
+  }
+  .money-card.cost::after      { content: "💸"; }
+  .money-card.income::after    { content: "💰"; }
+  .money-card.intensity::after { content: "⚖️"; }
   .money-label {
     font-size: 11px;
     text-transform: uppercase;
