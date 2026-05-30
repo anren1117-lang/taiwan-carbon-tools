@@ -264,7 +264,9 @@
   </div>
   <div class="right">
     <button class="btn ghost" id="langToggle">English</button>
-    <button class="btn" onclick="window.print()" id="printBtn">列印 / 存成 PDF · Print / Save PDF</button>
+    <button class="btn ghost" id="shareLinkBtn" onclick="copyShareLink(this)">🔗 複製連結給買家 · Copy share link</button>
+    <a class="btn ghost" id="lineShareBtn" href="#" target="_blank" rel="noopener">💬 LINE</a>
+    <button class="btn" onclick="window.print()" id="printBtn">📄 列印 / 存 PDF · Print / Save PDF</button>
   </div>
 </div>
 
@@ -569,12 +571,32 @@ function render() {
   // Back link preserves fragment so the dashboard reloads with same data
   document.getElementById('backLink').href = 'farm-dashboard.html' + location.search + location.hash;
 
+  // LINE share button — current pitch URL with farm name in the share text
+  const pitchUrl = location.href;
+  const farmNameStr = pick(cfg.clientName, currentLang) || (isZh ? '永續農場' : 'Sustainable farm');
+  const lineShareText = isZh
+    ? `${farmNameStr} 的買家提案單：${pitchUrl}`
+    : `Buyer pitch for ${farmNameStr}: ${pitchUrl}`;
+  document.getElementById('lineShareBtn').href = `https://line.me/R/share?text=${encodeURIComponent(lineShareText)}`;
+
   // Apply data-zh / data-en
   document.querySelectorAll('[data-zh]').forEach(el => {
     const v = el.dataset[currentLang];
     if (v !== undefined) el.textContent = v;
   });
 }
+
+// Copy share link (current pitch URL) to clipboard
+window.copyShareLink = async function(btn) {
+  try {
+    await navigator.clipboard.writeText(location.href);
+    const orig = btn.textContent;
+    btn.textContent = currentLang === 'zh' ? '✓ 已複製連結' : '✓ Link copied';
+    setTimeout(() => { btn.textContent = orig; }, 1800);
+  } catch (e) {
+    prompt(currentLang === 'zh' ? '複製這個連結：' : 'Copy this link:', location.href);
+  }
+};
 
 document.getElementById('langToggle').addEventListener('click', () => {
   currentLang = currentLang === 'zh' ? 'en' : 'zh';
