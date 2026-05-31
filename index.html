@@ -120,13 +120,29 @@
     padding: 32px;
     text-decoration: none;
     color: inherit;
-    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+    transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
     display: block;
+    position: relative;
+    overflow: hidden;
   }
+  /* Top accent stripe per tool — visual differentiation +
+     matches Money Hero card pattern on the dashboard. */
+  .tool-card::before {
+    content: "";
+    position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    background: var(--accent);
+    transform: scaleX(0.7);
+    transform-origin: left;
+    transition: transform 0.25s ease;
+  }
+  .tool-card:hover::before { transform: scaleX(1); }
+  .tool-card[href*="household"]::before { background: linear-gradient(90deg, #2563eb, #60a5fa); }
+  .tool-card[href*="business"]::before  { background: linear-gradient(90deg, #7c3aed, #a78bfa); }
+  .tool-card[href*="farm.html"]::before { background: linear-gradient(90deg, #1D9E75, #34d399); }
   .tool-card:hover {
-    transform: translateY(-2px);
+    transform: translateY(-3px);
     border-color: var(--accent);
-    box-shadow: 0 12px 28px rgba(29, 158, 117, 0.10);
+    box-shadow: 0 14px 32px rgba(29, 158, 117, 0.12);
   }
   .tool-icon {
     width: 52px; height: 52px;
@@ -139,19 +155,22 @@
     font-size: 26px;
     margin-bottom: 20px;
     font-weight: 600;
+    transition: transform 0.25s ease;
   }
-  .tool-card h3 { font-size: 22px; margin-bottom: 8px; font-weight: 600; }
+  .tool-card:hover .tool-icon { transform: scale(1.08) rotate(-3deg); }
+  .tool-card h3 { font-size: 22px; margin-bottom: 8px; font-weight: 700; letter-spacing: -0.01em; }
   .tool-card .subtitle { color: var(--text-muted); font-size: 13px; margin-bottom: 12px; }
   .tool-card p { color: var(--text-muted); font-size: 14px; margin-bottom: 20px; line-height: 1.6; }
   .tool-card .arrow {
     color: var(--accent);
-    font-weight: 500;
+    font-weight: 600;
     font-size: 14px;
     display: inline-flex;
     align-items: center;
     gap: 4px;
+    transition: gap 0.2s ease;
   }
-  .tool-card:hover .arrow { gap: 8px; transition: gap 0.2s; }
+  .tool-card:hover .arrow { gap: 10px; }
   .section { padding: 60px 0; }
   .section.subtle { background: var(--bg-subtle); }
   .section-inner { max-width: 760px; margin: 0 auto; }
