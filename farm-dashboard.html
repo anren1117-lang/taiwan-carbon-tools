@@ -2525,19 +2525,23 @@
       <div id="survivalPriorities"></div>
     </div>
 
-    <!-- Certification ladder — green/safe/organic options analyzed for THIS farm -->
-    <div style="margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--border);">
-      <div class="panel-title" style="font-size: 13px; margin-bottom: 4px;" data-zh="認證階梯：「綠色」與「安全」的所有選項，本農場分析" data-en="Certification ladder: every green & safe option, analyzed for this farm">認證階梯：「綠色」與「安全」的所有選項，本農場分析</div>
-      <div class="panel-sub" style="margin-bottom: 14px;" data-zh="台灣有 6 種主要的綠色 / 安全 / 有機認證，門檻與溢價不同。下表分析每張你現在能拿、接近、或還待發展。建議從可申請的最高階開始。" data-en="Taiwan has 6 main green / safe / organic certifications with different bars + premiums. Each is analyzed for this farm — eligible now, close, or develop. Recommendation: start with the highest tier you currently qualify for.">台灣有 6 種主要的綠色 / 安全 / 有機認證，門檻與溢價不同。下表分析每張你現在能拿、接近、或還待發展。建議從可申請的最高階開始。</div>
-      <div id="certLadder"></div>
-    </div>
+    <!-- Certification ladder — reference info, collapsed by default -->
+    <details style="margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--border);">
+      <summary style="cursor: pointer; list-style: none; outline: none;">
+        <div class="panel-title" style="font-size: 13px; margin-bottom: 4px; display: inline-flex; gap: 8px;"><span data-zh="📜 認證階梯（參考）" data-en="📜 Certification ladder (reference)">📜 認證階梯（參考）</span><span style="font-size: 11px; color: var(--text-muted); font-weight: 500;" data-zh="點開展開" data-en="click to expand">點開展開</span></div>
+        <div class="panel-sub" style="margin-bottom: 4px;" data-zh="台灣有 6 種主要的綠色 / 安全 / 有機認證 — 每張的門檻、年費、預期溢價、本農場目前資格分析。" data-en="Taiwan's 6 main green/safe/organic certs — threshold, fee, expected premium, analyzed for this farm.">台灣有 6 種主要的綠色 / 安全 / 有機認證 — 每張的門檻、年費、預期溢價、本農場目前資格分析。</div>
+      </summary>
+      <div id="certLadder" style="margin-top: 14px;"></div>
+    </details>
 
-    <!-- Supply chain: where to source seeds, fert, equipment, finance, training -->
-    <div style="margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--border);">
-      <div class="panel-title" style="font-size: 13px; margin-bottom: 4px;" data-zh="供應鏈：種子、肥料、設備、檢測、金融、訓練 — 你的所有需求從哪裡來" data-en="Supply chain: seeds, fertilizer, equipment, testing, finance, training — where to source everything">供應鏈：種子、肥料、設備、檢測、金融、訓練 — 你的所有需求從哪裡來</div>
-      <div class="panel-sub" style="margin-bottom: 14px;" data-zh="不只「賣到哪裡」 — 也包括「哪裡買種子、肥料、機具？哪裡做土壤檢測？哪裡申請貸款？哪裡學新技術？」依在地狀況整理。" data-en="Not just where to sell — also where to buy seeds, fertilizer, equipment; where to test soil; where to apply for loans; where to learn new techniques. Region-aware.">不只「賣到哪裡」 — 也包括「哪裡買種子、肥料、機具？哪裡做土壤檢測？哪裡申請貸款？哪裡學新技術？」依在地狀況整理。</div>
-      <div id="supplyChain"></div>
-    </div>
+    <!-- Supply chain — reference info, collapsed by default -->
+    <details style="margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--border);">
+      <summary style="cursor: pointer; list-style: none; outline: none;">
+        <div class="panel-title" style="font-size: 13px; margin-bottom: 4px; display: inline-flex; gap: 8px;"><span data-zh="🛒 供應鏈：種子 / 肥料 / 設備 / 訓練（參考）" data-en="🛒 Supply chain: seeds / fertilizer / equipment / training (reference)">🛒 供應鏈：種子 / 肥料 / 設備 / 訓練（參考）</span><span style="font-size: 11px; color: var(--text-muted); font-weight: 500;" data-zh="點開展開" data-en="click to expand">點開展開</span></div>
+        <div class="panel-sub" style="margin-bottom: 4px;" data-zh="從哪裡買種子、肥料、機具；哪裡做土壤檢測；哪裡申請貸款；哪裡學新技術 — 依在地狀況整理。" data-en="Where to buy seeds, fertilizer, equipment; where to test soil; where to apply for loans; where to learn — region-aware.">從哪裡買種子、肥料、機具；哪裡做土壤檢測；哪裡申請貸款；哪裡學新技術 — 依在地狀況整理。</div>
+      </summary>
+      <div id="supplyChain" style="margin-top: 14px;"></div>
+    </details>
 
     <!-- Concentration risk: are you a single-point-of-failure? -->
     <div style="margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--border);">
@@ -2560,12 +2564,14 @@
       <div id="businessMindset"></div>
     </div>
 
-    <!-- Where your goods can physically go (market infrastructure) -->
-    <div style="margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--border);">
-      <div class="panel-title" style="font-size: 13px; margin-bottom: 4px;" data-zh="你的農產品可以送去哪裡？（在地市場路徑）" data-en="Where your goods can go — local market routes">你的農產品可以送去哪裡？（在地市場路徑）</div>
-      <div class="panel-sub" style="margin-bottom: 14px;" data-zh="依你的所在區域，列出實際可運銷的批發市場、農夫市集、有機通路與外銷港口。" data-en="Based on your region, the wholesale markets, farmers' markets, organic channels, and export ports your goods can physically reach.">依你的所在區域，列出實際可運銷的批發市場、農夫市集、有機通路與外銷港口。</div>
-      <div id="marketRoutes"></div>
-    </div>
+    <!-- Where your goods can physically go — reference, collapsed by default -->
+    <details style="margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--border);">
+      <summary style="cursor: pointer; list-style: none; outline: none;">
+        <div class="panel-title" style="font-size: 13px; margin-bottom: 4px; display: inline-flex; gap: 8px;"><span data-zh="🚚 在地市場路徑（參考）" data-en="🚚 Local market routes (reference)">🚚 在地市場路徑（參考）</span><span style="font-size: 11px; color: var(--text-muted); font-weight: 500;" data-zh="點開展開" data-en="click to expand">點開展開</span></div>
+        <div class="panel-sub" style="margin-bottom: 4px;" data-zh="依你的所在區域，列出實際可運銷的批發市場、農夫市集、有機通路與外銷港口。" data-en="Based on your region, the wholesale markets, farmers' markets, organic channels, and export ports your goods can physically reach.">依你的所在區域，列出實際可運銷的批發市場、農夫市集、有機通路與外銷港口。</div>
+      </summary>
+      <div id="marketRoutes" style="margin-top: 14px;"></div>
+    </details>
   </section>
 
   <!-- ── Reduction roadmap ────────────────────────────────── -->
