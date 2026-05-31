@@ -4651,7 +4651,7 @@ This application supports starting organic-transition certification for ≥1 ha.
       const score = d => d.isOpen ? -1000 : (d.rolling ? -500 : d.daysAway);
       return score(aDl) - score(bDl);
     });
-    const subsidyHtml = sortedPrograms.map(p => {
+    const cards = sortedPrograms.map(p => {
       let eligible = false;
       try { eligible = p.eligibility(inp, r); } catch (e) {}
       const amount = p.rateNTPerHa
@@ -4760,7 +4760,7 @@ Applicant: ${ownerName} (signature)
         }
       }
 
-      return `
+      const card = `
         <div class="sub-card ${eligible ? 'eligible' : 'partial'}">
           <div>
             <span class="sc-status ${eligible ? 'eligible' : 'partial'}">${eligible ? tr('符合', 'eligible') : tr('條件未滿足', 'criteria unmet')}</span>
@@ -4792,8 +4792,24 @@ Applicant: ${ownerName} (signature)
             <span>${amountLabel}</span>
           </div>
         </div>`;
-    }).join('');
-    document.getElementById('subsidyList').innerHTML = subsidyHtml;
+      return { eligible, html: card };
+    });
+    // Group cards by eligibility with visual section headers + counts.
+    // Critical-thinking UX: an actionable list separates "can apply
+    // today" from "could unlock by doing X" — different urgency, needs
+    // different visual treatment so the scan goes fast.
+    const eligibleCards = cards.filter(c => c.eligible);
+    const ineligibleCards = cards.filter(c => !c.eligible);
+    const headerStyle = 'display: flex; align-items: center; gap: 10px; margin: 16px 0 10px; padding-bottom: 6px; border-bottom: 1px dashed var(--border); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;';
+    const eligibleHeader = eligibleCards.length > 0
+      ? `<div style="${headerStyle} color: var(--accent);"><span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--accent);"></span>${tr(`可立即申請 (${eligibleCards.length})`, `Eligible now (${eligibleCards.length})`)}<span style="margin-left:auto; font-weight:400; text-transform:none; letter-spacing:0; color:var(--text-muted); font-size:11px;">${tr('依窗口開啟先後排序', 'sorted by deadline urgency')}</span></div>`
+      : '';
+    const ineligibleHeader = ineligibleCards.length > 0
+      ? `<div style="${headerStyle} color: var(--text-muted);"><span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--text-muted); opacity:0.5;"></span>${tr(`條件待達成 (${ineligibleCards.length}) — 看下方 note 知道差什麼`, `Criteria not yet met (${ineligibleCards.length}) — see notes to unlock`)}</div>`
+      : '';
+    document.getElementById('subsidyList').innerHTML =
+      eligibleHeader + eligibleCards.map(c => c.html).join('') +
+      ineligibleHeader + ineligibleCards.map(c => c.html).join('');
 
     // Carbon credit value cards
     const sinkT = r.sinkTotal / 1000;
