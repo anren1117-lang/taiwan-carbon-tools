@@ -73,6 +73,22 @@
     color: var(--text);
     line-height: 1.55;
     -webkit-font-smoothing: antialiased;
+    /* Tabular numbers globally — this dashboard is number-dense and
+       aligned columns of NT$ / kg / % values look jagged with
+       proportional figures. Tabular keeps digit-widths equal so
+       columns visually line up. */
+    font-variant-numeric: tabular-nums;
+  }
+  /* But not in headings + free-prose — proportional figures fit
+     Latin/CJK text better there. */
+  h1, h2, h3, h4, p, .narrative, .farm-name, .panel-sub {
+    font-variant-numeric: normal;
+  }
+  /* Override the override for number-bearing elements inside prose */
+  strong, .num, [class*="value"], [class*="-val"], [class*="-num"],
+  [class*="amount"], [class*="price"], [class*="cost"],
+  .ta-impact, .ev-cell .num {
+    font-variant-numeric: tabular-nums;
   }
   .container { max-width: 1180px; margin: 0 auto; padding: 0 20px; }
 
