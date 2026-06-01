@@ -2064,6 +2064,57 @@
   }
   .agent-q-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(29, 158, 117, 0.3); }
   .agent-q-btn:active { transform: translateY(0); }
+  /* Recent questions row — return-visit shortcut */
+  .agent-recent {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .agent-recent:empty { display: none; }
+  .agent-recent-label {
+    font-size: 10.5px;
+    color: var(--text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-right: 4px;
+  }
+  .agent-recent-chip {
+    background: transparent;
+    border: 1px dashed var(--border);
+    color: var(--text-muted);
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: inherit;
+    max-width: 280px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transition: border-color 0.12s ease, color 0.12s ease, background 0.12s ease;
+  }
+  .agent-recent-chip:hover {
+    border-style: solid;
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-tint);
+  }
+  .agent-recent-clear {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 14px;
+    padding: 4px 8px;
+    cursor: pointer;
+    border-radius: 50%;
+    line-height: 1;
+    margin-left: auto;
+    transition: color 0.12s ease, background 0.12s ease;
+  }
+  .agent-recent-clear:hover { color: var(--pri-1); background: var(--pri-1-bg); }
   /* Quick-chip shortcuts — 1-tap common questions */
   .agent-quick-chips {
     display: flex;
@@ -2592,6 +2643,8 @@
       </div>
       <button class="agent-reset" id="agentReset" style="display:none" data-zh="重新開始" data-en="Start over">重新開始</button>
     </div>
+    <!-- Recent questions row — restored from localStorage per farm-id -->
+    <div class="agent-recent" id="agentRecent" aria-label="Recent questions"></div>
     <!-- Free-form Q&A bar — keyword-routed knowledge base -->
     <form id="agentAskForm" class="agent-ask" onsubmit="askAgent(event)" autocomplete="off">
       <input type="text" id="agentQuestion" class="agent-q-input"
@@ -5224,6 +5277,61 @@ This application supports starting organic-transition certification for ≥1 ha.
     pricing_specific:    ['price_too_low', 'find_buyers', 'pitch_buyer']
   };
 
+  // ── Recent questions history (per-farm, localStorage) ───────────
+  // Return-visit usefulness: a farmer who asked "what subsidies?"
+  // last week sees that question as a one-tap chip next visit.
+  function recentQStorageKey() {
+    const id = (CLIENT_CONFIG && CLIENT_CONFIG.id) || 'demo';
+    return 'tct_agent_recent_' + id;
+  }
+  function loadRecentQuestions() {
+    try {
+      const raw = localStorage.getItem(recentQStorageKey());
+      return raw ? JSON.parse(raw) : [];
+    } catch (e) { return []; }
+  }
+  function pushRecentQuestion(q) {
+    if (!q || !q.trim()) return;
+    let list = loadRecentQuestions();
+    // Dedupe — move existing entry to top instead of duplicating
+    list = list.filter(item => item.q !== q);
+    list.unshift({ q, ts: Date.now() });
+    list = list.slice(0, 5);
+    try { localStorage.setItem(recentQStorageKey(), JSON.stringify(list)); } catch (e) {}
+    renderRecentQuestions();
+  }
+  window.clearRecentQuestions = function() {
+    try { localStorage.removeItem(recentQStorageKey()); } catch (e) {}
+    renderRecentQuestions();
+  };
+  function renderRecentQuestions() {
+    const host = document.getElementById('agentRecent');
+    if (!host) return;
+    const list = loadRecentQuestions();
+    if (list.length === 0) { host.innerHTML = ''; return; }
+    const isZh = currentLang !== 'en';
+    const chips = list.map(({ q }) => {
+      const safeQ = q.replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+      const display = q.length > 30 ? q.slice(0, 28) + '…' : q;
+      return `<button class="agent-recent-chip" onclick="askRecent('${safeQ}')" title="${safeQ}">${display}</button>`;
+    }).join('');
+    host.innerHTML = `
+      <span class="agent-recent-label">${isZh ? '最近問過' : 'Recent'}</span>
+      ${chips}
+      <button class="agent-recent-clear" onclick="clearRecentQuestions()" title="${isZh ? '清除' : 'Clear'}">×</button>
+    `;
+  }
+  window.askRecent = function(q) {
+    const inp = readInputs();
+    const r = calcFromInputs(inp);
+    const match = findBestAnswer(q);
+    agentState.lastQuestion = q;
+    agentState.lastAnswer = match;
+    pushRecentQuestion(q);
+    renderAgentAnswer(q, match, inp, r);
+    document.getElementById('sec-agent').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
   // Quick-chip canned questions, paired by topic (zh, en).
   // The question text shown in the "you asked" pill switches with lang.
   const QUICK_CHIPS = {
@@ -5248,6 +5356,7 @@ This application supports starting organic-transition certification for ≥1 ha.
     const match = findBestAnswer(question);
     agentState.lastQuestion = question;
     agentState.lastAnswer = match;
+    pushRecentQuestion(question);
     renderAgentAnswer(question, match, inp, r);
     document.getElementById('sec-agent').scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
@@ -5263,6 +5372,7 @@ This application supports starting organic-transition certification for ≥1 ha.
     const match = findBestAnswer(q);
     agentState.lastQuestion = q;
     agentState.lastAnswer = match;
+    pushRecentQuestion(q);
     renderAgentAnswer(q, match, inp, r);
     inputEl.value = '';
     document.getElementById('sec-agent').scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -5355,6 +5465,7 @@ This application supports starting organic-transition certification for ≥1 ha.
     const synthQ = isZh ? entry.topic.zh : entry.topic.en;
     agentState.lastQuestion = synthQ;
     agentState.lastAnswer = entry;
+    pushRecentQuestion(synthQ);
     renderAgentAnswer(synthQ, entry, inp, r);
     document.getElementById('sec-agent').scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
@@ -9572,6 +9683,7 @@ Applicant: ${ownerName} (signature)
     applyConfigToDom();
     maybeShowWelcome();
     initMobileJumper();
+    renderRecentQuestions();
     initCarbonGroupState();
 
     const liveInputs = [
