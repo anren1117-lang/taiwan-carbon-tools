@@ -53,23 +53,56 @@
   .screen-bar .left a { color: var(--accent); text-decoration: none; font-weight: 600; }
   .screen-bar .right { display: flex; gap: 8px; flex-wrap: wrap; }
   .btn {
-    padding: 7px 14px;
+    padding: 8px 14px;
     background: var(--accent);
     color: #fff;
-    border: none;
-    border-radius: 6px;
+    border: 1px solid var(--accent);
+    border-radius: 8px;
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
     text-decoration: none;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    line-height: 1.2;
+    transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+  }
+  .btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(29, 158, 117, 0.25);
   }
   .btn.ghost {
     background: transparent;
     color: var(--accent);
-    border: 1px solid var(--accent);
+    border-color: var(--accent);
   }
-  .btn:hover { opacity: 0.9; }
+  .btn.ghost:hover {
+    background: var(--accent-tint);
+    box-shadow: none;
+  }
+  /* LINE brand color for the LINE share button — primary action
+     in Taiwan since LINE is the dominant messenger. */
+  .btn.line {
+    background: #06C755;
+    color: #fff;
+    border-color: #06C755;
+  }
+  .btn.line:hover { box-shadow: 0 4px 10px rgba(6, 199, 85, 0.32); }
+  /* Plain text-link styling for utility actions (lang toggle) — these
+     shouldn't compete with the action buttons visually. */
+  .btn.text {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid transparent;
+    padding: 8px 10px;
+  }
+  .btn.text:hover {
+    color: var(--accent);
+    background: var(--bg-soft);
+    box-shadow: none;
+    transform: none;
+  }
 
   .pitch-sheet {
     background: #fff;
@@ -263,10 +296,10 @@
     <a href="farm-dashboard.html" id="backLink">← 回到儀表板 · Back to dashboard</a>
   </div>
   <div class="right">
-    <button class="btn ghost" id="langToggle">English</button>
-    <button class="btn ghost" id="shareLinkBtn" onclick="copyShareLink(this)">🔗 複製連結給買家 · Copy share link</button>
-    <a class="btn ghost" id="lineShareBtn" href="#" target="_blank" rel="noopener">💬 LINE</a>
-    <button class="btn" onclick="window.print()" id="printBtn">📄 列印 / 存 PDF · Print / Save PDF</button>
+    <button class="btn text" id="langToggle">English</button>
+    <button class="btn" id="shareLinkBtn" onclick="copyShareLink(this)">🔗 複製連結 · Copy link</button>
+    <a class="btn line" id="lineShareBtn" href="#" target="_blank" rel="noopener">💬 LINE</a>
+    <button class="btn ghost" onclick="window.print()" id="printBtn">📄 列印 / PDF · Print</button>
   </div>
 </div>
 
