@@ -433,6 +433,60 @@
   .dc-card.tier-good .dc-card-badge { background: var(--pri-3); }
   .dc-card.tier-warn .dc-card-badge { background: var(--pri-2); }
   .dc-card.tier-cold .dc-card-badge { background: var(--text-muted); }
+
+  /* Cash Flow Calendar: polished chart with CSS classes instead of
+     inline-styled divs everywhere. Same dark-mode-safe priority tokens. */
+  .cf-chart {
+    display: flex; gap: 4px; min-width: 480px;
+    padding: 8px 4px 4px;
+  }
+  .cf-month {
+    display: flex; flex-direction: column; align-items: center;
+    min-width: 0; flex: 1;
+    position: relative;
+  }
+  .cf-bar-track {
+    height: 76px;
+    display: flex; align-items: flex-end;
+    width: 100%; justify-content: center;
+  }
+  .cf-bar-track.bottom { align-items: flex-start; margin-top: 2px; }
+  .cf-bar {
+    width: 72%;
+    border-radius: 4px 4px 0 0;
+    transition: transform 0.12s ease, opacity 0.12s ease;
+  }
+  .cf-bar.expense { border-radius: 0 0 4px 4px; opacity: 0.78; }
+  .cf-bar.income  { background: var(--pri-3); }
+  .cf-bar.expense { background: var(--pri-1); }
+  .cf-month:hover .cf-bar { transform: scaleY(1.04); transform-origin: bottom; }
+  .cf-month:hover .cf-bar.expense { transform: scaleY(1.04); transform-origin: top; }
+  .cf-month-label {
+    font-size: 10.5px;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-top: 3px;
+    letter-spacing: -0.01em;
+  }
+  .cf-month.gap .cf-month-label { color: var(--pri-1); font-weight: 700; }
+  .cf-month.peak .cf-month-label { color: var(--pri-3); font-weight: 700; }
+  .cf-month.gap .cf-bar.income { opacity: 0.4; }
+  .cf-month.gap .cf-bar.expense { opacity: 1; }
+  .cf-balance {
+    font-size: 9.5px;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-top: 5px;
+    text-align: center;
+    line-height: 1.2;
+    font-variant-numeric: tabular-nums;
+  }
+  .cf-balance.neg { color: var(--pri-1); font-weight: 700; }
+  /* Zero baseline — subtle horizontal rule between income/expense */
+  .cf-axis {
+    height: 1px; background: var(--border); margin: 1px 0;
+    opacity: 0.5;
+  }
   .top-action-card {
     display: grid;
     grid-template-columns: auto 1fr auto;
@@ -8029,25 +8083,24 @@ Applicant: ${ownerName} (signature)
     const rbRange = maxRB - minRB || 1;
     const inGap = cf.minBalance < 0;
 
-    // Bars: income above zero (green), expense below (red), running balance line
+    // Bars: income above axis (green), expense below (red), running balance label
     let bars = '';
     cf.months.forEach((m, i) => {
-      const incH = maxBar > 0 ? (m.income / maxBar) * 70 : 0;
-      const expH = maxBar > 0 ? (m.expense / maxBar) * 70 : 0;
+      const incH = maxBar > 0 ? (m.income / maxBar) * 72 : 0;
+      const expH = maxBar > 0 ? (m.expense / maxBar) * 72 : 0;
       const isGapMonth = i === cf.minMonth && inGap;
       const isPeakMonth = i === cf.maxMonth;
-      const labelColor = isGapMonth ? '#dc2626' : (isPeakMonth ? '#059669' : 'var(--muted)');
-      const labelWeight = (isGapMonth || isPeakMonth) ? 700 : 500;
+      const monthClass = isGapMonth ? 'gap' : (isPeakMonth ? 'peak' : '');
       bars += `
-        <div style="display: flex; flex-direction: column; align-items: center; min-width: 0; flex: 1;">
-          <div style="height: 80px; display: flex; align-items: flex-end; width: 100%; justify-content: center;">
-            <div style="width: 70%; background: #059669; height: ${incH}px; border-radius: 3px 3px 0 0; opacity: ${isGapMonth ? 0.5 : 1};" title="${isZh ? '收入' : 'Income'} NT$ ${fmt0(m.income)}"></div>
+        <div class="cf-month ${monthClass}">
+          <div class="cf-bar-track">
+            <div class="cf-bar income" style="height: ${incH}px;" title="${isZh ? '收入' : 'Income'} NT$ ${fmt0(m.income)}"></div>
           </div>
-          <div style="font-size: 10px; color: ${labelColor}; font-weight: ${labelWeight}; margin-top: 2px;">${monthNames[i]}</div>
-          <div style="height: 80px; display: flex; align-items: flex-start; width: 100%; justify-content: center; margin-top: 2px;">
-            <div style="width: 70%; background: #dc2626; height: ${expH}px; border-radius: 0 0 3px 3px; opacity: ${isGapMonth ? 1 : 0.7};" title="${isZh ? '支出' : 'Expense'} NT$ ${fmt0(m.expense)}"></div>
+          <div class="cf-month-label">${monthNames[i]}</div>
+          <div class="cf-bar-track bottom">
+            <div class="cf-bar expense" style="height: ${expH}px;" title="${isZh ? '支出' : 'Expense'} NT$ ${fmt0(m.expense)}"></div>
           </div>
-          <div style="font-size: 9px; color: ${m.runningBalance < 0 ? '#dc2626' : 'var(--muted)'}; font-weight: ${m.runningBalance < 0 ? 700 : 500}; margin-top: 4px; text-align: center; line-height: 1.2;">${fmt0(m.runningBalance / 1000)}k</div>
+          <div class="cf-balance ${m.runningBalance < 0 ? 'neg' : ''}">${fmt0(m.runningBalance / 1000)}k</div>
         </div>
       `;
     });
@@ -8056,8 +8109,8 @@ Applicant: ${ownerName} (signature)
     if (inGap) {
       const gapAmount = Math.abs(cf.minBalance);
       advice = `
-        <div style="padding: 12px 14px; background: rgba(220, 38, 38, 0.08); border: 1px solid rgba(220, 38, 38, 0.3); border-radius: 8px; margin-top: 14px; font-size: 13px; line-height: 1.6;">
-          <div style="font-weight: 700; color: #dc2626; margin-bottom: 6px;">${isZh ? `⚠️ ${monthNames[cf.minMonth]} 是你的現金缺口月` : `⚠️ ${monthNames[cf.minMonth]} is your cash gap month`}</div>
+        <div style="padding: 12px 14px; background: var(--pri-1-bg); border: 1px solid var(--pri-1-ring); border-radius: 8px; margin-top: 14px; font-size: 13px; line-height: 1.6;">
+          <div style="font-weight: 700; color: var(--pri-1); margin-bottom: 6px;">${isZh ? `⚠️ ${monthNames[cf.minMonth]} 是你的現金缺口月` : `⚠️ ${monthNames[cf.minMonth]} is your cash gap month`}</div>
           <div style="margin-bottom: 8px;">${isZh ? `預估累積餘額將下探 NT$ -${fmt0(gapAmount)}。在這之前你需要安排周轉。` : `Running balance is projected to drop to NT$ -${fmt0(gapAmount)} that month. You need to arrange funding before then.`}</div>
           <div style="font-weight: 600; margin-top: 8px; margin-bottom: 4px;">${isZh ? '三種選項：' : 'Three options:'}</div>
           <div style="padding-left: 16px;">
@@ -8069,8 +8122,8 @@ Applicant: ${ownerName} (signature)
       `;
     } else {
       advice = `
-        <div style="padding: 12px 14px; background: rgba(5, 150, 105, 0.08); border: 1px solid rgba(5, 150, 105, 0.3); border-radius: 8px; margin-top: 14px; font-size: 13px; line-height: 1.55;">
-          <div style="font-weight: 700; color: #059669; margin-bottom: 4px;">${isZh ? '✓ 沒有缺口月 — 整年現金流為正' : '✓ No gap month — cash flow stays positive year-round'}</div>
+        <div style="padding: 12px 14px; background: var(--pri-3-bg); border: 1px solid var(--pri-3-ring); border-radius: 8px; margin-top: 14px; font-size: 13px; line-height: 1.55;">
+          <div style="font-weight: 700; color: var(--pri-3); margin-bottom: 4px;">${isZh ? '✓ 沒有缺口月 — 整年現金流為正' : '✓ No gap month — cash flow stays positive year-round'}</div>
           <div>${isZh ? `最低點在 ${monthNames[cf.minMonth]}（NT$ ${fmt0(cf.minBalance)}）。下一步：把這筆「最低餘額」當作緊急預備金的下限，不要花掉。` : `Lowest point is ${monthNames[cf.minMonth]} (NT$ ${fmt0(cf.minBalance)}). Next: treat that minimum as your emergency reserve floor — don't spend it down.`}</div>
         </div>
       `;
@@ -8084,7 +8137,7 @@ Applicant: ${ownerName} (signature)
         <div><div class="u" style="font-size: 11px;">${isZh ? '最高餘額月' : 'Highest balance month'}</div><div style="font-size: 16px; font-weight: 700; color: #059669;">${monthNames[cf.maxMonth]} · NT$ ${fmt0(cf.maxBalance)}</div></div>
       </div>
       <div style="padding: 14px 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; overflow-x: auto;">
-        <div style="display: flex; gap: 4px; min-width: 480px;">${bars}</div>
+        <div class="cf-chart">${bars}</div>
         <div style="display: flex; justify-content: center; gap: 18px; margin-top: 12px; font-size: 11px; color: var(--muted);">
           <span><span style="display: inline-block; width: 10px; height: 10px; background: #059669; border-radius: 2px; vertical-align: middle;"></span> ${isZh ? '月收入' : 'Monthly income'}</span>
           <span><span style="display: inline-block; width: 10px; height: 10px; background: #dc2626; border-radius: 2px; vertical-align: middle;"></span> ${isZh ? '月支出' : 'Monthly expense'}</span>
