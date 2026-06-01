@@ -2023,6 +2023,69 @@
     color: var(--text-muted); cursor: pointer;
   }
   .agent-reset:hover { color: var(--accent); border-color: var(--accent); }
+  /* Free-form Q&A input — "ask anything" affordance */
+  .agent-ask {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 14px;
+    background: var(--bg-card);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 4px;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .agent-ask:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px var(--accent-tint);
+  }
+  .agent-q-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 10px 12px;
+    font-size: 14px;
+    font-family: inherit;
+    color: var(--text);
+    outline: none;
+    min-width: 0;
+  }
+  .agent-q-input::placeholder { color: var(--text-muted); opacity: 0.75; font-size: 13px; }
+  .agent-q-btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 9px;
+    padding: 0 18px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
+  .agent-q-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(29, 158, 117, 0.3); }
+  .agent-q-btn:active { transform: translateY(0); }
+  /* Q&A answer styling — reuse agent-bubble but tighter top spacing */
+  .ag-answer-topic { font-size: 11px; color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+  .ag-answer-section { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border); }
+  .ag-answer-section h4 { font-size: 13px; font-weight: 700; margin-bottom: 6px; color: var(--text); }
+  .ag-answer-section ol, .ag-answer-section ul { margin: 0 0 0 20px; padding: 0; font-size: 13px; line-height: 1.7; }
+  .ag-answer-section li { margin-bottom: 4px; }
+  .ag-answer-links { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .ag-answer-links a {
+    background: var(--accent-tint); color: var(--accent-dark, var(--accent));
+    padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600;
+    text-decoration: none;
+  }
+  .ag-answer-links a:hover { background: var(--accent); color: #fff; }
+  /* Recent question history — shown above the answer */
+  .ag-history-q {
+    background: var(--bg-subtle); border: 1px solid var(--border);
+    border-radius: 12px; padding: 8px 12px;
+    font-size: 13px; color: var(--text-muted);
+    margin-bottom: 10px; display: inline-block;
+  }
+  .ag-history-q::before { content: "你問："; font-weight: 600; color: var(--accent); margin-right: 6px; }
+  [lang="en"] .ag-history-q::before { content: "You asked: "; }
   .agent-bubble {
     background: var(--bg-card);
     border: 1px solid var(--border);
@@ -2453,10 +2516,18 @@
       <span class="agent-avatar">🌱</span>
       <div>
         <div class="agent-name" data-zh="永續經營顧問" data-en="Sustainable Operations Advisor">永續經營顧問</div>
-        <div class="agent-tag" data-zh="可演練買家議價、給生存建議、規劃減碳路徑" data-en="Buyer role-play, survival advice, decarbonization plan">可演練買家議價、給生存建議、規劃減碳路徑</div>
+        <div class="agent-tag" data-zh="問任何問題 — 我會給具體行動建議" data-en="Ask anything — get concrete action steps">問任何問題 — 我會給具體行動建議</div>
       </div>
       <button class="agent-reset" id="agentReset" style="display:none" data-zh="重新開始" data-en="Start over">重新開始</button>
     </div>
+    <!-- Free-form Q&A bar — keyword-routed knowledge base -->
+    <form id="agentAskForm" class="agent-ask" onsubmit="askAgent(event)" autocomplete="off">
+      <input type="text" id="agentQuestion" class="agent-q-input"
+             data-zh-placeholder="例：買家嫌貴怎麼辦？我能拿什麼補助？什麼通路毛利最高？哪個做法最快回本？..."
+             data-en-placeholder="e.g. Buyer says I'm too expensive — what do I say? What subsidies can I claim? Which practice pays back fastest?"
+             placeholder="例：買家嫌貴怎麼辦？我能拿什麼補助？什麼通路毛利最高？哪個做法最快回本？...">
+      <button type="submit" class="agent-q-btn" data-zh="問顧問" data-en="Ask">問顧問</button>
+    </form>
     <div id="agentBody"></div>
   </section>
 
@@ -4230,7 +4301,517 @@ This application supports starting organic-transition certification for ≥1 ha.
   }
 
   // ── Sustainable-ag agent ─────────────────────────────────────────
-  let agentState = { priority: null };
+  let agentState = { priority: null, lastQuestion: null, lastAnswer: null };
+
+  // ── Agent knowledge base ─────────────────────────────────────────
+  // Keyword-routed Q&A. Each entry has: keywords (zh + en lowercase
+  // triggers), topic label, and an answer() function that returns
+  // a structured response computed from the farmer's actual data.
+  // No backend, no LLM — pure client-side fuzzy matching, so it works
+  // offline and respects the dashboard's no-data-collection promise.
+  const AGENT_KB = [
+    {
+      id: 'price_too_low',
+      keywords: ['價格', '定價', '賣多少', '一公斤多少', '訂價', 'price', 'pricing', 'charge', 'sell for', 'kg', '/kg'],
+      topic: { zh: '定價', en: 'Pricing' },
+      answer(inp, r) {
+        const yieldKg = inp.annualYieldKg || 0;
+        const cost = computeAnnualCost().total;
+        const costPerKg = (yieldKg > 0 && cost > 0) ? cost / yieldKg : null;
+        const floorPrice = costPerKg ? costPerKg / 0.6 : null;
+        const premiumPrice = costPerKg ? costPerKg / 0.5 : null;
+        return {
+          headline: { zh: '定價有 3 個價位，不是 1 個', en: 'There are 3 price tiers, not 1' },
+          situation: costPerKg
+            ? { zh: `你的實際每公斤成本是 NT$ ${costPerKg.toFixed(1)}。任何低於這個的賣價都是賠錢做。`,
+                en: `Your real cost per kg is NT$ ${costPerKg.toFixed(1)}. Anything below that price is losing money.` }
+            : { zh: '我看不到你的每公斤成本（需要先填年產量 + 帳單）。先到「設定」補上，這個問題才有具體答案。',
+                en: 'Can\'t see your per-kg cost yet (need annual yield + bills). Fill those in Settings first.' },
+          actions: costPerKg ? [
+            { zh: `🟥 地板價 NT$ ${costPerKg.toFixed(1)}/kg — 只在現金緊急時用，不要當常態`,
+              en: `🟥 Floor NT$ ${costPerKg.toFixed(1)}/kg — emergencies only, never your default` },
+            { zh: `🟧 永續價 NT$ ${floorPrice.toFixed(1)}/kg — 40% 毛利，撐得起再投資 + 緩衝金`,
+              en: `🟧 Sustainable NT$ ${floorPrice.toFixed(1)}/kg — 40% margin, funds reinvestment + buffer` },
+            { zh: `🟩 故事溢價 NT$ ${premiumPrice.toFixed(1)}/kg+ — 配合認證 / 土壤碳證據賣給 CSA / 餐廳 / 有機通路`,
+              en: `🟩 Story premium NT$ ${premiumPrice.toFixed(1)}/kg+ — pair with cert + soil C evidence; sell to CSA / chefs / organic retail` }
+          ] : [{ zh: '到「設定」抽屜輸入年產量 + 在「資料來源」加帳單。', en: 'Open Settings, enter annual yield + add bills in Data Sources.' }],
+          links: [
+            { label: { zh: '看定價工作室', en: 'Open Pricing Studio' }, href: '#sec-pricing' }
+          ]
+        };
+      }
+    },
+    {
+      id: 'buyer_expensive',
+      keywords: ['嫌貴', '太貴', '比較貴', '殺價', '砍價', '議價', 'expensive', 'too pricey', 'negotiate', 'discount', 'haggle'],
+      topic: { zh: '議價', en: 'Negotiation' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '「貴」是錨點戰術 — 你不是同類產品', en: '"Expensive" is anchoring — you\'re not the same product' },
+          situation: { zh: '當買家拿你跟最便宜的供應商比，他在「設定價格錨點」。回應的關鍵不是降價，是「重新分類」 — 你賣的不是同一個東西。',
+                       en: 'When a buyer compares you to the cheapest, they\'re setting a price anchor. The reply isn\'t a discount — it\'s a reclassification. You sell something different.' },
+          actions: [
+            { zh: '1. 拿出證據包 — 認證、土壤碳趨勢、年資、實踐紀錄。差異化是「過程證據」不是「形容詞」。',
+              en: '1. Pull out the evidence pack — cert, soil C trend, years operating, practice log. Differentiation is "process evidence", not adjectives.' },
+            { zh: '2. 反問：「您要比的是同價格區段的供應商，還是同類產品的供應商？」 把對話從價格軸轉到價值軸。',
+              en: '2. Reverse question: "Are you comparing to suppliers in the same price band, or the same product class?" Shift the axis from price to value.' },
+            { zh: '3. 給退路 — 「如果價格是唯一考量，我推薦您找拍賣市場。我們可能不是合適供應商，但這是好的釐清。」 篩買家不是請求買家。',
+              en: '3. Offer the exit — "If price is your only criterion, I\'d point you to wholesale. We may not be the right fit — but this is a useful clarifying question." You\'re screening buyers, not begging.' }
+          ],
+          links: [
+            { label: { zh: '完整對話演練', en: 'Full negotiation rehearsal' }, href: '#sec-agent' }
+          ]
+        };
+      }
+    },
+    {
+      id: 'subsidies_available',
+      keywords: ['補助', '補貼', '申請', '政府', '農糧署', '什麼補助', '哪些補助', 'subsidy', 'subsidies', 'grant', 'apply', 'government', 'moa'],
+      topic: { zh: '補助', en: 'Subsidies' },
+      answer(inp, r) {
+        const total = computeSubsidyTotal(inp, r).total;
+        const eligible = computeSubsidyTotal(inp, r).eligible.length;
+        return {
+          headline: total > 0
+            ? { zh: `你目前符合 ${eligible} 項補助，年度上限 NT$ ${fmt0(total)}`,
+                en: `You qualify for ${eligible} subsidies, annual ceiling NT$ ${fmt0(total)}` }
+            : { zh: '目前還沒有符合的補助 — 但有 1-2 項離資格不遠',
+                en: 'No subsidies qualify yet — but 1-2 are close' },
+          situation: { zh: '補助不是慈善，是「你做對事情的對價」。台灣的友善 / 綠色給付都是先做、後申請、年度結算。',
+                       en: 'Subsidies aren\'t charity — they\'re compensation for doing the right work. Taiwan\'s friendly / green programs are practice-first, apply-later, settle annually.' },
+          actions: [
+            { zh: '1. 到「補助與碳匯收益」看本農場可申請的清單，每項可點「📋 產生申請草稿」一鍵生成可寄出的申請函。',
+              en: '1. Open "Subsidies & carbon income" panel — each eligible one has a "📋 Generate draft" button that produces a ready-to-send application letter.' },
+            { zh: '2. 草稿生成後點「📧 用 Email 發送」直接寄到對應的農會 / 改良場 / 環境部。',
+              en: '2. After generating, click "📧 Send by email" — opens your mail client pre-filled with subject + body.' },
+            { zh: '3. 缺什麼？儀表板會在每張卡的「note」欄位告訴你還差哪一項條件。',
+              en: '3. What\'s missing? Each card\'s "note" field tells you exactly which criterion needs to be met.' }
+          ],
+          links: [
+            { label: { zh: '看補助清單', en: 'See subsidy list' }, href: '#sec-income' }
+          ]
+        };
+      }
+    },
+    {
+      id: 'cash_short',
+      keywords: ['沒錢', '現金', '周轉', '缺錢', '青黃不接', '帳單付不出', 'cash', 'broke', 'short on cash', 'bridge', 'gap month'],
+      topic: { zh: '現金流', en: 'Cash flow' },
+      answer(inp, r) {
+        const revenue = inp.annualRevenueNT || 0;
+        const cost = computeAnnualCost().total;
+        if (revenue <= 0) {
+          return {
+            headline: { zh: '先輸入年營收，現金流月曆才能算缺口', en: 'Enter annual revenue first to compute cash gaps' },
+            situation: { zh: '沒有營收資料，無法預測哪個月會缺現金。', en: 'Without revenue, can\'t forecast which month runs short.' },
+            actions: [{ zh: '到「設定」抽屜輸入「年營收」，現金流月曆會自動展開。', en: 'Open Settings, enter annual revenue — calendar auto-expands.' }],
+            links: [{ label: { zh: '前往設定', en: 'Open settings' }, href: '#sec-editor' }]
+          };
+        }
+        return {
+          headline: { zh: '現金流缺口有 3 種解法 — 先看哪一種你做得到', en: 'Cash gaps have 3 solutions — pick the one you can act on' },
+          situation: { zh: '帳面賺錢但月份對不上時間，是永續農場最常見的死法。要分得清「利潤問題」（年度賠錢）vs「時序問題」（年度賺錢但某月對不上）— 解法不一樣。',
+                       en: 'Profitable on paper but timing-mismatched between months is the #1 cause of sustainable-farm failure. Distinguish "profit problem" (losing money annually) vs "timing problem" (profitable annually but a gap month) — different fixes.' },
+          actions: [
+            { zh: '1. <strong>提前預售</strong> — CSA / 訂閱箱 2-3 個月前開放募集，預收貨款覆蓋淡季出貨成本。',
+              en: '1. <strong>Pre-sell early</strong> — CSA / subscription opens 2-3 months ahead, pre-paid cash covers off-season output costs.' },
+            { zh: '2. <strong>農會周轉貸款</strong> — 在缺口前一個月申請，額度 = 缺口 × 1.3 含緩衝。利率比信用卡低很多。',
+              en: '2. <strong>Farmers association bridge loan</strong> — apply month before the gap, line = gap × 1.3 with buffer. Much cheaper than credit cards.' },
+            { zh: '3. <strong>遞延支出</strong> — 與供應商談月結 60-90 天，把採購延到收成後付款。',
+              en: '3. <strong>Defer expense</strong> — negotiate net-60 to net-90 with suppliers, push purchases past harvest income.' }
+          ],
+          links: [
+            { label: { zh: '看現金流月曆', en: 'See Cash Flow Calendar' }, href: '#sec-cashflow' }
+          ]
+        };
+      }
+    },
+    {
+      id: 'how_diversify',
+      keywords: ['多角化', '副業', '第二收益', '多元', '另外賺', '分散風險', 'diversify', 'side business', 'second income', 'spread risk'],
+      topic: { zh: '多元收益', en: 'Diversification' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '依你的作物 / 面積 / 區域，有 3-5 個最適合', en: '3-5 best-fit streams given your crop / area / region' },
+          situation: { zh: '集中度風險是永續農場第二大致命傷（第一是現金流時序）。多元化的關鍵：副業要「跟主業共用資源」— 用同樣的土地、同樣的客戶、同樣的故事。',
+                       en: 'Concentration is the #2 silent killer for sustainable farms (after cash-flow timing). The key to good diversification: side businesses should share resources with the main — same land, same customer, same story.' },
+          actions: [
+            { zh: '1. 看「多元收益機會」面板的 Top 3 — 已依你的條件排序，最吻合的在最上面。',
+              en: '1. Check the Diversification Opportunities panel\'s Top 3 — already sorted by fit for your farm.' },
+            { zh: '2. 每個機會卡有「🚀 本週做」 — 不要規劃，直接做第一週的具體動作。',
+              en: '2. Each card has a "🚀 This week" action — don\'t plan, just do the week-1 step.' },
+            { zh: '3. 注意「⚠️ 別這樣」 — 那是經驗教訓，能避開的雷不要踩。',
+              en: '3. Read the "⚠️ Avoid" lines — battle-tested pitfalls; don\'t step on the rake.' }
+          ],
+          links: [
+            { label: { zh: '看多元機會', en: 'Diversification panel' }, href: '#sec-survival' }
+          ]
+        };
+      }
+    },
+    {
+      id: 'practice_invest',
+      keywords: ['投資', '做法', '改變', '採用', '回本', '划算', '哪個最好', '從哪開始', 'invest', 'practice', 'adopt', 'payback', 'roi', 'where to start'],
+      topic: { zh: '做法投資', en: 'Practice ROI' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '從「最快回本」開始，不要從「最酷」開始', en: 'Start with fastest payback, not "most exciting"' },
+          situation: { zh: '永續做法的「對」順序是現金流邏輯：先做不花錢或一年回本的，攢出緩衝再投長期項目。',
+                       en: 'Right order for sustainable practices is cash-flow logic: do zero-cost or sub-1-year payback items first, build buffer, then invest in long-haul ones.' },
+          actions: [
+            { zh: '1. 殘株還田、覆蓋作物 — 通常 0-1 年回本，零或極低投資。',
+              en: '1. Residue retention, cover crops — typically 0-1 year payback, zero or near-zero investment.' },
+            { zh: '2. 堆肥施用 — 1-2 年回本，取代部分化肥開銷。',
+              en: '2. Compost — 1-2 year payback, replaces chemical fertilizer cost.' },
+            { zh: '3. 屋頂光電 / 設備電動化 — 5-10 年回本，有政府補助加成。先確認屋頂結構或機具年限。',
+              en: '3. Rooftop solar / equipment electrification — 5-10 year payback with subsidy stacking. Verify roof structure or equipment age first.' }
+          ],
+          links: [
+            { label: { zh: '看投資回收計算機', en: 'Practice ROI Switchboard' }, href: '#sec-roi' }
+          ]
+        };
+      }
+    },
+    {
+      id: 'cert_question',
+      keywords: ['認證', '有機', 'tgap', '吉園圃', '產銷履歷', 'moa', 'toaf', '友善登錄', 'certification', 'organic', 'cert'],
+      topic: { zh: '認證', en: 'Certification' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '認證是「通路門票」+「定價籌碼」，不是目的本身', en: 'Cert is a channel ticket + pricing leverage, not the goal itself' },
+          situation: { zh: '台灣有 6 種主要綠色 / 安全 / 有機認證。每張的門檻、年費、預期溢價不同。建議從你「現在能拿的最高階」開始 — 不要直接跳有機。',
+                       en: 'Taiwan has 6 main green/safe/organic certs. Each has different bars, fees, premiums. Best practice: start with the highest tier you currently qualify for — don\'t leapfrog straight to organic.' },
+          actions: [
+            { zh: '1. 友善登錄（30 分鐘、線上）→ 解鎖友善耕作補助 NT$ 30k/ha。',
+              en: '1. Friendly farming registration (30 min, online) → unlocks NT$ 30k/ha subsidy.' },
+            { zh: '2. TGAP 產銷履歷（3-6 個月、繳費 + 第三方查驗）→ 解鎖在地超市 / 學校午餐通路。',
+              en: '2. TGAP traceability (3-6 months, fee + third-party audit) → unlocks local supermarkets / school lunch channels.' },
+            { zh: '3. 有機驗證（轉型期 2 年 + 通過驗證）→ 進入有機商店、CSA 高端通路；建議走「輔導申請」拿補助。',
+              en: '3. Organic cert (2-year transition + verification) → opens organic retail + CSA high-end. Apply via the support program for subsidy.' }
+          ],
+          links: [
+            { label: { zh: '看認證階梯', en: 'See cert ladder' }, href: '#sec-survival' }
+          ]
+        };
+      }
+    },
+    {
+      id: 'find_buyers',
+      keywords: ['買家', '通路', '哪裡賣', '銷售', '客戶', '市場', 'buyer', 'channel', 'where to sell', 'customer', 'market'],
+      topic: { zh: '找通路', en: 'Find buyers' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '不同通路 = 不同毛利 + 不同摩擦 — 別只走拍賣市場', en: 'Different channels = different margins + frictions — don\'t default to wholesale' },
+          situation: { zh: '7 個通路涵蓋從「現金流但無利潤」（批發拍賣 5% 毛利）到「故事溢價」（餐廳直供 60%）。每個通路都有具體的入門條件 + 本週你可以做的第一步。',
+                       en: '7 channels span "cash-flow zero-margin" (wholesale, 5%) to "story premium" (chef-direct, 60%). Each has concrete entry requirements + a "this-week" step.' },
+          actions: [
+            { zh: '1. 看「定價工作室」每張通路卡上的「你的距離」徽章 — 綠色 = 今天可進，橙色 = 還差 1 項。',
+              en: '1. Check each channel card\'s "Your fit" badge in the Pricing Studio — green = pitch today, amber = 1 item missing.' },
+            { zh: '2. 點開「📋 開場白」— 已用你的農場資料填好的客製化訊息，可一鍵 LINE / Email 發出。',
+              en: '2. Open the "📋 Outreach opener" — pre-filled with your farm data; one-click LINE or Email send.' },
+            { zh: '3. 別只挑最賺的 — 通路組合要分散：1 個穩定（學校 / 區域物流）+ 1-2 個溢價（CSA / 餐廳）。',
+              en: '3. Don\'t pick only the highest-margin — diversify: 1 stable (school / distributor) + 1-2 premium (CSA / restaurant).' }
+          ],
+          links: [
+            { label: { zh: '看定價工作室', en: 'Pricing Studio' }, href: '#sec-pricing' },
+            { label: { zh: '看市場媒合', en: 'Market matching' }, href: '#sec-market' }
+          ]
+        };
+      }
+    },
+    {
+      id: 'soil_test',
+      keywords: ['土壤', '檢測', '採樣', 'soc', '碳含量', 'soil', 'sample', 'soc', 'organic carbon'],
+      topic: { zh: '土壤檢測', en: 'Soil testing' },
+      answer(inp, r) {
+        const soil = CLIENT_CONFIG.soilTest || {};
+        const hasBaseline = !!soil.socPercent;
+        return {
+          headline: hasBaseline
+            ? { zh: `你已有基準（SOC ${soil.socPercent}%, ${soil.date || '日期未填'}）`, en: `You have baseline (SOC ${soil.socPercent}%, ${soil.date || 'date missing'})` }
+            : { zh: '沒土壤碳基準 = 進不了高溢價通路', en: 'No soil C baseline = locked out of premium channels' },
+          situation: { zh: '土壤碳基準 = 認證 + 碳信用 + 買家 ESG 採購的入場券。一次採樣 NT$ 1,500-3,000，每 1-2 年重做一次。',
+                       en: 'Soil C baseline = your ticket to cert + carbon credits + buyer ESG procurement. NT$ 1,500-3,000 per sample, re-test every 1-2 years.' },
+          actions: [
+            { zh: '1. 縣農業改良場 — 免費或補助價，但排隊較久。',
+              en: '1. County agricultural improvement station — free or subsidized, but waitlist is longer.' },
+            { zh: '2. 商業實驗室（如台美、SGS、SDC）— 約 NT$ 2,000-3,000，2-3 週出報告。',
+              en: '2. Commercial labs (台美 / SGS / SDC) — ~NT$ 2,000-3,000, 2-3 week turnaround.' },
+            { zh: '3. 取樣方式 — 5 點混合採樣、深度 0-30 cm、避開田埂與肥料堆積點。資料填到「設定」就會即時更新儀表板。',
+              en: '3. Sampling — 5-point composite, 0-30cm depth, avoid bunds and fertilizer-pile spots. Enter results in Settings → dashboard auto-updates.' }
+          ],
+          links: [
+            { label: { zh: '輸入土壤資料', en: 'Enter soil data' }, href: '#sec-editor' }
+          ]
+        };
+      }
+    },
+    {
+      id: 'losing_money',
+      keywords: ['賠錢', '虧本', '虧損', '撐不下去', '收入不夠', 'losing money', 'going broke', 'unprofitable', 'red ink'],
+      topic: { zh: '虧損急救', en: 'Loss emergency' },
+      answer(inp, r) {
+        const revenue = inp.annualRevenueNT || 0;
+        const cost = computeAnnualCost().total;
+        const subsidies = computeSubsidyTotal(inp, r).total;
+        const loss = cost - (revenue + subsidies);
+        return {
+          headline: loss > 0 && revenue > 0
+            ? { zh: `儀表板算出你今年虧損約 NT$ ${fmt0(loss)} — 兩線並進`, en: `Dashboard shows ~NT$ ${fmt0(loss)} loss this year — pursue two tracks` }
+            : { zh: '虧損急救：升價 + 降本 + 找補助 三線並進', en: 'Loss emergency: raise price + cut cost + claim subsidies in parallel' },
+          situation: { zh: '永續農場虧損不一定是失敗 — 但需要把它當「火警」處理。先做「升價」（最快），再做「降本」（慢但持久），同時把該領的補助領齊。',
+                       en: 'A sustainable farm losing money isn\'t necessarily failure — but treat it like a fire alarm. Raise prices first (fastest), then cut costs (slow but lasting), and claim every eligible subsidy in parallel.' },
+          actions: [
+            { zh: '1. <strong>升價</strong>（48 小時內）— 計算地板價，至少要漲到損益兩平。看「定價工作室」。',
+              en: '1. <strong>Raise price</strong> (within 48hr) — compute the floor; minimum: break-even. See Pricing Studio.' },
+            { zh: '2. <strong>領補助</strong>（1 週內）— 「補助」面板每張你符合的都生成草稿、一鍵寄出。NT$ 30-100k 立刻入帳。',
+              en: '2. <strong>Claim subsidies</strong> (within 1 week) — for each eligible one, generate the draft, send by email. NT$ 30-100k inbound.' },
+            { zh: '3. <strong>砍成本</strong>（持續）— 從帳單裡 % 最大的開刀（通常電費 + 肥料）。轉電動 + 殘株還田能砍 15-30%。',
+              en: '3. <strong>Cut cost</strong> (ongoing) — start with largest bill (usually electricity + fertilizer). Electrification + residue retention can cut 15-30%.' }
+          ],
+          links: [
+            { label: { zh: '看「本月該做的 3 件事」', en: 'See Top 3 actions' }, href: '#sec-top3' }
+          ]
+        };
+      }
+    },
+    {
+      id: 'reduce_cost',
+      keywords: ['降低成本', '省錢', '減少支出', '貴', '電費', '肥料費', 'reduce cost', 'save money', 'cheaper', 'electricity', 'fertilizer cost'],
+      topic: { zh: '降本', en: 'Cost reduction' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '砍成本要先找「最大支出 + 最易砍的」交集', en: 'Cut costs at the intersection of "biggest spend + easiest to cut"' },
+          situation: { zh: '別什麼都想省 — 那只會讓你疲憊。從帳單佔比最大的 1-2 項下手，其他先放著。',
+                       en: 'Don\'t try to save everywhere — that just exhausts you. Pick the top 1-2 line items by spend, leave the rest alone for now.' },
+          actions: [
+            { zh: '1. 看儀表板上方「年度排放成本」的分解 — 找到佔比最大的 1 項（多半是電費或燃料）。',
+              en: '1. Look at the "Annual emission cost" breakdown at the top — find the largest single line (usually electricity or fuel).' },
+            { zh: '2. 對應到「投資回收計算機」找對應的做法（精準肥料 / AWD / 屋頂光電 / 殘株還田）。',
+              en: '2. Map it to Practice ROI to find the matching practice (precision fertilizer / AWD / rooftop solar / residue retention).' },
+            { zh: '3. 同時申請設備或耕作做法相關的補助 — 補助可砍 30-50% 的建置成本。',
+              en: '3. Claim relevant subsidies in parallel — they can offset 30-50% of setup cost.' }
+          ],
+          links: [
+            { label: { zh: '看投資回收', en: 'Practice ROI' }, href: '#sec-roi' }
+          ]
+        };
+      }
+    },
+    {
+      id: 'compare_peers',
+      keywords: ['比較', '同行', '別的農場', '平均', '我這樣好嗎', 'compare', 'peer', 'other farms', 'average', 'how am i doing'],
+      topic: { zh: '同儕比較', en: 'Peer comparison' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '「我做得好不好？」要看 4 個指標 + 跟誰比', en: '"Am I doing well?" — check 4 metrics vs the right peers' },
+          situation: { zh: '同儕比較面板用同一個引擎計算 4 個示範農場 + 你的農場：碳強度、每公斤成本、毛利率、土壤碳、做法採用數。最好 / 最差的顏色標出來。',
+                       en: 'The peer panel runs the same engine on 4 sample farms + yours: intensity, cost/kg, margin %, SOC, practice count. Best/worst per column highlighted.' },
+          actions: [
+            { zh: '1. 看「同儕比較」面板 — 你的列有 👉 標記，綠色 = 該指標最佳，橙色 = 該指標最差。',
+              en: '1. Open the Peer Comparison panel — your row has 👉 marker; green = best in that column, amber = worst.' },
+            { zh: '2. 點任何一個示範農場的列 — 開啟那個農場的完整儀表板，看他們怎麼做的。',
+              en: '2. Click any sample farm row to open that farm\'s full dashboard — see exactly how they operate.' },
+            { zh: '3. 落後的指標 — 那是你的優先改進方向，但別追每一項。挑 1 個能在 6 個月內動的開始。',
+              en: '3. Where you lag = your improvement priority, but don\'t chase every metric. Pick 1 movable in 6 months.' }
+          ],
+          links: [
+            { label: { zh: '看同儕比較', en: 'See peer comparison' }, href: '#sec-compare' }
+          ]
+        };
+      }
+    },
+    {
+      id: 'pitch_buyer',
+      keywords: ['提案', '介紹', '怎麼跟買家說', '推銷', '介紹自己', 'pitch', 'introduce', 'tell buyer', 'sales sheet'],
+      topic: { zh: '買家提案', en: 'Buyer pitch' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '一頁 A4 提案 + 連結 LINE — 比 10 分鐘 cold call 有效', en: 'A 1-page A4 pitch + LINE link beats a 10-minute cold call' },
+          situation: { zh: '買家沒空聽你講 10 分鐘。但他會看一頁 A4 — 如果上面有故事 + 認證 + 土壤碳數據 + 建議定價 + 承諾條款。',
+                       en: 'Buyers don\'t have 10 minutes to listen. But they\'ll read a 1-page A4 if it has story + cert + soil C + suggested pricing + commitment terms.' },
+          actions: [
+            { zh: '1. 開啟「買家提案單」（網址 + 你的資料自動帶入），可直接 A4 列印或存 PDF。',
+              en: '1. Open the Buyer Pitch Sheet (URL pre-filled with your data) — print A4 or save PDF.' },
+            { zh: '2. 上方「🔗 複製連結 / 💬 LINE / 📧 Email」— 任一鍵把同一份提案傳給買家。連結是即時版，買家看到的永遠是最新資料。',
+              en: '2. The top bar — Copy link / LINE / Email shares the same pitch. The link is live, the buyer always sees your latest data.' },
+            { zh: '3. 緊接著用「定價工作室」的「開場白」做後續 — 用同樣的渠道、同樣的資料，連續 2-3 次接觸。',
+              en: '3. Follow up with the Pricing Studio "opener" via the same channel — 2-3 contacts with consistent data builds credibility.' }
+          ],
+          links: [
+            { label: { zh: '開啟提案單', en: 'Open pitch sheet' }, href: 'farm-pitch.html', external: true }
+          ]
+        };
+      }
+    },
+    {
+      id: 'what_to_do_now',
+      keywords: ['先做什麼', '從哪開始', '優先', '最重要', '本月', '本週', '下一步', 'what to do', 'where to start', 'priority', 'first step', 'this month', 'next step'],
+      topic: { zh: '優先行動', en: 'Priority action' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '不用我給你 — 儀表板「本月 3 件事」已根據你的資料算好', en: 'Already computed — see "Top 3 actions this month"' },
+          situation: { zh: '我每次重新整理都會把你儀表板上的狀態消化一遍，挑出 3 件影響最大的事。每件附資料依據 + CTA 連結對應工具。',
+                       en: 'Every refresh I read your full dashboard state and pick the 3 highest-impact moves. Each has supporting data + a CTA link to the relevant tool.' },
+          actions: [
+            { zh: '1. 滾到頁面最頂 — 「本月該做的 3 件事」面板。優先級紅 > 橙 > 綠。',
+              en: '1. Scroll to the top — "Top 3 Actions This Month" panel. Priority red > amber > green.' },
+            { zh: '2. 做完一件按「✓ 完成了」— 那件會挪到「本週已完成」，第 4 件自動補上。',
+              en: '2. Hit "✓ Done" — that one moves to "Wins this week", the 4th candidate slides up.' },
+            { zh: '3. 如果 3 件都做完，恭喜 — 看「投資回收計算機」或「多元收益」找長期戰略。',
+              en: '3. All 3 done? Great — look at Practice ROI or Diversification for the longer-term move.' }
+          ],
+          links: [
+            { label: { zh: '到本月 3 件事', en: 'Go to Top 3' }, href: '#sec-top3' }
+          ]
+        };
+      }
+    },
+    {
+      id: 'goal_setting',
+      keywords: ['目標', '計畫', '一年', '今年', 'goal', 'target', 'plan', 'this year'],
+      topic: { zh: '目標設定', en: 'Goal setting' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '4 個目標就夠了 — 別貪心', en: 'Just 4 goals is enough — don\'t over-reach' },
+          situation: { zh: '目標太多 = 都做不完。永續農場最關鍵的 4 個目標：營收、毛利率、土壤碳、新客戶數。其他都是輔助。',
+                       en: 'Too many goals = none accomplished. The 4 that matter for sustainable farms: revenue, margin %, soil organic carbon, new buyer count. Everything else is supporting.' },
+          actions: [
+            { zh: '1. 開啟「年度目標追蹤」面板（在折疊區）— 4 個欄位都已預填合理建議。改成你的目標。',
+              en: '1. Open the Annual Goal Tracker (collapsed by default) — 4 fields with suggested defaults; edit to your targets.' },
+            { zh: '2. 進度條 + 「達標步調」會即時算 — 落後超過 50% 時，儀表板的「本月 3 件事」會主動把該目標推到優先順位。',
+              en: '2. Progress bars + "on-pace" verdict update live. If you fall >50% behind, Top 3 auto-bumps that goal as a priority.' },
+            { zh: '3. 「新客戶」用手動 +1 — 每談成一個新買家就點一下，累積感覺很實在。',
+              en: '3. "New buyers" is manual +1 — tick after each landed buyer. The accumulation feels visceral.' }
+          ],
+          links: [
+            { label: { zh: '到年度目標', en: 'Open goal tracker' }, href: '#sec-goals' }
+          ]
+        };
+      }
+    },
+    {
+      id: 'climate_risk',
+      keywords: ['颱風', '氣候', '極端天氣', '乾旱', '水災', '災害', 'typhoon', 'climate', 'weather', 'drought', 'flood', 'disaster'],
+      topic: { zh: '氣候風險', en: 'Climate risk' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '氣候保險 + 韌性做法 — 雙重防線', en: 'Climate insurance + resilient practices — double defense' },
+          situation: { zh: '一場颱風或乾旱可以毀掉整年收入。台灣有兩種對應：保險（事後補救）+ 韌性做法（事前減少損害）。',
+                       en: 'One typhoon or drought can wipe out annual income. Taiwan has two answers: insurance (post-event) + resilient practices (pre-event damage reduction).' },
+          actions: [
+            { zh: '1. 農作物保險 — 農糧署有 20+ 種品項保單，保費政府補貼 50-80%。到農會問。',
+              en: '1. Crop insurance — Council of Agriculture has 20+ product-specific policies, premium 50-80% subsidized. Ask your local farmers association.' },
+            { zh: '2. 韌性做法 — 覆蓋作物（防土壤流失）+ 防風林（防颱風）+ AWD 水管理（防旱）。看「投資回收」每項都有具體成本。',
+              en: '2. Resilient practices — cover crops (soil retention) + windbreaks (typhoon) + AWD water mgmt (drought). Practice ROI has costs for each.' },
+            { zh: '3. 災害後 — 縣政府農業處有「天然災害現金救助」，務必在 7 天內報案 + 拍照存證。',
+              en: '3. Post-disaster — county Ag Bureau has "natural disaster cash aid". File within 7 days + photo evidence is critical.' }
+          ],
+          links: [
+            { label: { zh: '看做法 ROI', en: 'See Practice ROI' }, href: '#sec-roi' }
+          ]
+        };
+      }
+    }
+  ];
+
+  // Score an entry by keyword overlap with the question (lowercase,
+  // unicode-aware). Returns 0 if no match.
+  function scoreAgentMatch(entry, q) {
+    const qLow = q.toLowerCase();
+    let score = 0;
+    for (const kw of entry.keywords) {
+      if (qLow.includes(kw.toLowerCase())) {
+        score += kw.length >= 3 ? 2 : 1; // longer match = stronger signal
+      }
+    }
+    return score;
+  }
+
+  function findBestAnswer(question) {
+    if (!question || !question.trim()) return null;
+    let best = null, bestScore = 0;
+    for (const entry of AGENT_KB) {
+      const s = scoreAgentMatch(entry, question);
+      if (s > bestScore) { bestScore = s; best = entry; }
+    }
+    return bestScore > 0 ? best : null;
+  }
+
+  // Render the agent's answer in the agent body
+  window.askAgent = function(e) {
+    e.preventDefault();
+    const inputEl = document.getElementById('agentQuestion');
+    const q = (inputEl.value || '').trim();
+    if (!q) return false;
+    const inp = readInputs();
+    const r = calcFromInputs(inp);
+    const match = findBestAnswer(q);
+    agentState.lastQuestion = q;
+    agentState.lastAnswer = match;
+    renderAgentAnswer(q, match, inp, r);
+    inputEl.value = '';
+    document.getElementById('sec-agent').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    return false;
+  };
+
+  function renderAgentAnswer(q, match, inp, r) {
+    const body = document.getElementById('agentBody');
+    const isZh = currentLang !== 'en';
+    const resetBtn = document.getElementById('agentReset');
+    if (resetBtn) resetBtn.style.display = '';
+
+    // No match: graceful fallback that still gives the farmer value
+    if (!match) {
+      body.innerHTML = `
+        <div class="ag-history-q">${escapeHtml(q)}</div>
+        <div class="agent-bubble">
+          <div class="ag-answer-topic">${isZh ? '我沒有完全對應的答案' : 'No exact match for your question'}</div>
+          <div>${isZh
+            ? '但對任何永續農場來說，這 3 個工具回答了 80% 的常見問題。挑跟你最相關的一個開始：'
+            : 'But for any sustainable farm, these 3 tools answer 80% of common questions. Pick whichever fits your situation:'}</div>
+          <ol style="margin: 12px 0 12px 22px; font-size: 13.5px; line-height: 1.7;">
+            <li>${isZh ? '<strong>「本月 3 件事」</strong> — 儀表板上方，已自動算出你的最高優先行動。' : '<strong>"Top 3 Actions"</strong> — auto-computed priorities at the top of the dashboard.'}</li>
+            <li>${isZh ? '<strong>「定價工作室」</strong> — 你該收多少？哪些通路你今天就能進？' : '<strong>"Pricing Studio"</strong> — what to charge, which channels you can pitch today.'}</li>
+            <li>${isZh ? '<strong>「補助與碳匯收益」</strong> — 一鍵生成可寄出的補助申請草稿。' : '<strong>"Subsidies & carbon income"</strong> — one-click generates ready-to-send application drafts.'}</li>
+          </ol>
+          <div style="font-size: 12px; color: var(--text-muted); font-style: italic;">${isZh
+            ? '提示：用更具體的詞彙再問一次（例：「我可以拿什麼補助」、「買家嫌貴怎麼辦」、「最快回本的做法」）。'
+            : 'Tip: try more specific words (e.g. "what subsidies can I claim", "buyer says expensive", "fastest payback practice").'}</div>
+          <div class="ag-answer-links">
+            <a href="#sec-top3">${isZh ? '🎯 看本月 3 件事' : '🎯 See Top 3'}</a>
+            <a href="#sec-pricing">${isZh ? '💰 定價工作室' : '💰 Pricing Studio'}</a>
+            <a href="#sec-income">${isZh ? '📋 補助清單' : '📋 Subsidies'}</a>
+          </div>
+        </div>`;
+      return;
+    }
+
+    const ans = match.answer(inp, r);
+    const actionsHtml = ans.actions.map(a => `<li>${isZh ? a.zh : a.en}</li>`).join('');
+    const linksHtml = (ans.links || []).map(l => {
+      const target = l.external ? ' target="_blank" rel="noopener"' : '';
+      return `<a href="${l.href}"${target}>${isZh ? l.label.zh : l.label.en}</a>`;
+    }).join('');
+
+    body.innerHTML = `
+      <div class="ag-history-q">${escapeHtml(q)}</div>
+      <div class="agent-bubble">
+        <div class="ag-answer-topic">${isZh ? match.topic.zh : match.topic.en}</div>
+        <div style="font-size: 15px; font-weight: 700; margin-bottom: 8px; line-height: 1.4;">${isZh ? ans.headline.zh : ans.headline.en}</div>
+        <div style="font-size: 13px; line-height: 1.65; color: var(--text-muted);">${isZh ? ans.situation.zh : ans.situation.en}</div>
+        <div class="ag-answer-section">
+          <h4>${isZh ? '🎯 具體行動' : '🎯 Concrete action'}</h4>
+          <ol>${actionsHtml}</ol>
+        </div>
+        ${linksHtml ? `<div class="ag-answer-links">${linksHtml}</div>` : ''}
+      </div>`;
+  }
+
+  // Simple HTML escape for user-provided question text
+  function escapeHtml(s) {
+    return (s || '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+  }
 
   function buildAgentSteps(priority, inp, r) {
     const sourceEntries = Object.entries(r.sources).filter(([, v]) => v > 0).sort((a, b) => b[1] - a[1]);
@@ -4475,6 +5056,12 @@ This application supports starting organic-transition certification for ≥1 ha.
   function renderAgent(inp, r) {
     const body = document.getElementById('agentBody');
     const resetBtn = document.getElementById('agentReset');
+    // If there's a recent Q&A answer, keep it visible — don't overwrite
+    // with the chip-selector. The "Start over" button clears it.
+    if (agentState.lastQuestion) {
+      renderAgentAnswer(agentState.lastQuestion, agentState.lastAnswer, inp, r);
+      return;
+    }
     if (!agentState.priority) {
       resetBtn.style.display = 'none';
       body.innerHTML = `
@@ -8470,9 +9057,11 @@ Applicant: ${ownerName} (signature)
       applyLang(currentLang === 'zh' ? 'en' : 'zh');
     });
 
-    // Agent reset
+    // Agent reset — clear both priority and Q&A state
     document.getElementById('agentReset').addEventListener('click', () => {
       agentState.priority = null;
+      agentState.lastQuestion = null;
+      agentState.lastAnswer = null;
       render();
     });
 
