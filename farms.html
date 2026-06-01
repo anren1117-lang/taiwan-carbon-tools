@@ -98,9 +98,33 @@
     border-radius: 18px;
     padding: 26px;
     box-shadow: var(--shadow);
-    transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+    transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+    position: relative;
+    overflow: hidden;
   }
-  .farm-card:hover { transform: translateY(-2px); border-color: var(--accent); box-shadow: 0 12px 28px rgba(29,158,117,0.10); }
+  /* Top accent stripe per crop — visual differentiation + matches
+     the dashboard's Money Hero + homepage tool card pattern. Crops
+     get distinct gradients: rice gold, vegetables green, fruit
+     red/orange, livestock teal, mixed accent. */
+  .farm-card::before {
+    content: "";
+    position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    background: var(--accent);
+    transform: scaleX(0.7);
+    transform-origin: left;
+    transition: transform 0.25s ease;
+  }
+  .farm-card:hover::before { transform: scaleX(1); }
+  .farm-card.crop-rice::before      { background: linear-gradient(90deg, #d4a017, #f0c93f); }
+  .farm-card.crop-vegetables::before { background: linear-gradient(90deg, #1D9E75, #34d399); }
+  .farm-card.crop-fruit::before     { background: linear-gradient(90deg, #dc2626, #f97316); }
+  .farm-card.crop-livestock::before { background: linear-gradient(90deg, #0891b2, #06b6d4); }
+  .farm-card.crop-mixed::before     { background: linear-gradient(90deg, #7c3aed, #a78bfa); }
+  .farm-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent);
+    box-shadow: 0 14px 32px rgba(29,158,117,0.12);
+  }
   .farm-eyebrow {
     display: inline-block;
     padding: 3px 10px;
@@ -314,7 +338,8 @@
         }).join('')}${certs.length > 4 ? `<span class="farm-cert" style="opacity:0.6">+${certs.length - 4}</span>` : ''}</div>`
       : '';
 
-    return `<div class="farm-card">
+    const cropClass = `crop-${inp.cropType || 'mixed'}`;
+    return `<div class="farm-card ${cropClass}">
       <div class="farm-eyebrow">${trObj(farm.tag)}</div>
       <div class="farm-name">${cropIcon} ${trObj(cfg.clientName)}</div>
       <div class="farm-meta">${trObj(cfg.clientLocation)} · ${fmt(inp.farmSize, 1)} ${tr('公頃', 'ha')}</div>
