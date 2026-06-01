@@ -1066,26 +1066,47 @@
   }
 
   /* ── Reduction roadmap ──────────────────────────────────── */
+  /* Reduction Roadmap cards — aligned with .dc-card visual language
+     (chip-anchor + tier-tinted bg + hover lift) but with rec-specific
+     layout for the econ table + status checkbox + tags row. */
   .rec {
-    border-top: 1px solid var(--border);
-    padding: 14px 0;
+    padding: 16px 18px;
+    margin-bottom: 10px;
     display: grid;
-    grid-template-columns: 28px 1fr;
+    grid-template-columns: 38px 1fr;
     gap: 14px;
     align-items: start;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 12px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    position: relative;
   }
-  .rec:first-of-type { border-top: none; padding-top: 4px; }
+  .rec:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  }
+  /* Tier-tinted gradient bg + border-left color based on payback */
+  .rec.tier-good { border-left-color: var(--pri-3); background: linear-gradient(90deg, var(--pri-3-bg) 0%, var(--bg-card) 35%); }
+  .rec.tier-warn { border-left-color: var(--pri-2); background: linear-gradient(90deg, var(--pri-2-bg) 0%, var(--bg-card) 35%); }
+  .rec.tier-cold { border-left-color: var(--text-muted); }
   .rec-num {
-    width: 26px; height: 26px;
+    width: 38px; height: 38px;
     border-radius: 50%;
-    background: var(--accent-tint);
-    color: var(--accent);
-    font-weight: 700;
-    font-size: 13px;
+    color: #fff;
+    font-weight: 800;
+    font-size: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
+    background: var(--accent);
+    box-shadow: 0 0 0 4px var(--accent-tint);
+    flex-shrink: 0;
   }
+  .rec.tier-good .rec-num { background: var(--pri-3); box-shadow: 0 0 0 4px var(--pri-3-ring); }
+  .rec.tier-warn .rec-num { background: var(--pri-2); box-shadow: 0 0 0 4px var(--pri-2-ring); }
+  .rec.tier-cold .rec-num { background: var(--text-muted); box-shadow: 0 0 0 4px rgba(107,114,128,0.18); }
   .rec-body .rec-title { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
   .rec-body .rec-desc { font-size: 12.5px; color: var(--text-muted); line-height: 1.5; }
   .rec-impact {
@@ -7597,8 +7618,16 @@ Applicant: ${ownerName} (signature)
 
       const titleStr = trObj(rec.title);
       const actionDone = actionStatusFor(titleStr);
+      // Map payback to .dc-card-style tier — same color logic across
+      // dashboard's decision-card system. Fast = good, mid = warn,
+      // long/strategic = cold.
+      const recPayback = econ ? computePayback(econ.costNT, econ.savingsNT, econ.subsidyNT) : null;
+      const recTier = recPayback === null ? 'tier-cold'
+                    : recPayback <= 1     ? 'tier-good'
+                    : recPayback <= 3     ? 'tier-warn'
+                    :                       'tier-cold';
       return `
-        <div class="rec ${actionDone ? 'rec-done' : ''}">
+        <div class="rec ${recTier} ${actionDone ? 'rec-done' : ''}">
           <div class="rec-num">${i + 1}</div>
           <div class="rec-body">
             <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;">
