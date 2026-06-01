@@ -6711,6 +6711,47 @@ Applicant: ${ownerName} (signature)
     return out;
   }
 
+  // Compute a farmer's fit for a specific pricing channel based on
+  // their current state (practices, certs, soil baseline, scale).
+  // Returns { tier: 'ready'|'close'|'far', color, labelZh, labelEn, reason? }
+  // — used to surface a badge per channel + de-emphasize unreachable ones.
+  function channelFit(c, inp) {
+    const certs = CLIENT_CONFIG.certifications || [];
+    const hasAnyCert = certs.length > 0;
+    const hasOrganicCert = certs.some(x => /有機|organic|MOA|TOAF/i.test((x.label && (x.label.zh || x.label.en)) || x.id || ''));
+    const practiceCount = Object.values(inp.practices || {}).filter(Boolean).length;
+    const hasSoilBaseline = !!(CLIENT_CONFIG.soilTest && CLIENT_CONFIG.soilTest.socPercent);
+    const ready = { tier: 'ready', color: '#059669', labelZh: '✓ 可立即進入', labelEn: '✓ Ready now' };
+    const close = (z, e) => ({ tier: 'close', color: '#d97706', labelZh: '⏳ 接近 — 差 1 項', labelEn: '⏳ Close — 1 item', reason: { zh: z, en: e } });
+    const far   = (z, e) => ({ tier: 'far',   color: '#6b7280', labelZh: '🌱 長期目標',     labelEn: '🌱 Long-term',     reason: { zh: z, en: e } });
+
+    switch (c.id) {
+      case 'wholesale':
+        return ready;
+      case 'school_meal':
+      case 'local_market':
+        if (hasAnyCert) return ready;
+        return close('需要 TGAP / 吉園圃 / 友善登錄至少 1 項', 'Need TGAP / JGP / friendly-farming registration (any 1)');
+      case 'organic_retail':
+        if (hasOrganicCert) return ready;
+        if (practiceCount >= 3) return close('差有機驗證（已有實踐基礎，可申請輔導）', 'Need organic cert (practices already qualify for support program)');
+        return far('需要有機驗證 + 至少 3 項永續做法', 'Need organic cert + 3+ sustainable practices');
+      case 'csa':
+        if (practiceCount >= 2 && hasAnyCert) return ready;
+        if (practiceCount >= 2 || hasAnyCert) return close('需 1 項認證 + 2 項以上實踐才有故事可說', 'Need 1 cert + 2+ practices for a credible story');
+        return far('CSA 客群最重視「故事」— 先做認證 + 實踐基礎', 'CSA customers buy the story — build cert + practice foundation first');
+      case 'restaurant':
+        if (hasAnyCert && hasSoilBaseline) return ready;
+        if (hasAnyCert) return close('差土壤碳基準資料 — 主廚會問', 'Need soil C baseline — chefs will ask');
+        return far('主廚直供需要：認證 + 土壤碳數據 + 樣品試菜', 'Chef-direct needs: cert + soil C data + sample tasting');
+      case 'gift_box':
+        if (hasAnyCert) return ready;
+        return close('禮盒通常需要認證標章撐起售價', 'Gift boxes typically need a cert label to justify the price');
+      default:
+        return ready;
+    }
+  }
+
   function renderPricingStudio(inp, r) {
     const host = document.getElementById('pricingStudioContent');
     if (!host) return;
@@ -6756,13 +6797,18 @@ Applicant: ${ownerName} (signature)
         const rawOpener = c.opener ? (isZh ? c.opener.zh : c.opener.en) : null;
         const openerText = rawOpener ? fillOpenerPlaceholders(rawOpener, inp, r, isZh) : null;
         const openerId = 'opener-' + c.id;
+        const fit = channelFit(c, inp);
 
         html += `
-          <div style="padding: 14px 16px; background: ${meta.bg}; border: 1px solid ${meta.border}; border-radius: 8px;">
+          <div style="padding: 14px 16px; background: ${meta.bg}; border: 1px solid ${meta.border}; border-radius: 8px; ${fit.tier === 'far' ? 'opacity: 0.62;' : ''}">
             <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 8px;">
-              <div style="font-size: 15px; font-weight: 700;">${isZh ? c.name.zh : c.name.en}</div>
+              <div style="font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                <span>${isZh ? c.name.zh : c.name.en}</span>
+                <span style="font-size: 10px; padding: 2px 8px; border-radius: 999px; background: ${fit.color}; color: #fff; font-weight: 700; letter-spacing: 0.04em; white-space: nowrap;">${isZh ? fit.labelZh : fit.labelEn}</span>
+              </div>
               <div style="font-size: 18px; font-weight: 800; color: ${meta.color};">NT$ ${fmt(suggestedPrice, 1)}<span style="font-size: 12px; font-weight: 500; color: var(--muted);">/kg · ${channelMargin}% ${isZh ? '毛利' : 'margin'}</span></div>
             </div>
+            ${fit.reason ? `<div style="font-size: 11.5px; color: var(--muted); margin-bottom: 8px; padding: 6px 10px; background: var(--bg-card, var(--bg)); border-radius: 5px; border-left: 2px solid ${fit.color};"><strong style="color: ${fit.color};">${isZh ? '你的距離：' : 'Your gap: '}</strong>${isZh ? fit.reason.zh : fit.reason.en}</div>` : ''}
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px 18px; font-size: 12px; line-height: 1.55; margin-bottom: 10px;">
               <div><span class="u">${isZh ? '現金時程' : 'Cash terms'}：</span>${isZh ? c.cashTiming.zh : c.cashTiming.en}</div>
               <div><span class="u">${isZh ? '優勢' : 'Pros'}：</span>${isZh ? c.pros.zh : c.pros.en}</div>
