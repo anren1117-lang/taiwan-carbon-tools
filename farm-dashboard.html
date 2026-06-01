@@ -5193,6 +5193,211 @@ This application supports starting organic-transition certification for ≥1 ha.
           ]
         };
       }
+    },
+    {
+      id: 'contract_farming',
+      keywords: ['契作', '契約', '保價', '簽約', '保證價格', 'contract farming', 'contract', 'guaranteed price', 'offtake'],
+      topic: { zh: '契作', en: 'Contract farming' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '契作有 2 種 — 一種解你的問題，一種綁死你', en: 'Contract farming has 2 forms — one solves your problem, one ties you down' },
+          situation: { zh: '台灣常見的「保證價格契作」分兩類：(a) 大型食品廠 / 連鎖通路提供固定收購價（穩定但價低）；(b) 餐廳 / 有機通路簽季度合約（價高但量小）。讀合約細節決定你是「夥伴」還是「契作工」。',
+                       en: 'Taiwan\'s common "guaranteed-price contract farming" splits into 2: (a) large food processors / chain channels offer fixed prices (stable but low); (b) restaurants / organic channels do quarterly deals (high price but small volumes). Read the clauses to know whether you\'re a "partner" or "contract laborer".' },
+          actions: [
+            { zh: '1. <strong>檢查 3 個關鍵條款</strong> — 退貨條款（誰負責滯銷）、不可抗力條款（颱風 / 病害誰擔）、終止條款（提前解約罰金）。沒有寫清楚 = 不要簽。',
+              en: '1. <strong>Check 3 critical clauses</strong> — return policy (who eats unsold inventory), force majeure (typhoon/pest loss allocation), termination (early-exit penalty). Not clearly written = don\'t sign.' },
+            { zh: '2. <strong>單一買家不要超過 40%</strong> — 即使對方給好價，把單一買家依賴度控制在 40% 以下。看「集中度風險」。',
+              en: '2. <strong>No single buyer over 40%</strong> — even with great pricing, cap single-buyer dependency at 40%. See Concentration Risk panel.' },
+            { zh: '3. <strong>「最低保證」+「上限自由」結構</strong>最佳 — 例如：每年保證收 5,000 kg @ NT$ 60/kg，超出部分你可賣其他通路。',
+              en: '3. <strong>Best structure: "floor guarantee + freedom on overflow"</strong> — e.g. they buy 5,000 kg/yr @ NT$ 60/kg guaranteed; surplus you sell elsewhere.' }
+          ],
+          links: [
+            { label: { zh: '看集中度風險', en: 'Concentration risk' }, href: '#sec-survival' }
+          ]
+        };
+      }
+    },
+    {
+      id: 'processing_coop',
+      keywords: ['合作社', '共同加工', '產銷班', '集貨', '聯合', 'cooperative', 'co-op', 'production group', 'joint processing', 'shared'],
+      topic: { zh: '產銷班 / 合作社', en: 'Co-op / Production group' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '產銷班是「小農的擴大版」 — 不入加 30% 困難', en: 'Production groups are "small farms scaled" — not joining = 30% harder' },
+          situation: { zh: '台灣產銷班 = 同作物 / 同區域的 3-15 戶農場組成的法定組織。共購（肥料 / 種苗 -20-30% 成本）、共售（議價力強）、共學（技術交流）、共用設備（冷藏 / 機具）。沒加入 = 你獨自面對所有這些。',
+                       en: 'A "production group" (產銷班) in Taiwan = 3-15 same-crop/same-region farms forming a legal collective. Joint buying (-20-30% inputs cost), joint selling (negotiation power), shared learning, shared equipment (cold storage, machinery). Skipping it = facing all this solo.' },
+          actions: [
+            { zh: '1. <strong>查詢在地產銷班</strong> — 到鄉鎮農會 + 縣農改場詢問你作物的在地班別。台灣每縣每作物多半已有 2-5 個產銷班。',
+              en: '1. <strong>Find local groups</strong> — ask your township farmers association + county improvement station which groups exist for your crop. Most counties × crops already have 2-5 active groups.' },
+            { zh: '2. <strong>先參加月會 2-3 次再決定加入</strong> — 觀察會員結構、決策方式、有無強勢主導者。產銷班好不好「人」決定 80%。',
+              en: '2. <strong>Attend 2-3 monthly meetings before joining</strong> — observe member mix, decision-making style, whether one person dominates. A group\'s quality is 80% about its people.' },
+            { zh: '3. <strong>自己起新班的條件</strong> — 3 戶以上同作物農戶、農會輔導員協助、申請農業部立案。新班 5 年內有設備 / 場地補助 NT$ 50-500k。',
+              en: '3. <strong>To start a new group</strong> — 3+ same-crop farmers, township association advisor support, MOA registration. First 5 years get equipment/facility subsidy NT$ 50-500k.' }
+          ],
+          links: []
+        };
+      }
+    },
+    {
+      id: 'agritourism',
+      keywords: ['農場體驗', '觀光農場', '採果', '採摘', '一日遊', '休閒農業', '民宿', 'agritourism', 'farm tour', 'pick your own', 'day trip', 'lodging'],
+      topic: { zh: '農場體驗 / 休閒農業', en: 'Agritourism / farm experience' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '別先蓋民宿 — 從「半日體驗」驗證需求', en: 'Don\'t build lodging first — validate demand via half-day experiences' },
+          situation: { zh: '農場體驗最大失敗模式：先大規模投資（民宿、體驗工坊、停車場）再找客人。台灣休閒農業區內的成功農場都是反過來：先做半日體驗 6-12 個月、有穩定客流再投資。',
+                       en: 'Biggest failure pattern in agritourism: big investment first (lodging, workshop, parking) then look for customers. Successful Taiwan leisure-ag farms reverse it: half-day experiences first for 6-12 months, then invest after demand validated.' },
+          actions: [
+            { zh: '1. <strong>採收體驗（NT$ 300-800/人，2-3 小時）</strong> — 最低門檻，只需保險 + 一個帶隊員。週末辦 1 場，3 個月後看數據。',
+              en: '1. <strong>Harvest experience (NT$ 300-800/person, 2-3hr)</strong> — lowest barrier; needs only insurance + 1 leader. Weekend slots, review numbers after 3 months.' },
+            { zh: '2. <strong>休閒農業區登記</strong>（在鄉鎮農業課） — 區內農場可申請場地改造、停車補助。先確認你的地段在不在區內。',
+              en: '2. <strong>Leisure-ag zone registration</strong> (township ag office) — farms in the zone get facility renovation + parking subsidies. Check if your land is in the zone first.' },
+            { zh: '3. <strong>客群測試 — 親子 vs 文青 vs 銀髮</strong>。每群人付的價、停的時間、買的東西完全不同。先測 3 個月再做行銷定位。',
+              en: '3. <strong>Audience test — families vs young couples vs seniors</strong>. Each spends differently, stays differently, buys differently. Test 3 months before locking marketing positioning.' }
+          ],
+          links: [
+            { label: { zh: '看多元收益', en: 'Diversification' }, href: '#sec-survival' }
+          ]
+        };
+      }
+    },
+    {
+      id: 'glut_oversupply',
+      keywords: ['供過於求', '價格崩盤', '滯銷', '賣不完', '盛產', '便宜貨', 'glut', 'oversupply', 'crash', 'unsold', 'peak season', 'too much produce'],
+      topic: { zh: '盛產期 / 供過於求', en: 'Glut / oversupply' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '盛產期不要殺價 — 有 4 個更好的選項', en: 'Don\'t price-cut during a glut — 4 better options' },
+          situation: { zh: '殺價是盛產期最爛的反應 — 把自己拉到拍賣市場價格邏輯，且明年買家會記得你「廉價賣」過。先做 4 件事，殺價是最後手段。',
+                       en: 'Price-cutting is the worst response to oversupply — it drags you into wholesale logic + buyers remember next year that you "discount-dumped". Try 4 things first; cutting is last resort.' },
+          actions: [
+            { zh: '1. <strong>加工延長壽命</strong> — 醜果、產量過剩 → 果乾、果醬、果汁、發酵品。一公斤鮮品 NT$ 30，做成果乾 NT$ 80-150。',
+              en: '1. <strong>Process to extend shelf life</strong> — ugly produce + surplus → dried, jam, juice, fermented. NT$ 30/kg fresh becomes NT$ 80-150 as dried.' },
+            { zh: '2. <strong>食物銀行 / 學校午餐</strong> — 沒人要的剩下品可捐贈，部分縣有「捐贈抵稅」+ 公益形象。',
+              en: '2. <strong>Food bank / school lunch</strong> — leftover surplus to non-profits; some counties offer "donation tax credit" + community goodwill.' },
+            { zh: '3. <strong>禮盒組合 + 預售下批</strong> — 把盛產品包成「下批優先取貨」的會員禮盒，預收明年的訂金。',
+              en: '3. <strong>Gift bundle + pre-sell next batch</strong> — bundle surplus into "first-priority for next batch" member packages, collecting deposits for next year.' },
+            { zh: '4. <strong>儲存等過盛產期</strong> — 冷藏 / 冷凍 / 乾燥儲存 1-3 個月，等市場價恢復再賣。需要冷鏈設備或合作冷藏倉。',
+              en: '4. <strong>Store past the glut</strong> — refrigerate / freeze / dry for 1-3 months, sell when prices recover. Needs cold-chain equipment or shared storage.' }
+          ],
+          links: [
+            { label: { zh: '看通路選擇', en: 'Channel options' }, href: '#sec-pricing' }
+          ]
+        };
+      }
+    },
+    {
+      id: 'equipment_maint',
+      keywords: ['機具', '保養', '維修', '故障', '舊機器', '換新', '設備', 'equipment', 'maintenance', 'repair', 'broken', 'old machine', 'replace'],
+      topic: { zh: '機具保養 / 設備', en: 'Equipment maintenance' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '機具維護不是花錢 — 是「不被困在田裡」', en: 'Equipment maintenance isn\'t spending money — it\'s "not getting stuck in the field"' },
+          situation: { zh: '中古曳引機 / 中耕機 / 抽水機在台灣可用 15-25 年 — 但前提是有保養。最常見的死法：颱風前要噴藥但抽水機壞了，整片田泡水。',
+                       en: 'Used tractors / cultivators / pumps in Taiwan can last 15-25 years — IF maintained. Common disaster: typhoon coming, need to drain field, pump dies. Whole crop drowns.' },
+          actions: [
+            { zh: '1. <strong>季前保養清單</strong> — 主要農忙前 1 個月，每台設備做：機油 / 過濾器 / 皮帶 / 電瓶 / 啟動測試。NT$ 500-2,000/台，比急修便宜 5-10 倍。',
+              en: '1. <strong>Pre-season checklist</strong> — 1 month before busy season, each piece: oil / filter / belt / battery / startup test. NT$ 500-2,000/unit, 5-10× cheaper than emergency repair.' },
+            { zh: '2. <strong>備援關鍵設備</strong> — 抽水機 / 噴霧機壞掉會立刻癱瘓。中古市場買 1 台備用（NT$ 5-15k），故障時不慌。',
+              en: '2. <strong>Spare critical equipment</strong> — pump / sprayer breakdowns paralyze operations instantly. Buy 1 backup from used market (NT$ 5-15k), no panic when something fails.' },
+            { zh: '3. <strong>「農機電動化」補助</strong> — 老柴油機到了該換的時候，可申請農業部補助（最高 NT$ 100k+）改成電動。看「補助清單」。',
+              en: '3. <strong>"Equipment electrification" grant</strong> — when your old diesel needs replacing, MOA grant covers switch to electric (up to NT$ 100k+). See Subsidies panel.' }
+          ],
+          links: [
+            { label: { zh: '看補助', en: 'Subsidies' }, href: '#sec-income' }
+          ]
+        };
+      }
+    },
+    {
+      id: 'parent_gap',
+      keywords: ['父母', '爸媽', '長輩', '不理解', '反對', '吵架', '保守', 'parents', 'elders', 'older generation', 'disagree', 'arguments', 'conservative'],
+      topic: { zh: '與長輩世代差', en: 'Generation gap with parents' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '長輩不是頑固 — 是用「他們經歷過的工具」評估你的新做法', en: 'Elders aren\'t stubborn — they\'re evaluating your new ideas using the tools they have' },
+          situation: { zh: '台灣回鄉青農跟長輩衝突的核心：長輩活在「保證收成 + 慣行做法」的世代，年輕一代要做「永續 + 風險前期」 — 兩個經驗系統不同，吵架沒用。要用長輩懂的語言溝通。',
+                       en: 'Core conflict for returning Taiwanese young farmers: elders lived through "guaranteed yield + conventional practices" era; younger gen wants "sustainable + front-loaded risk". Different experience systems, arguing won\'t work. Speak in elders\' language.' },
+          actions: [
+            { zh: '1. <strong>用數字、不用理念</strong> — 別說「永續才能救地球」，說「這個做法我算過 18 個月回本，比化肥便宜 30%」。長輩會聽數字。',
+              en: '1. <strong>Use numbers, not ideology</strong> — don\'t say "sustainability saves the planet"; say "I calculated this practice pays back in 18 months, 30% cheaper than synthetic". Elders respond to numbers.' },
+            { zh: '2. <strong>小規模試做不要全場改</strong> — 「先試 0.5 公頃 1 年，數據比較給你看再決定全場」。長輩怕的是「整年沒收成」，不是怕新做法。',
+              en: '2. <strong>Small-scale trial, not full conversion</strong> — "Let me try 0.5 ha for 1 year, show you the numbers, then decide". Elders fear "lose a year of harvest", not "new methods".' },
+            { zh: '3. <strong>給他們一個明確角色</strong> — 「品質檢查長」、「採購顧問」、「客戶接待」。長輩有事做，覺得被尊重，比說服更有效。',
+              en: '3. <strong>Give them a clear role</strong> — "Quality inspector", "purchasing advisor", "customer host". When elders have a defined role + feel respected, persuasion becomes unnecessary.' }
+          ],
+          links: []
+        };
+      }
+    },
+    {
+      id: 'land_encroach',
+      keywords: ['鄰居', '侵占', '佔用', '糾紛', '田邊', '農路', '排水', 'encroachment', 'neighbor dispute', 'land', 'border', 'drainage'],
+      topic: { zh: '土地糾紛', en: 'Land / boundary dispute' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '邊界糾紛拖越久越貴 — 先文件，再協調，最後告', en: 'Boundary disputes get more expensive the longer they drag — paper first, mediate next, sue last' },
+          situation: { zh: '常見糾紛：鄰居田埂越界、農路堵塞、排水溝改向、噴藥飄移傷你作物。情緒上要打架，理性上要走 3 步流程。',
+                       en: 'Common disputes: neighbor\'s bund crosses your line, blocked farm road, redirected drainage, pesticide drift damage. Emotionally you want to fight; rationally take 3 steps.' },
+          actions: [
+            { zh: '1. <strong>文件先到手</strong> — 地政事務所申請「地籍圖謄本」+「鑑界」（NT$ 4,000-8,000）。沒這個 = 你跟對方都在猜。',
+              en: '1. <strong>Get the paper first</strong> — apply at the Land Administration Office for cadastral map + boundary verification (NT$ 4,000-8,000). Without this, you\'re both guessing.' },
+            { zh: '2. <strong>村里長 / 調解委員會免費調解</strong> — 帶著地籍資料去。多數糾紛這一關解決。',
+              en: '2. <strong>Village chief / mediation committee — free</strong> — bring the cadastral docs. Most disputes resolve here.' },
+            { zh: '3. <strong>農藥飄移傷害</strong> — 拍照 + 採樣 + 環保局報案。若鄰居違規使用，可獲賠償。但要快（48 小時內證據保全）。',
+              en: '3. <strong>Pesticide-drift damage</strong> — photos + samples + report to Environmental Protection Bureau. If neighbor violated regulations you can claim damages. But move fast (48hr evidence-preservation window).' },
+            { zh: '4. <strong>最後手段：找律師</strong> — 民事訴訟 NT$ 30-100k 起。盡可能用前 3 步解決。',
+              en: '4. <strong>Last resort: lawyer</strong> — civil litigation NT$ 30-100k+. Exhaust first 3 steps if possible.' }
+          ],
+          links: []
+        };
+      }
+    },
+    {
+      id: 'crop_rice',
+      keywords: ['水稻', '稻米', '稻子', '插秧', '收割', '糧食', 'rice', 'paddy', 'planting', 'harvest', 'grain'],
+      topic: { zh: '水稻專屬', en: 'Rice-specific' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '稻米永續 3 大槓桿：AWD + 殘株還田 + 多元品種', en: 'Rice sustainability\'s 3 levers: AWD + residue retention + variety diversity' },
+          situation: { zh: '稻米是台灣最主要的作物，但毛利薄、現金流壓力大、climate 風險高。永續稻米的關鍵不是「不噴藥」，是「改變水管理 + 殘株處理」 — 這 2 件事影響 70% 的成本與碳排。',
+                       en: 'Rice is Taiwan\'s primary crop but margins are thin, cash flow is tight, climate risk is high. Sustainable rice\'s key isn\'t "no chemicals" — it\'s "water management + residue handling". These 2 drive 70% of cost and emissions.' },
+          actions: [
+            { zh: '1. <strong>AWD 間歇灌溉</strong> — 同樣產量、水費 -30%、甲烷 -45%。可申請「節水稻作示範補助」。',
+              en: '1. <strong>AWD (alternate wetting + drying)</strong> — same yield, water -30%, methane -45%. Eligible for "water-saving rice demo subsidy".' },
+            { zh: '2. <strong>殘株還田 + 綠肥</strong> — 收成後別燒稻草。直接碾入土 + 種田菁 / 毛苕子 → 第二期氮肥 -15-20%。',
+              en: '2. <strong>Residue retention + green manure</strong> — don\'t burn straw. Till it back in + plant sesbania / vetch → next-season N fertilizer -15-20%.' },
+            { zh: '3. <strong>跳出量產邏輯：精品米路線</strong> — 種特色品種（台農 71 / 台中秈 17 / 高雄 145 / 香米）+ 品牌包裝 → NT$ 80-150/kg 可達。同樣田能多賺 50%。',
+              en: '3. <strong>Escape commodity logic: premium-rice path</strong> — grow specialty varieties (台農 71 / 台中秈 17 / 高雄 145 / aromatic) + branded packaging → NT$ 80-150/kg achievable. Same land, 50% more revenue.' }
+          ],
+          links: [
+            { label: { zh: '看投資回收（AWD）', en: 'Practice ROI (AWD)' }, href: '#sec-roi' }
+          ]
+        };
+      }
+    },
+    {
+      id: 'crop_veg',
+      keywords: ['蔬菜', '葉菜', '青菜', '小白菜', '空心菜', '青江菜', '高麗菜', '萵苣', 'vegetables', 'leafy', 'cabbage', 'lettuce', 'greens'],
+      topic: { zh: '蔬菜專屬', en: 'Vegetables-specific' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '蔬菜永續 3 大槓桿：輪作 + 滴灌 + 直銷', en: 'Vegetable sustainability\'s 3 levers: rotation + drip + direct sales' },
+          situation: { zh: '葉菜類週期短（30-90 天）= 全年連作壓力大 = 病蟲累積快 = 化肥農藥用量高。永續路線：快輪作 + 精準水肥 + 跳出批發市場價格戰。',
+                       en: 'Leafy vegetables have short cycles (30-90 days) = constant continuous-cropping pressure = fast pest buildup = high chemical input. Sustainable path: fast rotation + precision irrigation/fertilizer + escape the wholesale price war.' },
+          actions: [
+            { zh: '1. <strong>快輪作</strong> — 每塊地每季換不同葉菜（葉菜 → 豆科 → 根莖）。同一畦 3 個月內不種同科作物。病蟲壓力立刻下降。',
+              en: '1. <strong>Fast rotation</strong> — each bed gets a different leafy each season (leafy → legume → root). Same plot, no same-family crop within 3 months. Pest pressure drops immediately.' },
+            { zh: '2. <strong>滴灌或微噴</strong> — 葉菜可省水 40-50% + 減少葉面濕度造成的病害。設備 NT$ 30-60k/分地，2-3 年回本。',
+              en: '2. <strong>Drip or micro-spray</strong> — vegetables save water 40-50% + reduces foliar disease from leaf wetness. NT$ 30-60k per 0.1 ha, 2-3 yr payback.' },
+            { zh: '3. <strong>CSA / 訂閱箱直銷</strong> — 葉菜最適合每週配送（短期保鮮）。50-150 戶訂閱戶可撐起一個 2 公頃葉菜農場全年收入。',
+              en: '3. <strong>CSA / subscription direct sales</strong> — leafy is ideal for weekly delivery (short shelf life). 50-150 subscribers can carry the entire annual revenue of a 2-ha leafy farm.' }
+          ],
+          links: [
+            { label: { zh: '看 CSA 機會', en: 'CSA opportunity' }, href: '#sec-survival' }
+          ]
+        };
+      }
     }
   ];
 
@@ -5274,7 +5479,16 @@ This application supports starting organic-transition certification for ≥1 ha.
     organic_transition:  ['cert_question', 'subsidies_available', 'practice_invest'],
     find_mentor:         ['burnout', 'hiring_labor', 'compare_peers'],
     water_mgmt:          ['practice_invest', 'climate_risk', 'reduce_cost'],
-    pricing_specific:    ['price_too_low', 'find_buyers', 'pitch_buyer']
+    pricing_specific:    ['price_too_low', 'find_buyers', 'pitch_buyer'],
+    contract_farming:    ['compare_peers', 'find_buyers', 'pricing_specific'],
+    processing_coop:     ['hiring_labor', 'reduce_cost', 'storage_coldchain'],
+    agritourism:         ['how_diversify', 'marketing_social', 'find_mentor'],
+    glut_oversupply:     ['packaging_rules', 'storage_coldchain', 'how_diversify'],
+    equipment_maint:     ['subsidies_available', 'reduce_cost', 'practice_invest'],
+    parent_gap:          ['succession', 'find_mentor', 'burnout'],
+    land_encroach:       ['land_tenure', 'find_mentor', 'burnout'],
+    crop_rice:           ['water_mgmt', 'practice_invest', 'find_buyers'],
+    crop_veg:            ['crop_rotation', 'how_diversify', 'water_mgmt']
   };
 
   // ── Recent questions history (per-farm, localStorage) ───────────
