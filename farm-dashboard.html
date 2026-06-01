@@ -4479,21 +4479,65 @@ This application supports starting organic-transition certification for ≥1 ha.
         const costPerKg = (yieldKg > 0 && cost > 0) ? cost / yieldKg : null;
         const floorPrice = costPerKg ? costPerKg / 0.6 : null;
         const premiumPrice = costPerKg ? costPerKg / 0.5 : null;
+        const wkSubsBox = costPerKg ? Math.round(costPerKg * 1.6 * Math.max(50, Math.min(150, yieldKg / 52)) / 100) * 100 : null;
         return {
-          headline: { zh: '定價有 3 個價位，不是 1 個', en: 'There are 3 price tiers, not 1' },
+          headline: { zh: '定價有 3 個價位，不是 1 個 — 而且不該跟市場行情走', en: 'There are 3 price tiers, not 1 — and you should NOT follow wholesale market prices' },
           situation: costPerKg
-            ? { zh: `你的實際每公斤成本是 NT$ ${costPerKg.toFixed(1)}。任何低於這個的賣價都是賠錢做。`,
-                en: `Your real cost per kg is NT$ ${costPerKg.toFixed(1)}. Anything below that price is losing money.` }
+            ? { zh: `你的實際每公斤成本是 NT$ ${costPerKg.toFixed(1)}。任何低於這個的賣價都是賠錢做。多數小農的錯誤：用「市場行情」訂價（拍賣市場每日公告） — 那是慣行 + 規模農場設定的價格邏輯，把永續小農拉到地板。你的優勢不是價格，是「過程證據」 + 「故事密度」 + 「在地關係」。`,
+                en: `Your real per-kg cost is NT$ ${costPerKg.toFixed(1)}. Any price below this loses money. Most small farms' mistake: pricing by "market rate" (daily wholesale postings) — that's a logic set by conventional + scaled producers; it drags sustainable small farms to the floor. Your edge isn't price — it's "process evidence" + "story density" + "local relationships".` }
             : { zh: '我看不到你的每公斤成本（需要先填年產量 + 帳單）。先到「設定」補上，這個問題才有具體答案。',
                 en: 'Can\'t see your per-kg cost yet (need annual yield + bills). Fill those in Settings first.' },
           actions: costPerKg ? [
-            { zh: `🟥 地板價 NT$ ${costPerKg.toFixed(1)}/kg — 只在現金緊急時用，不要當常態`,
-              en: `🟥 Floor NT$ ${costPerKg.toFixed(1)}/kg — emergencies only, never your default` },
-            { zh: `🟧 永續價 NT$ ${floorPrice.toFixed(1)}/kg — 40% 毛利，撐得起再投資 + 緩衝金`,
-              en: `🟧 Sustainable NT$ ${floorPrice.toFixed(1)}/kg — 40% margin, funds reinvestment + buffer` },
-            { zh: `🟩 故事溢價 NT$ ${premiumPrice.toFixed(1)}/kg+ — 配合認證 / 土壤碳證據賣給 CSA / 餐廳 / 有機通路`,
-              en: `🟩 Story premium NT$ ${premiumPrice.toFixed(1)}/kg+ — pair with cert + soil C evidence; sell to CSA / chefs / organic retail` }
+            { zh: `🟥 <strong>地板價 NT$ ${costPerKg.toFixed(1)}/kg</strong> — 等同你的成本，0% 毛利。只在現金緊急（出貨期已過、要趕快出清）時用。賣到批發拍賣市場通常會落在這附近。`,
+              en: `🟥 <strong>Floor NT$ ${costPerKg.toFixed(1)}/kg</strong> — equals your cost, 0% margin. Only when cash-emergency (past delivery window, must clear). Wholesale auction typically lands near here.` },
+            { zh: `🟧 <strong>永續價 NT$ ${floorPrice.toFixed(1)}/kg</strong> — 40% 毛利，撐得起再投資 + 緩衝金。對應「在地超市」、「學校午餐」、「區域物流」 — 通路認可你 = 接受這個價。`,
+              en: `🟧 <strong>Sustainable NT$ ${floorPrice.toFixed(1)}/kg</strong> — 40% margin, funds reinvestment + buffer. Maps to "local supermarket", "school lunch", "regional distributor" — channels that recognize you accept this.` },
+            { zh: `🟩 <strong>故事溢價 NT$ ${premiumPrice.toFixed(1)}/kg+</strong> — 50%+ 毛利。CSA、主廚餐廳、有機商店、節慶禮盒。配合「認證 + 土壤碳趨勢 + 實踐時間軸 + 即時儀表板 URL」整套證據包。`,
+              en: `🟩 <strong>Story premium NT$ ${premiumPrice.toFixed(1)}/kg+</strong> — 50%+ margin. CSA, chef-direct, organic retail, holiday gift boxes. Bring the full evidence pack: cert + soil C trend + practice timeline + live dashboard URL.` },
+            { zh: '4. <strong>每年至少漲一次</strong> — 通膨 + 投入成本上升 = 不漲 = 你的毛利每年縮 3-5%。固定每年 1 月 / 7 月各做一次價格檢視。',
+              en: '4. <strong>Raise at least annually</strong> — inflation + input cost rise = no raise means margin shrinks 3-5%/yr. Lock in price reviews each Jan + Jul.' },
+            { zh: '5. <strong>用「定價工作室」自動生成開場白</strong> — 每個通路有不同的提案語言。已用你的農場資料填好，可一鍵 LINE / Email 給買家。',
+              en: '5. <strong>Use Pricing Studio\'s auto-generated openers</strong> — each channel has its own pitch language. Pre-filled with your farm data; one-click LINE / Email to buyer.' }
           ] : [{ zh: '到「設定」抽屜輸入年產量 + 在「資料來源」加帳單。', en: 'Open Settings, enter annual yield + add bills in Data Sources.' }],
+          checklist: costPerKg ? {
+            title: { zh: '定價前必確認的 6 件事', en: 'Confirm these 6 things before pricing' },
+            items: [
+              { zh: '<strong>包裝成本</strong>是否已含進「每公斤成本」？（紙箱 / 標籤 / 保鮮材 通常加 NT$ 2-8/kg）', en: '<strong>Packaging cost</strong> included in "per-kg cost"? (cartons / labels / preservation typically NT$ 2-8/kg)' },
+              { zh: '<strong>運送成本</strong>是否含進？— 自送 vs 物流 vs 買家自取，差異可達 NT$ 5-15/kg', en: '<strong>Delivery cost</strong> included? — self-deliver vs logistics vs buyer pickup differ by NT$ 5-15/kg' },
+              { zh: '<strong>勞動成本</strong>含自己嗎？— 多數小農忘了把自己時間算進去 NT$ 8-15/kg', en: '<strong>Labor cost</strong> include your own time? — most small farms forget self-labor NT$ 8-15/kg' },
+              { zh: '<strong>付款條件</strong>是月結還是現金？月結 60 天 = 加 1-2% 早付折扣談', en: '<strong>Payment terms</strong> net-cash or monthly? Net-60 = negotiate 1-2% early-pay discount' },
+              { zh: '<strong>退貨風險</strong> — 通路若有退貨率 5-10%，要把這部分加入價格緩衝', en: '<strong>Return risk</strong> — if channel has 5-10% return rate, price in this buffer' },
+              { zh: '<strong>毛利目標</strong> — 至少 40% 才有空間投資土壤 / 設備 / 留現金', en: '<strong>Target margin</strong> — at least 40% to have room for soil / equipment investment + cash reserve' }
+            ]
+          } : null,
+          timeline: costPerKg ? {
+            title: { zh: '季節性定價節奏', en: 'Seasonal pricing rhythm' },
+            items: [
+              { zh: '<strong>盛產期</strong>（4-9 月多數作物）— 不要降價，改做加工 / 預售 / 禮盒。看「盛產期答案」', en: '<strong>Peak season</strong> (Apr-Sep for most crops) — don\'t cut price; pivot to processing / pre-sell / gift boxes. See "Glut" answer' },
+              { zh: '<strong>淡季 / 端午中秋前 1-2 月</strong>— 禮盒預售期，定價可比平日高 30-50%。提前 8 週談企業團購', en: '<strong>Off-season / 1-2 mo before holidays</strong> — gift-box pre-sell window; price 30-50% above weekday. Pitch corporate bulk 8 wks ahead' },
+              { zh: '<strong>春節 / 中秋</strong>— 最高溢價時段。提前 8 週鎖定包裝設計、提前 4 週開放預訂', en: '<strong>CNY / Mid-Autumn</strong> — peak premium window. Lock packaging design 8 wks before; open pre-orders 4 wks before' },
+              { zh: '<strong>新合約季</strong>（每年 1 月 / 7 月）— 重新檢視所有買家合約。漲價或調整付款條件最合適的時機', en: '<strong>Contract renewal</strong> (Jan / Jul yearly) — review every buyer contract. Best window to raise prices or adjust payment terms' }
+            ]
+          } : null,
+          pitfalls: costPerKg ? {
+            title: { zh: '常見定價地雷', en: 'Common pricing landmines' },
+            items: [
+              { zh: '<strong>「跟著市場行情走」</strong>— 把自己拉到拍賣市場價格邏輯。市場價是慣行農場設定的，不是你應該的目標', en: '<strong>"Following market rate"</strong> — drags you into wholesale logic. Market price is set by conventional farms, not your target' },
+              { zh: '<strong>「賠錢沖量先做關係」</strong>— 第一次就低價賣 = 買家永遠記得你的「低價版」，再難談漲價', en: '<strong>"Discount-dump to build relationship"</strong> — first sale at low price = buyer remembers your "cheap version" forever; impossible to raise later' },
+              { zh: '<strong>「我品質好他們會自己懂」</strong>— 沒有，你要主動告訴他們。把品質、認證、土壤碳趨勢做成證據包', en: '<strong>"My quality speaks for itself"</strong> — it doesn\'t. You have to tell them. Package quality + cert + soil C trend as evidence' },
+              { zh: '<strong>「每個買家給同一個價」</strong>— 學校午餐和 CSA 訂閱戶不應該收同一個價。通路差異化是常識', en: '<strong>"Same price for every buyer"</strong> — school lunch and CSA shouldn\'t pay the same. Channel differentiation is basic' },
+              { zh: '<strong>「不敢漲價，怕客戶跑」</strong>— 通膨已經幫你「加價」了，你不漲 = 實際降價。每年 1 次至少 5% 是健康。', en: '<strong>"Afraid to raise prices, customers might leave"</strong> — inflation already raised your costs; not raising = effective price cut. 5% annual raise is healthy' }
+            ]
+          } : null,
+          resources: costPerKg ? {
+            title: { zh: '參考行情 + 工具', en: 'Reference rates + tools' },
+            items: [
+              { zh: '<a href="https://amis.afa.gov.tw/" target="_blank" rel="noopener">農產品交易行情站</a> — 每日各批發市場行情（當作對方底線、不是你目標）', en: '<a href="https://amis.afa.gov.tw/" target="_blank" rel="noopener">COA Agricultural Trading Info</a> — daily wholesale prices (treat as their floor, not your target)' },
+              { zh: '<a href="https://www.afa.gov.tw/" target="_blank" rel="noopener">農糧署</a> — 補助 + 認證 + 通路推廣資訊', en: '<a href="https://www.afa.gov.tw/" target="_blank" rel="noopener">MOA AFA</a> — subsidies + cert + channel promotion info' },
+              { zh: '儀表板「定價工作室」— 自動算 3 價位 + 7 通路建議 + 每個通路的開場白', en: 'Dashboard Pricing Studio — auto-computed 3 tiers + 7 channels + per-channel openers' },
+              { zh: '同業 LINE 群 — 加入「友善小農聯盟」、「有機農業聯盟」可即時問同行平均行情', en: 'Industry LINE groups — join "Friendly Farming Alliance" / "Organic Agriculture Alliance" for real-time peer prices' }
+            ]
+          } : null,
           links: [
             { label: { zh: '看定價工作室', en: 'Open Pricing Studio' }, href: '#sec-pricing' }
           ]
