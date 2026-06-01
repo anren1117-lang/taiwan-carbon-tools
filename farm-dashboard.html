@@ -6483,12 +6483,16 @@ Applicant: ${ownerName} (signature)
       }
     ];
 
-    const scoreColor = { good: '#059669', warn: '#d97706', poor: '#dc2626' };
-    const scoreBg = { good: 'rgba(5,150,105,0.05)', warn: 'rgba(217,119,6,0.05)', poor: 'rgba(220,38,38,0.05)' };
+    // Map score → unified .dc-card tier class. 'poor' maps to tier-warn
+    // visually (amber) since 'tier-poor' doesn't exist yet — for
+    // concentration the difference between "warn" and "poor" is
+    // continuous, not categorical, so amber works for both.
+    const tierMap = { good: 'tier-good', warn: 'tier-warn', poor: 'tier-warn' };
+    const chipIconMap = { good: '✓', warn: '!', poor: '!!' };
 
     const warnings = dims.filter(d => d.score !== 'good').length;
     let html = `
-      <div style="padding: 10px 14px; background: ${warnings === 0 ? 'rgba(5,150,105,0.08)' : 'rgba(217,119,6,0.08)'}; border-radius: 8px; margin-bottom: 14px; font-size: 13px; font-weight: 600;">
+      <div style="padding: 10px 14px; background: ${warnings === 0 ? 'var(--pri-3-bg)' : 'var(--pri-2-bg)'}; border-radius: 8px; margin-bottom: 14px; font-size: 13px; font-weight: 600;">
         ${warnings === 0
           ? (isZh ? '✓ 集中度風險低 — 你的農場有多條防線。' : '✓ Low concentration risk — your farm has multiple lines of defense.')
           : (isZh ? `⚠️ ${warnings} 個維度需要注意 — 依下方優先順序處理。` : `⚠️ ${warnings} dimensions need attention — work through them in priority order below.`)}
@@ -6497,8 +6501,11 @@ Applicant: ${ownerName} (signature)
 
     dims.forEach(d => {
       html += `
-        <div style="padding: 12px 14px; background: ${scoreBg[d.score]}; border: 1px solid ${scoreColor[d.score]}; border-left-width: 4px; border-radius: 8px;">
-          <div style="font-size: 13px; font-weight: 700; color: ${scoreColor[d.score]}; margin-bottom: 6px;">${isZh ? d.title.zh : d.title.en}</div>
+        <div class="dc-card ${tierMap[d.score]}">
+          <div class="dc-card-head">
+            <div class="dc-chip">${chipIconMap[d.score]}</div>
+            <div class="dc-card-title">${isZh ? d.title.zh : d.title.en}</div>
+          </div>
           <div style="font-size: 13px; line-height: 1.6; margin-bottom: ${d.action ? '8px' : '0'};">${isZh ? d.finding.zh : d.finding.en}</div>
           ${d.action ? `<div style="font-size: 12px; line-height: 1.55; padding: 8px 10px; background: var(--bg); border-radius: 6px;"><strong>${isZh ? '行動：' : 'Action: '}</strong>${isZh ? d.action.zh : d.action.en}</div>` : ''}
         </div>
