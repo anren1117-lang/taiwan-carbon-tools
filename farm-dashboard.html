@@ -2064,6 +2064,41 @@
   }
   .agent-q-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(29, 158, 117, 0.3); }
   .agent-q-btn:active { transform: translateY(0); }
+  /* Quick-chip shortcuts — 1-tap common questions */
+  .agent-quick-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+  .agent-quick-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-right: 4px;
+  }
+  .agent-quick {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 12.5px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+    transition: transform 0.12s ease, border-color 0.12s ease, background 0.12s ease, color 0.12s ease;
+  }
+  .agent-quick:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-tint);
+    transform: translateY(-1px);
+  }
+  .agent-quick:active { transform: translateY(0); }
   /* Q&A answer styling — reuse agent-bubble but tighter top spacing */
   .ag-answer-topic { font-size: 11px; color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
   .ag-answer-section { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border); }
@@ -2528,6 +2563,19 @@
              placeholder="例：買家嫌貴怎麼辦？我能拿什麼補助？什麼通路毛利最高？哪個做法最快回本？...">
       <button type="submit" class="agent-q-btn" data-zh="問顧問" data-en="Ask">問顧問</button>
     </form>
+    <!-- Quick-chip shortcuts — 1-tap most-asked questions -->
+    <div class="agent-quick-chips" id="agentQuickChips" aria-label="Common questions">
+      <span class="agent-quick-label" data-zh="常見問題" data-en="Common questions">常見問題</span>
+      <button class="agent-quick" onclick="askQuick('我能拿什麼補助？')" data-zh="💰 什麼補助？" data-en="💰 What subsidies?">💰 什麼補助？</button>
+      <button class="agent-quick" onclick="askQuick('我的產品應該賣多少錢？')" data-zh="🏷️ 怎麼定價？" data-en="🏷️ How to price?">🏷️ 怎麼定價？</button>
+      <button class="agent-quick" onclick="askQuick('買家嫌我貴怎麼辦？')" data-zh="🎭 買家嫌貴" data-en="🎭 Buyer says expensive">🎭 買家嫌貴</button>
+      <button class="agent-quick" onclick="askQuick('缺現金、青黃不接怎麼辦？')" data-zh="💧 缺現金" data-en="💧 Short on cash">💧 缺現金</button>
+      <button class="agent-quick" onclick="askQuick('我要先做什麼？哪個做法最快回本？')" data-zh="📈 哪個做法回本最快" data-en="📈 Fastest payback">📈 哪個做法回本最快</button>
+      <button class="agent-quick" onclick="askQuick('哪裡可以賣？要找什麼通路？')" data-zh="🚚 找通路" data-en="🚚 Find buyers">🚚 找通路</button>
+      <button class="agent-quick" onclick="askQuick('怎麼跟買家介紹我自己？')" data-zh="📄 怎麼跟買家介紹" data-en="📄 Pitch yourself">📄 怎麼跟買家介紹</button>
+      <button class="agent-quick" onclick="askQuick('我做得好不好？')" data-zh="🔀 我做得好嗎" data-en="🔀 How am I doing">🔀 我做得好嗎</button>
+      <button class="agent-quick" onclick="askQuick('我覺得太累、撐不下去')" data-zh="🆘 撐不下去" data-en="🆘 Burning out">🆘 撐不下去</button>
+    </div>
     <div id="agentBody"></div>
   </section>
 
@@ -5080,6 +5128,34 @@ This application supports starting organic-transition certification for ≥1 ha.
     }
     return bestScore > 0 ? best : null;
   }
+
+  // Quick-chip canned questions, paired by topic (zh, en).
+  // The question text shown in the "you asked" pill switches with lang.
+  const QUICK_CHIPS = {
+    '我能拿什麼補助？': { zh: '我能拿什麼補助？', en: 'What subsidies can I claim?' },
+    '我的產品應該賣多少錢？': { zh: '我的產品應該賣多少錢？', en: 'What should I charge per kg?' },
+    '買家嫌我貴怎麼辦？': { zh: '買家嫌我貴怎麼辦？', en: 'Buyer says I\'m too expensive — what do I say?' },
+    '缺現金、青黃不接怎麼辦？': { zh: '缺現金、青黃不接怎麼辦？', en: 'I\'m short on cash this month — what now?' },
+    '我要先做什麼？哪個做法最快回本？': { zh: '我要先做什麼？哪個做法最快回本？', en: 'Which sustainable practice pays back fastest?' },
+    '哪裡可以賣？要找什麼通路？': { zh: '哪裡可以賣？要找什麼通路？', en: 'Where can I sell? Which channels should I pitch?' },
+    '怎麼跟買家介紹我自己？': { zh: '怎麼跟買家介紹我自己？', en: 'How do I introduce myself to a buyer?' },
+    '我做得好不好？': { zh: '我做得好不好？', en: 'How am I doing compared to other farms?' },
+    '我覺得太累、撐不下去': { zh: '我覺得太累、撐不下去', en: 'I\'m exhausted and want to give up' }
+  };
+  // One-tap quick-chip → submit through the same pipeline as a typed
+  // question. Picks the question text in the user's current language
+  // so the "you asked" history pill reads naturally.
+  window.askQuick = function(zhKey) {
+    const pair = QUICK_CHIPS[zhKey];
+    const question = pair ? (currentLang === 'en' ? pair.en : pair.zh) : zhKey;
+    const inp = readInputs();
+    const r = calcFromInputs(inp);
+    const match = findBestAnswer(question);
+    agentState.lastQuestion = question;
+    agentState.lastAnswer = match;
+    renderAgentAnswer(question, match, inp, r);
+    document.getElementById('sec-agent').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
 
   // Render the agent's answer in the agent body
   window.askAgent = function(e) {
