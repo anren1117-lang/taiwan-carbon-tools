@@ -4536,18 +4536,65 @@ This application supports starting organic-transition certification for ≥1 ha.
                 en: `You qualify for ${eligible} subsidies, annual ceiling NT$ ${fmt0(total)}` }
             : { zh: '目前還沒有符合的補助 — 但有 1-2 項離資格不遠',
                 en: 'No subsidies qualify yet — but 1-2 are close' },
-          situation: { zh: '補助不是慈善，是「你做對事情的對價」。台灣的友善 / 綠色給付都是先做、後申請、年度結算。',
-                       en: 'Subsidies aren\'t charity — they\'re compensation for doing the right work. Taiwan\'s friendly / green programs are practice-first, apply-later, settle annually.' },
+          situation: { zh: '補助不是慈善 — 是「你做對事情的對價」。多數小農錯過的不是錢，是「沒申請」。台灣的友善 / 綠色給付都是「先做、後申請、年度結算」的模式。一個 2 公頃的友善小農每年潛在可領 NT$ 50-200k，但平均只實領 30-40%。',
+                       en: 'Subsidies aren\'t charity — they\'re compensation for doing the right work. Most small farmers miss out not because they don\'t qualify, but because they don\'t apply. Taiwan\'s friendly / green programs all run "practice first → apply later → settle annually". A typical 2-ha friendly farm has NT$ 50-200k/yr available; average actually claimed is 30-40%.' },
           actions: [
-            { zh: '1. 到「補助與碳匯收益」看本農場可申請的清單，每項可點「📋 產生申請草稿」一鍵生成可寄出的申請函。',
-              en: '1. Open "Subsidies & carbon income" panel — each eligible one has a "📋 Generate draft" button that produces a ready-to-send application letter.' },
-            { zh: '2. 草稿生成後點「📧 用 Email 發送」直接寄到對應的農會 / 改良場 / 環境部。',
-              en: '2. After generating, click "📧 Send by email" — opens your mail client pre-filled with subject + body.' },
-            { zh: '3. 缺什麼？儀表板會在每張卡的「note」欄位告訴你還差哪一項條件。',
-              en: '3. What\'s missing? Each card\'s "note" field tells you exactly which criterion needs to be met.' }
+            { zh: '1. <strong>到「補助與碳匯收益」面板</strong>看本農場可申請的清單。每張可點「📋 產生申請草稿」一鍵生成正式申請函（已預填農場名、地址、實踐做法、土壤資料、聯絡資訊）。',
+              en: '1. <strong>Open the "Subsidies & carbon income" panel</strong> — each eligible one has a "📋 Generate draft" button that produces a formal application letter (pre-filled with farm name, address, practices, soil data, contact).' },
+            { zh: '2. <strong>草稿生成後一鍵寄出</strong>：點「📧 用 Email 發送」即開啟郵件 App，主旨 + 內文已填好。也可選「📋 複製」貼到 LINE 給輔導員。',
+              en: '2. <strong>One-click send</strong>: click "📧 Send by email" to launch your mail client with subject + body pre-filled. Or "📋 Copy" and paste to LINE for your advisor.' },
+            { zh: '3. <strong>不符合的看「note」</strong>：每張卡的條件說明會告訴你還差哪一項。例如「需要 ≥ 3 項土地管理做法」— 對應到「投資回收計算機」找最便宜的做法補上。',
+              en: '3. <strong>For ineligible: read the "note"</strong> — each card explains what\'s missing. E.g., "needs ≥ 3 land-management practices" → go to Practice ROI to find the cheapest practice to add.' },
+            { zh: '4. <strong>窗口截止日 ⚠️</strong>：申請窗口開啟時，儀表板會在卡片上顯示 🔥 紅色徽章。錯過 = 等明年。本月有「下次窗口 < 60 天」也會顯示倒數。',
+              en: '4. <strong>Watch deadlines ⚠️</strong>: when an application window opens, the dashboard shows a 🔥 red badge on the card. Miss it = wait until next year. Cards within 60 days also show countdown.' },
+            { zh: '5. <strong>疊加策略</strong>：友善耕作 + 綠色環境給付 + 有機驗證輔導 = 可同時申請（不互斥）。一個 2 公頃農場全領可達 NT$ 150k+。',
+              en: '5. <strong>Stacking strategy</strong>: friendly farming + green payment + organic cert support = all simultaneously claimable (not mutually exclusive). A 2-ha farm fully stacked can hit NT$ 150k+/yr.' },
+            { zh: '6. <strong>第一次申請 → 找輔導員陪</strong>：地方農會「青農輔導員」或縣農改場可免費協助。第二次以後自己跑流程就熟了。',
+              en: '6. <strong>First application → bring an advisor</strong>: local farmers association "Young Farmer Advisor" or county Agricultural Improvement Station offers free guidance. After the first time you\'ll know the process.' }
           ],
+          checklist: {
+            title: { zh: '申請前準備清單', en: 'Pre-application checklist' },
+            items: [
+              { zh: '農場土地使用權證明（地籍謄本 / 租約 6 個月內版本）', en: 'Land use proof (cadastral excerpt / lease, dated within 6 months)' },
+              { zh: '國民身分證影本（雙面）', en: 'National ID copy (both sides)' },
+              { zh: '銀行存摺封面影本（用於補助匯款）', en: 'Bank book front-page copy (for subsidy deposit)' },
+              { zh: '耕作管理紀錄（儀表板的「農事日誌」或紙本）', en: 'Practice records (dashboard Activity Log or paper notebook)' },
+              { zh: '土壤檢驗報告（半年內，用於碳匯類補助）', en: 'Soil test report (within 6 months, for carbon-credit class subsidies)' },
+              { zh: '第三方驗證證書（如有 TGAP / 有機等，影本即可）', en: 'Third-party certification (TGAP / organic etc., photocopy OK)' }
+            ]
+          },
+          timeline: {
+            title: { zh: '台灣主要補助窗口（依年度公告為準）', en: 'Main Taiwan subsidy windows (per annual announcement)' },
+            items: [
+              { zh: '<strong>友善耕作補助</strong> · 隨時可申請 · NT$ 30,000/ha · 農業部農糧署', en: '<strong>Friendly Farming Subsidy</strong> · rolling · NT$ 30k/ha · MOA AFA' },
+              { zh: '<strong>有機驗證輔導</strong> · 隨時可申請 · NT$ 15,000/ha + 驗證費補貼 · 農業部農糧署', en: '<strong>Organic Cert Support</strong> · rolling · NT$ 15k/ha + cert fee · MOA AFA' },
+              { zh: '<strong>農機具電動化</strong> · 1-3 月為主要批次 · 一次性 NT$ 100k+ · MOA + 經濟部', en: '<strong>Electric Equipment Grant</strong> · Q1 main batch · one-time NT$ 100k+ · MOA + MOEA' },
+              { zh: '<strong>智慧農業計畫</strong> · 4-5 月開放 · 一次性 NT$ 50k · 農業部資訊司', en: '<strong>Smart Ag Grants</strong> · April-May · one-time NT$ 50k · MOA Info Dept' },
+              { zh: '<strong>綠色環境給付</strong> · 3-4 月春季申請 · NT$ 45,000/ha · 農業部農糧署', en: '<strong>Green Env Payment</strong> · March-April spring · NT$ 45k/ha · MOA AFA' },
+              { zh: '<strong>碳匯先行區域試辦</strong> · 5-6 月公告 · NT$ 20,000/ha · 農業部 + 環境部', en: '<strong>Carbon Pilot Program</strong> · May-June · NT$ 20k/ha · MOA + MOENV' }
+            ]
+          },
+          pitfalls: {
+            title: { zh: '常見駁回原因 + 對應方法', en: 'Common rejection reasons + fixes' },
+            items: [
+              { zh: '<strong>文件不齊</strong>：80% 駁回原因。用上方清單逐項打勾，缺一不寄。', en: '<strong>Missing documents</strong>: 80% of rejections. Use the checklist above — don\'t send if anything\'s missing.' },
+              { zh: '<strong>耕作做法未連續實踐 6 個月以上</strong>：友善 / 綠色給付要求「常態實踐」。儀表板的「實踐起始年」要早於申請日 6 個月。', en: '<strong>Practice not sustained ≥ 6 months</strong>: friendly + green require "established practice". Your "practice start year" in the dashboard must be 6+ months before application.' },
+              { zh: '<strong>化學投入物超量</strong>：超過閾值即不符合。儀表板會在「資料來源」面板計算每公頃用量並警告。', en: '<strong>Chemical input over threshold</strong>: above limit = ineligible. Dashboard Data Sources panel computes per-ha usage + warns.' },
+              { zh: '<strong>銀行帳戶資料錯誤</strong>：第二常見技術駁回。寄出前再確認帳號正確。', en: '<strong>Wrong bank account info</strong>: second-most-common technical rejection. Verify account number before sending.' }
+            ]
+          },
+          resources: {
+            title: { zh: '直接聯絡資源', en: 'Direct contacts' },
+            items: [
+              { zh: '農業部農糧署 — <a href="https://www.afa.gov.tw/" target="_blank" rel="noopener">afa.gov.tw</a>（補助公告主入口）', en: 'MOA AFA — <a href="https://www.afa.gov.tw/" target="_blank" rel="noopener">afa.gov.tw</a> (subsidy main portal)' },
+              { zh: '農業部 — <a href="https://www.moa.gov.tw/" target="_blank" rel="noopener">moa.gov.tw</a>（總入口）', en: 'MOA — <a href="https://www.moa.gov.tw/" target="_blank" rel="noopener">moa.gov.tw</a> (main portal)' },
+              { zh: '所在縣市農業改良場 — 各縣設有，可面對面諮詢免費 + 田間訪視', en: 'Your county Agricultural Improvement Station — free in-person consult + on-site visit' },
+              { zh: '所屬鄉鎮農會 — 「青農輔導員」可協助代寫申請 + 文件送件', en: 'Township farmers association — "Young Farmer Advisor" helps with drafting + filing' }
+            ]
+          },
           links: [
-            { label: { zh: '看補助清單', en: 'See subsidy list' }, href: '#sec-income' }
+            { label: { zh: '看補助清單', en: 'See subsidy list' }, href: '#sec-income' },
+            { label: { zh: '看投資回收（補滿缺項）', en: 'Practice ROI (fill the gap)' }, href: '#sec-roi' }
           ]
         };
       }
@@ -5915,6 +5962,22 @@ This application supports starting organic-transition certification for ≥1 ha.
       return `<a href="${l.href}"${target}>${isZh ? l.label.zh : l.label.en}</a>`;
     }).join('');
 
+    // Render an optional "extra section" (checklist / timeline /
+    // pitfalls / resources) — each has { title: {zh,en}, items: [{zh,en}] }.
+    // Used for deepened KB entries that provide more detail beyond the
+    // 3-step action list. Items render as a bullet list with inline HTML
+    // allowed (for <strong>, <a href>, etc.) since the content is
+    // author-controlled, not user-provided.
+    function extraSection(spec, icon) {
+      if (!spec || !spec.items || spec.items.length === 0) return '';
+      const items = spec.items.map(it => `<li>${isZh ? it.zh : it.en}</li>`).join('');
+      return `
+        <div class="ag-answer-section">
+          <h4>${icon} ${isZh ? spec.title.zh : spec.title.en}</h4>
+          <ul>${items}</ul>
+        </div>`;
+    }
+
     body.innerHTML = `
       <div class="ag-history-q">${escapeHtml(q)}</div>
       <div class="agent-bubble">
@@ -5925,6 +5988,10 @@ This application supports starting organic-transition certification for ≥1 ha.
           <h4>${isZh ? '🎯 具體行動' : '🎯 Concrete action'}</h4>
           <ol>${actionsHtml}</ol>
         </div>
+        ${extraSection(ans.checklist, '✅')}
+        ${extraSection(ans.timeline,  '📅')}
+        ${extraSection(ans.pitfalls,  '⚠️')}
+        ${extraSection(ans.resources, '🔗')}
         ${linksHtml ? `<div class="ag-answer-links">${linksHtml}</div>` : ''}
         ${relatedChips(match.id, null)}
       </div>`;
