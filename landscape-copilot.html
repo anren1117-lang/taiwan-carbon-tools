@@ -1,0 +1,1478 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Landscape Copilot · 原生植物景觀規劃</title>
+<meta name="description" content="台灣原生植物 AI 景觀規劃工具 — 5 分鐘從陽台、頂樓到庭院，生成復層生態配置：俯瞰平面圖、花期月曆、採購清單。免費，無需註冊。">
+<link rel="canonical" href="https://anren1117-lang.github.io/taiwan-carbon-tools/landscape-copilot.html">
+<meta name="theme-color" content="#2C3526">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:site_name" content="Taiwan Carbon Tools">
+<meta property="og:title" content="AI Landscape Copilot · 原生植物景觀規劃">
+<meta property="og:description" content="陽台、頂樓、庭院 — 5 分鐘生成台灣原生植物復層配置：俯瞰平面圖、花期月曆、採購清單。">
+<meta property="og:url" content="https://anren1117-lang.github.io/taiwan-carbon-tools/landscape-copilot.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="AI Landscape Copilot · 原生植物景觀規劃">
+<meta name="twitter:description" content="5 分鐘生成台灣原生植物復層配置：俯瞰平面圖、花期月曆、採購清單。免費、無需註冊。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;600;700&family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script defer data-domain="anren1117-lang.github.io/taiwan-carbon-tools" src="https://plausible.io/js/script.js"></script>
+<style>
+  :root {
+    --paper: #EDEAE0;
+    --paper-warm: #E4DFD2;
+    --forest: #2C3526;
+    --forest-soft: #3F4A37;
+    --sage: #8A9A7B;
+    --sage-deep: #6E7E60;
+    --clay: #A88A6A;
+    --clay-deep: #8C6F52;
+    --ink: #33352E;
+    --ink-soft: #5A5C50;
+    --line: #C9C3B4;
+    --accent-line: #06C755;
+    --serif: 'Noto Serif TC', 'Songti TC', Georgia, serif;
+    --sans: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
+  html, body { background: var(--paper); color: var(--ink); font-family: var(--sans); line-height: 1.6; }
+  body { min-height: 100vh; position: relative; overflow-x: hidden; padding-bottom: 100px; }
+
+  /* atmospheric layer (light texture + corner glows) */
+  .grain {
+    position: fixed; inset: 0; pointer-events: none; z-index: 1; opacity: 0.35;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+  }
+  .glow-tl, .glow-br { position: fixed; border-radius: 50%; pointer-events: none; z-index: 0; filter: blur(20px); }
+  .glow-tl { top: -180px; left: -180px; width: 460px; height: 460px; background: radial-gradient(circle, rgba(138,154,123,0.25), transparent 70%); }
+  .glow-br { bottom: -200px; right: -160px; width: 520px; height: 520px; background: radial-gradient(circle, rgba(168,138,106,0.18), transparent 70%); }
+
+  /* top bar — matches farm-pitch.html pattern */
+  .screen-bar {
+    position: relative; z-index: 5;
+    background: rgba(237, 234, 224, 0.85);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+    padding: 10px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; flex-wrap: wrap;
+  }
+  .screen-bar .left { font-size: 13px; color: var(--ink-soft); }
+  .screen-bar .left a { color: var(--sage-deep); text-decoration: none; font-weight: 600; }
+  .screen-bar .right { display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn {
+    padding: 8px 14px;
+    background: var(--forest);
+    color: var(--paper);
+    border: 1px solid var(--forest);
+    border-radius: 999px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    line-height: 1.2;
+    transition: transform .12s ease, box-shadow .12s ease, background .15s ease;
+  }
+  .btn:hover { transform: translateY(-1px); box-shadow: 0 6px 14px -4px rgba(44,53,38,0.4); }
+  .btn.ghost { background: transparent; color: var(--forest); border-color: var(--forest); }
+  .btn.ghost:hover { background: rgba(44,53,38,0.08); box-shadow: none; }
+  .btn.line { background: var(--accent-line); color: #fff; border-color: var(--accent-line); }
+  .btn.line:hover { box-shadow: 0 6px 14px -4px rgba(6,199,85,0.4); }
+  .btn.text {
+    background: transparent; color: var(--ink-soft);
+    border: 1px solid transparent; padding: 8px 10px;
+  }
+  .btn.text:hover { color: var(--forest); transform: none; box-shadow: none; }
+
+  /* header */
+  header.brand {
+    position: relative; z-index: 2;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 26px 30px 0; max-width: 880px; margin: 0 auto;
+    flex-wrap: wrap; gap: 8px;
+  }
+  .brand-row { display: flex; align-items: center; gap: 9px; }
+  .brand-text { font-size: 12px; letter-spacing: 0.22em; font-weight: 600; color: var(--forest-soft); }
+  .brand-sub { font-size: 12px; letter-spacing: 0.05em; color: var(--ink-soft); font-family: var(--serif); font-style: italic; }
+
+  .progress-wrap { position: relative; z-index: 2; display: flex; gap: 8px; justify-content: center; margin-top: 30px; }
+  .progress-dot { width: 34px; height: 3px; border-radius: 2px; background: var(--line); transition: all .5s; }
+  .progress-dot.on { background: var(--sage-deep); width: 44px; }
+
+  main.body { position: relative; z-index: 2; max-width: 880px; margin: 0 auto; padding: 44px 30px 0; }
+
+  .fade-up { animation: fadeUp .6s cubic-bezier(.2,.7,.3,1); }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+  .slide-in { animation: slideIn .42s cubic-bezier(.2,.7,.3,1); }
+  @keyframes slideIn { from { transform: translateX(40px); opacity: .4; } to { transform: none; opacity: 1; } }
+
+  .kicker { font-size: 11.5px; letter-spacing: 0.28em; color: var(--clay-deep); font-weight: 600; margin-bottom: 18px; text-transform: uppercase; }
+  h1.title { font-family: var(--serif); font-size: clamp(30px, 6vw, 46px); line-height: 1.18; font-weight: 600; color: var(--forest); letter-spacing: 0.01em; }
+  h2.subtitle { font-family: var(--serif); font-size: 22px; font-weight: 600; color: var(--forest); margin-top: 36px; margin-bottom: 6px; }
+  p.lead { font-size: 15.5px; line-height: 1.7; color: var(--ink-soft); margin-top: 16px; max-width: 540px; }
+  p.lead-small { font-size: 14px; line-height: 1.65; color: var(--ink-soft); margin-top: 0; margin-bottom: 22px; max-width: 560px; }
+
+  /* wizard cards */
+  .grid { display: grid; gap: 14px; margin-top: 36px; }
+  .grid.cols-2 { grid-template-columns: 1fr 1fr; }
+  .grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .card-opt {
+    text-align: left;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: rgba(255,255,255,0.4);
+    padding: 22px;
+    cursor: pointer;
+    display: flex; flex-direction: column;
+    transition: all .3s cubic-bezier(.2,.7,.3,1);
+    font-family: inherit;
+    backdrop-filter: blur(2px);
+    width: 100%;
+  }
+  .card-opt:hover { transform: translateY(-3px); border-color: var(--sage); box-shadow: 0 14px 28px -16px rgba(44,53,38,0.35); }
+  .card-opt.active { background: var(--forest); border-color: var(--forest); box-shadow: 0 16px 30px -16px rgba(44,53,38,0.5); }
+  .card-opt-icon { margin-bottom: 14px; }
+  .card-opt-row { display: flex; justify-content: space-between; align-items: center; }
+  .card-opt-label { font-size: 18px; font-weight: 600; font-family: var(--serif); color: var(--forest); }
+  .card-opt.active .card-opt-label { color: var(--paper); }
+  .card-opt-sub { font-size: 13px; margin-top: 6px; line-height: 1.5; color: var(--ink-soft); }
+  .card-opt.active .card-opt-sub { color: rgba(237,234,224,0.7); }
+  .check-dot { width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--line); display: flex; align-items: center; justify-content: center; font-size: 12px; color: var(--paper); }
+  .card-opt.active .check-dot { background: var(--sage); border-color: var(--sage); }
+
+  /* fixed navigation footer */
+  footer.nav {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 3;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 16px 30px; max-width: 880px; margin: 0 auto;
+    background: linear-gradient(transparent, rgba(237,234,224,0.95) 40%);
+    backdrop-filter: blur(6px);
+  }
+  .nav-btn { background: none; border: none; color: var(--ink-soft); font-size: 14px; cursor: pointer; font-family: var(--sans); padding: 8px 4px; }
+  .nav-btn:hover { color: var(--forest); }
+  .nav-btn.hidden { visibility: hidden; }
+  .foot-note { font-size: 12.5px; color: var(--ink-soft); font-family: var(--serif); font-style: italic; }
+  .cta {
+    background: var(--forest); color: var(--paper); border: none; border-radius: 30px;
+    padding: 13px 26px; font-size: 14.5px; font-weight: 600; cursor: pointer;
+    font-family: var(--sans); letter-spacing: 0.03em;
+    box-shadow: 0 12px 24px -12px rgba(44,53,38,0.6); transition: all .3s;
+  }
+  .cta:hover { transform: translateY(-2px); }
+  .cta:disabled { opacity: 0.35; cursor: not-allowed; box-shadow: none; transform: none; }
+
+  /* RESULT page */
+  .chip-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 22px; margin-bottom: 32px; }
+  .chip { font-size: 12.5px; padding: 6px 14px; border-radius: 30px; background: rgba(138,154,123,0.18); color: var(--sage-deep); border: 1px solid rgba(138,154,123,0.3); font-weight: 500; }
+
+  /* result tabs */
+  .tabs { display: flex; gap: 2px; background: rgba(255,255,255,0.5); border: 1px solid var(--line); border-radius: 999px; padding: 4px; margin: 24px 0 30px; max-width: 100%; overflow-x: auto; scrollbar-width: none; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab { padding: 9px 16px; background: none; border: none; border-radius: 999px; font-family: inherit; font-size: 13.5px; color: var(--ink-soft); cursor: pointer; white-space: nowrap; font-weight: 500; transition: all .2s; }
+  .tab:hover { color: var(--forest); }
+  .tab.active { background: var(--forest); color: var(--paper); }
+
+  /* section diagram (vertical layers) */
+  .layer-stack { display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px; }
+  .layer-row { display: flex; align-items: center; gap: 18px; padding: 16px 18px; border-radius: 14px; background: rgba(255,255,255,0.45); border: 1px solid var(--line); cursor: pointer; transition: all .3s; }
+  .layer-row:hover { transform: translateY(-2px); border-color: var(--sage); box-shadow: 0 10px 22px -14px rgba(44,53,38,0.3); }
+  .layer-bar { width: 8px; align-self: stretch; border-radius: 4px; min-height: 44px; }
+  .layer-info { flex: 0 0 38%; }
+  .layer-tier { font-size: 14.5px; font-weight: 600; color: var(--forest); font-family: var(--serif); }
+  .layer-desc { font-size: 12.5px; color: var(--ink-soft); margin-top: 3px; }
+  .layer-plant { flex: 1; min-width: 0; }
+  .layer-plant-name { font-size: 15px; font-weight: 600; color: var(--ink); }
+  .layer-plant-latin { font-size: 12px; font-style: italic; color: var(--ink-soft); font-family: var(--serif); }
+  .layer-arrow { color: var(--clay); font-size: 16px; }
+  .layer-row.empty { opacity: 0.5; cursor: default; }
+  .layer-row.empty:hover { transform: none; border-color: var(--line); box-shadow: none; }
+  .layer-row.empty .layer-plant-name { font-style: italic; color: var(--ink-soft); font-size: 13.5px; font-weight: 400; }
+
+  /* recommendation grid */
+  .rec-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
+  .rec-card { padding: 18px; border-radius: 16px; background: rgba(255,255,255,0.5); border: 1px solid var(--line); cursor: pointer; transition: all .3s; display: flex; flex-direction: column; font-family: inherit; text-align: left; }
+  .rec-card:hover { transform: translateY(-3px); border-color: var(--sage); box-shadow: 0 14px 28px -16px rgba(44,53,38,0.35); }
+  .rec-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
+  .rec-swatch { width: 40px; height: 40px; border-radius: 12px; }
+  .rec-match { font-family: var(--serif); font-size: 24px; font-weight: 700; color: var(--sage-deep); line-height: 1; }
+  .rec-match-pct { font-size: 11px; font-weight: 400; color: var(--ink-soft); margin-left: 3px; }
+  .rec-name { font-size: 19px; font-weight: 600; font-family: var(--serif); color: var(--forest); }
+  .rec-latin { font-size: 12.5px; font-style: italic; color: var(--ink-soft); font-family: var(--serif); margin-top: 2px; }
+  .rec-type { font-size: 12px; color: var(--clay-deep); margin-top: 8px; font-weight: 500; }
+  .rec-reasons { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 12px; flex: 1; align-content: flex-start; }
+  .rec-tag { font-size: 11px; padding: 3px 9px; border-radius: 20px; background: rgba(168,138,106,0.15); color: var(--clay-deep); }
+  .rec-view { font-size: 12.5px; color: var(--forest); margin-top: 14px; font-weight: 600; letter-spacing: 0.02em; }
+
+  /* GARDEN PLAN SVG */
+  .plan-frame {
+    margin-top: 14px; padding: 18px; background: rgba(255,255,255,0.55);
+    border: 1px solid var(--line); border-radius: 18px;
+  }
+  .plan-svg { width: 100%; height: auto; display: block; border-radius: 12px; }
+  .plan-legend { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 14px; font-size: 12px; color: var(--ink-soft); }
+  .plan-legend-item { display: flex; align-items: center; gap: 6px; }
+  .plan-legend-dot { width: 12px; height: 12px; border-radius: 50%; border: 1px solid rgba(0,0,0,0.1); }
+
+  /* BLOOM CALENDAR */
+  .cal-frame { padding: 18px; background: rgba(255,255,255,0.55); border: 1px solid var(--line); border-radius: 18px; overflow-x: auto; }
+  .cal-table { width: 100%; min-width: 600px; border-collapse: collapse; font-size: 12.5px; }
+  .cal-table th { font-family: var(--serif); font-weight: 600; color: var(--forest); padding: 8px 4px; font-size: 12px; text-align: center; border-bottom: 1px solid var(--line); }
+  .cal-table th.plant-col { text-align: left; padding-left: 8px; min-width: 130px; }
+  .cal-table td { padding: 4px 2px; vertical-align: middle; }
+  .cal-table td.plant-cell { padding: 8px; }
+  .cal-table td.plant-cell .nm { font-weight: 600; color: var(--forest); }
+  .cal-table td.plant-cell .lt { font-size: 11px; font-style: italic; color: var(--ink-soft); font-family: var(--serif); }
+  .cal-cell { height: 22px; border-radius: 3px; background: rgba(0,0,0,0.04); position: relative; margin: 0 1px; }
+  .cal-cell.bloom { background: linear-gradient(180deg, #B86B9C, #9B5C8F); }
+  .cal-cell.fruit { background: linear-gradient(180deg, #C9764C, #B23A30); }
+  .cal-cell.both  { background: linear-gradient(90deg, #B86B9C 50%, #C9764C 50%); }
+  .cal-legend { display: flex; gap: 14px; margin-top: 14px; font-size: 12.5px; color: var(--ink-soft); align-items: center; flex-wrap: wrap; }
+  .cal-leg-swatch { display: inline-block; width: 16px; height: 12px; border-radius: 3px; vertical-align: middle; margin-right: 6px; }
+
+  /* SHOPPING LIST */
+  .shop-frame { padding: 18px; background: rgba(255,255,255,0.55); border: 1px solid var(--line); border-radius: 18px; }
+  .shop-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .shop-table th, .shop-table td { padding: 12px 8px; text-align: left; border-bottom: 1px solid var(--line); }
+  .shop-table th { font-family: var(--serif); font-weight: 600; color: var(--forest); font-size: 13px; background: rgba(255,255,255,0.4); }
+  .shop-table td.right { text-align: right; }
+  .shop-table tr:last-child td { border-bottom: none; }
+  .shop-qty { display: inline-flex; align-items: center; gap: 8px; }
+  .shop-qty-btn { width: 26px; height: 26px; border-radius: 50%; border: 1px solid var(--line); background: rgba(255,255,255,0.5); color: var(--forest); cursor: pointer; font-size: 14px; font-family: inherit; font-weight: 600; transition: all .2s; }
+  .shop-qty-btn:hover:not(:disabled) { background: var(--forest); color: var(--paper); border-color: var(--forest); }
+  .shop-qty-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+  .shop-qty-val { min-width: 22px; text-align: center; font-weight: 600; color: var(--forest); }
+  .shop-total { padding: 18px; margin-top: 14px; background: var(--forest); color: var(--paper); border-radius: 14px; display: flex; justify-content: space-between; align-items: center; font-family: var(--serif); }
+  .shop-total .label { font-size: 14px; letter-spacing: 0.05em; }
+  .shop-total .amount { font-size: 26px; font-weight: 700; }
+  .shop-note { font-size: 12px; color: var(--ink-soft); margin-top: 14px; line-height: 1.6; font-style: italic; font-family: var(--serif); }
+  .shop-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+  .shop-actions .btn { font-size: 13px; padding: 8px 14px; }
+
+  /* PLANT DRAWER */
+  .drawer-overlay {
+    position: fixed; inset: 0; z-index: 20;
+    background: rgba(44,53,38,0.35);
+    backdrop-filter: blur(4px);
+    display: flex; justify-content: flex-end;
+  }
+  .drawer {
+    width: min(440px, 92vw); height: 100%;
+    background: var(--paper-warm);
+    padding: 30px 30px 40px;
+    overflow-y: auto; position: relative;
+    box-shadow: -30px 0 60px -20px rgba(0,0,0,0.3);
+  }
+  .drawer-close { position: absolute; top: 22px; right: 24px; background: none; border: none; font-size: 18px; color: var(--ink-soft); cursor: pointer; }
+  .drawer-swatch { width: 70px; height: 70px; border-radius: 18px; margin-bottom: 22px; }
+  .drawer-type { font-size: 12px; letter-spacing: 0.1em; color: var(--clay-deep); font-weight: 600; }
+  .drawer-name { font-family: var(--serif); font-size: 32px; font-weight: 600; color: var(--forest); margin: 6px 0 2px; }
+  .drawer-en { font-size: 13px; color: var(--ink-soft); margin-bottom: 2px; }
+  .drawer-latin { font-size: 14px; font-style: italic; color: var(--ink-soft); font-family: var(--serif); }
+  .drawer-meta { display: flex; gap: 10px; margin: 24px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 18px 0; flex-wrap: wrap; }
+  .meta-cell { flex: 1; min-width: 90px; }
+  .meta-label { font-size: 11px; color: var(--ink-soft); letter-spacing: 0.05em; }
+  .meta-val { font-size: 14.5px; font-weight: 600; color: var(--forest); margin-top: 4px; font-family: var(--serif); }
+  .drawer-block { margin-bottom: 24px; }
+  .drawer-block-title { font-size: 12.5px; letter-spacing: 0.12em; color: var(--sage-deep); font-weight: 600; margin-bottom: 10px; text-transform: uppercase; }
+  .drawer-text { font-size: 15px; line-height: 1.78; color: var(--ink-soft); }
+  .drawer-foot { font-size: 11.5px; color: var(--clay); font-family: var(--serif); font-style: italic; margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--line); }
+  .drawer-supports { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .drawer-supports .chip { font-size: 11.5px; padding: 4px 10px; }
+
+  /* responsive */
+  @media (max-width: 640px) {
+    main.body { padding: 30px 20px 0; }
+    header.brand { padding: 22px 20px 0; }
+    .grid.cols-2, .grid.cols-3 { grid-template-columns: 1fr; }
+    .layer-row { flex-wrap: wrap; gap: 10px; }
+    .layer-info { flex: 0 0 100%; }
+    h1.title { font-size: 30px; }
+    h2.subtitle { font-size: 20px; }
+    .shop-table th, .shop-table td { padding: 10px 6px; font-size: 13px; }
+    footer.nav { padding: 14px 20px; }
+  }
+
+  /* PRINT — clean A4 layout */
+  @media print {
+    body { background: white; padding-bottom: 0; }
+    .grain, .glow-tl, .glow-br, .screen-bar, footer.nav, .tabs, .drawer-overlay { display: none !important; }
+    main.body { max-width: none; padding: 0 12mm; }
+    header.brand { padding: 12mm 12mm 0; }
+    .card-opt, .layer-row, .rec-card, .plan-frame, .cal-frame, .shop-frame {
+      background: white !important; box-shadow: none !important; border-color: #ccc !important;
+    }
+    h1.title { font-size: 28px; }
+    .chip { background: #f5f3eb !important; }
+    .rec-grid { grid-template-columns: 1fr 1fr; }
+    .tab-panel { page-break-inside: avoid; }
+    .tab-panel + .tab-panel { page-break-before: always; }
+  }
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+<div class="glow-tl"></div>
+<div class="glow-br"></div>
+
+<div class="screen-bar">
+  <div class="left">
+    <a href="index.html">← <span data-zh="回到首頁" data-en="Back to home">回到首頁</span></a>
+  </div>
+  <div class="right">
+    <button class="btn text" id="langToggle">English</button>
+    <button class="btn ghost" id="shareLinkBtn" onclick="copyShareLink(this)">🔗 <span data-zh="複製連結" data-en="Copy link">複製連結</span></button>
+    <a class="btn line" id="lineShareBtn" href="#" target="_blank" rel="noopener">💬 LINE</a>
+    <button class="btn ghost" onclick="window.print()">📄 <span data-zh="列印 / PDF" data-en="Print / PDF">列印 / PDF</span></button>
+  </div>
+</div>
+
+<header class="brand">
+  <div class="brand-row">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+      <path d="M5 19c0-8 6-14 14-14 0 8-6 14-14 14z" stroke="#6E7E60" stroke-width="1.3"/>
+      <path d="M5 19C9 15 13 11 19 5" stroke="#6E7E60" stroke-width="1.1"/>
+    </svg>
+    <span class="brand-text">AI&nbsp;LANDSCAPE&nbsp;COPILOT</span>
+  </div>
+  <span class="brand-sub" data-zh="原生植物 × AI 生態景觀" data-en="Native plants × AI ecological design">原生植物 × AI 生態景觀</span>
+</header>
+
+<div class="progress-wrap" id="progressWrap"></div>
+
+<main class="body" id="app"></main>
+
+<footer class="nav" id="navFooter"></footer>
+
+<div id="drawerHost"></div>
+
+<script>
+// ─────────────────────────────────────────────────────────────
+// Plant database — 22 native Taiwan plants, curated for urban landscapes
+// tier: T=canopy/structural, S=shrub, G=ground/perennial, W=water/wetland, C=climber/vine
+// spaces: which space types this plant fits (balcony/rooftop/yard/indoor)
+// bloom/fruit months: 1-12, for the calendar view
+// cost: typical NTD nursery price per plant (rough, for shopping list)
+// ─────────────────────────────────────────────────────────────
+const PLANTS = [
+  // === Canopy / structural ===
+  { id:"pittosporum", zh:"海桐", en:"Japanese Mock Orange", lt:"Pittosporum tobira",
+    tier:"T", type_zh:"喬木/灌木 · 原生", type_en:"Tree/shrub · native",
+    sun:["full","part"], water:"low", height:[1.5,3], spread:[1,2],
+    spaces:["balcony","rooftop","yard"], container_ok:true,
+    role_zh:"防風骨架", role_en:"Windbreak frame",
+    bloom:[3,4,5], fruit:[10,11],
+    color:"#4F6A45", cost:600,
+    note_zh:"極耐風耐鹽的海岸原生樹種，緻密枝葉可作為陽台的防風與隱私屏障，春季白花帶香。",
+    note_en:"Salt- and wind-tolerant coastal native. Dense foliage makes a privacy/windbreak screen; fragrant white spring flowers.",
+    care_zh:"全日照至半日照，耐旱耐風，排水良好，可塑形為綠籬。",
+    care_en:"Full to part sun. Drought and wind tolerant. Well-drained soil. Can be shaped as hedge.",
+    supports_zh:["授粉昆蟲","耐鹽風"], supports_en:["Pollinators","Salt/wind tolerant"] },
+
+  { id:"cherry", zh:"山櫻花", en:"Taiwan Cherry", lt:"Prunus campanulata",
+    tier:"T", type_zh:"喬木 · 台灣特有", type_en:"Tree · Taiwan endemic",
+    sun:["full"], water:"med", height:[3,5], spread:[2,3],
+    spaces:["yard"], container_ok:false,
+    role_zh:"焦點花樹", role_en:"Focal flowering tree",
+    bloom:[1,2,3], fruit:[5,6],
+    color:"#C75A8F", cost:1800,
+    note_zh:"台灣特有的鐘形深粉紅櫻花，是中海拔生態系的關鍵蜜源，吸引綠繡眼、五色鳥與蝴蝶。",
+    note_en:"Taiwan-endemic bell-shaped cherry. A keystone nectar source — attracts white-eyes, barbets, and butterflies.",
+    care_zh:"全日照，排水良好的酸性土壤，春開後可輕修。冬季略乾旱促花。",
+    care_en:"Full sun. Well-drained acidic soil. Light prune after spring bloom. Slight winter dryness encourages flowering.",
+    supports_zh:["蜂蝶蜜源","誘鳥","台灣特有"], supports_en:["Nectar source","Bird-attracting","Taiwan endemic"] },
+
+  { id:"bischofia", zh:"茄苳", en:"Bishop Wood", lt:"Bischofia javanica",
+    tier:"T", type_zh:"大喬木 · 原生", type_en:"Large tree · native",
+    sun:["full","part"], water:"med", height:[3,8], spread:[3,5],
+    spaces:["yard"], container_ok:false,
+    role_zh:"遮蔭主樹", role_en:"Shade canopy",
+    bloom:[3,4], fruit:[10,11,12],
+    color:"#3A5A2A", cost:1500,
+    note_zh:"低海拔代表性遮蔭樹，秋冬轉紅落葉，台灣常見的「老樹公」樹種，是鳥類與松鼠的棲地核心。",
+    note_en:"Iconic shade tree of Taiwan lowlands; autumn-red leaves. Often a village sacred tree. Core habitat for birds and squirrels.",
+    care_zh:"全日照至半日照，適應性極強，需要較大空間。",
+    care_en:"Full to part sun. Highly adaptable. Needs space — 3m+ from buildings.",
+    supports_zh:["鳥類棲地","松鼠","蝶幼蟲食草"], supports_en:["Bird habitat","Squirrels","Butterfly host"] },
+
+  { id:"michelia", zh:"烏心石", en:"Formosan Michelia", lt:"Michelia compressa",
+    tier:"T", type_zh:"喬木 · 台灣原生", type_en:"Tree · Taiwan native",
+    sun:["full","part"], water:"med", height:[2,5], spread:[2,3],
+    spaces:["yard"], container_ok:false,
+    role_zh:"芳香常綠", role_en:"Fragrant evergreen",
+    bloom:[2,3,4], fruit:[8,9,10],
+    color:"#5A6D3E", cost:2200,
+    note_zh:"台灣原生木蘭科喬木，春日開乳白色芳香花，材質堅實，是傳統匠藝重要樹種。",
+    note_en:"Taiwan-native magnolia relative. Creamy fragrant spring flowers; strong timber traditionally used by craftsmen.",
+    care_zh:"全日照至半日照，喜濕潤排水良好土壤，避免強西曬。",
+    care_en:"Full to part sun. Moist, well-drained soil. Protect from harsh western sun.",
+    supports_zh:["授粉昆蟲","芳香花"], supports_en:["Pollinators","Fragrance"] },
+
+  { id:"broussonetia", zh:"構樹", en:"Paper Mulberry", lt:"Broussonetia papyrifera",
+    tier:"T", type_zh:"喬木 · 原生", type_en:"Tree · native",
+    sun:["full"], water:"low", height:[3,6], spread:[2,4],
+    spaces:["yard"], container_ok:false,
+    role_zh:"先鋒樹種", role_en:"Pioneer species",
+    bloom:[4,5], fruit:[6,7,8],
+    color:"#7A6D3E", cost:800,
+    note_zh:"台灣低海拔最強健的先鋒樹種，紅色聚合果是鳥類重要食物，南島民族用樹皮製作樹皮布。",
+    note_en:"The toughest pioneer tree of Taiwan lowlands. Red aggregate fruit is critical bird food; Austronesian peoples make bark cloth from it.",
+    care_zh:"全日照，極耐旱耐瘠，幾乎免維護。注意：易擴散，限制空間使用。",
+    care_en:"Full sun. Extremely drought- and poverty-tolerant. Caveat: spreads aggressively — confine the planting space.",
+    supports_zh:["誘鳥（聚合果）","原住民文化"], supports_en:["Bird food (fruit)","Indigenous heritage"] },
+
+  { id:"chionanthus", zh:"流蘇", en:"Chinese Fringe Tree", lt:"Chionanthus retusus",
+    tier:"T", type_zh:"小喬木 · 原生", type_en:"Small tree · native",
+    sun:["full"], water:"med", height:[2,4], spread:[2,3],
+    spaces:["yard"], container_ok:false,
+    role_zh:"春季焦點", role_en:"Spring focal point",
+    bloom:[3,4], fruit:[9,10],
+    color:"#DDD3B8", cost:2500,
+    note_zh:"春日盛開如雪般的白色流蘇花，是台北最具代表性的春景樹之一（台大椰林大道）。",
+    note_en:"Spring snow-white fringe flowers. One of Taipei's signature spring trees (NTU Coconut Grove Boulevard).",
+    care_zh:"全日照，深厚肥沃土壤，年輕時需澆水建立，成樹後耐旱。",
+    care_en:"Full sun. Deep fertile soil. Water young trees until established; mature trees are drought-tolerant.",
+    supports_zh:["蜜源","景觀焦點"], supports_en:["Nectar source","Landscape focal"] },
+
+  // === Shrub layer ===
+  { id:"melastoma", zh:"野牡丹", en:"Common Melastoma", lt:"Melastoma candidum",
+    tier:"S", type_zh:"灌木 · 原生", type_en:"Shrub · native",
+    sun:["full","part"], water:"med", height:[0.6,1.2], spread:[0.6,1.2],
+    spaces:["balcony","rooftop","yard"], container_ok:true,
+    role_zh:"開花灌木", role_en:"Flowering shrub",
+    bloom:[4,5,6,7,8], fruit:[8,9,10],
+    color:"#9B5C8F", cost:350,
+    note_zh:"台灣低海拔代表性開花灌木，紫紅色大花是原生授粉蜂的重要蜜源，復層綠化的中層主角。",
+    note_en:"Iconic lowland flowering shrub. Magenta flowers feed native pollinator bees — backbone of mid-layer ecological planting.",
+    care_zh:"半日照至全日照，排水良好的微酸土壤，花後修剪促分枝。",
+    care_en:"Part to full sun. Slightly acidic, well-drained soil. Prune after bloom to promote branching.",
+    supports_zh:["原生蜂蜜源","果實誘鳥"], supports_en:["Native bee nectar","Bird-attracting fruit"] },
+
+  { id:"ardisia", zh:"硃砂根", en:"Coralberry", lt:"Ardisia crenata",
+    tier:"S", type_zh:"灌木 · 原生", type_en:"Shrub · native",
+    sun:["part","shade"], water:"med", height:[0.4,0.8], spread:[0.4,0.7],
+    spaces:["balcony","yard","indoor"], container_ok:true,
+    role_zh:"耐陰灌木", role_en:"Shade shrub",
+    bloom:[5,6], fruit:[11,12,1,2],
+    color:"#B23A30", cost:280,
+    note_zh:"耐陰的常綠灌木，冬季結鮮紅漿果，吸引鳥類，是北向陽台與樹蔭下的理想選擇。",
+    note_en:"Evergreen shade shrub. Bright red winter berries attract birds — ideal for north-facing balcony or tree-shaded spots.",
+    care_zh:"半日照至遮陰，忌強烈西曬，保持土壤濕潤不積水。",
+    care_en:"Part shade to shade. Avoid harsh western sun. Keep soil moist but not waterlogged.",
+    supports_zh:["冬季誘鳥","耐陰"], supports_en:["Winter bird food","Shade-loving"] },
+
+  { id:"alpinia", zh:"月桃", en:"Shell Ginger", lt:"Alpinia zerumbet",
+    tier:"S", type_zh:"灌木 · 原生", type_en:"Shrub · native",
+    sun:["part","shade"], water:"med", height:[1.5,2.5], spread:[1,1.5],
+    spaces:["yard"], container_ok:true,
+    role_zh:"芳香大葉", role_en:"Fragrant broad-leaf",
+    bloom:[4,5,6], fruit:[8,9],
+    color:"#C4B05A", cost:300,
+    note_zh:"葉片清香可包月桃粽，是台灣傳統食物的香氣記憶。粉白花序如珍珠串，紅果可觀。",
+    note_en:"Aromatic leaves used to wrap traditional Taiwanese rice dumplings. Pearl-like flower clusters and red seed pods are ornamental.",
+    care_zh:"半日照至遮陰，喜濕潤土壤，避免強日。冬季可剪除老葉。",
+    care_en:"Part to full shade. Moist soil. Avoid direct hot sun. Remove old leaves in winter.",
+    supports_zh:["民族植物","可食/包葉"], supports_en:["Ethnobotanical","Edible wrapping"] },
+
+  { id:"hibiscus_tw", zh:"山芙蓉", en:"Taiwan Hibiscus", lt:"Hibiscus taiwanensis",
+    tier:"S", type_zh:"灌木 · 台灣特有", type_en:"Shrub · Taiwan endemic",
+    sun:["full"], water:"med", height:[1.5,2.5], spread:[1,1.5],
+    spaces:["yard","rooftop"], container_ok:true,
+    role_zh:"秋季花景", role_en:"Autumn flowering",
+    bloom:[9,10,11], fruit:[12,1],
+    color:"#E89C9C", cost:450,
+    note_zh:"台灣特有的木槿，秋季開花從白轉粉再轉紅，一日三變，傳統別稱「醉芙蓉」。",
+    note_en:"Taiwan-endemic hibiscus. Autumn flowers shift from white to pink to red in a single day — traditionally called 'drunk hibiscus'.",
+    care_zh:"全日照，排水良好，冬季落葉後可重剪。",
+    care_en:"Full sun. Well-drained soil. Hard prune after winter leaf-drop.",
+    supports_zh:["台灣特有","秋季蜜源"], supports_en:["Taiwan endemic","Autumn nectar"] },
+
+  { id:"murraya", zh:"月橘", en:"Orange Jessamine", lt:"Murraya paniculata",
+    tier:"S", type_zh:"灌木/小喬木 · 原生", type_en:"Shrub/small tree · native",
+    sun:["full","part"], water:"low", height:[1,2.5], spread:[1,1.5],
+    spaces:["balcony","rooftop","yard"], container_ok:true,
+    role_zh:"芳香綠籬", role_en:"Fragrant hedge",
+    bloom:[5,6,7,8,9], fruit:[9,10,11],
+    color:"#5F7848", cost:250,
+    note_zh:"台灣常見的常綠芳香樹種（俗稱七里香），白花濃郁香氣，可塑型為綠籬或單植觀賞。",
+    note_en:"Ubiquitous evergreen fragrant shrub (called 'seven-mile fragrance'). Intense jasmine-like scent. Hedge or specimen.",
+    care_zh:"全日照至半日照，耐旱，排水良好。可頻繁修剪維持形狀。",
+    care_en:"Full to part sun. Drought tolerant. Tolerates frequent shaping.",
+    supports_zh:["夜行性昆蟲","芳香"], supports_en:["Nocturnal pollinators","Fragrance"] },
+
+  { id:"cephalanthus", zh:"風箱樹", en:"Taiwan Buttonbush", lt:"Cephalanthus tetrandrus",
+    tier:"S", type_zh:"濕地灌木 · 原生", type_en:"Wetland shrub · native",
+    sun:["full","part"], water:"high", height:[1.5,3], spread:[1.5,2.5],
+    spaces:["yard"], container_ok:false,
+    role_zh:"濕地蜜源", role_en:"Wetland nectar",
+    bloom:[5,6,7,8], fruit:[10,11],
+    color:"#D6D88A", cost:550,
+    note_zh:"台灣稀有的濕地灌木，圓球狀的乳白花序如太空船，是復育生態池畔的明星物種，蜂蝶極愛。",
+    note_en:"Rare Taiwan wetland shrub. Spherical creamy flower-heads like little planets — a star species for ecological pond restoration; bees love it.",
+    care_zh:"全日照至半日照，需常年濕潤至淺水，適合生態池畔。",
+    care_en:"Full to part sun. Constantly moist to shallow water. Ideal for pond edge.",
+    supports_zh:["蜂蝶集合","稀有保育"], supports_en:["Pollinator magnet","Rare/conservation"] },
+
+  { id:"mulberry_sm", zh:"小葉桑", en:"Small-leaf Mulberry", lt:"Morus australis",
+    tier:"S", type_zh:"灌木/小喬木 · 原生", type_en:"Shrub/small tree · native",
+    sun:["full","part"], water:"med", height:[1.5,3], spread:[1.5,2.5],
+    spaces:["yard","rooftop"], container_ok:true,
+    role_zh:"可食誘鳥", role_en:"Edible / bird-attracting",
+    bloom:[2,3], fruit:[4,5,6],
+    color:"#5A3A1A", cost:350,
+    note_zh:"台灣原生小葉桑，初夏結紫黑色甜美桑椹，可食可釀，是台灣藍鵲與綠繡眼最愛的早夏食物。",
+    note_en:"Taiwan-native mulberry. Sweet purple-black fruit in early summer — edible/brewable, and a favorite of Taiwan blue magpies and white-eyes.",
+    care_zh:"全日照至半日照，適應性強。果實期需注意鳥類分食。",
+    care_en:"Full to part sun. Highly adaptable. Expect birds to share the fruit harvest.",
+    supports_zh:["可食","藍鵲最愛"], supports_en:["Edible","Blue magpie favorite"] },
+
+  // === Ground / perennial ===
+  { id:"sida", zh:"金午時花", en:"Cuban Jute", lt:"Sida rhombifolia",
+    tier:"G", type_zh:"地被 · 原生", type_en:"Groundcover · native",
+    sun:["full"], water:"low", height:[0.3,0.6], spread:[0.4,0.7],
+    spaces:["balcony","rooftop","yard"], container_ok:true,
+    role_zh:"陽光地被", role_en:"Sun groundcover",
+    bloom:[4,5,6,7,8,9,10], fruit:[],
+    color:"#D4B24A", cost:80,
+    note_zh:"耐旱強健的原生草本，午間綻放小黃花，極適合頂樓、強日照陽台的先鋒植物。",
+    note_en:"Tough drought-tolerant native. Small yellow midday flowers — perfect pioneer for hot rooftops and balconies.",
+    care_zh:"全日照，極耐旱，排水良好即可，幾乎免維護。",
+    care_en:"Full sun. Very drought tolerant. Just needs drainage. Near zero maintenance.",
+    supports_zh:["小型蜂","耐旱先鋒"], supports_en:["Small bees","Drought pioneer"] },
+
+  { id:"liriope", zh:"麥門冬", en:"Lily Turf", lt:"Liriope spicata",
+    tier:"G", type_zh:"地被 · 原生", type_en:"Groundcover · native",
+    sun:["part","shade"], water:"med", height:[0.2,0.3], spread:[0.3,0.5],
+    spaces:["balcony","rooftop","yard","indoor"], container_ok:true,
+    role_zh:"基底地被", role_en:"Base groundcover",
+    bloom:[6,7,8], fruit:[10,11,12],
+    color:"#7C6A9C", cost:60,
+    note_zh:"細緻的常綠地被，耐陰耐踏，紫色花穗點綴夏季，是復層設計最底層的綠色基底。",
+    note_en:"Fine evergreen groundcover. Shade- and traffic-tolerant. Purple summer flower spikes. The reliable base of any layered design.",
+    care_zh:"半日照至遮陰，適應性極強，耐旱亦耐濕，幾乎免維護。",
+    care_en:"Part to full shade. Extremely adaptable. Drought- and moisture-tolerant. Near zero maintenance.",
+    supports_zh:["全空間適用"], supports_en:["Universal layer"] },
+
+  { id:"dianella", zh:"桔梗蘭", en:"Flax Lily", lt:"Dianella ensifolia",
+    tier:"G", type_zh:"地被 · 原生", type_en:"Groundcover · native",
+    sun:["full","part"], water:"low", height:[0.4,0.7], spread:[0.5,0.8],
+    spaces:["balcony","rooftop","yard"], container_ok:true,
+    role_zh:"線形葉地被", role_en:"Strappy groundcover",
+    bloom:[3,4,5], fruit:[6,7,8],
+    color:"#5078A0", cost:150,
+    note_zh:"葉似桔梗的強健地被，初夏結亮藍紫色珠形果，是少有的「藍」色點綴，鳥類喜食。",
+    note_en:"Strap-leaf groundcover with rare cobalt-blue berries in early summer — an unusual blue accent. Birds eat the fruit.",
+    care_zh:"全日照至半日照，極耐旱，幾乎免維護。",
+    care_en:"Full to part sun. Very drought tolerant. Near zero maintenance.",
+    supports_zh:["藍色果實","誘鳥"], supports_en:["Blue berries","Bird-attracting"] },
+
+  { id:"duchesnea", zh:"蛇莓", en:"Mock Strawberry", lt:"Duchesnea indica",
+    tier:"G", type_zh:"地被 · 原生", type_en:"Groundcover · native",
+    sun:["part","shade"], water:"med", height:[0.05,0.15], spread:[0.4,0.8],
+    spaces:["balcony","yard"], container_ok:true,
+    role_zh:"匍匐地被", role_en:"Spreading groundcover",
+    bloom:[3,4,5,6], fruit:[5,6,7],
+    color:"#C94747", cost:80,
+    note_zh:"低矮匍匐的地被，黃花紅果如野生小草莓，是樹蔭下、陽台邊緣的可愛點綴。",
+    note_en:"Low-creeping groundcover. Yellow flowers and red strawberry-like fruit — charming under trees or along balcony edges.",
+    care_zh:"半日照至遮陰，喜濕潤，會自然蔓延填空缺。",
+    care_en:"Part shade to shade. Likes moisture. Spreads naturally to fill gaps.",
+    supports_zh:["匍匐填縫","小型蜂"], supports_en:["Spreading filler","Small bees"] },
+
+  { id:"miscanthus", zh:"五節芒", en:"Chinese Silver Grass", lt:"Miscanthus sinensis",
+    tier:"G", type_zh:"草本 · 原生", type_en:"Grass · native",
+    sun:["full"], water:"low", height:[1,2.5], spread:[0.8,1.5],
+    spaces:["rooftop","yard"], container_ok:true,
+    role_zh:"垂直動感", role_en:"Vertical movement",
+    bloom:[9,10,11], fruit:[11,12,1],
+    color:"#D8C49E", cost:200,
+    note_zh:"台灣丘陵秋色的代名詞，銀白色花穗在風中搖曳，極耐旱，是頂樓綠化的「風景」植物。",
+    note_en:"Iconic of Taiwan's autumn hillsides. Silver plumes sway in the wind. Drought-bulletproof — a 'scenery' plant for rooftops.",
+    care_zh:"全日照，極耐旱耐瘠，初春剪除前年花穗。",
+    care_en:"Full sun. Extremely drought-tolerant. Cut down old plumes in early spring.",
+    supports_zh:["秋景","風景植物"], supports_en:["Autumn color","Wind movement"] },
+
+  { id:"nephrolepis", zh:"腎蕨", en:"Sword Fern", lt:"Nephrolepis cordifolia",
+    tier:"G", type_zh:"蕨類 · 原生", type_en:"Fern · native",
+    sun:["shade","part"], water:"med", height:[0.3,0.5], spread:[0.4,0.7],
+    spaces:["balcony","yard","indoor"], container_ok:true,
+    role_zh:"陰生綠葉", role_en:"Shade greenery",
+    bloom:[], fruit:[],
+    color:"#5A7A4A", cost:180,
+    note_zh:"強健的原生蕨類，層疊羽狀葉提供豐富綠意與濕度感，是陰角與牆面綠化的基底。",
+    note_en:"Tough native fern. Layered fronds bring lush green and a humid feel. Base layer for shady corners and green walls.",
+    care_zh:"遮陰至半日照，喜濕潤空氣，定期噴霧，避免直射。",
+    care_en:"Shade to part shade. Likes humid air; mist regularly. Avoid direct sun.",
+    supports_zh:["室內","空氣感"], supports_en:["Indoor-friendly","Humidity feel"] },
+
+  // === Water / wetland ===
+  { id:"nuphar", zh:"台灣萍蓬草", en:"Taiwan Yellow Water Lily", lt:"Nuphar shimadae",
+    tier:"W", type_zh:"水生 · 台灣特有", type_en:"Aquatic · Taiwan endemic",
+    sun:["full","part"], water:"high", height:[0,0.05], spread:[0.5,1],
+    spaces:["rooftop","yard"], container_ok:true,
+    role_zh:"水景核心", role_en:"Water feature core",
+    bloom:[5,6,7,8,9], fruit:[],
+    color:"#C9A84C", cost:1200,
+    note_zh:"台灣特有的睡蓮科水生植物，金黃色花朵浮於水面，適合水盤或生態池。為蜻蜓與水生昆蟲提供棲地。",
+    note_en:"Taiwan-endemic aquatic lily. Golden flowers float on the surface. Perfect for a small pond or water bowl. Habitat for dragonflies.",
+    care_zh:"全日照水池，水深 30–60cm，靜水環境，避免強流。",
+    care_en:"Full sun pond. Water depth 30–60cm. Still water — avoid strong current.",
+    supports_zh:["蜻蜓棲地","台灣特有"], supports_en:["Dragonfly habitat","Taiwan endemic"] },
+
+  { id:"philydrum", zh:"田蔥", en:"Frogsmouth", lt:"Philydrum lanuginosum",
+    tier:"W", type_zh:"濕地 · 原生", type_en:"Wetland · native",
+    sun:["full"], water:"high", height:[0.6,0.9], spread:[0.3,0.5],
+    spaces:["rooftop","yard"], container_ok:true,
+    role_zh:"垂直線條", role_en:"Vertical line",
+    bloom:[6,7,8,9], fruit:[10],
+    color:"#B8A23C", cost:280,
+    note_zh:"濕地原生植物，挺立的線狀葉與黃色花序帶來建築感，是生態池畔的優雅骨架。",
+    note_en:"Wetland native. Erect strap leaves and yellow flowers add architectural form — elegant frame for pond edges.",
+    care_zh:"全日照，喜濕潤至淺水，耐高溫，秋後可修剪。",
+    care_en:"Full sun. Moist to shallow water. Heat tolerant. Prune after autumn.",
+    supports_zh:["濕地骨架"], supports_en:["Wetland structure"] },
+
+  // === Climbers ===
+  { id:"piper", zh:"風藤", en:"Native Pepper Vine", lt:"Piper kadsura",
+    tier:"C", type_zh:"藤本 · 原生", type_en:"Vine · native",
+    sun:["part","shade"], water:"med", height:[2,4], spread:[1,2],
+    spaces:["balcony","yard"], container_ok:true,
+    role_zh:"耐陰藤本", role_en:"Shade vine",
+    bloom:[4,5], fruit:[9,10,11],
+    color:"#3F5A3A", cost:300,
+    note_zh:"台灣原生胡椒科藤本，耐陰、葉具光澤，可攀附牆面或棚架柔化建築硬線。",
+    note_en:"Taiwan-native pepper-family vine. Shade-tolerant, glossy leaves. Climbs walls or trellises to soften hard architecture.",
+    care_zh:"半日照至遮陰，需支撐物攀附，喜微濕土壤。",
+    care_en:"Part shade to shade. Needs support to climb. Likes slightly moist soil.",
+    supports_zh:["垂直綠化","軟化建築"], supports_en:["Vertical green","Softens architecture"] },
+
+  { id:"jasminum", zh:"山素英", en:"Native Jasmine", lt:"Jasminum nervosum",
+    tier:"C", type_zh:"藤本 · 原生", type_en:"Vine · native",
+    sun:["full","part"], water:"med", height:[2,3], spread:[1,2],
+    spaces:["balcony","yard"], container_ok:true,
+    role_zh:"芳香藤本", role_en:"Fragrant vine",
+    bloom:[3,4,5,6,7,8], fruit:[10,11],
+    color:"#E8E0CC", cost:280,
+    note_zh:"台灣原生茉莉，純白星形花朵帶清雅香氣，攀附支架可作為陽台天然窗簾。",
+    note_en:"Native Taiwan jasmine. Pure white star-shaped flowers with delicate fragrance. On a trellis it becomes a natural balcony curtain.",
+    care_zh:"全日照至半日照，需要支撐物，花後輕修保持形狀。",
+    care_en:"Full to part sun. Needs support. Light prune after bloom to maintain shape.",
+    supports_zh:["夜行性昆蟲","芳香"], supports_en:["Nocturnal pollinators","Fragrance"] },
+];
+
+// ─────────────────────────────────────────────────────────────
+// Wizard option sets
+// ─────────────────────────────────────────────────────────────
+const SPACE_OPTIONS = [
+  { key:"balcony", zh:"陽台", en:"Balcony", sub_zh:"都市公寓 · 容器種植", sub_en:"Urban apartment · container planting" },
+  { key:"rooftop", zh:"頂樓", en:"Rooftop", sub_zh:"開放空間 · 強日照與風", sub_en:"Open space · strong sun & wind" },
+  { key:"yard", zh:"庭院 / 中庭", en:"Yard / courtyard", sub_zh:"地植 · 較大面積", sub_en:"In-ground · larger area" },
+  { key:"indoor", zh:"室內窗邊", en:"Indoor window", sub_zh:"間接光 · 小型綠化", sub_en:"Indirect light · small green" },
+];
+
+const SUN_OPTIONS = [
+  { key:"full", zh:"全日照", en:"Full sun", sub_zh:"南向 / 頂樓 · 6小時以上直射", sub_en:"South-facing / rooftop · 6+ hrs direct" },
+  { key:"part", zh:"半日照", en:"Part sun", sub_zh:"東/西向 · 3–5小時直射", sub_en:"East/west · 3–5 hrs direct" },
+  { key:"shade", zh:"遮陰", en:"Shade", sub_zh:"北向 / 樹蔭 · 散射光為主", sub_en:"North-facing / tree shade · diffuse light" },
+];
+
+const WATER_OPTIONS = [
+  { key:"low", zh:"低", en:"Low", sub_zh:"常忘記澆水 / 想免維護", sub_en:"I often forget / want low-maintenance" },
+  { key:"med", zh:"中", en:"Medium", sub_zh:"規律照顧 · 每週數次", sub_en:"Regular care · a few times a week" },
+  { key:"high", zh:"高", en:"High", sub_zh:"想嘗試水景 / 濕地植物", sub_en:"I want a water feature / wetland plants" },
+];
+
+const GOAL_OPTIONS = [
+  { key:"pollinator", zh:"吸引蜂蝶鳥類", en:"Attract pollinators & birds", sub_zh:"建立生態跳島", sub_en:"Build an urban biodiversity stepping-stone" },
+  { key:"screen", zh:"遮蔽與隱私", en:"Screening & privacy", sub_zh:"綠籬 · 防風", sub_en:"Hedge · windbreak" },
+  { key:"edible", zh:"四季可食 / 花藝", en:"Edible / floral", sub_zh:"餐桌與香氣", sub_en:"Kitchen and fragrance" },
+  { key:"easy", zh:"最低維護", en:"Low maintenance", sub_zh:"強健 · 耐旱", sub_en:"Tough · drought tolerant" },
+];
+
+const MONTHS = {
+  zh: ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"],
+  en: ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
+};
+
+// ─────────────────────────────────────────────────────────────
+// State + scoring
+// ─────────────────────────────────────────────────────────────
+const STEPS = ["space","sun","water","goals","result"];
+const state = {
+  step: 0,
+  space: null,
+  sun: null,
+  water: null,
+  goals: [],
+  resultTab: "plan",   // plan | layers | calendar | shopping
+  selectedPlantId: null,
+  qty: {},              // shopping list quantities
+  lang: "zh",
+};
+
+// Auto-suggest sun for indoor (no choice — it's always part/shade)
+function autoApplySpaceDefaults() {
+  if (state.space === "indoor" && !state.sun) state.sun = "shade";
+}
+
+// Scoring engine — now uses space as well (fix for original bug where space was unused)
+function scorePlants() {
+  const { sun, water, goals, space } = state;
+  return PLANTS.map((p) => {
+    let score = 0;
+    const reasons_zh = [], reasons_en = [];
+
+    // Sun match
+    if (p.sun.includes(sun)) { score += 35; reasons_zh.push("光照相符"); reasons_en.push("Sun match"); }
+    else if (sun === "part" && (p.sun.includes("full") || p.sun.includes("shade"))) { score += 14; }
+
+    // Water match
+    if (p.water === water) { score += 28; reasons_zh.push("水分相符"); reasons_en.push("Water match"); }
+    else if (Math.abs(["low","med","high"].indexOf(p.water) - ["low","med","high"].indexOf(water)) === 1) { score += 10; }
+
+    // Space match — this was the major bug in the original .jsx
+    if (p.spaces.includes(space)) { score += 22; }
+    else { score -= 25; }  // strong penalty — a 5m tree on a balcony is just wrong
+    if (space === "balcony" && p.container_ok) { score += 6; reasons_zh.push("適合容器"); reasons_en.push("Container-friendly"); }
+    if (space === "indoor" && p.spaces.includes("indoor")) { score += 10; reasons_zh.push("室內可生長"); reasons_en.push("Indoor-tolerant"); }
+
+    // Goal match
+    if (goals.includes("pollinator") && (p.supports_zh.some(s => /蜂|蝶|鳥|蜜|授粉/.test(s)))) {
+      score += 18; reasons_zh.push("授粉/誘鳥"); reasons_en.push("Pollinator/bird");
+    }
+    if (goals.includes("screen") && (p.role_zh.includes("骨架") || p.role_zh.includes("綠籬") || p.tier === "T")) {
+      score += 18; reasons_zh.push("遮蔽屏障"); reasons_en.push("Screening");
+    }
+    if (goals.includes("edible") && (p.supports_zh.some(s => /可食|食/.test(s)) || p.id === "alpinia" || p.id === "mulberry_sm")) {
+      score += 16; reasons_zh.push("可食/花藝"); reasons_en.push("Edible/floral");
+    }
+    if (goals.includes("easy") && p.water === "low") { score += 14; reasons_zh.push("低維護"); reasons_en.push("Low maintenance"); }
+
+    // Tier diversity bonus — encourage variety
+    score += 4;
+
+    score = Math.max(0, Math.min(99, score + 8));
+    return { ...p, score, reasons_zh, reasons_en };
+  }).sort((a, b) => b.score - a.score);
+}
+
+// Layer assignment — FIX for original bug: ensure every tier has fallback to *best plant fitting tier*,
+// even if the top-5 don't include one. Also, if no plant of a tier fits the space at all, mark it empty.
+function buildLayers(scored) {
+  const tierMap = {
+    T: { tier_zh:"上層 · 喬木/骨架", tier_en:"Upper · Canopy / Frame",     desc_zh:"防風、遮蔭、垂直結構", desc_en:"Windbreak, shade, vertical structure" },
+    S: { tier_zh:"中層 · 開花灌木",   tier_en:"Middle · Flowering shrubs",  desc_zh:"生態蜜源、視覺焦點", desc_en:"Pollinator nectar, focal interest" },
+    G: { tier_zh:"地被 · 鋪面",       tier_en:"Ground · Cover",             desc_zh:"固土、保濕、底層綠意", desc_en:"Soil retention, moisture, base green" },
+    W: { tier_zh:"水景 · 點綴",       tier_en:"Water · Accent",             desc_zh:"水生植物、生物多樣性", desc_en:"Aquatic plants, biodiversity" },
+    C: { tier_zh:"藤本 · 立體綠化",   tier_en:"Climber · Vertical green",   desc_zh:"軟化邊界、節省地面", desc_en:"Softens edges, saves ground" },
+  };
+
+  // Pick best plant per tier from the scored & space-compatible set.
+  const compatible = scored.filter((p) => p.score >= 30);
+  const layers = [];
+  for (const tier of ["T","S","G","W","C"]) {
+    const best = compatible.find((p) => p.tier === tier);
+    layers.push({
+      key: tier,
+      ...tierMap[tier],
+      plant: best || null,
+    });
+  }
+  // Drop W and C if there's no plant — they're optional tiers; keep T/S/G visible even if empty so user sees what's missing.
+  return layers.filter((l) => !(["W","C"].includes(l.key) && !l.plant));
+}
+
+// ─────────────────────────────────────────────────────────────
+// Render
+// ─────────────────────────────────────────────────────────────
+const app = document.getElementById("app");
+const progressWrap = document.getElementById("progressWrap");
+const navFooter = document.getElementById("navFooter");
+const drawerHost = document.getElementById("drawerHost");
+
+function t(zh, en) { return state.lang === "zh" ? zh : en; }
+
+function render() {
+  // progress dots
+  progressWrap.innerHTML = state.step < 4 ? STEPS.slice(0,4).map((_, i) =>
+    `<div class="progress-dot ${i <= state.step ? "on" : ""}"></div>`).join("") : "";
+
+  // main area
+  switch (state.step) {
+    case 0: renderSpace(); break;
+    case 1: renderSun(); break;
+    case 2: renderWater(); break;
+    case 3: renderGoals(); break;
+    case 4: renderResult(); break;
+  }
+
+  renderNav();
+  applyLanguage();
+}
+
+function renderSpace() {
+  app.innerHTML = `
+    <div class="fade-up">
+      <div class="kicker" data-zh="01 — 你的空間" data-en="01 — Your space">01 — 你的空間</div>
+      <h1 class="title" data-zh="你想種在哪裡？" data-en="Where will you plant?">你想種在哪裡？</h1>
+      <p class="lead" data-zh="告訴我你的種植環境，AI 將從台灣原生植物資料庫為你配置。" data-en="Tell me your planting environment — I'll design from the Taiwan native plant database.">告訴我你的種植環境，AI 將從台灣原生植物資料庫為你配置。</p>
+      <div class="grid cols-2">
+        ${SPACE_OPTIONS.map(o => optCard(o, state.space === o.key)).join("")}
+      </div>
+    </div>`;
+  wireOptCards("space");
+}
+
+function renderSun() {
+  app.innerHTML = `
+    <div class="fade-up">
+      <div class="kicker" data-zh="02 — 微氣候" data-en="02 — Microclimate">02 — 微氣候</div>
+      <h1 class="title" data-zh="光照條件如何？" data-en="What's the light like?">光照條件如何？</h1>
+      <p class="lead" data-zh="日照是景觀設計的第一準則。先讀光，再選種。" data-en="Light is the first rule of landscape design. Read the light, then choose plants.">日照是景觀設計的第一準則。先讀光，再選種。</p>
+      <div class="grid cols-3">
+        ${SUN_OPTIONS.map(o => optCard(o, state.sun === o.key, sunIcon(o.key, state.sun === o.key))).join("")}
+      </div>
+    </div>`;
+  wireOptCards("sun");
+}
+
+function renderWater() {
+  app.innerHTML = `
+    <div class="fade-up">
+      <div class="kicker" data-zh="03 — 水分" data-en="03 — Water">03 — 水分</div>
+      <h1 class="title" data-zh="你能投入多少照顧？" data-en="How much care can you give?">你能投入多少照顧？</h1>
+      <p class="lead" data-zh="誠實面對你的生活節奏，才能養出健康的活體土壤。" data-en="Be honest about your rhythm — that's how living soil stays healthy.">誠實面對你的生活節奏，才能養出健康的活體土壤。</p>
+      <div class="grid cols-3">
+        ${WATER_OPTIONS.map(o => optCard(o, state.water === o.key)).join("")}
+      </div>
+    </div>`;
+  wireOptCards("water");
+}
+
+function renderGoals() {
+  app.innerHTML = `
+    <div class="fade-up">
+      <div class="kicker" data-zh="04 — 願景（可複選）" data-en="04 — Goals (multi-select)">04 — 願景（可複選）</div>
+      <h1 class="title" data-zh="你希望這片綠地帶來什麼？" data-en="What should this green space give you?">你希望這片綠地帶來什麼？</h1>
+      <p class="lead" data-zh="從單純的觀賞，到成為都市生態廊道的一部分。" data-en="From simple ornament to becoming part of an urban ecological corridor.">從單純的觀賞，到成為都市生態廊道的一部分。</p>
+      <div class="grid cols-2">
+        ${GOAL_OPTIONS.map(o => optCard(o, state.goals.includes(o.key), null, true)).join("")}
+      </div>
+    </div>`;
+  wireOptCards("goals", true);
+}
+
+function optCard(opt, active, iconHtml, checkable) {
+  return `
+    <button class="card-opt ${active ? "active" : ""}" data-key="${opt.key}">
+      ${iconHtml ? `<div class="card-opt-icon">${iconHtml}</div>` : ""}
+      <div class="card-opt-row">
+        <span class="card-opt-label" data-zh="${opt.zh}" data-en="${opt.en}">${opt.zh}</span>
+        ${checkable ? `<span class="check-dot">${active ? "✓" : ""}</span>` : ""}
+      </div>
+      <span class="card-opt-sub" data-zh="${opt.sub_zh}" data-en="${opt.sub_en}">${opt.sub_zh}</span>
+    </button>`;
+}
+
+function sunIcon(key, active) {
+  const c = active ? "#EDEAE0" : "#2C3526";
+  const s = `stroke="${c}" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" fill="none"`;
+  switch (key) {
+    case "full":  return `<svg width="30" height="30" viewBox="0 0 24 24" ${s}><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"/></svg>`;
+    case "part":  return `<svg width="30" height="30" viewBox="0 0 24 24" ${s}><path d="M12 3a6 6 0 000 12"/><circle cx="12" cy="9" r="3"/><path d="M3 18h18M12 15v3"/></svg>`;
+    case "shade": return `<svg width="30" height="30" viewBox="0 0 24 24" ${s}><path d="M17 8a5 5 0 10-9 3 4 4 0 00.5 8H17a4 4 0 000-8z"/></svg>`;
+  }
+  return "";
+}
+
+function wireOptCards(field, multi) {
+  app.querySelectorAll(".card-opt").forEach((el) => {
+    el.addEventListener("click", () => {
+      const key = el.dataset.key;
+      if (multi) {
+        if (state.goals.includes(key)) state.goals = state.goals.filter(g => g !== key);
+        else state.goals = [...state.goals, key];
+      } else {
+        state[field] = key;
+      }
+      render();
+    });
+  });
+}
+
+function renderNav() {
+  if (state.step < 4) {
+    const canNext = (state.step === 0 && state.space) ||
+                    (state.step === 1 && state.sun) ||
+                    (state.step === 2 && state.water) ||
+                    state.step === 3;
+    const isLast = state.step === 3;
+    navFooter.innerHTML = `
+      <button class="nav-btn ${state.step === 0 ? "hidden" : ""}" id="navBack">← <span data-zh="上一步" data-en="Back">上一步</span></button>
+      <button class="cta" id="navNext" ${canNext ? "" : "disabled"}>
+        <span data-zh="${isLast ? "生成我的景觀配置" : "繼續"}" data-en="${isLast ? "Generate my plan" : "Continue"}">${isLast ? "生成我的景觀配置" : "繼續"}</span> →
+      </button>`;
+    document.getElementById("navBack")?.addEventListener("click", () => { state.step = Math.max(0, state.step - 1); render(); });
+    document.getElementById("navNext")?.addEventListener("click", () => {
+      if (!canNext) return;
+      state.step++;
+      autoApplySpaceDefaults();
+      if (state.step === 4) initShoppingQty();
+      render();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      updateLineShare();
+    });
+  } else {
+    const recsCount = scorePlants().filter(p => p.score >= 30).length;
+    navFooter.innerHTML = `
+      <button class="nav-btn" id="navReset">↺ <span data-zh="重新開始" data-en="Start over">重新開始</span></button>
+      <span class="foot-note" data-zh="共 ${recsCount} 種候選 · AI 依你的微氣候生成" data-en="${recsCount} candidates · generated from your microclimate">共 ${recsCount} 種候選 · AI 依你的微氣候生成</span>`;
+    document.getElementById("navReset")?.addEventListener("click", () => {
+      Object.assign(state, { step:0, space:null, sun:null, water:null, goals:[], resultTab:"plan", selectedPlantId:null, qty:{} });
+      render();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  }
+}
+
+// ─────────────────────────────────────────────────────────────
+// RESULT PAGE
+// ─────────────────────────────────────────────────────────────
+function initShoppingQty() {
+  const scored = scorePlants();
+  const compatible = scored.filter(p => p.score >= 30).slice(0, 8);
+  state.qty = {};
+  compatible.forEach((p) => {
+    // Default quantities by tier — sensible starting points for nursery shopping
+    const defaultQty = { T: 1, S: 2, G: 5, W: 2, C: 1 };
+    state.qty[p.id] = defaultQty[p.tier] || 1;
+  });
+}
+
+function renderResult() {
+  const scored = scorePlants();
+  const recs = scored.filter(p => p.score >= 30);
+  const layers = buildLayers(scored);
+
+  const sunLabel = SUN_OPTIONS.find(o => o.key === state.sun);
+  const waterLabel = WATER_OPTIONS.find(o => o.key === state.water);
+  const spaceLabel = SPACE_OPTIONS.find(o => o.key === state.space);
+
+  app.innerHTML = `
+    <div class="fade-up">
+      <div class="kicker" data-zh="你的專屬配置 · GENERATED" data-en="Your custom plan · GENERATED">你的專屬配置 · GENERATED</div>
+      <h1 class="title" data-zh="為你的微氣候而生的<br/>原生植物景觀" data-en="A native plant landscape<br/>built for your microclimate">為你的微氣候而生的<br/>原生植物景觀</h1>
+      <div class="chip-row">
+        <span class="chip">📍 <span data-zh="${spaceLabel.zh}" data-en="${spaceLabel.en}">${spaceLabel.zh}</span></span>
+        <span class="chip">☀ <span data-zh="${sunLabel.zh}" data-en="${sunLabel.en}">${sunLabel.zh}</span></span>
+        <span class="chip">💧 <span data-zh="${waterLabel.zh}水" data-en="${waterLabel.en} water">${waterLabel.zh}水</span></span>
+        ${state.goals.map(g => {
+          const go = GOAL_OPTIONS.find(o => o.key === g);
+          return `<span class="chip"><span data-zh="${go.zh}" data-en="${go.en}">${go.zh}</span></span>`;
+        }).join("")}
+      </div>
+
+      <div class="tabs" role="tablist">
+        ${[
+          { k:"plan",      zh:"俯瞰平面圖",   en:"Garden plan" },
+          { k:"layers",    zh:"復層配置",     en:"Layered design" },
+          { k:"calendar",  zh:"花期月曆",     en:"Bloom calendar" },
+          { k:"shopping",  zh:"採購清單",     en:"Shopping list" },
+        ].map(tab => `
+          <button class="tab ${state.resultTab === tab.k ? "active" : ""}" data-tab="${tab.k}">
+            <span data-zh="${tab.zh}" data-en="${tab.en}">${tab.zh}</span>
+          </button>
+        `).join("")}
+      </div>
+
+      <div class="tab-panel" id="tabPanel"></div>
+    </div>`;
+
+  app.querySelectorAll(".tab").forEach((t) => {
+    t.addEventListener("click", () => { state.resultTab = t.dataset.tab; renderTabPanel(recs, layers); applyLanguage(); });
+  });
+
+  renderTabPanel(recs, layers);
+}
+
+function renderTabPanel(recs, layers) {
+  const host = document.getElementById("tabPanel");
+  if (!host) return;
+  switch (state.resultTab) {
+    case "plan":     host.innerHTML = renderPlan(layers, recs); wirePlanInteractions(); break;
+    case "layers":   host.innerHTML = renderLayers(layers, recs); wireLayerCards(); break;
+    case "calendar": host.innerHTML = renderCalendar(recs); break;
+    case "shopping": host.innerHTML = renderShopping(recs); wireShoppingControls(); break;
+  }
+  applyLanguage();
+}
+
+// ── TAB: GARDEN PLAN (top-down SVG) ─────────────────────────
+function renderPlan(layers, recs) {
+  // Determine space dimensions for the SVG viewBox
+  const dims = {
+    balcony: { w: 600, h: 240, label_zh: "陽台 ≈ 3m × 1m", label_en: "Balcony ≈ 3m × 1m" },
+    rooftop: { w: 540, h: 420, label_zh: "頂樓 ≈ 5m × 4m", label_en: "Rooftop ≈ 5m × 4m" },
+    yard:    { w: 540, h: 420, label_zh: "庭院 ≈ 6m × 5m", label_en: "Yard ≈ 6m × 5m" },
+    indoor:  { w: 600, h: 220, label_zh: "室內窗邊 ≈ 1.5m × 0.5m", label_en: "Indoor window ≈ 1.5m × 0.5m" },
+  }[state.space];
+
+  // Picked plants for the plan: top 1 of each available tier + 1 accent
+  const plantsForPlan = layers.filter(l => l.plant).map(l => l.plant);
+  const plan = layoutPlan(plantsForPlan, dims, state.space);
+
+  // Build SVG
+  const sunArrow = `
+    <g transform="translate(${dims.w - 60}, 28)">
+      <circle r="14" fill="#F4D67E" stroke="#C9A84C" stroke-width="1.5"/>
+      <text x="0" y="4" text-anchor="middle" font-size="13" fill="#8C6F52" font-weight="600">☀</text>
+      <text x="0" y="36" text-anchor="middle" font-size="10" fill="#5A5C50" font-family="Noto Serif TC">${t("陽光", "Sun")}</text>
+    </g>`;
+
+  const ground = `
+    <rect x="20" y="20" width="${dims.w - 40}" height="${dims.h - 40}" rx="14"
+          fill="rgba(196,184,144,0.18)" stroke="#C9C3B4" stroke-width="1.2" stroke-dasharray="6 4"/>`;
+
+  const labelBar = `
+    <text x="32" y="46" font-size="11" letter-spacing="0.18em" fill="#8C6F52" font-weight="600">
+      ${t("俯瞰圖 · TOP VIEW", "TOP VIEW")}
+    </text>
+    <text x="32" y="${dims.h - 28}" font-size="11" fill="#5A5C50" font-family="Noto Serif TC" font-style="italic">
+      ${t(dims.label_zh, dims.label_en)}
+    </text>`;
+
+  const plantCircles = plan.map((p, i) => {
+    const r = Math.max(18, Math.min(46, (p.spread[1] || 1) * 22));
+    const fontSize = r > 30 ? 12.5 : 11.5;
+    return `
+      <g class="plan-plant" data-id="${p.id}" style="cursor:pointer;">
+        <circle cx="${p.x}" cy="${p.y}" r="${r + 4}" fill="${p.color}" opacity="0.18"/>
+        <circle cx="${p.x}" cy="${p.y}" r="${r}" fill="${p.color}" opacity="0.5" stroke="${p.color}" stroke-width="2"/>
+        <text x="${p.x}" y="${p.y - 2}" text-anchor="middle" font-size="${fontSize}" font-family="Noto Serif TC" font-weight="600" fill="#2C3526">${p.zh}</text>
+        <text x="${p.x}" y="${p.y + 12}" text-anchor="middle" font-size="10" fill="#5A5C50" font-style="italic" font-family="Noto Serif TC">${p.lt}</text>
+      </g>`;
+  }).join("");
+
+  // Legend: tier color key
+  const tiersInPlan = [...new Set(plantsForPlan.map(p => p.tier))];
+  const tierLabels = { T:t("上層","Upper"), S:t("中層","Mid"), G:t("地被","Ground"), W:t("水景","Water"), C:t("藤本","Vine") };
+  const legend = `
+    <div class="plan-legend">
+      ${tiersInPlan.map(tier => {
+        const p = plantsForPlan.find(pp => pp.tier === tier);
+        return `<span class="plan-legend-item"><span class="plan-legend-dot" style="background:${p.color}"></span>${tierLabels[tier]} — ${t(p.zh, p.en)}</span>`;
+      }).join("")}
+    </div>`;
+
+  return `
+    <h2 class="subtitle" data-zh="俯瞰平面圖 · Top View" data-en="Top View — Garden Plan">俯瞰平面圖 · Top View</h2>
+    <p class="lead-small" data-zh="點擊任一植物查看詳細養護指南。圓圈大小相對於成株時的冠幅。"
+       data-en="Tap a plant to see full care guide. Circle size is roughly proportional to mature spread.">
+       點擊任一植物查看詳細養護指南。圓圈大小相對於成株時的冠幅。</p>
+    <div class="plan-frame">
+      <svg class="plan-svg" viewBox="0 0 ${dims.w} ${dims.h}" preserveAspectRatio="xMidYMid meet">
+        ${ground}
+        ${labelBar}
+        ${sunArrow}
+        ${plantCircles}
+      </svg>
+      ${legend}
+    </div>`;
+}
+
+function layoutPlan(plants, dims, space) {
+  // Place plants by tier:
+  //   T (canopy) → back row (y near top, away from sun viewer in metaphor)
+  //   S (shrub)  → middle row
+  //   G (ground) → front row (closer to viewer)
+  //   W (water)  → if present, special left-side pond
+  //   C (climber) → left/right edge
+  const pad = 60;
+  const w = dims.w - pad * 2;
+
+  const T = plants.filter(p => p.tier === "T");
+  const S = plants.filter(p => p.tier === "S");
+  const G = plants.filter(p => p.tier === "G");
+  const W = plants.filter(p => p.tier === "W");
+  const C = plants.filter(p => p.tier === "C");
+
+  // Rows: define y positions based on space shape
+  let yT, yS, yG;
+  if (space === "balcony" || space === "indoor") {
+    // narrow strip — single rank, but spread across width: T at left if any, S middle, G right
+    yT = yS = yG = dims.h / 2;
+  } else {
+    yT = pad + 20;
+    yG = dims.h - pad - 20;
+    yS = (yT + yG) / 2;
+  }
+
+  const out = [];
+
+  function placeRow(arr, y, leftRatio = 0, rightRatio = 1) {
+    const n = arr.length;
+    if (!n) return;
+    const x0 = pad + w * leftRatio;
+    const xw = w * (rightRatio - leftRatio);
+    arr.forEach((p, i) => {
+      const x = n === 1 ? x0 + xw / 2 : x0 + (xw / (n + 1)) * (i + 1);
+      out.push({ ...p, x, y });
+    });
+  }
+
+  if (space === "balcony" || space === "indoor") {
+    // Single row left→right: T, S, G, then accents (W,C) appended
+    const seq = [...T, ...S, ...G, ...W, ...C];
+    seq.forEach((p, i) => {
+      const x = pad + (w / (seq.length + 1)) * (i + 1);
+      out.push({ ...p, x, y: dims.h / 2 });
+    });
+    return out;
+  }
+
+  // For rooftop/yard: layered
+  // Reserve left edge for water if present
+  if (W.length) {
+    out.push({ ...W[0], x: pad + 50, y: yS + 15 });
+    placeRow(T, yT, 0.15, 1);
+  } else {
+    placeRow(T, yT, 0, 1);
+  }
+  placeRow(S, yS, W.length ? 0.18 : 0, 1);
+  placeRow(G, yG, 0, 1);
+
+  // Climber on right edge (decorative)
+  if (C.length) {
+    out.push({ ...C[0], x: dims.w - pad - 30, y: yS - 30 });
+  }
+  return out;
+}
+
+function wirePlanInteractions() {
+  document.querySelectorAll(".plan-plant").forEach((g) => {
+    g.addEventListener("click", () => openDrawer(g.dataset.id));
+  });
+}
+
+// ── TAB: LAYERS (section diagram) ───────────────────────────
+function renderLayers(layers, recs) {
+  const total = layers.filter(l => l.plant).length;
+  return `
+    <h2 class="subtitle" data-zh="復層配置 — Living Soil System" data-en="Layered Design — Living Soil System">復層配置 — Living Soil System</h2>
+    <p class="lead-small"
+       data-zh="從骨架到地被，模擬自然森林的垂直分層，最大化都市生物多樣性。"
+       data-en="From canopy to ground, mimicking a natural forest's vertical layers to maximize urban biodiversity.">
+       從骨架到地被，模擬自然森林的垂直分層，最大化都市生物多樣性。</p>
+
+    <div class="layer-stack">
+      ${layers.map(l => l.plant ? `
+        <div class="layer-row" data-id="${l.plant.id}">
+          <div class="layer-bar" style="background:${l.plant.color}"></div>
+          <div class="layer-info">
+            <div class="layer-tier" data-zh="${l.tier_zh}" data-en="${l.tier_en}">${l.tier_zh}</div>
+            <div class="layer-desc" data-zh="${l.desc_zh}" data-en="${l.desc_en}">${l.desc_zh}</div>
+          </div>
+          <div class="layer-plant">
+            <div class="layer-plant-name" data-zh="${l.plant.zh}" data-en="${l.plant.en}">${l.plant.zh}</div>
+            <div class="layer-plant-latin">${l.plant.lt}</div>
+          </div>
+          <div class="layer-arrow">→</div>
+        </div>` : `
+        <div class="layer-row empty">
+          <div class="layer-bar" style="background:#C9C3B4"></div>
+          <div class="layer-info">
+            <div class="layer-tier" data-zh="${l.tier_zh}" data-en="${l.tier_en}">${l.tier_zh}</div>
+            <div class="layer-desc" data-zh="${l.desc_zh}" data-en="${l.desc_en}">${l.desc_zh}</div>
+          </div>
+          <div class="layer-plant">
+            <div class="layer-plant-name"
+                 data-zh="（這個微氣候不適合此層）"
+                 data-en="(This layer doesn't fit your microclimate)">（這個微氣候不適合此層）</div>
+          </div>
+        </div>`).join("")}
+    </div>
+
+    <h2 class="subtitle" data-zh="推薦植物 · 點擊查看養護指南" data-en="Recommended plants · tap for care guide">推薦植物 · 點擊查看養護指南</h2>
+    <div class="rec-grid">
+      ${recs.slice(0, 8).map(p => `
+        <button class="rec-card" data-id="${p.id}">
+          <div class="rec-head">
+            <div class="rec-swatch" style="background:${p.color}"></div>
+            <div class="rec-match">${p.score}<span class="rec-match-pct">% <span data-zh="相符" data-en="match">相符</span></span></div>
+          </div>
+          <div class="rec-name" data-zh="${p.zh}" data-en="${p.en}">${p.zh}</div>
+          <div class="rec-latin">${p.lt}</div>
+          <div class="rec-type" data-zh="${p.type_zh} · ${p.role_zh}" data-en="${p.type_en} · ${p.role_en}">${p.type_zh} · ${p.role_zh}</div>
+          <div class="rec-reasons">
+            ${(state.lang === "zh" ? p.reasons_zh : p.reasons_en).slice(0, 3).map(r => `<span class="rec-tag">${r}</span>`).join("")}
+          </div>
+          <div class="rec-view" data-zh="養護指南 →" data-en="Care guide →">養護指南 →</div>
+        </button>`).join("")}
+    </div>`;
+}
+
+function wireLayerCards() {
+  document.querySelectorAll(".layer-row[data-id], .rec-card[data-id]").forEach((el) => {
+    el.addEventListener("click", () => openDrawer(el.dataset.id));
+  });
+}
+
+// ── TAB: BLOOM CALENDAR ─────────────────────────────────────
+function renderCalendar(recs) {
+  const top = recs.slice(0, 8);
+  const months = MONTHS[state.lang];
+  return `
+    <h2 class="subtitle" data-zh="花期 × 果期月曆" data-en="Bloom × Fruit Calendar">花期 × 果期月曆</h2>
+    <p class="lead-small"
+       data-zh="八種推薦植物的全年花果時序。一個好的設計，應該全年都有色彩與食物。"
+       data-en="Year-round bloom and fruit timing across your top 8 plants. A good design always has color and food, every month.">
+       八種推薦植物的全年花果時序。一個好的設計，應該全年都有色彩與食物。</p>
+    <div class="cal-frame">
+      <table class="cal-table">
+        <thead>
+          <tr>
+            <th class="plant-col" data-zh="植物" data-en="Plant">植物</th>
+            ${months.map(m => `<th>${m}</th>`).join("")}
+          </tr>
+        </thead>
+        <tbody>
+          ${top.map(p => `
+            <tr>
+              <td class="plant-cell">
+                <div class="nm" data-zh="${p.zh}" data-en="${p.en}">${p.zh}</div>
+                <div class="lt">${p.lt}</div>
+              </td>
+              ${months.map((_, i) => {
+                const m = i + 1;
+                const bloom = p.bloom?.includes(m);
+                const fruit = p.fruit?.includes(m);
+                let cls = "cal-cell";
+                if (bloom && fruit) cls += " both";
+                else if (bloom) cls += " bloom";
+                else if (fruit) cls += " fruit";
+                return `<td><div class="${cls}"></div></td>`;
+              }).join("")}
+            </tr>`).join("")}
+        </tbody>
+      </table>
+      <div class="cal-legend">
+        <span><span class="cal-leg-swatch" style="background:linear-gradient(180deg,#B86B9C,#9B5C8F)"></span><span data-zh="花期" data-en="Bloom">花期</span></span>
+        <span><span class="cal-leg-swatch" style="background:linear-gradient(180deg,#C9764C,#B23A30)"></span><span data-zh="果期" data-en="Fruit">果期</span></span>
+        <span><span class="cal-leg-swatch" style="background:linear-gradient(90deg,#B86B9C 50%,#C9764C 50%)"></span><span data-zh="花果並見" data-en="Bloom + Fruit">花果並見</span></span>
+      </div>
+    </div>`;
+}
+
+// ── TAB: SHOPPING LIST ──────────────────────────────────────
+function renderShopping(recs) {
+  const top = recs.slice(0, 8);
+  let total = 0;
+  const rows = top.map(p => {
+    const qty = state.qty[p.id] ?? 1;
+    const sub = qty * p.cost;
+    total += sub;
+    return `
+      <tr>
+        <td>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:28px;height:28px;border-radius:8px;background:${p.color};flex-shrink:0;"></div>
+            <div>
+              <div style="font-weight:600;color:var(--forest);" data-zh="${p.zh}" data-en="${p.en}">${p.zh}</div>
+              <div style="font-size:11.5px;font-style:italic;color:var(--ink-soft);font-family:var(--serif);">${p.lt}</div>
+            </div>
+          </div>
+        </td>
+        <td>
+          <div class="shop-qty">
+            <button class="shop-qty-btn" data-act="dec" data-id="${p.id}" ${qty <= 0 ? "disabled" : ""}>−</button>
+            <span class="shop-qty-val">${qty}</span>
+            <button class="shop-qty-btn" data-act="inc" data-id="${p.id}">+</button>
+          </div>
+        </td>
+        <td class="right">NT$ ${p.cost.toLocaleString()}</td>
+        <td class="right" style="font-weight:600;color:var(--forest);">NT$ ${sub.toLocaleString()}</td>
+      </tr>`;
+  }).join("");
+
+  return `
+    <h2 class="subtitle" data-zh="採購清單" data-en="Shopping List">採購清單</h2>
+    <p class="lead-small"
+       data-zh="調整每種植物的數量，估算總成本。價格為一般花市/苗圃參考價，依規格與季節變動。"
+       data-en="Adjust quantities to estimate total cost. Prices reflect typical nursery/market reference rates and vary by size and season.">
+       調整每種植物的數量，估算總成本。價格為一般花市/苗圃參考價，依規格與季節變動。</p>
+    <div class="shop-frame">
+      <table class="shop-table">
+        <thead>
+          <tr>
+            <th data-zh="植物" data-en="Plant">植物</th>
+            <th data-zh="數量" data-en="Qty">數量</th>
+            <th class="right" data-zh="單價" data-en="Unit">單價</th>
+            <th class="right" data-zh="小計" data-en="Subtotal">小計</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+      <div class="shop-total">
+        <span class="label" data-zh="預估總成本" data-en="Estimated total">預估總成本</span>
+        <span class="amount" id="shopTotal">NT$ ${total.toLocaleString()}</span>
+      </div>
+      <p class="shop-note"
+         data-zh="* 不含土壤、盆器、肥料、人工。原生植物在台灣最佳栽種期為春季 (3–5月) 與秋季 (10–11月)。建議向農場、林試所、原生植物協會或在地有機苗圃詢問。"
+         data-en="* Excludes soil, containers, fertilizer, labor. Best planting in Taiwan: spring (Mar–May) and autumn (Oct–Nov). Source from native plant nurseries, TFRI, or the Native Plant Society.">
+         * 不含土壤、盆器、肥料、人工。原生植物在台灣最佳栽種期為春季 (3–5月) 與秋季 (10–11月)。建議向農場、林試所、原生植物協會或在地有機苗圃詢問。
+      </p>
+      <div class="shop-actions">
+        <button class="btn ghost" onclick="exportShoppingCSV()">⬇ <span data-zh="下載 CSV" data-en="Download CSV">下載 CSV</span></button>
+        <button class="btn ghost" onclick="window.print()">📄 <span data-zh="列印清單" data-en="Print list">列印清單</span></button>
+      </div>
+    </div>`;
+}
+
+function wireShoppingControls() {
+  document.querySelectorAll(".shop-qty-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const id = btn.dataset.id;
+      const act = btn.dataset.act;
+      const cur = state.qty[id] ?? 1;
+      if (act === "inc") state.qty[id] = cur + 1;
+      else if (act === "dec" && cur > 0) state.qty[id] = cur - 1;
+      const scored = scorePlants();
+      const recs = scored.filter(p => p.score >= 30);
+      document.getElementById("tabPanel").innerHTML = renderShopping(recs);
+      wireShoppingControls();
+      applyLanguage();
+    });
+  });
+}
+
+window.exportShoppingCSV = function() {
+  const scored = scorePlants();
+  const top = scored.filter(p => p.score >= 30).slice(0, 8);
+  const header = ["Name (中文)", "Name (English)", "Latin", "Qty", "Unit (NTD)", "Subtotal (NTD)"];
+  const rows = top.map(p => {
+    const q = state.qty[p.id] ?? 1;
+    return [p.zh, p.en, p.lt, q, p.cost, q * p.cost];
+  });
+  const csv = [header, ...rows].map(r => r.map(c => `"${c}"`).join(",")).join("\n");
+  const blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = `landscape-plan-${state.space}.csv`; a.click();
+  URL.revokeObjectURL(url);
+};
+
+// ─────────────────────────────────────────────────────────────
+// PLANT DRAWER
+// ─────────────────────────────────────────────────────────────
+function openDrawer(id) {
+  const plant = PLANTS.find(p => p.id === id);
+  if (!plant) return;
+  state.selectedPlantId = id;
+  drawerHost.innerHTML = `
+    <div class="drawer-overlay" id="drawerOverlay">
+      <div class="drawer slide-in" onclick="event.stopPropagation()">
+        <button class="drawer-close" id="drawerClose">✕</button>
+        <div class="drawer-swatch" style="background:${plant.color}"></div>
+        <div class="drawer-type" data-zh="${plant.type_zh}" data-en="${plant.type_en}">${plant.type_zh}</div>
+        <h2 class="drawer-name" data-zh="${plant.zh}" data-en="${plant.en}">${plant.zh}</h2>
+        <div class="drawer-en" data-zh="${plant.en}" data-en="${plant.zh}">${plant.en}</div>
+        <div class="drawer-latin">${plant.lt}</div>
+
+        <div class="drawer-meta">
+          <div class="meta-cell">
+            <div class="meta-label" data-zh="角色" data-en="Role">角色</div>
+            <div class="meta-val" data-zh="${plant.role_zh}" data-en="${plant.role_en}">${plant.role_zh}</div>
+          </div>
+          <div class="meta-cell">
+            <div class="meta-label" data-zh="高度" data-en="Height">高度</div>
+            <div class="meta-val">${plant.height[0]}–${plant.height[1]} m</div>
+          </div>
+          <div class="meta-cell">
+            <div class="meta-label" data-zh="冠幅" data-en="Spread">冠幅</div>
+            <div class="meta-val">${plant.spread[0]}–${plant.spread[1]} m</div>
+          </div>
+        </div>
+
+        <div class="drawer-block">
+          <div class="drawer-block-title" data-zh="關於這株植物" data-en="About this plant">關於這株植物</div>
+          <p class="drawer-text" data-zh="${plant.note_zh}" data-en="${plant.note_en}">${plant.note_zh}</p>
+        </div>
+
+        <div class="drawer-block">
+          <div class="drawer-block-title" data-zh="養護指南" data-en="Care Guide">養護指南</div>
+          <p class="drawer-text" data-zh="${plant.care_zh}" data-en="${plant.care_en}">${plant.care_zh}</p>
+        </div>
+
+        <div class="drawer-block">
+          <div class="drawer-block-title" data-zh="生態貢獻" data-en="Ecological role">生態貢獻</div>
+          <div class="drawer-supports">
+            ${(state.lang === "zh" ? plant.supports_zh : plant.supports_en).map(s => `<span class="chip">${s}</span>`).join("")}
+          </div>
+        </div>
+
+        <div class="drawer-foot" data-zh="Biodiversity Living System · 原生植物資料庫" data-en="Biodiversity Living System · Native Plant Database">Biodiversity Living System · 原生植物資料庫</div>
+      </div>
+    </div>`;
+  document.getElementById("drawerOverlay").addEventListener("click", closeDrawer);
+  document.getElementById("drawerClose").addEventListener("click", (e) => { e.stopPropagation(); closeDrawer(); });
+  applyLanguage();
+}
+
+function closeDrawer() {
+  state.selectedPlantId = null;
+  drawerHost.innerHTML = "";
+}
+
+// ─────────────────────────────────────────────────────────────
+// Language toggle (zh/en) — same data-zh/data-en pattern as farm-pitch.html
+// ─────────────────────────────────────────────────────────────
+function applyLanguage() {
+  document.querySelectorAll("[data-zh][data-en]").forEach((el) => {
+    el.innerHTML = el.dataset[state.lang];
+  });
+  document.documentElement.lang = state.lang === "zh" ? "zh-Hant" : "en";
+  document.getElementById("langToggle").textContent = state.lang === "zh" ? "English" : "中文";
+}
+
+document.getElementById("langToggle").addEventListener("click", () => {
+  state.lang = state.lang === "zh" ? "en" : "zh";
+  render();
+});
+
+// ─────────────────────────────────────────────────────────────
+// Share + LINE (matches farm-pitch.html pattern)
+// ─────────────────────────────────────────────────────────────
+function updateLineShare() {
+  const text = state.lang === "zh"
+    ? `我用 AI Landscape Copilot 規劃了一個原生植物景觀 — 來看看你的 → ${location.href}`
+    : `I designed a native plant landscape with AI Landscape Copilot — try yours → ${location.href}`;
+  document.getElementById("lineShareBtn").href = `https://line.me/R/share?text=${encodeURIComponent(text)}`;
+}
+
+window.copyShareLink = async function(btn) {
+  try {
+    await navigator.clipboard.writeText(location.href);
+    const original = btn.innerHTML;
+    btn.innerHTML = `✓ <span>${state.lang === "zh" ? "已複製" : "Copied"}</span>`;
+    setTimeout(() => { btn.innerHTML = original; applyLanguage(); }, 1800);
+  } catch (e) {
+    prompt(state.lang === "zh" ? "請手動複製此連結：" : "Please copy this link:", location.href);
+  }
+};
+
+// ─────────────────────────────────────────────────────────────
+// Init
+// ─────────────────────────────────────────────────────────────
+updateLineShare();
+render();
+</script>
+</body>
+</html>
