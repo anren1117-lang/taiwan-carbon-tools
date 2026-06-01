@@ -2112,6 +2112,43 @@
     text-decoration: none;
   }
   .ag-answer-links a:hover { background: var(--accent); color: #fff; }
+  /* Related-question chips — appears at the bottom of each answer */
+  .ag-related {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--border);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+  }
+  .ag-related-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-right: 4px;
+  }
+  .agent-related-chip {
+    background: var(--bg-subtle, var(--bg));
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+    transition: transform 0.12s ease, border-color 0.12s ease, background 0.12s ease, color 0.12s ease;
+  }
+  .agent-related-chip::before { content: "→ "; opacity: 0.5; }
+  .agent-related-chip:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-tint);
+    transform: translateY(-1px);
+  }
   /* Recent question history — shown above the answer */
   .ag-history-q {
     background: var(--bg-subtle); border: 1px solid var(--border);
@@ -5129,6 +5166,64 @@ This application supports starting organic-transition certification for ≥1 ha.
     return bestScore > 0 ? best : null;
   }
 
+  // For no-match fallback: return top-3 closest KB topics by length-
+  // weighted token overlap on stemmed words. Helps farmer find a
+  // related answer instead of a generic "I don't know" suggestion.
+  function findClosestTopics(question, exclude) {
+    if (!question || !question.trim()) return [];
+    const excludeSet = new Set(exclude || []);
+    return AGENT_KB
+      .filter(e => !excludeSet.has(e.id))
+      .map(e => ({ entry: e, score: scoreAgentMatch(e, question) }))
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 3)
+      .filter(x => x.score > 0 || true) // include even zero-score for any-question fallback
+      .map(x => x.entry);
+  }
+
+  // Look up KB entries by id for "related questions" suggestions
+  function kbById(ids) {
+    if (!ids) return [];
+    return ids.map(id => AGENT_KB.find(e => e.id === id)).filter(Boolean);
+  }
+
+  // Topic graph — what to suggest as "related questions" after each
+  // answer. Edges chosen to form natural "consulting conversation
+  // arcs" (price → negotiation → pitch / cash gap → financing / etc.)
+  const RELATED_TOPICS = {
+    price_too_low:       ['buyer_expensive', 'find_buyers', 'pricing_specific'],
+    buyer_expensive:     ['price_too_low', 'pitch_buyer', 'find_buyers'],
+    subsidies_available: ['organic_transition', 'practice_invest', 'cash_short'],
+    cash_short:          ['subsidies_available', 'how_diversify', 'reduce_cost'],
+    how_diversify:       ['practice_invest', 'find_buyers', 'marketing_social'],
+    practice_invest:     ['cert_question', 'subsidies_available', 'soil_test'],
+    cert_question:       ['organic_transition', 'find_buyers', 'subsidies_available'],
+    find_buyers:         ['pitch_buyer', 'price_too_low', 'marketing_social'],
+    soil_test:           ['cert_question', 'practice_invest', 'subsidies_available'],
+    losing_money:        ['price_too_low', 'cash_short', 'reduce_cost'],
+    reduce_cost:         ['practice_invest', 'subsidies_available', 'water_mgmt'],
+    compare_peers:       ['practice_invest', 'how_diversify', 'cert_question'],
+    pitch_buyer:         ['buyer_expensive', 'find_buyers', 'marketing_social'],
+    what_to_do_now:      ['compare_peers', 'practice_invest', 'subsidies_available'],
+    goal_setting:        ['compare_peers', 'what_to_do_now', 'how_diversify'],
+    climate_risk:        ['practice_invest', 'water_mgmt', 'crop_rotation'],
+    pest_disease:        ['crop_rotation', 'practice_invest', 'find_mentor'],
+    hiring_labor:        ['burnout', 'succession', 'when_scale'],
+    succession:          ['hiring_labor', 'when_scale', 'burnout'],
+    marketing_social:    ['pitch_buyer', 'find_buyers', 'how_diversify'],
+    storage_coldchain:   ['find_buyers', 'subsidies_available', 'cert_question'],
+    crop_rotation:       ['pest_disease', 'practice_invest', 'soil_test'],
+    packaging_rules:     ['how_diversify', 'find_buyers', 'tax_accounting'],
+    tax_accounting:      ['packaging_rules', 'how_diversify', 'goal_setting'],
+    burnout:             ['hiring_labor', 'when_scale', 'find_mentor'],
+    land_tenure:         ['when_scale', 'succession', 'soil_test'],
+    when_scale:          ['hiring_labor', 'compare_peers', 'land_tenure'],
+    organic_transition:  ['cert_question', 'subsidies_available', 'practice_invest'],
+    find_mentor:         ['burnout', 'hiring_labor', 'compare_peers'],
+    water_mgmt:          ['practice_invest', 'climate_risk', 'reduce_cost'],
+    pricing_specific:    ['price_too_low', 'find_buyers', 'pitch_buyer']
+  };
+
   // Quick-chip canned questions, paired by topic (zh, en).
   // The question text shown in the "you asked" pill switches with lang.
   const QUICK_CHIPS = {
@@ -5180,25 +5275,47 @@ This application supports starting organic-transition certification for ≥1 ha.
     const resetBtn = document.getElementById('agentReset');
     if (resetBtn) resetBtn.style.display = '';
 
-    // No match: graceful fallback that still gives the farmer value
+    // Build a "related questions" chip row for any answer. Uses the
+    // RELATED_TOPICS graph if we have a match id, or the top-3 by
+    // keyword score if we're in fallback. Each chip re-fires askQuick
+    // by asking the related entry's first keyword phrase.
+    function relatedChips(matchId, fallbackQuestion) {
+      let related = [];
+      if (matchId && RELATED_TOPICS[matchId]) {
+        related = kbById(RELATED_TOPICS[matchId]);
+      } else if (fallbackQuestion) {
+        related = findClosestTopics(fallbackQuestion, []);
+      }
+      if (related.length === 0) return '';
+      const chips = related.map(e => {
+        const topicLabel = isZh ? e.topic.zh : e.topic.en;
+        // Each chip dispatches a synthetic question using the entry's
+        // first keyword as a query (guaranteed to match itself).
+        const q = (e.keywords && e.keywords[0]) || topicLabel;
+        return `<button class="agent-related-chip" onclick="askAgentTopic('${e.id}')">${topicLabel}</button>`;
+      }).join('');
+      return `
+        <div class="ag-related">
+          <span class="ag-related-label">${isZh ? '繼續探索' : 'Explore next'}</span>
+          ${chips}
+        </div>`;
+    }
+
+    // No match: graceful fallback — show the 3 closest topics by
+    // keyword score as related chips, not just generic links.
     if (!match) {
+      const closest = findClosestTopics(q, []);
       body.innerHTML = `
         <div class="ag-history-q">${escapeHtml(q)}</div>
         <div class="agent-bubble">
-          <div class="ag-answer-topic">${isZh ? '我沒有完全對應的答案' : 'No exact match for your question'}</div>
-          <div>${isZh
-            ? '但對任何永續農場來說，這 3 個工具回答了 80% 的常見問題。挑跟你最相關的一個開始：'
-            : 'But for any sustainable farm, these 3 tools answer 80% of common questions. Pick whichever fits your situation:'}</div>
-          <ol style="margin: 12px 0 12px 22px; font-size: 13.5px; line-height: 1.7;">
-            <li>${isZh ? '<strong>「本月 3 件事」</strong> — 儀表板上方，已自動算出你的最高優先行動。' : '<strong>"Top 3 Actions"</strong> — auto-computed priorities at the top of the dashboard.'}</li>
-            <li>${isZh ? '<strong>「定價工作室」</strong> — 你該收多少？哪些通路你今天就能進？' : '<strong>"Pricing Studio"</strong> — what to charge, which channels you can pitch today.'}</li>
-            <li>${isZh ? '<strong>「補助與碳匯收益」</strong> — 一鍵生成可寄出的補助申請草稿。' : '<strong>"Subsidies & carbon income"</strong> — one-click generates ready-to-send application drafts.'}</li>
-          </ol>
-          <div style="font-size: 12px; color: var(--text-muted); font-style: italic;">${isZh
-            ? '提示：用更具體的詞彙再問一次（例：「我可以拿什麼補助」、「買家嫌貴怎麼辦」、「最快回本的做法」）。'
-            : 'Tip: try more specific words (e.g. "what subsidies can I claim", "buyer says expensive", "fastest payback practice").'}</div>
-          <div class="ag-answer-links">
-            <a href="#sec-top3">${isZh ? '🎯 看本月 3 件事' : '🎯 See Top 3'}</a>
+          <div class="ag-answer-topic">${isZh ? '沒有完全對應的答案' : 'No exact match'}</div>
+          <div style="font-size: 15px; font-weight: 700; margin-bottom: 8px; line-height: 1.4;">${isZh ? '但這 3 個話題可能跟你的問題最相關 ↓' : 'But these 3 topics may be closest to what you\'re asking ↓'}</div>
+          <div style="font-size: 13px; line-height: 1.65; color: var(--text-muted);">${isZh
+            ? '點任何一個直接看答案，或用更具體的詞彙再問一次（例：「補助」、「定價」、「現金」、「議價」、「投資」）。'
+            : 'Click any to see the answer, or rephrase with more specific words (e.g. "subsidies", "pricing", "cash", "negotiation", "investment").'}</div>
+          ${relatedChips(null, q)}
+          <div class="ag-answer-links" style="margin-top: 14px;">
+            <a href="#sec-top3">${isZh ? '🎯 本月 3 件事' : '🎯 Top 3'}</a>
             <a href="#sec-pricing">${isZh ? '💰 定價工作室' : '💰 Pricing Studio'}</a>
             <a href="#sec-income">${isZh ? '📋 補助清單' : '📋 Subsidies'}</a>
           </div>
@@ -5224,8 +5341,23 @@ This application supports starting organic-transition certification for ≥1 ha.
           <ol>${actionsHtml}</ol>
         </div>
         ${linksHtml ? `<div class="ag-answer-links">${linksHtml}</div>` : ''}
+        ${relatedChips(match.id, null)}
       </div>`;
   }
+
+  // Jump directly to a KB topic answer (used by related-chip clicks)
+  window.askAgentTopic = function(topicId) {
+    const entry = AGENT_KB.find(e => e.id === topicId);
+    if (!entry) return;
+    const inp = readInputs();
+    const r = calcFromInputs(inp);
+    const isZh = currentLang !== 'en';
+    const synthQ = isZh ? entry.topic.zh : entry.topic.en;
+    agentState.lastQuestion = synthQ;
+    agentState.lastAnswer = entry;
+    renderAgentAnswer(synthQ, entry, inp, r);
+    document.getElementById('sec-agent').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
 
   // Simple HTML escape for user-provided question text
   function escapeHtml(s) {
