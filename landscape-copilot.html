@@ -148,6 +148,60 @@
   .check-dot { width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--line); display: flex; align-items: center; justify-content: center; font-size: 12px; color: var(--paper); }
   .card-opt.active .check-dot { background: var(--sage); border-color: var(--sage); }
 
+  /* DETAILS step — text + numeric inputs, orientation picker */
+  .detail-grid { display: grid; grid-template-columns: 1fr; gap: 22px; margin-top: 32px; }
+  .field { display: flex; flex-direction: column; gap: 8px; }
+  .field-label { font-size: 12px; letter-spacing: 0.16em; color: var(--clay-deep); font-weight: 600; text-transform: uppercase; }
+  .field-sub { font-size: 12.5px; color: var(--ink-soft); line-height: 1.5; margin-top: -2px; }
+  .field-input, .field-input-num {
+    background: rgba(255,255,255,0.5);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-family: inherit;
+    font-size: 16px;
+    color: var(--forest);
+    transition: border-color .2s, background .2s, box-shadow .2s;
+    width: 100%;
+  }
+  .field-input:focus, .field-input-num:focus {
+    outline: none;
+    border-color: var(--sage);
+    background: rgba(255,255,255,0.75);
+    box-shadow: 0 0 0 3px rgba(138,154,123,0.18);
+  }
+  .field-input::placeholder { color: var(--ink-soft); opacity: 0.6; }
+  .detected-chip-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; min-height: 26px; }
+  .detected-chip {
+    font-size: 12px; padding: 5px 12px; border-radius: 999px;
+    background: rgba(138,154,123,0.18); color: var(--sage-deep);
+    border: 1px solid rgba(138,154,123,0.3); font-weight: 500;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .detected-chip.coastal { background: rgba(80,120,160,0.15); color: #3D6086; border-color: rgba(80,120,160,0.3); }
+  .detected-chip.muted { background: transparent; color: var(--ink-soft); border-color: var(--line); font-style: italic; font-family: var(--serif); font-size: 12.5px; }
+  .dim-row { display: grid; grid-template-columns: 1fr auto 1fr auto; gap: 10px; align-items: end; }
+  .dim-row .field-input-num { text-align: right; font-variant-numeric: tabular-nums; padding: 12px 14px; font-size: 17px; font-weight: 600; }
+  .dim-x { font-family: var(--serif); font-size: 18px; color: var(--clay); padding-bottom: 14px; }
+  .dim-unit { font-family: var(--serif); font-size: 14px; color: var(--ink-soft); padding-bottom: 16px; }
+  .dim-area { font-family: var(--serif); font-size: 14px; color: var(--sage-deep); font-style: italic; margin-top: 8px; }
+
+  .orient-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .orient-btn {
+    background: rgba(255,255,255,0.5);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 14px 8px;
+    cursor: pointer; font-family: inherit;
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    transition: all .2s;
+  }
+  .orient-btn:hover { border-color: var(--sage); transform: translateY(-1px); }
+  .orient-btn.active { background: var(--forest); color: var(--paper); border-color: var(--forest); box-shadow: 0 8px 16px -8px rgba(44,53,38,0.4); }
+  .orient-btn .compass { font-size: 18px; font-family: var(--serif); font-weight: 700; }
+  .orient-btn .label { font-size: 12px; color: var(--ink-soft); }
+  .orient-btn.active .label { color: rgba(237,234,224,0.8); }
+
   /* fixed navigation footer */
   footer.nav {
     position: fixed; bottom: 0; left: 0; right: 0; z-index: 3;
@@ -367,7 +421,7 @@ const PLANTS = [
   { id:"pittosporum", zh:"海桐", en:"Japanese Mock Orange", lt:"Pittosporum tobira",
     tier:"T", type_zh:"喬木/灌木 · 原生", type_en:"Tree/shrub · native",
     sun:["full","part"], water:"low", height:[1.5,3], spread:[1,2],
-    spaces:["balcony","rooftop","yard"], container_ok:true,
+    spaces:["balcony","rooftop","yard"], container_ok:true, coastal_ok:true,
     role_zh:"防風骨架", role_en:"Windbreak frame",
     bloom:[3,4,5], fruit:[10,11],
     color:"#4F6A45", cost:600,
@@ -380,7 +434,7 @@ const PLANTS = [
   { id:"cherry", zh:"山櫻花", en:"Taiwan Cherry", lt:"Prunus campanulata",
     tier:"T", type_zh:"喬木 · 台灣特有", type_en:"Tree · Taiwan endemic",
     sun:["full"], water:"med", height:[3,5], spread:[2,3],
-    spaces:["yard"], container_ok:false,
+    spaces:["yard"], container_ok:false, zones:["N","C","E"],
     role_zh:"焦點花樹", role_en:"Focal flowering tree",
     bloom:[1,2,3], fruit:[5,6],
     color:"#C75A8F", cost:1800,
@@ -406,7 +460,7 @@ const PLANTS = [
   { id:"michelia", zh:"烏心石", en:"Formosan Michelia", lt:"Michelia compressa",
     tier:"T", type_zh:"喬木 · 台灣原生", type_en:"Tree · Taiwan native",
     sun:["full","part"], water:"med", height:[2,5], spread:[2,3],
-    spaces:["yard"], container_ok:false,
+    spaces:["yard"], container_ok:false, zones:["N","C","E"],
     role_zh:"芳香常綠", role_en:"Fragrant evergreen",
     bloom:[2,3,4], fruit:[8,9,10],
     color:"#5A6D3E", cost:2200,
@@ -419,7 +473,7 @@ const PLANTS = [
   { id:"broussonetia", zh:"構樹", en:"Paper Mulberry", lt:"Broussonetia papyrifera",
     tier:"T", type_zh:"喬木 · 原生", type_en:"Tree · native",
     sun:["full"], water:"low", height:[3,6], spread:[2,4],
-    spaces:["yard"], container_ok:false,
+    spaces:["yard"], container_ok:false, coastal_ok:true,
     role_zh:"先鋒樹種", role_en:"Pioneer species",
     bloom:[4,5], fruit:[6,7,8],
     color:"#7A6D3E", cost:800,
@@ -432,7 +486,7 @@ const PLANTS = [
   { id:"chionanthus", zh:"流蘇", en:"Chinese Fringe Tree", lt:"Chionanthus retusus",
     tier:"T", type_zh:"小喬木 · 原生", type_en:"Small tree · native",
     sun:["full"], water:"med", height:[2,4], spread:[2,3],
-    spaces:["yard"], container_ok:false,
+    spaces:["yard"], container_ok:false, zones:["N","C"],
     role_zh:"春季焦點", role_en:"Spring focal point",
     bloom:[3,4], fruit:[9,10],
     color:"#DDD3B8", cost:2500,
@@ -705,44 +759,115 @@ const MONTHS = {
 // ─────────────────────────────────────────────────────────────
 // State + scoring
 // ─────────────────────────────────────────────────────────────
-const STEPS = ["space","sun","water","goals","result"];
+const STEPS = ["space","details","sun","water","goals","result"];
 const state = {
   step: 0,
   space: null,
+  // step 2 — space details (all optional, defaults applied per space type)
+  address: "",
+  detected: null,        // { county, zone (N/C/S/E), coastal }
+  widthM: null,
+  depthM: null,
+  orientation: "S",      // N / E / S / W — which way the space faces
+  // microclimate
   sun: null,
   water: null,
   goals: [],
-  resultTab: "plan",   // plan | layers | calendar | shopping
+  // result
+  resultTab: "plan",
   selectedPlantId: null,
-  qty: {},              // shopping list quantities
+  qty: {},
   lang: "zh",
 };
+
+// Default dimensions per space type — applied when entering Details step
+const SPACE_DEFAULTS = {
+  balcony: { w: 3.0, d: 1.0 },
+  rooftop: { w: 5.0, d: 4.0 },
+  yard:    { w: 6.0, d: 5.0 },
+  indoor:  { w: 1.5, d: 0.5 },
+};
+
+// Taiwan climate zones, keyed by county/city name (matches both forms users type).
+// N=North (cool/wet), C=Central (moderate), S=South (hot/dry), E=East (very wet, low pollution)
+const COUNTY_ZONES = {
+  "台北": "N", "臺北": "N", "新北": "N", "基隆": "N", "桃園": "N", "新竹": "N", "宜蘭": "N",
+  "苗栗": "C", "台中": "C", "臺中": "C", "彰化": "C", "南投": "C", "雲林": "C",
+  "嘉義": "S", "台南": "S", "臺南": "S", "高雄": "S", "屏東": "S", "澎湖": "S",
+  "花蓮": "E", "台東": "E", "臺東": "E",
+};
+// Coastal keywords — any of these in the address bumps coastal=true (salt-tolerance bonus).
+const COASTAL_KEYWORDS = ["海","濱","灘","港","澳","漁","沙崙","淡水","三芝","金山","萬里","八里","蘇澳","頭城","壯圍","五結","南方澳","梧棲","鹿港","布袋","東石","安平","旗津","林園","小琉球","恆春","車城","枋寮","蘇花","成功","大武"];
+
+const ZONE_LABEL = {
+  N: { zh: "北部 · 涼濕", en: "North · cool/wet" },
+  C: { zh: "中部 · 溫和", en: "Central · moderate" },
+  S: { zh: "南部 · 炎熱", en: "South · hot/dry" },
+  E: { zh: "東部 · 多雨", en: "East · rainy" },
+};
+
+function detectLocation(address) {
+  if (!address || !address.trim()) return null;
+  const s = address.trim();
+  let county = null, zone = null;
+  for (const key of Object.keys(COUNTY_ZONES)) {
+    if (s.includes(key)) { county = key; zone = COUNTY_ZONES[key]; break; }
+  }
+  // fallback: if address looks English, try a few keywords
+  if (!county) {
+    const lower = s.toLowerCase();
+    if (/taipei|new taipei|keelung|taoyuan|hsinchu|yilan|ilan/.test(lower)) zone = "N";
+    else if (/miaoli|taichung|changhua|nantou|yunlin/.test(lower)) zone = "C";
+    else if (/chiayi|tainan|kaohsiung|pingtung|penghu/.test(lower)) zone = "S";
+    else if (/hualien|taitung/.test(lower)) zone = "E";
+  }
+  const coastal = COASTAL_KEYWORDS.some(k => s.includes(k));
+  if (!zone && !coastal) return null;
+  return { county, zone: zone || "C", coastal };
+}
 
 // Auto-suggest sun for indoor (no choice — it's always part/shade)
 function autoApplySpaceDefaults() {
   if (state.space === "indoor" && !state.sun) state.sun = "shade";
 }
 
-// Scoring engine — now uses space as well (fix for original bug where space was unused)
+// Scoring engine — uses space + climate zone + coastal + goals.
+// The original .jsx silently ignored space; this version penalizes mismatches
+// (e.g. a 5m tree on a balcony) and rewards regional/coastal fit.
 function scorePlants() {
-  const { sun, water, goals, space } = state;
+  const { sun, water, goals, space, detected } = state;
+  const zone = detected?.zone || "C";        // default to central if no location
+  const coastal = !!detected?.coastal;
   return PLANTS.map((p) => {
     let score = 0;
     const reasons_zh = [], reasons_en = [];
 
     // Sun match
-    if (p.sun.includes(sun)) { score += 35; reasons_zh.push("光照相符"); reasons_en.push("Sun match"); }
-    else if (sun === "part" && (p.sun.includes("full") || p.sun.includes("shade"))) { score += 14; }
+    if (p.sun.includes(sun)) { score += 32; reasons_zh.push("光照相符"); reasons_en.push("Sun match"); }
+    else if (sun === "part" && (p.sun.includes("full") || p.sun.includes("shade"))) { score += 13; }
 
     // Water match
-    if (p.water === water) { score += 28; reasons_zh.push("水分相符"); reasons_en.push("Water match"); }
+    if (p.water === water) { score += 26; reasons_zh.push("水分相符"); reasons_en.push("Water match"); }
     else if (Math.abs(["low","med","high"].indexOf(p.water) - ["low","med","high"].indexOf(water)) === 1) { score += 10; }
 
-    // Space match — this was the major bug in the original .jsx
-    if (p.spaces.includes(space)) { score += 22; }
-    else { score -= 25; }  // strong penalty — a 5m tree on a balcony is just wrong
+    // Space match
+    if (p.spaces.includes(space)) { score += 20; }
+    else { score -= 25; }
     if (space === "balcony" && p.container_ok) { score += 6; reasons_zh.push("適合容器"); reasons_en.push("Container-friendly"); }
     if (space === "indoor" && p.spaces.includes("indoor")) { score += 10; reasons_zh.push("室內可生長"); reasons_en.push("Indoor-tolerant"); }
+
+    // Climate zone — if a plant is restricted to specific zones, penalize if mismatched
+    if (p.zones && !p.zones.includes(zone)) {
+      score -= 12;
+    } else if (p.zones && p.zones.includes(zone)) {
+      score += 5; reasons_zh.push(`${ZONE_LABEL[zone].zh}適合`); reasons_en.push(`${ZONE_LABEL[zone].en}-suited`);
+    }
+
+    // Coastal — salt-tolerant bonus / sensitive penalty
+    if (coastal) {
+      if (p.coastal_ok) { score += 10; reasons_zh.push("耐鹽霧"); reasons_en.push("Salt tolerant"); }
+      else { score -= 4; }
+    }
 
     // Goal match
     if (goals.includes("pollinator") && (p.supports_zh.some(s => /蜂|蝶|鳥|蜜|授粉/.test(s)))) {
@@ -756,7 +881,7 @@ function scorePlants() {
     }
     if (goals.includes("easy") && p.water === "low") { score += 14; reasons_zh.push("低維護"); reasons_en.push("Low maintenance"); }
 
-    // Tier diversity bonus — encourage variety
+    // Small diversity bonus — keeps borderline candidates on the list
     score += 4;
 
     score = Math.max(0, Math.min(99, score + 8));
@@ -801,17 +926,18 @@ const drawerHost = document.getElementById("drawerHost");
 function t(zh, en) { return state.lang === "zh" ? zh : en; }
 
 function render() {
-  // progress dots
-  progressWrap.innerHTML = state.step < 4 ? STEPS.slice(0,4).map((_, i) =>
+  // progress dots — 5 wizard steps (space, details, sun, water, goals) before the result
+  progressWrap.innerHTML = state.step < 5 ? STEPS.slice(0,5).map((_, i) =>
     `<div class="progress-dot ${i <= state.step ? "on" : ""}"></div>`).join("") : "";
 
   // main area
   switch (state.step) {
     case 0: renderSpace(); break;
-    case 1: renderSun(); break;
-    case 2: renderWater(); break;
-    case 3: renderGoals(); break;
-    case 4: renderResult(); break;
+    case 1: renderDetails(); break;
+    case 2: renderSun(); break;
+    case 3: renderWater(); break;
+    case 4: renderGoals(); break;
+    case 5: renderResult(); break;
   }
 
   renderNav();
@@ -831,10 +957,143 @@ function renderSpace() {
   wireOptCards("space");
 }
 
+function renderDetails() {
+  // Apply defaults the first time we land on this step
+  if (state.widthM == null) state.widthM = SPACE_DEFAULTS[state.space].w;
+  if (state.depthM == null) state.depthM = SPACE_DEFAULTS[state.space].d;
+
+  const det = state.detected;
+  const area = (state.widthM * state.depthM).toFixed(1);
+  const orientLabels = {
+    N: { zh:"北", en:"N" }, E: { zh:"東", en:"E" }, S: { zh:"南", en:"S" }, W: { zh:"西", en:"W" },
+  };
+  const orientHints = {
+    N: { zh:"日照最少", en:"Least sun" },
+    E: { zh:"晨光柔和", en:"Soft morning" },
+    S: { zh:"日照最好", en:"Best sun" },
+    W: { zh:"午後強光", en:"Hot afternoon" },
+  };
+
+  app.innerHTML = `
+    <div class="fade-up">
+      <div class="kicker" data-zh="02 — 空間細節" data-en="02 — Space details">02 — 空間細節</div>
+      <h1 class="title" data-zh="告訴我更多，配置會更準。" data-en="More detail → more accurate plan.">告訴我更多，配置會更準。</h1>
+      <p class="lead"
+         data-zh="地址、尺寸、朝向都是選填 — 但提供越多，AI 越能依你的氣候區、海岸鹽霧與光照軌跡量身設計。"
+         data-en="Address, size, and orientation are all optional — but the more you share, the better AI can tune to your climate zone, salt exposure, and sun path.">
+         地址、尺寸、朝向都是選填 — 但提供越多，AI 越能依你的氣候區、海岸鹽霧與光照軌跡量身設計。</p>
+
+      <div class="detail-grid">
+
+        <div class="field">
+          <span class="field-label" data-zh="地址 / 區域" data-en="Address / Region">地址 / 區域</span>
+          <span class="field-sub"
+                data-zh="輸入地址、縣市，或關鍵字（如：「台南市安平區」、「淡水」、「Hualien」）。我們不上傳，純前端判斷氣候區。"
+                data-en="Type address, city/county, or a keyword (e.g. 'Tainan Anping', 'Tamsui', 'Hualien'). Nothing is uploaded — climate zone is detected locally.">
+                輸入地址、縣市，或關鍵字（如：「台南市安平區」、「淡水」、「Hualien」）。我們不上傳，純前端判斷氣候區。</span>
+          <input class="field-input" id="addressInput" type="text"
+                 value="${escapeHtml(state.address)}"
+                 placeholder="${t('例：台北市大安區 / Taipei Daan', 'e.g. Taipei Daan / 高雄鼓山')}" />
+          <div class="detected-chip-row" id="detectedChips">
+            ${det
+              ? `${det.county ? `<span class="detected-chip">📍 ${det.county}${det.zone ? `（${state.lang === "zh" ? ZONE_LABEL[det.zone].zh : ZONE_LABEL[det.zone].en}）` : ""}</span>` : `<span class="detected-chip">🌏 ${state.lang === "zh" ? ZONE_LABEL[det.zone].zh : ZONE_LABEL[det.zone].en}</span>`}
+                 ${det.coastal ? `<span class="detected-chip coastal">🌊 ${t("近海岸 · 偏好耐鹽植物","Coastal · prefer salt-tolerant")}</span>` : ""}`
+              : `<span class="detected-chip muted">${t("未指定區域 → 將使用 中部 · 溫和 預設","No region → defaults to Central · moderate")}</span>`
+            }
+          </div>
+        </div>
+
+        <div class="field">
+          <span class="field-label" data-zh="尺寸 (m)" data-en="Size (m)">尺寸 (m)</span>
+          <span class="field-sub"
+                data-zh="量一下你能用的長寬，公尺即可（小數可）。AI 會用實際比例繪製俯瞰圖，並估算需要的植株數。"
+                data-en="Measure your usable width × depth in meters (decimals OK). The plan view scales to real proportions; plant counts are estimated from the area.">
+                量一下你能用的長寬，公尺即可（小數可）。AI 會用實際比例繪製俯瞰圖，並估算需要的植株數。</span>
+          <div class="dim-row">
+            <input class="field-input-num" id="widthInput" type="number" min="0.3" max="50" step="0.1" value="${state.widthM}" />
+            <span class="dim-x">×</span>
+            <input class="field-input-num" id="depthInput" type="number" min="0.3" max="50" step="0.1" value="${state.depthM}" />
+            <span class="dim-unit">m</span>
+          </div>
+          <div class="dim-area" id="areaDisplay" data-zh="≈ ${area} m² 可用面積" data-en="≈ ${area} m² usable area">≈ ${area} m² 可用面積</div>
+        </div>
+
+        <div class="field">
+          <span class="field-label" data-zh="空間朝向" data-en="Orientation">空間朝向</span>
+          <span class="field-sub"
+                data-zh="主要陽光從哪一面進來？俯瞰圖會根據朝向擺放陽光指示，並調整植物的種植順序。"
+                data-en="Which side does the main light come from? The plan view places the sun marker accordingly and adjusts plant ordering.">
+                主要陽光從哪一面進來？俯瞰圖會根據朝向擺放陽光指示，並調整植物的種植順序。</span>
+          <div class="orient-row">
+            ${["N","E","S","W"].map(k => `
+              <button class="orient-btn ${state.orientation === k ? "active" : ""}" data-orient="${k}">
+                <span class="compass">${orientLabels[k][state.lang]}</span>
+                <span class="label" data-zh="${orientHints[k].zh}" data-en="${orientHints[k].en}">${orientHints[k].zh}</span>
+              </button>
+            `).join("")}
+          </div>
+        </div>
+
+      </div>
+    </div>`;
+
+  wireDetails();
+}
+
+function wireDetails() {
+  const addrEl = document.getElementById("addressInput");
+  const wEl = document.getElementById("widthInput");
+  const dEl = document.getElementById("depthInput");
+  const areaEl = document.getElementById("areaDisplay");
+
+  // Address: detect on input (debounced)
+  let to;
+  addrEl.addEventListener("input", (e) => {
+    state.address = e.target.value;
+    clearTimeout(to);
+    to = setTimeout(() => {
+      state.detected = detectLocation(state.address);
+      // Re-render only the detected-chip row so the user doesn't lose input focus
+      const chipsHost = document.getElementById("detectedChips");
+      const det = state.detected;
+      chipsHost.innerHTML = det
+        ? `${det.county ? `<span class="detected-chip">📍 ${det.county}${det.zone ? `（${state.lang === "zh" ? ZONE_LABEL[det.zone].zh : ZONE_LABEL[det.zone].en}）` : ""}</span>` : `<span class="detected-chip">🌏 ${state.lang === "zh" ? ZONE_LABEL[det.zone].zh : ZONE_LABEL[det.zone].en}</span>`}
+           ${det.coastal ? `<span class="detected-chip coastal">🌊 ${t("近海岸 · 偏好耐鹽植物","Coastal · prefer salt-tolerant")}</span>` : ""}`
+        : `<span class="detected-chip muted">${t("未指定區域 → 將使用 中部 · 溫和 預設","No region → defaults to Central · moderate")}</span>`;
+    }, 250);
+  });
+
+  // Dimensions: live area update
+  function updateArea() {
+    const w = parseFloat(wEl.value) || 0;
+    const d = parseFloat(dEl.value) || 0;
+    state.widthM = w;
+    state.depthM = d;
+    const a = (w * d).toFixed(1);
+    areaEl.dataset.zh = `≈ ${a} m² 可用面積`;
+    areaEl.dataset.en = `≈ ${a} m² usable area`;
+    areaEl.textContent = areaEl.dataset[state.lang];
+  }
+  wEl.addEventListener("input", updateArea);
+  dEl.addEventListener("input", updateArea);
+
+  // Orientation: 4 buttons
+  document.querySelectorAll(".orient-btn").forEach((el) => {
+    el.addEventListener("click", () => {
+      state.orientation = el.dataset.orient;
+      document.querySelectorAll(".orient-btn").forEach((b) => b.classList.toggle("active", b.dataset.orient === state.orientation));
+    });
+  });
+}
+
+function escapeHtml(s) {
+  return String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
+}
+
 function renderSun() {
   app.innerHTML = `
     <div class="fade-up">
-      <div class="kicker" data-zh="02 — 微氣候" data-en="02 — Microclimate">02 — 微氣候</div>
+      <div class="kicker" data-zh="03 — 微氣候" data-en="03 — Microclimate">03 — 微氣候</div>
       <h1 class="title" data-zh="光照條件如何？" data-en="What's the light like?">光照條件如何？</h1>
       <p class="lead" data-zh="日照是景觀設計的第一準則。先讀光，再選種。" data-en="Light is the first rule of landscape design. Read the light, then choose plants.">日照是景觀設計的第一準則。先讀光，再選種。</p>
       <div class="grid cols-3">
@@ -847,7 +1106,7 @@ function renderSun() {
 function renderWater() {
   app.innerHTML = `
     <div class="fade-up">
-      <div class="kicker" data-zh="03 — 水分" data-en="03 — Water">03 — 水分</div>
+      <div class="kicker" data-zh="04 — 水分" data-en="04 — Water">04 — 水分</div>
       <h1 class="title" data-zh="你能投入多少照顧？" data-en="How much care can you give?">你能投入多少照顧？</h1>
       <p class="lead" data-zh="誠實面對你的生活節奏，才能養出健康的活體土壤。" data-en="Be honest about your rhythm — that's how living soil stays healthy.">誠實面對你的生活節奏，才能養出健康的活體土壤。</p>
       <div class="grid cols-3">
@@ -860,7 +1119,7 @@ function renderWater() {
 function renderGoals() {
   app.innerHTML = `
     <div class="fade-up">
-      <div class="kicker" data-zh="04 — 願景（可複選）" data-en="04 — Goals (multi-select)">04 — 願景（可複選）</div>
+      <div class="kicker" data-zh="05 — 願景（可複選）" data-en="05 — Goals (multi-select)">05 — 願景（可複選）</div>
       <h1 class="title" data-zh="你希望這片綠地帶來什麼？" data-en="What should this green space give you?">你希望這片綠地帶來什麼？</h1>
       <p class="lead" data-zh="從單純的觀賞，到成為都市生態廊道的一部分。" data-en="From simple ornament to becoming part of an urban ecological corridor.">從單純的觀賞，到成為都市生態廊道的一部分。</p>
       <div class="grid cols-2">
@@ -909,12 +1168,13 @@ function wireOptCards(field, multi) {
 }
 
 function renderNav() {
-  if (state.step < 4) {
+  if (state.step < 5) {
     const canNext = (state.step === 0 && state.space) ||
-                    (state.step === 1 && state.sun) ||
-                    (state.step === 2 && state.water) ||
-                    state.step === 3;
-    const isLast = state.step === 3;
+                    (state.step === 1) ||                // details — everything is optional
+                    (state.step === 2 && state.sun) ||
+                    (state.step === 3 && state.water) ||
+                    (state.step === 4);
+    const isLast = state.step === 4;
     navFooter.innerHTML = `
       <button class="nav-btn ${state.step === 0 ? "hidden" : ""}" id="navBack">← <span data-zh="上一步" data-en="Back">上一步</span></button>
       <button class="cta" id="navNext" ${canNext ? "" : "disabled"}>
@@ -925,7 +1185,7 @@ function renderNav() {
       if (!canNext) return;
       state.step++;
       autoApplySpaceDefaults();
-      if (state.step === 4) initShoppingQty();
+      if (state.step === 5) initShoppingQty();
       render();
       window.scrollTo({ top: 0, behavior: "smooth" });
       updateLineShare();
@@ -936,7 +1196,12 @@ function renderNav() {
       <button class="nav-btn" id="navReset">↺ <span data-zh="重新開始" data-en="Start over">重新開始</span></button>
       <span class="foot-note" data-zh="共 ${recsCount} 種候選 · AI 依你的微氣候生成" data-en="${recsCount} candidates · generated from your microclimate">共 ${recsCount} 種候選 · AI 依你的微氣候生成</span>`;
     document.getElementById("navReset")?.addEventListener("click", () => {
-      Object.assign(state, { step:0, space:null, sun:null, water:null, goals:[], resultTab:"plan", selectedPlantId:null, qty:{} });
+      Object.assign(state, {
+        step:0, space:null,
+        address:"", detected:null, widthM:null, depthM:null, orientation:"S",
+        sun:null, water:null, goals:[],
+        resultTab:"plan", selectedPlantId:null, qty:{},
+      });
       render();
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
@@ -950,11 +1215,22 @@ function initShoppingQty() {
   const scored = scorePlants();
   const compatible = scored.filter(p => p.score >= 30).slice(0, 8);
   state.qty = {};
-  compatible.forEach((p) => {
-    // Default quantities by tier — sensible starting points for nursery shopping
-    const defaultQty = { T: 1, S: 2, G: 5, W: 2, C: 1 };
-    state.qty[p.id] = defaultQty[p.tier] || 1;
-  });
+
+  // Scale default quantities to the actual area when known. Rough nursery-density rules:
+  //   canopy ~1 per 8 m², shrub ~1 per 2 m², ground ~2 per m², water ~2, climber ~1.
+  const area = (state.widthM || SPACE_DEFAULTS[state.space].w) *
+               (state.depthM || SPACE_DEFAULTS[state.space].d);
+  const tierQty = (tier) => {
+    switch (tier) {
+      case "T": return Math.max(1, Math.round(area / 8));
+      case "S": return Math.max(1, Math.round(area / 2));
+      case "G": return Math.max(2, Math.round(area * 2));
+      case "W": return 2;
+      case "C": return Math.max(1, Math.round(area / 6));
+      default:  return 1;
+    }
+  };
+  compatible.forEach((p) => { state.qty[p.id] = tierQty(p.tier); });
 }
 
 function renderResult() {
@@ -965,13 +1241,26 @@ function renderResult() {
   const sunLabel = SUN_OPTIONS.find(o => o.key === state.sun);
   const waterLabel = WATER_OPTIONS.find(o => o.key === state.water);
   const spaceLabel = SPACE_OPTIONS.find(o => o.key === state.space);
+  const w = state.widthM || SPACE_DEFAULTS[state.space].w;
+  const d = state.depthM || SPACE_DEFAULTS[state.space].d;
+  const area = (w * d).toFixed(1);
+  const det = state.detected;
+  const locText_zh = det?.county ? `${det.county}的` : "";
+  const locText_en = det?.county ? `${det.county}'s ` : "";
 
   app.innerHTML = `
     <div class="fade-up">
       <div class="kicker" data-zh="你的專屬配置 · GENERATED" data-en="Your custom plan · GENERATED">你的專屬配置 · GENERATED</div>
-      <h1 class="title" data-zh="為你的微氣候而生的<br/>原生植物景觀" data-en="A native plant landscape<br/>built for your microclimate">為你的微氣候而生的<br/>原生植物景觀</h1>
+      <h1 class="title"
+         data-zh="${locText_zh}${area} m² 的<br/>原生植物復層景觀"
+         data-en="A native-plant layered landscape for<br/>${locText_en}${area} m² ${spaceLabel.en.toLowerCase()}">
+         ${locText_zh}${area} m² 的<br/>原生植物復層景觀
+      </h1>
       <div class="chip-row">
-        <span class="chip">📍 <span data-zh="${spaceLabel.zh}" data-en="${spaceLabel.en}">${spaceLabel.zh}</span></span>
+        <span class="chip">📍 <span data-zh="${spaceLabel.zh} · ${area} m²" data-en="${spaceLabel.en} · ${area} m²">${spaceLabel.zh} · ${area} m²</span></span>
+        ${det?.county ? `<span class="chip">🗺 ${det.county}<span data-zh="（${ZONE_LABEL[det.zone].zh}）" data-en=" (${ZONE_LABEL[det.zone].en})">（${ZONE_LABEL[det.zone].zh}）</span></span>` : (det ? `<span class="chip">🌏 <span data-zh="${ZONE_LABEL[det.zone].zh}" data-en="${ZONE_LABEL[det.zone].en}">${ZONE_LABEL[det.zone].zh}</span></span>` : "")}
+        ${det?.coastal ? `<span class="chip">🌊 <span data-zh="近海岸 · 耐鹽" data-en="Coastal · salt-tolerant">近海岸 · 耐鹽</span></span>` : ""}
+        <span class="chip">🧭 <span data-zh="朝${state.orientation === "N" ? "北" : state.orientation === "E" ? "東" : state.orientation === "S" ? "南" : "西"}" data-en="Facing ${state.orientation}">朝${state.orientation === "N" ? "北" : state.orientation === "E" ? "東" : state.orientation === "S" ? "南" : "西"}</span></span>
         <span class="chip">☀ <span data-zh="${sunLabel.zh}" data-en="${sunLabel.en}">${sunLabel.zh}</span></span>
         <span class="chip">💧 <span data-zh="${waterLabel.zh}水" data-en="${waterLabel.en} water">${waterLabel.zh}水</span></span>
         ${state.goals.map(g => {
@@ -1017,24 +1306,45 @@ function renderTabPanel(recs, layers) {
 
 // ── TAB: GARDEN PLAN (top-down SVG) ─────────────────────────
 function renderPlan(layers, recs) {
-  // Determine space dimensions for the SVG viewBox
+  // Derive SVG viewBox from real width × depth. Keep total area constant-ish
+  // so the SVG fits on screen, but preserve the aspect ratio so a long balcony
+  // actually looks long and a square yard actually looks square.
+  const realW = state.widthM || SPACE_DEFAULTS[state.space].w;
+  const realD = state.depthM || SPACE_DEFAULTS[state.space].d;
+  const area = (realW * realD).toFixed(1);
+  // Pick a target size that fits the screen while preserving aspect ratio.
+  const aspect = realW / realD;
+  const maxW = 600, maxH = 420;
+  let svgW, svgH;
+  if (aspect >= maxW / maxH) { svgW = maxW; svgH = svgW / aspect; }
+  else { svgH = maxH; svgW = svgH * aspect; }
+  svgW = Math.max(280, svgW);
+  svgH = Math.max(180, svgH);
   const dims = {
-    balcony: { w: 600, h: 240, label_zh: "陽台 ≈ 3m × 1m", label_en: "Balcony ≈ 3m × 1m" },
-    rooftop: { w: 540, h: 420, label_zh: "頂樓 ≈ 5m × 4m", label_en: "Rooftop ≈ 5m × 4m" },
-    yard:    { w: 540, h: 420, label_zh: "庭院 ≈ 6m × 5m", label_en: "Yard ≈ 6m × 5m" },
-    indoor:  { w: 600, h: 220, label_zh: "室內窗邊 ≈ 1.5m × 0.5m", label_en: "Indoor window ≈ 1.5m × 0.5m" },
-  }[state.space];
+    w: svgW, h: svgH,
+    label_zh: `${state.space === "balcony" ? "陽台" : state.space === "rooftop" ? "頂樓" : state.space === "yard" ? "庭院" : "室內窗邊"} ${realW}m × ${realD}m ≈ ${area} m²`,
+    label_en: `${state.space === "balcony" ? "Balcony" : state.space === "rooftop" ? "Rooftop" : state.space === "yard" ? "Yard" : "Indoor"} ${realW}m × ${realD}m ≈ ${area} m²`,
+  };
 
   // Picked plants for the plan: top 1 of each available tier + 1 accent
   const plantsForPlan = layers.filter(l => l.plant).map(l => l.plant);
   const plan = layoutPlan(plantsForPlan, dims, state.space);
 
-  // Build SVG
+  // Sun marker — placed by orientation. "South-facing" means sun comes from south
+  // (top of plan, conventionally). North-facing = sun mostly behind/dim.
+  const orient = state.orientation || "S";
+  let sunX, sunY, sunLabel = t("陽光", "Sun");
+  switch (orient) {
+    case "S": sunX = dims.w - 60; sunY = 28; sunLabel = t("南向 · 陽光", "S · Sun"); break;
+    case "E": sunX = 32; sunY = dims.h / 2; sunLabel = t("東向 · 晨光", "E · AM Sun"); break;
+    case "W": sunX = dims.w - 60; sunY = dims.h / 2; sunLabel = t("西向 · 午後光", "W · PM Sun"); break;
+    case "N": sunX = dims.w - 60; sunY = dims.h - 36; sunLabel = t("北向 · 散射光", "N · Diffuse"); break;
+  }
   const sunArrow = `
-    <g transform="translate(${dims.w - 60}, 28)">
+    <g transform="translate(${sunX}, ${sunY})">
       <circle r="14" fill="#F4D67E" stroke="#C9A84C" stroke-width="1.5"/>
       <text x="0" y="4" text-anchor="middle" font-size="13" fill="#8C6F52" font-weight="600">☀</text>
-      <text x="0" y="36" text-anchor="middle" font-size="10" fill="#5A5C50" font-family="Noto Serif TC">${t("陽光", "Sun")}</text>
+      <text x="0" y="36" text-anchor="middle" font-size="10" fill="#5A5C50" font-family="Noto Serif TC">${sunLabel}</text>
     </g>`;
 
   const ground = `
