@@ -5419,6 +5419,236 @@ This application supports starting organic-transition certification for ≥1 ha.
           ]
         };
       }
+    },
+    {
+      id: 'crop_fruit',
+      keywords: ['果樹', '果園', '芒果', '荔枝', '柑橘', '蓮霧', '梨子', '桃', '葡萄', '水果', 'fruit', 'orchard', 'mango', 'citrus', 'grape', 'pear', 'lychee'],
+      topic: { zh: '果樹專屬', en: 'Fruit / orchard-specific' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '果樹永續 3 大槓桿：行間覆蓋 + 防風林 + 加工副品', en: 'Orchard sustainability\'s 3 levers: alley cover + windbreak + value-add processing' },
+          situation: { zh: '果樹週期長（種下到產 3-7 年）= 投資門檻高 + 替代成本高 + 颱風 / 蟲害一次性風險大。永續果園的核心是「降低化學依賴 + 多重收益疊加」，不是純改有機。',
+                       en: 'Fruit trees have long cycles (3-7 years from planting to harvest) = high investment barrier + high switching cost + concentrated typhoon/pest risk. Sustainable orchards focus on "reduce chemical dependency + stacking revenue streams", not just going organic.' },
+          actions: [
+            { zh: '1. <strong>行間覆蓋作物</strong> — 田菁 / 太陽麻 / 三葉草 — 抑草、保水、固氮、引益蟲。NT$ 3-8k/ha 投入，年省化肥 + 除草劑 NT$ 20-40k/ha。',
+              en: '1. <strong>Alley cover crops</strong> — sesbania / sunn hemp / clover — weed suppression + moisture + N fix + beneficial insects. NT$ 3-8k/ha, saves NT$ 20-40k/ha fertilizer + herbicide.' },
+            { zh: '2. <strong>邊界防風林</strong> — 30-60 棵樹/ha，颱風減損可達 40-60%。同時是永久碳匯 — 可申請農林碳匯試辦補助。',
+              en: '2. <strong>Boundary windbreak</strong> — 30-60 trees/ha cuts typhoon damage 40-60%. Also permanent carbon sink — eligible for agroforestry carbon pilot subsidy.' },
+            { zh: '3. <strong>加工副品線</strong> — 醜果、過盛 → 果乾 / 果醬 / 酵素 / 果酒。鮮品 NT$ 30-80/kg、加工品 NT$ 200-500/kg。一次乾燥設備投資 NT$ 50-150k，2-3 年回本。',
+              en: '3. <strong>Value-add processing line</strong> — ugly + surplus fruit → dried / jam / enzyme / fruit wine. Fresh NT$ 30-80/kg vs processed NT$ 200-500/kg. One-time dehydrator equipment NT$ 50-150k, 2-3yr payback.' }
+          ],
+          links: [
+            { label: { zh: '看多元收益', en: 'Diversification' }, href: '#sec-survival' }
+          ]
+        };
+      }
+    },
+    {
+      id: 'crop_livestock',
+      keywords: ['畜牧', '牛', '豬', '羊', '養殖', '家畜', '動物福祉', 'livestock', 'cattle', 'cow', 'pig', 'sheep', 'animal welfare'],
+      topic: { zh: '畜牧 / 動物', en: 'Livestock' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '小規模畜牧的優勢是「動物福祉溢價」 — 不是規模', en: 'Small-scale livestock\'s advantage is animal-welfare premium — never scale' },
+          situation: { zh: '台灣畜牧大廠規模化 + 飼料成本壓力 = 小農要打的不是同一場仗。永續小型畜牧的路：動物福祉認證 + 在地飼料 + 直銷 + 副產品（糞肥 / 蛋 / 乳）多角化。',
+                       en: 'Taiwan industrial livestock is at scale + feed cost pressure = small farmers cannot win on the same battlefield. Sustainable small-livestock path: animal welfare cert + local feed + direct sales + by-products (manure / eggs / dairy) diversification.' },
+          actions: [
+            { zh: '1. <strong>動物福祉乳業 / 友善蛋雞 / 自然豬</strong>標章 — 通常價格溢價 50-200%。產品認證 + 場域認證雙軌制。從農業部「人道飼養」開始查。',
+              en: '1. <strong>Animal welfare dairy / friendly egg / natural pig</strong> labels — typical price premium 50-200%. Both product cert + facility cert required. Start at MOA "humane husbandry" page.' },
+            { zh: '2. <strong>糞肥資源化</strong> — 別把糞便當廢物。堆肥標準化包裝後賣鄰近農場 / 園藝店，NT$ 10k-30k/年增收。也可申請有機資材登記。',
+              en: '2. <strong>Manure resource recovery</strong> — don\'t treat manure as waste. Standardize compost, bag, sell to neighboring farms / garden stores. NT$ 10-30k/yr extra revenue. Can register as organic input.' },
+            { zh: '3. <strong>飼料在地化</strong> — 化跟在地穀物農場 / 食品加工廠合作買「副產品飼料」（米糠、豆渣、麥渣）。飼料成本可降 20-40%。',
+              en: '3. <strong>Local feed sourcing</strong> — partner with local grain farms / food processors for "byproduct feed" (rice bran, soybean okara, brewer\'s grains). Feed cost cuts 20-40%.' }
+          ],
+          links: []
+        };
+      }
+    },
+    {
+      id: 'crop_poultry',
+      keywords: ['雞', '蛋', '雞蛋', '蛋雞', '肉雞', '鴨', '鵝', '家禽', 'chicken', 'egg', 'layer', 'broiler', 'duck', 'poultry', 'goose'],
+      topic: { zh: '家禽 / 雞蛋', en: 'Poultry / eggs' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '不關籠雞蛋 + 在地配送 = 通路自己找上門', en: 'Cage-free eggs + local delivery = channels come to you' },
+          situation: { zh: '台灣消費者對「動物福祉雞蛋」需求年增 15-20%，但供應跟不上。100-500 隻不關籠蛋雞 + LINE 訂閱戶配送是台灣最容易達成的永續畜牧模式。',
+                       en: 'Taiwan consumer demand for "animal welfare eggs" grows 15-20% annually but supply lags. 100-500 cage-free layers + LINE subscriber delivery is the easiest sustainable livestock model to reach in Taiwan.' },
+          actions: [
+            { zh: '1. <strong>不關籠飼養標準</strong> — 每隻雞 ≥ 0.15 m² + 棲架 + 沙浴箱 + 自然光。100 隻雞需要 ~25 m² 雞舍 + 100 m² 戶外運動場。',
+              en: '1. <strong>Cage-free standard</strong> — ≥ 0.15 m² per bird + perches + dust-bath + natural light. 100 birds need ~25 m² coop + 100 m² outdoor.' },
+            { zh: '2. <strong>定價邏輯</strong> — 慣行盒裝雞蛋 NT$ 60-90/盒（10 顆），不關籠 NT$ 150-220/盒 = 2-2.5 倍溢價。100 隻雞滿產 = NT$ 6-9k/週。',
+              en: '2. <strong>Pricing logic</strong> — conventional eggs NT$ 60-90 / 10-pack box; cage-free NT$ 150-220 = 2-2.5× premium. 100 hens at full lay = NT$ 6-9k/wk.' },
+            { zh: '3. <strong>LINE 訂閱直銷</strong> — 不必通過通路。50-150 訂閱戶 (家庭+小餐廳) 就能消化 100-200 隻雞全產量。每週固定配送，預收現金流。',
+              en: '3. <strong>LINE subscriber direct delivery</strong> — skip channels entirely. 50-150 subscribers (households + small restaurants) absorb 100-200 hens\' total output. Weekly delivery, prepaid cash flow.' }
+          ],
+          links: [
+            { label: { zh: '看 CSA / 直銷機會', en: 'CSA / direct-sales path' }, href: '#sec-survival' }
+          ]
+        };
+      }
+    },
+    {
+      id: 'crop_aquaculture',
+      keywords: ['漁業', '養殖', '魚', '蝦', '蛤蜊', '虱目魚', '吳郭魚', '水產', 'fish', 'shrimp', 'aquaculture', 'clam', 'tilapia', 'milkfish'],
+      topic: { zh: '水產養殖', en: 'Aquaculture' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '永續水產 = 低密度 + 多物種 + 直銷', en: 'Sustainable aquaculture = low density + multi-species + direct sales' },
+          situation: { zh: '台灣水產養殖最大成本：電費（曝氣抽水）+ 飼料 + 病害。永續路 = 低密度（減少病害 + 不需大量抗生素）+ 混養（虱目 / 白蝦 / 蛤蜊共生）+ 在地直銷（避開盤商 30-40% 中間利潤）。',
+                       en: 'Taiwan aquaculture\'s top costs: electricity (aeration + pumping) + feed + disease. Sustainable path = low density (less disease + no antibiotic dosing) + polyculture (milkfish + shrimp + clam symbiosis) + direct local sales (skip middlemen taking 30-40%).' },
+          actions: [
+            { zh: '1. <strong>降低密度 + 屋頂光電</strong> — 池水深 ≥ 1.5m，每池密度減 30% = 病害減 50-70%。屋頂光電可同時遮陰降溫 + 補貼曝氣電費。',
+              en: '1. <strong>Reduce density + rooftop solar</strong> — pond depth ≥ 1.5m, density cut 30% = disease drops 50-70%. Rooftop solar both shades + offsets aeration power bill.' },
+            { zh: '2. <strong>混養生態系</strong> — 虱目 + 白蝦 + 蛤蜊：虱目排泄物 = 蝦食物，蛤蜊濾水。產量總和不減 + 飼料 -40%。',
+              en: '2. <strong>Polyculture ecosystem</strong> — milkfish + white shrimp + clams: fish waste = shrimp food, clams filter water. Total yield maintained + feed cost -40%.' },
+            { zh: '3. <strong>「產地直送」會員配送</strong> — 從養殖場宅配到家庭 / 餐廳，避開批發拍賣。鮮度溢價可達 50-100%。每週固定配送日。',
+              en: '3. <strong>"Direct from pond" subscriber delivery</strong> — pond-to-household + restaurant, skip wholesale auction. Freshness premium 50-100%. Fixed weekly delivery day.' }
+          ],
+          links: []
+        };
+      }
+    },
+    {
+      id: 'food_waste',
+      keywords: ['食物浪費', '剩餘', '醜果', '損耗', '丟棄', '剩貨', 'food waste', 'ugly produce', 'loss', 'discard', 'spoilage'],
+      topic: { zh: '減少食物浪費', en: 'Reduce food waste' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '田間損耗 30% 是默認 — 把它變成第二收益', en: 'On-farm losses run 30% by default — convert them to a 2nd revenue stream' },
+          situation: { zh: '台灣田間到通路損耗約 20-30%（醜形、過大過小、機械傷、過熟）。多數小農把它當垃圾處理。但這是「免費原料」— 重新分類就是第二產線。',
+                       en: 'Field-to-channel losses in Taiwan run 20-30% (ugly shapes, too big/small, mechanical damage, overripe). Most small farms treat it as garbage. But it\'s free raw material — re-classify it and you have a second product line.' },
+          actions: [
+            { zh: '1. <strong>分級三軌</strong> — A 級（外觀完美）→ 通路 / 禮盒；B 級（小瑕疵）→ CSA / 訂閱戶（折扣 30%）；C 級（嚴重瑕疵）→ 加工原料。',
+              en: '1. <strong>3-tier sorting</strong> — A grade (perfect) → channels / gift box; B grade (minor flaws) → CSA / subscribers (-30% discount); C grade (heavy flaws) → processing input.' },
+            { zh: '2. <strong>加工延長壽命</strong> — 蔬菜 → 漬物 / 乾燥；水果 → 果乾 / 果醬 / 酵素；穀物碎粒 → 烘焙 / 飼料。看「盛產期 / 供過於求」答案。',
+              en: '2. <strong>Process to extend shelf life</strong> — vegetables → pickles / dried; fruit → dried / jam / enzyme; grain remnants → baking / feed. See "Glut / oversupply" answer.' },
+            { zh: '3. <strong>食物銀行夥伴關係</strong> — 真正無法銷售的（過熟、輕微腐敗）捐到食物銀行 → 部分縣有「捐贈抵稅」+ 公益形象 = 行銷副效益。',
+              en: '3. <strong>Food bank partnership</strong> — truly unsellable (overripe, mild spoilage) → donate to food bank → some counties offer "donation tax credit" + community goodwill as marketing side-effect.' }
+          ],
+          links: [
+            { label: { zh: '看加工副業', en: 'Processing side-business' }, href: '#sec-survival' }
+          ]
+        };
+      }
+    },
+    {
+      id: 'export_market',
+      keywords: ['外銷', '出口', '國際', '日本', '香港', '中國', '東南亞', 'export', 'overseas', 'international', 'japan', 'hong kong', 'china'],
+      topic: { zh: '外銷市場', en: 'Export market' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '外銷不是「進階版」 — 是「不同遊戲」', en: 'Export isn\'t "next level" — it\'s a different game entirely' },
+          situation: { zh: '台灣小農想做外銷常踩的雷：以為「我把產品做好就能外銷」。實際上 — 外銷 = 物流 + 法規 + 認證 + 規模 + 翻譯 + 資金壓力 6 重門檻。多數小農更適合「先做穩定本地溢價」。',
+                       en: 'Common Taiwan small-farm pitfall: thinking "if my product is good, exports follow". Reality — export = logistics + regulation + cert + scale + translation + capital pressure — 6 layers of barriers. Most small farms are better off "stabilize domestic premium first".' },
+          actions: [
+            { zh: '1. <strong>檢查 6 個外銷現實</strong> — (a) 你能穩定供應 ≥ 500 kg/批？(b) 有冷鏈到港？(c) 取得目的國植檢 + 衛生 + 標示？(d) 流動現金可撐 90-180 天回款？(e) 有翻譯 + 客服？(f) 規模能讓物流成本佔比 < 30%？',
+              en: '1. <strong>6 export realities to check</strong> — (a) can you stably supply ≥ 500 kg/batch? (b) cold chain to port? (c) destination phytosanitary + food safety + labeling done? (d) cash to weather 90-180 day payment? (e) translation + customer service? (f) scale where logistics < 30% of cost?' },
+            { zh: '2. <strong>低門檻起步路徑</strong> — 跨境電商（蝦皮跨境、Pinkoi、Etsy）的乾貨 / 加工品 / 禮盒。物流 EMS 適用 < 30 kg 包裹。免複雜進口手續，先驗證海外需求。',
+              en: '2. <strong>Low-barrier entry path</strong> — cross-border e-commerce (Shopee CB, Pinkoi, Etsy) with dried / processed / gift-box products. EMS shipping works for < 30 kg packages. Skip complex import paperwork, validate overseas demand first.' },
+            { zh: '3. <strong>真要做正式外銷</strong> — 加入農業部「農產品國際行銷推廣」計畫 → 提供市場資訊、展售會、媒合服務、補助 30-50% 展會費。先用這個再說。',
+              en: '3. <strong>If pursuing formal export</strong> — join MOA "International Marketing" program → market intel + trade shows + matchmaking + 30-50% trade-show subsidy. Use this before going alone.' }
+          ],
+          links: []
+        };
+      }
+    },
+    {
+      id: 'cert_body_compare',
+      keywords: ['驗證機構', '哪個有機', 'toaf', 'moa', '慈心', 'usda', '差別', 'organic body', 'cert agency', 'comparison', 'which cert'],
+      topic: { zh: '驗證機構比較', en: 'Cert body comparison' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '4 個主要驗證機構各有優劣 — 看你的通路要哪一張', en: '4 main certifying bodies each have trade-offs — pick by which channel you\'re targeting' },
+          situation: { zh: '台灣有機驗證標章超過 10 個，但實務上 4 大主要派系：TOAF（慈心，里仁系統）、MOA（國際派，外銷適用）、TAF-OC（國家標準，公部門偏好）、台灣有機農業協會。選錯機構 = 認證費花了，目標通路卻不認。',
+                       en: 'Taiwan has 10+ organic cert labels, but 4 main families: TOAF (Tse-Xin, Leezen system), MOA (international-aligned, export-suited), TAF-OC (national standard, government-preferred), Taiwan Organic Agri Assoc. Wrong choice = paid cert fee, target channel doesn\'t accept.' },
+          actions: [
+            { zh: '1. <strong>賣里仁 / 主婦聯盟 → TOAF 慈心</strong>。年費 NT$ 6-12k，台灣最大有機通路接受。',
+              en: '1. <strong>Selling to Leezen / Homemakers Union → TOAF (Tse-Xin)</strong>. Annual fee NT$ 6-12k. Taiwan\'s largest organic channels accept it.' },
+            { zh: '2. <strong>外銷 / 高端餐廳 → MOA</strong>。較貴（NT$ 10-25k/yr）但國際接軌、日本、新加坡認可。',
+              en: '2. <strong>Export / high-end restaurants → MOA</strong>. Pricier (NT$ 10-25k/yr) but internationally aligned — Japan, Singapore accept.' },
+            { zh: '3. <strong>學校午餐 / 公部門 → TAF-OC</strong>。國家標準、農業部優先採購、補助多。',
+              en: '3. <strong>School lunch / government → TAF-OC</strong>. National standard, MOA-preferred procurement, more subsidies.' },
+            { zh: '4. <strong>剛起步、現金有限 → 先做 PGS 友善登錄</strong>。免費 / 低費，無第三方驗證但有書面承諾 + 同儕互評。半年內可拿到，6-12 個月後再升級到上述其中一個。',
+              en: '4. <strong>Starting out, cash-limited → PGS Friendly Farming first</strong>. Free / low-fee, no third-party verification but written commitment + peer audit. Achievable in 6 months; upgrade to one of the above in 6-12 months.' }
+          ],
+          links: [
+            { label: { zh: '看認證階梯', en: 'Cert ladder' }, href: '#sec-survival' }
+          ]
+        };
+      }
+    },
+    {
+      id: 'off_season',
+      keywords: ['淡季', '休耕', '冬天', '沒事做', '空閒', '空檔', 'off-season', 'winter', 'idle', 'slow season', 'between crops'],
+      topic: { zh: '淡季 / 休耕期收益', en: 'Off-season income' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '淡季不是「放假」 — 是「準備下一波 + 第二收益」', en: 'Off-season isn\'t vacation — it\'s "prep for next wave + 2nd income"' },
+          situation: { zh: '淡季 2-4 個月對小農是「免費時間」— 多數人沒利用。實際上這是農場「最有計畫餘裕」的時段，做的事比旺季更影響全年收入。',
+                       en: 'Off-season 2-4 months is "free time" for small farms — most don\'t use it. Actually this is when farms have the most "planning capacity"; what you do here drives next year\'s revenue more than peak-season hustle.' },
+          actions: [
+            { zh: '1. <strong>賣加工副品</strong> — 旺季時來不及做的果乾 / 果醬 / 米製品。淡季產線開動，禮盒鋪整年。',
+              en: '1. <strong>Sell processed goods</strong> — dried / jam / rice products you didn\'t have time for in peak. Production line runs in off-season, gift boxes stock year-round.' },
+            { zh: '2. <strong>開工作坊 / 體驗活動</strong> — 教覆蓋作物、堆肥、種子保存。NT$ 1.5-3k/人 × 10 人 × 月辦 2 場 = NT$ 30-60k/月淡季收入。',
+              en: '2. <strong>Run workshops / experiences</strong> — teach cover crops, composting, seed saving. NT$ 1.5-3k/person × 10 people × 2 sessions/mo = NT$ 30-60k/mo off-season income.' },
+            { zh: '3. <strong>明年訂單預售</strong> — CSA / 訂閱箱 / 禮盒在淡季開放預訂，預收現金流補淡季缺口。「早鳥優惠 8 折」效果最好。',
+              en: '3. <strong>Pre-sell next year</strong> — open CSA / subscription / gift box orders in off-season, pre-paid cash bridges the gap. "Early-bird 20% off" works best.' },
+            { zh: '4. <strong>進修</strong> — 看「找師傅」答案。淡季是上課的時候。',
+              en: '4. <strong>Learning</strong> — see "Find mentor" answer. Off-season is when you take classes.' }
+          ],
+          links: [
+            { label: { zh: '看現金流月曆', en: 'Cash flow calendar' }, href: '#sec-cashflow' }
+          ]
+        };
+      }
+    },
+    {
+      id: 'soil_ph',
+      keywords: ['ph', '土壤酸', '酸性', '鹼性', '土質', '改良', '石灰', 'soil ph', 'acidic', 'alkaline', 'soil amendment', 'lime'],
+      topic: { zh: '土壤 pH / 改良', en: 'Soil pH / amendment' },
+      answer(inp, r) {
+        return {
+          headline: { zh: 'pH 是「肥料效率倍率」— 修對之前其他都白費', en: 'pH is the "fertilizer efficiency multiplier" — fix it first, everything else compounds' },
+          situation: { zh: '台灣多數農地長期施用化肥 → 土壤偏酸（pH 4.5-5.5）→ 養分吸收率下降 30-50%。意思是你買的肥料一半被「酸土」鎖住了，根本吸不到。',
+                       en: 'Most Taiwan farmland is acidic (pH 4.5-5.5) from decades of chemical fertilizer → nutrient uptake drops 30-50%. That means half the fertilizer you bought is "locked" by acid soil — plants can\'t access it.' },
+          actions: [
+            { zh: '1. <strong>測 pH 是第一步</strong> — pH 試紙便宜（NT$ 100-200/組）但只給粗略值。完整土壤分析（含 N/P/K/有機質）約 NT$ 1,500-3,000，每 2 年做 1 次。',
+              en: '1. <strong>Test pH first</strong> — strips are cheap (NT$ 100-200/set) but rough. Full soil test (incl. N/P/K/organic matter) ~NT$ 1,500-3,000, every 2 years.' },
+            { zh: '2. <strong>調酸性土壤</strong> — 苦土石灰 / 石灰石粉。每分地 50-100 公斤 + 翻土均勻。1 個月後 pH 可升 0.5-1.0。NT$ 500-1,500/分地。',
+              en: '2. <strong>Fix acidic soil</strong> — dolomite / agricultural lime. 50-100 kg per 0.1 ha + work into soil. pH lifts 0.5-1.0 in 1 month. NT$ 500-1,500 per 0.1 ha.' },
+            { zh: '3. <strong>長期維持 = 堆肥</strong> — 化肥越多越酸；堆肥反而緩衝 pH。看「投資回收計算機」的堆肥項目，pH 改善是隱藏收益。',
+              en: '3. <strong>Long-term maintenance = compost</strong> — chemical fertilizer acidifies; compost buffers pH. Compost item in Practice ROI has pH improvement as a hidden benefit.' }
+          ],
+          links: [
+            { label: { zh: '看投資回收（堆肥）', en: 'Practice ROI (compost)' }, href: '#sec-roi' }
+          ]
+        };
+      }
+    },
+    {
+      id: 'record_keeping',
+      keywords: ['記錄', '紀錄', '帳本', '日誌', '管理', '怎麼記', 'record', 'log', 'track', 'journal', 'bookkeeping', 'how to record'],
+      topic: { zh: '農場記錄基礎', en: 'Farm record-keeping basics' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '記 4 件事就夠 — 其他都是錦上添花', en: 'Track 4 things — everything else is gravy' },
+          situation: { zh: '永續農場最常「想做但沒持續」就是記錄。問題不是時間，是「不知道要記什麼」。先聚焦最少 4 項 — 連續 6 個月你就會看見模式。',
+                       en: 'The most-tried, least-sustained habit on sustainable farms is record-keeping. The blocker isn\'t time — it\'s "I don\'t know what to track". Focus on 4 minimum; after 6 months patterns emerge.' },
+          actions: [
+            { zh: '1. <strong>每日：田間活動 (3 個字夠了)</strong> — 「噴藥 / 採收 / 除草 / 修剪」+ 田區編號。30 秒記完。用 ERP「農事日誌」或紙本筆記本。',
+              en: '1. <strong>Daily: field activity (3 words enough)</strong> — "spray / harvest / weed / prune" + plot ID. 30 seconds. Use ERP Activity Log or a paper notebook.' },
+            { zh: '2. <strong>每週：收支 1 行</strong> — 本週賣多少（總額 + 通路）、本週花多少（最大項是什麼）。ERP「收支簿」或試算表。',
+              en: '2. <strong>Weekly: 1-line ledger</strong> — what sold this week (total + channels) + what cost (largest item). ERP Ledger or spreadsheet.' },
+            { zh: '3. <strong>每月：庫存盤點</strong> — 還剩什麼種子 / 肥料 / 包材 / 收成？避免「下個月才發現沒種子」的尷尬。',
+              en: '3. <strong>Monthly: inventory check</strong> — what\'s left in seeds / fertilizer / packaging / harvest stock? Prevents "next month I realized I had no seeds" disasters.' },
+            { zh: '4. <strong>每季：通路狀態</strong> — 哪 3 個買家貢獻最多？誰最容易溝通？誰付款最慢？一個簡單表。下一季決策都從這個看。',
+              en: '4. <strong>Quarterly: channel status</strong> — top 3 buyers by revenue? Easiest to work with? Slowest to pay? Simple table. Next quarter\'s decisions come from this.' }
+          ],
+          links: [
+            { label: { zh: '到農場 ERP', en: 'Farm ERP' }, href: '#sec-erp' }
+          ]
+        };
+      }
     }
   ];
 
@@ -5509,7 +5739,17 @@ This application supports starting organic-transition certification for ≥1 ha.
     parent_gap:          ['succession', 'find_mentor', 'burnout'],
     land_encroach:       ['land_tenure', 'find_mentor', 'burnout'],
     crop_rice:           ['water_mgmt', 'practice_invest', 'find_buyers'],
-    crop_veg:            ['crop_rotation', 'how_diversify', 'water_mgmt']
+    crop_veg:            ['crop_rotation', 'how_diversify', 'water_mgmt'],
+    crop_fruit:          ['climate_risk', 'how_diversify', 'crop_rotation'],
+    crop_livestock:      ['hiring_labor', 'practice_invest', 'find_buyers'],
+    crop_poultry:        ['crop_livestock', 'find_buyers', 'marketing_social'],
+    crop_aquaculture:    ['crop_livestock', 'water_mgmt', 'practice_invest'],
+    food_waste:          ['glut_oversupply', 'how_diversify', 'packaging_rules'],
+    export_market:       ['cert_question', 'find_buyers', 'packaging_rules'],
+    cert_body_compare:   ['cert_question', 'organic_transition', 'find_buyers'],
+    off_season:          ['how_diversify', 'cash_short', 'find_mentor'],
+    soil_ph:             ['soil_test', 'practice_invest', 'reduce_cost'],
+    record_keeping:      ['compare_peers', 'tax_accounting', 'goal_setting']
   };
 
   // ── Recent questions history (per-farm, localStorage) ───────────
