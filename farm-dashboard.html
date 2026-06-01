@@ -6366,24 +6366,24 @@ Applicant: ${ownerName} (signature)
     let html = '<div style="display: grid; gap: 12px;">';
     scored.forEach((o, idx) => {
       const tier = o.score >= 80 ? 'good' : (o.score >= 60 ? 'medium' : 'low');
-      const tierColor = tier === 'good' ? '#059669' : (tier === 'medium' ? '#d97706' : '#6b7280');
-      const tierBg = tier === 'good' ? 'rgba(5,150,105,0.05)' : (tier === 'medium' ? 'rgba(217,119,6,0.05)' : 'var(--bg)');
+      const tierClass = tier === 'good' ? 'tier-good' : (tier === 'medium' ? 'tier-warn' : 'tier-cold');
       const fitLabel = tier === 'good' ? (isZh ? '極吻合' : 'Strong fit') : (tier === 'medium' ? (isZh ? '可行' : 'Workable') : (isZh ? '需評估' : 'Evaluate'));
 
       html += `
-        <div style="padding: 14px 16px; background: ${tierBg}; border: 1px solid ${tierColor}; border-left-width: 4px; border-radius: 8px;">
-          <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 8px;">
-            <div style="font-size: 14px; font-weight: 700;"><span style="margin-right: 6px;">${o.icon}</span>${idx + 1}. ${isZh ? o.name.zh : o.name.en}</div>
-            <div style="font-size: 11px; padding: 3px 10px; border-radius: 999px; background: ${tierColor}; color: #fff; font-weight: 700;">${fitLabel} · ${o.score}/100</div>
+        <div class="dc-card ${tierClass}">
+          <div class="dc-card-head">
+            <div class="dc-chip">${o.icon}</div>
+            <div class="dc-card-title">${idx + 1}. ${isZh ? o.name.zh : o.name.en}</div>
+            <span class="dc-card-badge">${fitLabel} · ${o.score}/100</span>
           </div>
           <div style="font-size: 12px; color: var(--muted); margin-bottom: 10px; font-style: italic;">${isZh ? o.why.zh : o.why.en}</div>
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; padding: 10px 0; border-top: 1px dashed var(--border); font-size: 12px;">
             <div><div class="u" style="font-size: 10px;">${isZh ? '建置成本' : 'Setup cost'}</div><div style="font-weight: 600; margin-top: 2px;">${isZh ? o.setup.zh : o.setup.en}</div></div>
-            <div><div class="u" style="font-size: 10px;">${isZh ? '年潛在收入' : 'Annual potential'}</div><div style="font-weight: 600; margin-top: 2px; color: ${tierColor};">${isZh ? o.income.zh : o.income.en}</div></div>
+            <div><div class="u" style="font-size: 10px;">${isZh ? '年潛在收入' : 'Annual potential'}</div><div style="font-weight: 600; margin-top: 2px;">${isZh ? o.income.zh : o.income.en}</div></div>
           </div>
           <div style="margin-top: 8px; padding: 8px 10px; background: var(--bg); border-radius: 6px; font-size: 12px; line-height: 1.6;"><strong>${isZh ? '怎麼開始：' : 'How to start: '}</strong>${isZh ? o.how.zh : o.how.en}</div>
-          ${o.firstWeek ? `<div style="margin-top: 6px; padding: 8px 10px; background: rgba(29, 158, 117, 0.08); border-radius: 6px; font-size: 12px; line-height: 1.6;"><strong style="color: var(--accent);">${isZh ? '🚀 本週做：' : '🚀 This week: '}</strong>${isZh ? o.firstWeek.zh : o.firstWeek.en}</div>` : ''}
-          ${o.pitfall ? `<div style="margin-top: 6px; padding: 8px 10px; background: rgba(220, 38, 38, 0.06); border-radius: 6px; font-size: 12px; line-height: 1.6;"><strong style="color: #dc2626;">${isZh ? '⚠️ 別這樣：' : '⚠️ Avoid: '}</strong>${isZh ? o.pitfall.zh : o.pitfall.en}</div>` : ''}
+          ${o.firstWeek ? `<div style="margin-top: 6px; padding: 8px 10px; background: var(--pri-3-bg); border-radius: 6px; font-size: 12px; line-height: 1.6;"><strong style="color: var(--accent);">${isZh ? '🚀 本週做：' : '🚀 This week: '}</strong>${isZh ? o.firstWeek.zh : o.firstWeek.en}</div>` : ''}
+          ${o.pitfall ? `<div style="margin-top: 6px; padding: 8px 10px; background: var(--pri-1-bg); border-radius: 6px; font-size: 12px; line-height: 1.6;"><strong style="color: var(--pri-1);">${isZh ? '⚠️ 別這樣：' : '⚠️ Avoid: '}</strong>${isZh ? o.pitfall.zh : o.pitfall.en}</div>` : ''}
         </div>
       `;
     });
