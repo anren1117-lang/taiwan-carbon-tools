@@ -4712,6 +4712,349 @@ This application supports starting organic-transition certification for ≥1 ha.
           ]
         };
       }
+    },
+    {
+      id: 'pest_disease',
+      keywords: ['病蟲害', '蟲害', '病害', '生病', '蟲咬', '蟲子', '害蟲', 'pest', 'disease', 'bug', 'insect', 'infestation'],
+      topic: { zh: '病蟲害', en: 'Pest / disease' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '先診斷、再用藥 — 順序錯會花冤枉錢', en: 'Diagnose first, treat second — wrong order = wasted money' },
+          situation: { zh: '看到蟲就噴藥是最貴的解法。台灣有免費的診斷資源 — 用過再決定要不要花錢。',
+                       en: 'Spraying first is the most expensive solution. Taiwan has free diagnostic resources — use them before spending.' },
+          actions: [
+            { zh: '1. <strong>拍照 + 標示位置</strong>，上傳到「智慧農業數位服務」或 LINE 群「台灣農業病蟲害辨識社團」— 通常 24 小時內有專家回覆。',
+              en: '1. <strong>Photo + location</strong> — upload to Taiwan smart-ag digital service OR the LINE group "Taiwan Pest ID community". Expert reply usually within 24h.' },
+            { zh: '2. 確診後再決定 — 友善耕作有 IPM（綜合管理）路徑：天敵 + 物理防治 + 必要時最低劑量藥劑。',
+              en: '2. After diagnosis — friendly farming uses IPM: natural enemies + physical barriers + minimum-dose chemicals as last resort.' },
+            { zh: '3. 鄰近農場改良場（每縣都有）有免費田間診斷 — 嚴重時請他們來現場。',
+              en: '3. Your county Agricultural Improvement Station has free on-site diagnostic visits — call them for serious outbreaks.' }
+          ],
+          links: [
+            { label: { zh: '看農事日誌（紀錄症狀）', en: 'Activity log (record symptoms)' }, href: '#sec-erp' }
+          ]
+        };
+      }
+    },
+    {
+      id: 'hiring_labor',
+      keywords: ['人手', '工人', '雇人', '找人幫忙', '請人', '人力', 'hire', 'labor', 'worker', 'help', 'employee', 'farm hand'],
+      topic: { zh: '人力 / 雇工', en: 'Labor / hiring' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '永續農場找人有 3 條路 — 別只想到「全職」', en: 'Sustainable farms have 3 labor paths — don\'t default to "full-time"' },
+          situation: { zh: '全職人力 NT$ 30-40k/月，加勞健保 + 風險（找不到人、不熟、流動）。多數小農用「組合方案」才撐得起。',
+                       en: 'Full-time labor costs NT$ 30-40k/mo + insurance + risk (hard to find, training time, churn). Most small farms survive with mixed approaches.' },
+          actions: [
+            { zh: '1. <strong>季節性工讀</strong> — 透過「農業缺工」平台、地方農會、社群媒體招收 — 給高一點時薪（NT$ 200-280）+ 包午餐 = 留得住人。',
+              en: '1. <strong>Seasonal hourly help</strong> — recruit via the "Agricultural Labor Shortage" platform, local farmers association, or social media — pay above market (NT$ 200-280/hr) + provide lunch = retention.' },
+            { zh: '2. <strong>WWOOF 換宿</strong> — 國際志工換住宿 + 三餐 + 體驗。質量參差但對「教學型」農場有用。',
+              en: '2. <strong>WWOOF (work-exchange)</strong> — international volunteers exchange labor for room + meals + experience. Variable quality, useful for teaching-style farms.' },
+            { zh: '3. <strong>產銷班 / 合作社共用</strong> — 跟鄰近 2-3 家友善農場共聘 1 個全職員工，輪流幫忙，分攤成本 50%+。',
+              en: '3. <strong>Production group / co-op shared labor</strong> — pool with 2-3 neighboring friendly farms to share 1 full-time hire, rotating help, costs split 50%+.' }
+          ],
+          links: []
+        };
+      }
+    },
+    {
+      id: 'succession',
+      keywords: ['接班', '傳承', '繼承', '下一代', '小孩', '兒子', '女兒', '家族', '退休', 'succession', 'inherit', 'next generation', 'son', 'daughter', 'retire', 'family farm'],
+      topic: { zh: '農場接班 / 傳承', en: 'Farm succession' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '接班是 5-10 年計畫，不是「我退休前再說」', en: 'Succession is a 5-10 yr plan, not "we\'ll figure it out when I retire"' },
+          situation: { zh: '台灣小農接班率不到 30% — 主因不是子女沒興趣，是「沒被當作事業經營給看過」。要讓下一代「想接」，農場要先看起來像可經營的事業，不是辛苦勞動。',
+                       en: 'Less than 30% of Taiwan small farms successfully transition. The cause isn\'t usually "kids aren\'t interested" — it\'s "they never saw the farm run like a real business". Make the farm visibly business-like before expecting succession interest.' },
+          actions: [
+            { zh: '1. <strong>把儀表板給孩子看</strong> — 毛利、定價地板、買家提案、補助申請 — 這些是「經營」，不是「下田」。讓他們看到「這可以是一份正職」。',
+              en: '1. <strong>Show them the dashboard</strong> — margin, pricing floor, buyer pitches, subsidy drafts. This is "operations", not "labor". Let them see "this could be a real career".' },
+            { zh: '2. <strong>提前 3-5 年共同決策</strong> — 不是「等我退休你接」，而是「這 5 年我們一起做這幾個重大決定」（買地、轉作、新通路）。',
+              en: '2. <strong>Co-decide 3-5 years ahead</strong> — not "you take over when I retire", but "for the next 5 years we make these big calls together" (land purchase, crop rotation, new channels).' },
+            { zh: '3. <strong>申請「青年從農」資源</strong> — 農業部「青農培育」、「百大青農」、農地租金補貼、創業貸款 — 子女回流的話這些可疊加 NT$ 100-500k 啟動資金。',
+              en: '3. <strong>Apply for "Young Farmer" support</strong> — MOA\'s Young Farmer programs, "Top 100 Young Farmers", land-rent subsidies, startup loans — these stack to NT$ 100-500k seed capital for returning kids.' }
+          ],
+          links: [
+            { label: { zh: '看本月 3 件事（給家人看）', en: 'Top 3 (to show family)' }, href: '#sec-top3' }
+          ]
+        };
+      }
+    },
+    {
+      id: 'marketing_social',
+      keywords: ['行銷', '宣傳', 'facebook', 'instagram', 'line', '社群', '粉絲', '臉書', '社團', 'marketing', 'social media', 'promote', 'fb', 'ig'],
+      topic: { zh: '社群行銷', en: 'Social media marketing' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '不要從「漲粉絲」開始 — 從「服務 30 個朋友」開始', en: 'Don\'t start by "gaining followers" — start by "serving 30 friends"' },
+          situation: { zh: '小農做行銷最常犯的錯：把社群當廣告投放。實際上小農的優勢是「真實 + 在地」。30 個願意每週看你貼文的真實朋友，價值勝過 1000 個被廣告買來的陌生人。',
+                       en: 'The #1 mistake small farms make: treat social media like ad campaigns. Your real advantage is "authentic + local". 30 real friends watching your weekly post beats 1000 strangers bought via ads.' },
+          actions: [
+            { zh: '1. <strong>每週 1 篇「農場現場」貼文</strong> — 收成照、田間問題、學到的事。不用包裝，要真實。Facebook + Instagram 同步。',
+              en: '1. <strong>1 weekly "farm-floor" post</strong> — harvest photo, field problem, what you learned. No polish, be authentic. Cross-post Facebook + Instagram.' },
+            { zh: '2. <strong>LINE 訂閱戶群組</strong> — 把買過你產品的人拉進一個 LINE 群（≤ 100 人）。每週公布本週可預訂的品項。比 FB 廣告轉換率高 10 倍。',
+              en: '2. <strong>LINE subscriber group</strong> — pull every customer who bought from you into a single LINE group (≤100 ppl). Weekly post: what\'s available for pre-order. 10x conversion vs FB ads.' },
+            { zh: '3. <strong>跟在地網紅交換 — 不付錢</strong> — 找在地飲食 / 親子 / 環境議題的 KOL，提供農產交換她們發 1 篇真實使用文。比廣告便宜，背書效果強。',
+              en: '3. <strong>Barter with local influencers</strong> — find local food / family / sustainability creators, send produce in exchange for one genuine post. Cheaper than ads, stronger endorsement.' }
+          ],
+          links: [
+            { label: { zh: '看買家提案單', en: 'Buyer pitch sheet' }, href: 'farm-pitch.html', external: true }
+          ]
+        };
+      }
+    },
+    {
+      id: 'storage_coldchain',
+      keywords: ['儲存', '保存', '冷藏', '冷鏈', '倉庫', '冰箱', '凍藏', 'storage', 'cold chain', 'refrigerator', 'preservation', 'shelf life'],
+      topic: { zh: '儲存 / 冷鏈', en: 'Storage / cold chain' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '冷鏈是溢價通路的「入場券」 — 沒它進不去', en: 'Cold chain is the "entry ticket" to premium channels — required, not optional' },
+          situation: { zh: '主婦聯盟、GREEN & SAFE、餐廳直供都要求 2-4°C 冷藏出貨。沒有冷鏈設備你的選項只剩拍賣市場。',
+                       en: 'Homemakers Union, GREEN & SAFE, and chef-direct all require 2-4°C cold delivery. Without cold chain you\'re stuck with wholesale auction.' },
+          actions: [
+            { zh: '1. <strong>低成本起步</strong> — 中古商用冰箱（4-6 萬）+ 保麗龍箱 + 冰寶 = NT$ 50-80k 入門組。先驗證需求再升級。',
+              en: '1. <strong>Low-cost start</strong> — used commercial fridge (NT$ 40-60k) + styrofoam boxes + ice packs = NT$ 50-80k starter kit. Validate demand before upgrading.' },
+            { zh: '2. <strong>共用冷鏈</strong> — 在地產銷班通常有合作冷藏倉庫（NT$ 1-3k/月租用）— 比自建便宜得多。',
+              en: '2. <strong>Shared cold chain</strong> — local production groups often have shared cold storage (NT$ 1-3k/mo lease) — much cheaper than building your own.' },
+            { zh: '3. <strong>申請冷鏈設備補助</strong> — 農業部「農產品冷鏈物流」補助可達設備 50%。看「補助與碳匯收益」面板。',
+              en: '3. <strong>Apply for cold-chain equipment subsidy</strong> — MOA\'s "Agricultural Cold Chain Logistics" grant covers up to 50% of equipment. See the Subsidies panel.' }
+          ],
+          links: [
+            { label: { zh: '看補助清單', en: 'Subsidy list' }, href: '#sec-income' }
+          ]
+        };
+      }
+    },
+    {
+      id: 'crop_rotation',
+      keywords: ['輪作', '輪種', '休耕', '間作', '套作', '什麼作物', '下季種什麼', 'rotation', 'rotate', 'fallow', 'intercrop', 'next season'],
+      topic: { zh: '輪作 / 間作', en: 'Crop rotation' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '輪作是「降低化肥 + 防病蟲」的免費保險', en: 'Crop rotation = free insurance against fertilizer dependency + pest pressure' },
+          situation: { zh: '同一塊地連作 3 年以上 = 養分失衡 + 特定害蟲累積。輪作不是浪費時間，是讓土壤回血的零成本投資。',
+                       en: 'Same crop 3+ years on the same land = nutrient imbalance + targeted-pest buildup. Rotation isn\'t lost time — it\'s zero-cost soil recovery.' },
+          actions: [
+            { zh: '1. <strong>三輪法則</strong> — 葉菜（吃氮）→ 豆科（固氮）→ 根莖（深層養分）。每塊地每年換種類，3 年一循環。',
+              en: '1. <strong>Three-rotation rule</strong> — leafy (N consumer) → legume (N fixer) → root (deep nutrients). Switch each plot annually, 3-year cycle.' },
+            { zh: '2. <strong>休耕期種覆蓋作物</strong> — 田休 1-2 個月時種田菁、毛苕子、扁豆等綠肥 — 比化肥便宜還能改良土壤。',
+              en: '2. <strong>Cover crops during fallow</strong> — even 1-2 month fallows can grow sesbania, vetch, or lablab as green manure — cheaper than fertilizer + soil improvement.' },
+            { zh: '3. <strong>記錄輪作計畫</strong> — 在「農事日誌」每塊田標記前作 + 預定下作 — 3 年後你會發現病蟲害自動減少。',
+              en: '3. <strong>Log your rotation plan</strong> — in the Activity Log, tag each plot\'s previous and next crop — after 3 years pest pressure naturally drops.' }
+          ],
+          links: [
+            { label: { zh: '到農事日誌', en: 'Activity Log' }, href: '#sec-erp' }
+          ]
+        };
+      }
+    },
+    {
+      id: 'packaging_rules',
+      keywords: ['包裝', '標示', '法規', '食品法', 'haccp', '加工', '工廠登記', 'packaging', 'labeling', 'regulation', 'food safety', 'processing', 'food factory'],
+      topic: { zh: '包裝 / 法規', en: 'Packaging / regulations' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '鮮品 vs 加工品的法規天差地遠 — 先搞清楚你在哪一邊', en: 'Fresh vs processed has totally different rules — know which side you\'re on' },
+          situation: { zh: '生鮮農產（洗、切、冷藏）— 規範相對寬鬆。一旦加熱 / 醃漬 / 調味 / 包裝後常溫銷售 = 食品加工 = 需要工廠登記、HACCP、產品檢驗、標示完整。違規罰 6 萬起跳。',
+                       en: 'Fresh produce (wash, cut, chill) — light regulation. Once you heat / pickle / season / shelf-stable-package, you\'re a food processor = factory registration, HACCP, product testing, full labeling required. Fines start at NT$ 60k.' },
+          actions: [
+            { zh: '1. <strong>鮮品銷售只需</strong>：包裝上標生產者、地址、產品名、產地、保存方式、有機/友善認證標章。',
+              en: '1. <strong>Fresh-product sales need only</strong>: producer name, address, product name, origin, storage instructions, cert label (if any).' },
+            { zh: '2. <strong>加工品先「家庭工坊」起步</strong>：未常溫上架、未上電商、量小、僅限自家通路 → 可暫不申請工廠登記，但仍需符合食品安全衛生管理法。',
+              en: '2. <strong>For processed: start as "home workshop"</strong>: no shelf-stable retail, no e-commerce, small volume, your own channels only → may skip factory registration but still must comply with Food Safety Act.' },
+            { zh: '3. <strong>規模超 5 萬/月 = 申請食品工廠登記</strong>：到地方政府衛生局申請，預算 NT$ 50-150k（場地改造 + 設備 + HACCP 顧問費）。',
+              en: '3. <strong>>NT$ 50k/mo revenue = apply for food factory registration</strong>: file with county Health Bureau, budget NT$ 50-150k (facility upgrade + equipment + HACCP consulting).' }
+          ],
+          links: []
+        };
+      }
+    },
+    {
+      id: 'tax_accounting',
+      keywords: ['稅', '報稅', '所得稅', '營業稅', '記帳', '會計', '發票', 'tax', 'accounting', 'income tax', 'bookkeeping', 'invoice', 'receipt'],
+      topic: { zh: '稅 / 記帳', en: 'Tax / accounting' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '免稅農業 vs 課稅事業 — 一個關鍵分界', en: 'Tax-exempt farming vs taxable business — one critical line' },
+          situation: { zh: '台灣自家農場銷售自產農產 = 免營業稅 + 免營業登記。但如果你做加工、辦體驗、賣別人的東西 = 變成「兼營非農業」 = 要報稅、要發票、要記帳。',
+                       en: 'Selling your own fresh produce in Taiwan = sales-tax exempt + no business registration needed. But once you process, run experiences, or resell others\' goods = "mixed non-farm activity" = file taxes, issue invoices, do bookkeeping.' },
+          actions: [
+            { zh: '1. <strong>純鮮品銷售</strong>：免稅、免登記、免發票（但開立「免用統一發票收據」會被買方喜歡）。年收 200 萬以下基本上沒人管。',
+              en: '1. <strong>Pure fresh-produce sales</strong>: tax-exempt, no registration, no invoice required (but a "tax-exempt receipt" makes buyers happier). Under NT$ 2M/yr basically untouched.' },
+            { zh: '2. <strong>有加工 / 體驗 / 民宿</strong>：到國稅局申請「商業登記」+ 取得統一編號 + 每兩個月報營業稅 + 年度個人綜所稅併報。',
+              en: '2. <strong>If you process / run experiences / lodging</strong>: register a business with the tax authority + obtain a tax ID + file sales tax bi-monthly + include in annual personal income tax.' },
+            { zh: '3. <strong>記帳工具</strong>：用 ERP 「收支簿」 — 每筆收入支出登錄 + 月底匯總 = 報稅資料齊全。或外包給記帳士（NT$ 1.5-3k/月）。',
+              en: '3. <strong>Bookkeeping tools</strong>: use the ERP "Ledger" — every income/expense logged + monthly totals = tax-ready records. Or outsource to a bookkeeper (NT$ 1.5-3k/mo).' }
+          ],
+          links: [
+            { label: { zh: '到收支簿', en: 'Open Ledger' }, href: '#sec-erp' }
+          ]
+        };
+      }
+    },
+    {
+      id: 'burnout',
+      keywords: ['累', '撐不住', '想放棄', '太辛苦', '壓力大', 'burned out', 'overwhelmed', 'tired', 'give up', 'too hard', 'mental health'],
+      topic: { zh: '撐不下去', en: 'Burnout' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '累不是因為你不夠努力 — 是「沒人能撐這麼多」', en: 'Burnout isn\'t a "you\'re not strong enough" problem — it\'s "no one can carry this load"' },
+          situation: { zh: '農場 = 12-16 小時 + 365 天 + 體力 + 情緒 + 風險。沒有人能一個人撐長期。要區分「短期累」（休息可恢復）vs「長期透支」（要結構性改變）。',
+                       en: 'A farm = 12-16 hrs × 365 days × physical + emotional + risk. No one can sustain this alone long-term. Distinguish "temporary tired" (rest fixes) vs "long-term depleted" (needs structural change).' },
+          actions: [
+            { zh: '1. <strong>立刻：強制休息 1 天</strong>。一整天不下田，不看訊息。不會死。把這當成投資不是浪費。',
+              en: '1. <strong>Right now: take 1 enforced day off</strong>. No field work, no messages. Nothing collapses. Treat it as investment, not waste.' },
+            { zh: '2. <strong>短期：找 1 個人分擔</strong>。共聘員工、產銷班、家人、WWOOF。一個人撐 = 終究會倒。看「人手 / 雇工」答案。',
+              en: '2. <strong>Short-term: bring in 1 helper</strong>. Co-hired employee, production group, family, WWOOF. Solo = eventual collapse. See "Labor / hiring" answer.' },
+            { zh: '3. <strong>長期：「最小可永續」收入</strong>。算一下：你和家庭一年需要多少？農場規模要剛好撐起這個 — 不是越大越好。看「現金流月曆」+「定價工作室」。',
+              en: '3. <strong>Long-term: "minimum sustainable income"</strong>. Calculate: how much do you + family need per year? Size the farm to that exactly — not bigger. See Cash Flow + Pricing Studio.' },
+            { zh: '4. <strong>不孤單</strong> — 衛福部安心專線 1925（24h）、張老師 1980。「想放棄」的念頭不丟臉，是健康訊號。',
+              en: '4. <strong>You\'re not alone</strong> — MOHW mental health hotline 1925 (24h), Teacher Chang 1980. The "I want to quit" thought isn\'t shameful — it\'s a health signal.' }
+          ],
+          links: []
+        };
+      }
+    },
+    {
+      id: 'land_tenure',
+      keywords: ['土地', '租地', '租金', '農地', '買地', '地主', '租約', 'land', 'rent', 'lease', 'farmland', 'landowner', 'tenant'],
+      topic: { zh: '農地 / 租賃', en: 'Land / leasing' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '租地永續經營要看「合約結構」 — 短租地不要重投資', en: 'Sustainable farming on leased land = contract structure matters; don\'t over-invest on short leases' },
+          situation: { zh: '土壤改良要 3-5 年見效，租約 1 年的地別投資土壤。台灣農地有「375 減租條例」+「耕地三七五租約」— 但通常新合約走「定額租金」+「公證租約」。',
+                       en: 'Soil improvement takes 3-5 years to show. Don\'t invest soil work in a 1-year lease. Taiwan has "Statute 375 Tenancy Reduction" + traditional tenancy contracts, but new leases typically use "fixed rent + notarized agreement".' },
+          actions: [
+            { zh: '1. <strong>租約最少 5 年起跳</strong>，含「續約優先權」條款。土壤改良 / 樹木 / 設施投資都需要這個時間軸保護。',
+              en: '1. <strong>Minimum 5-year lease</strong> with "right of first refusal to renew" clause. Soil work / trees / infrastructure investments need this horizon.' },
+            { zh: '2. <strong>租金合理區間</strong>：水稻田 NT$ 1.5-4k/分/年、蔬果地 NT$ 3-8k/分/年、果園 NT$ 4-10k/分/年。低於這個 = 留意是否有問題；高於這個 = 拿來談判。',
+              en: '2. <strong>Fair rent ranges</strong>: paddy NT$ 1.5-4k/0.1ha/yr; vegetable NT$ 3-8k; orchard NT$ 4-10k. Lower = check for hidden issues; higher = negotiation point.' },
+            { zh: '3. <strong>「青年從農」買地補貼</strong>：滿足條件可獲得低利貸款 + 部分頭期款補助。45 歲以下、無自有農地、有經營計畫 — 到農業部「青年農民」網查資格。',
+              en: '3. <strong>"Young Farmer" land-purchase subsidy</strong>: low-interest loan + down-payment grant for qualifying applicants — under 45, no existing farmland, with business plan. Check MOA Young Farmer site.' }
+          ],
+          links: []
+        };
+      }
+    },
+    {
+      id: 'when_scale',
+      keywords: ['擴大', '擴張', '加大', '長大', '更多地', '長遠計畫', 'scale', 'scale up', 'expand', 'grow bigger', 'more land'],
+      topic: { zh: '何時擴張', en: 'When to scale' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '3 個訊號齊全才能擴 — 缺一不可', en: 'Scale only when 3 signals are present — all of them' },
+          situation: { zh: '過早擴張是永續農場的死法之一。比賠錢更糟的是「越擴越累、越擴越虧」。',
+                       en: 'Premature scaling is a top sustainable-farm killer. Worse than losing money is "scaling into MORE work AND more losses".' },
+          actions: [
+            { zh: '1. <strong>訊號一：現有面積連續 3 年穩定毛利 ≥ 30%</strong>。沒到這個水位 = 你的單位經濟有問題，擴大只放大問題。',
+              en: '1. <strong>Signal 1: current area, 3 consecutive years of margin ≥ 30%</strong>. Below this = your unit economics have an issue; scaling magnifies the problem.' },
+            { zh: '2. <strong>訊號二：訂單量超過供應量 6+ 個月</strong>。被「拒絕訂單」拒得心痛、客戶等貨 — 那是真需求，不是預期。',
+              en: '2. <strong>Signal 2: demand exceeded supply for 6+ months</strong>. You\'ve been turning down orders repeatedly, customers waiting. That\'s real demand, not projected.' },
+            { zh: '3. <strong>訊號三：人力結構已就緒</strong>。擴大前要先有合夥人 / 全職員工 / 產銷班合作。沒有人 = 擴大 = 你累死。',
+              en: '3. <strong>Signal 3: people structure is ready</strong>. Before scaling, you need a partner / full-time hire / production-group collab. Without people = scale = burnout.' },
+            { zh: '替代路線：不擴面積，提高每公頃毛利 — 升級認證、轉高價作物、加工副產品。可能比擴 2 倍面積更賺。',
+              en: 'Alternative path: don\'t scale acreage, raise per-hectare margin — upgrade cert, shift to high-value crops, add processing. Often more profitable than 2× acreage.' }
+          ],
+          links: [
+            { label: { zh: '看同儕比較', en: 'Peer comparison' }, href: '#sec-compare' }
+          ]
+        };
+      }
+    },
+    {
+      id: 'organic_transition',
+      keywords: ['有機轉型', '有機轉作', '轉作有機', '驗證流程', '轉型期', 'organic transition', 'go organic', 'convert to organic', 'transition period'],
+      topic: { zh: '有機轉型', en: 'Organic transition' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '有機轉型 3 年 — 別小看「中間期」的現金缺口', en: 'Organic conversion = 3 years — don\'t underestimate the "middle period" cash gap' },
+          situation: { zh: '台灣有機驗證流程：申請 → 第三方驗證 → 2 年轉型期（不能標「有機」但已用有機方式） → 驗證通過。轉型期產量下降 + 還沒有溢價 = 現金最辛苦的 18 個月。',
+                       en: 'Taiwan organic cert flow: apply → third-party verify → 2-year transition (farming organic but can\'t label "organic" yet) → full cert. Transition = yield drops + no premium yet = the most cash-strapped 18 months.' },
+          actions: [
+            { zh: '1. <strong>提前儲備</strong> — 轉型前確認手邊有 1.5 倍年支出的現金 / 信用額度。沒有 = 延後轉型，先做友善登錄 + TGAP（同樣有補助、無轉型期）。',
+              en: '1. <strong>Build a runway first</strong> — confirm 1.5× annual expenses in cash / credit before transition. If not = delay; do friendly farming + TGAP first (same subsidies, no transition cost).' },
+            { zh: '2. <strong>分批轉型</strong> — 不要全場一次轉。先轉 30% 面積，2 年後通過再轉下 30%。風險可控。',
+              en: '2. <strong>Phased transition</strong> — don\'t convert the whole farm at once. Start with 30%, get cert in 2 yrs, then next 30%. Risk-bounded.' },
+            { zh: '3. <strong>申請「有機驗證輔導補助」</strong> — 補貼驗證費用 50-100% + 轉型期年度給付。看「補助」面板的「有機驗證輔導」。',
+              en: '3. <strong>Apply for "Organic Cert Support"</strong> — covers 50-100% of verification fees + transition-period annual payment. See "Organic Certification Support" in Subsidies.' }
+          ],
+          links: [
+            { label: { zh: '看補助清單', en: 'Subsidies' }, href: '#sec-income' }
+          ]
+        };
+      }
+    },
+    {
+      id: 'find_mentor',
+      keywords: ['找老師', '找師傅', '誰可以教', '請教', '學習', '訓練', '進修', 'mentor', 'teacher', 'who to ask', 'learn from', 'training', 'class', 'workshop'],
+      topic: { zh: '找師傅 / 學習', en: 'Find a mentor / training' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '台灣有 5 種免費/低費學習資源 — 大多數人只用過 1 種', en: 'Taiwan has 5 cheap/free learning paths — most farmers use only 1' },
+          situation: { zh: '不要等到「想學再找」— 提前建立 2-3 條資源管道，問題出現時馬上有人問。',
+                       en: 'Don\'t wait until you need help — build 2-3 resource channels in advance so when problems hit, you have someone to ask.' },
+          actions: [
+            { zh: '1. <strong>農業改良場（縣級）</strong> — 免費田間診斷 + 線上技術諮詢 + 定期辦研習。每個縣都有，很多人不知道是免費的。',
+              en: '1. <strong>Agricultural Improvement Station (county-level)</strong> — free on-site diagnostics + online tech consulting + regular workshops. Every county has one. Many farmers don\'t realize it\'s free.' },
+            { zh: '2. <strong>農業部「百大青農」+「青農 plus」</strong> — 媒合資深農場師傅 + 定期實作課程，年費 NT$ 1-2k 內。45 歲以下優先。',
+              en: '2. <strong>MOA "Top 100 Young Farmers" + "Young Farmer Plus"</strong> — pairs you with senior farm mentors + regular practical courses, annual fee under NT$ 2k. Priority for under-45.' },
+            { zh: '3. <strong>區域產銷班</strong> — 同作物 / 區域的農戶定期聚會、共購、共售、互相幫忙。比上課重要。',
+              en: '3. <strong>Regional Production Group</strong> — farmers of same crop/region meet regularly, joint buying, joint selling, mutual help. More important than classes.' },
+            { zh: '4. <strong>農業 YouTube / Podcast</strong> — 「種田農夫」「友善小農聯盟」「興大農業電子報」— 通勤時段聽。',
+              en: '4. <strong>Agriculture YouTube / Podcasts</strong> — search "種田農夫", "友善小農聯盟", "興大農業電子報" — listen during commute time.' },
+            { zh: '5. <strong>Facebook 專業社團</strong> — 「友善農業聯盟」、「有機農業推廣」、特定作物社團（如「香菜友善農法」）。問問題免費，常有專家秒回。',
+              en: '5. <strong>Facebook professional groups</strong> — "Friendly Farming Alliance", "Organic Promotion", crop-specific groups. Free Q&A, often experts reply within minutes.' }
+          ],
+          links: []
+        };
+      }
+    },
+    {
+      id: 'water_mgmt',
+      keywords: ['節水', '灌溉', '水費', '缺水', '旱災', 'awd', '間歇灌溉', '水資源', 'water', 'irrigation', 'drought', 'water bill', 'water management'],
+      topic: { zh: '水資源管理', en: 'Water management' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '水費省 30% + 看天吃飯減少 — 兩個目標一起追', en: 'Cut water bill 30% + reduce weather dependency — two goals in parallel' },
+          situation: { zh: '台灣農業用水佔總用水 70%，但氣候越來越極端。節水做法 = 省錢 + 應對乾旱兩個效益。',
+                       en: 'Agriculture uses 70% of Taiwan\'s water, but climate is increasingly extreme. Water-saving practices = cost savings + drought resilience together.' },
+          actions: [
+            { zh: '1. <strong>稻田 AWD（間歇灌溉）</strong> — 水費 -30%、甲烷 -45%、產量不變。看「投資回收計算機」AWD 的回本期 + 政府示範補助。',
+              en: '1. <strong>Rice AWD (alternate wetting + drying)</strong> — water -30%, methane -45%, yield unchanged. See Practice ROI for AWD payback + government demo subsidy.' },
+            { zh: '2. <strong>滴灌 / 微噴</strong> — 蔬果作物可減少 40-50% 用水。建置 NT$ 30-100k/ha，2-4 年回本（含補助）。',
+              en: '2. <strong>Drip / micro-spray</strong> — vegetable + fruit can cut water 40-50%. Install NT$ 30-100k/ha, 2-4 yr payback with subsidy.' },
+            { zh: '3. <strong>蓄水 / 雨水收集</strong> — 屋頂面積 100 m² 一年可集 70-90 噸雨水。設備 NT$ 20-50k。乾旱時救命。',
+              en: '3. <strong>Water storage / rainwater harvest</strong> — 100 m² roof yields 70-90 tons of rainwater/yr. Equipment NT$ 20-50k. Life-saver in drought.' }
+          ],
+          links: [
+            { label: { zh: '看投資回收 (AWD / 灌溉)', en: 'Practice ROI (AWD / irrigation)' }, href: '#sec-roi' }
+          ]
+        };
+      }
+    },
+    {
+      id: 'pricing_specific',
+      keywords: ['多少錢', '一斤多少', '一公斤多少錢', '行情', '市場價', 'how much per kg', 'market price', 'going rate', 'price per kg'],
+      topic: { zh: '市場行情 vs 你的價', en: 'Market price vs your price' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '別跟著市場行情走 — 你會被拉到地板價', en: 'Don\'t price by market rates — that drags you to the floor' },
+          situation: { zh: '農糧署網站公布每日各批發市場行情。看是好的，但永續農場「跟著市場走」= 死路一條。市場價是慣行農法 + 規模生產者設定的。',
+                       en: 'COA publishes daily wholesale prices. Reading them is fine. But sustainable farms "pricing-following" = a death trap. Market price is set by conventional + scaled producers.' },
+          actions: [
+            { zh: '1. <strong>知道市場行情</strong> — 農糧署「農產品交易行情站」每日更新。當作「對方的最低」, 不是「你的目標」。',
+              en: '1. <strong>Know the market</strong> — COA "Agricultural Trading Information Station" daily updates. Use as "their floor", not "your target".' },
+            { zh: '2. <strong>設你自己的價</strong> — 用「定價工作室」算成本反推 — 你的地板價 / 永續價 / 故事溢價是依你的成本，不是依市場。',
+              en: '2. <strong>Set your own price</strong> — use the Pricing Studio: cost-up calc gives your floor / sustainable / premium prices based on YOUR cost, not the market.' },
+            { zh: '3. <strong>離批發越遠越好</strong> — CSA、餐廳、有機通路、禮盒都是「免市場價」通路。看「定價工作室」每張通路卡。',
+              en: '3. <strong>Get distance from wholesale</strong> — CSA, restaurants, organic retail, gift boxes are all "market-price-free" channels. See Pricing Studio per-channel cards.' }
+          ],
+          links: [
+            { label: { zh: '看定價工作室', en: 'Pricing Studio' }, href: '#sec-pricing' }
+          ]
+        };
+      }
     }
   ];
 
