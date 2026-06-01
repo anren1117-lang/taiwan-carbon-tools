@@ -1963,32 +1963,56 @@
 
   /* ── Sustainable-ag agent panel ───────────────────────── */
   .agent-panel {
-    background: linear-gradient(135deg, rgba(29,158,117,0.06) 0%, rgba(37,99,235,0.04) 100%);
-    border: 1px solid rgba(29,158,117,0.25);
-    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(29,158,117,0.08) 0%, rgba(37,99,235,0.05) 100%);
+    border: 1.5px solid rgba(29,158,117,0.30);
+    border-radius: 16px;
     padding: 22px;
     margin-bottom: 14px;
     position: relative;
+    box-shadow: 0 4px 18px rgba(29, 158, 117, 0.08);
   }
   .agent-head {
-    display: flex; align-items: center; gap: 12px;
-    margin-bottom: 14px;
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 16px;
   }
   .agent-avatar {
-    width: 38px; height: 38px;
+    width: 46px; height: 46px;
     border-radius: 50%;
     background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
     color: white;
     display: inline-flex; align-items: center; justify-content: center;
-    font-size: 18px;
-    box-shadow: 0 4px 10px rgba(29,158,117,0.3);
+    font-size: 22px;
+    box-shadow: 0 4px 14px rgba(29,158,117,0.35);
+    position: relative;
+    flex-shrink: 0;
+  }
+  /* "Online" status dot — signals the agent is interactive, not just
+     a static info panel. Subtle pulse loop draws the eye when idle. */
+  .agent-avatar::after {
+    content: "";
+    position: absolute;
+    bottom: 1px; right: 1px;
+    width: 12px; height: 12px;
+    background: #22c55e;
+    border: 2.5px solid var(--bg-card);
+    border-radius: 50%;
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+    animation: agentPulse 2.4s ease-in-out infinite;
+  }
+  @keyframes agentPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5); }
+    50%      { box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .agent-avatar::after { animation: none; }
   }
   .agent-name {
-    font-size: 14px; font-weight: 700;
+    font-size: 15px; font-weight: 700;
     color: var(--text);
+    letter-spacing: -0.005em;
   }
   .agent-tag {
-    font-size: 11px; color: var(--text-muted);
+    font-size: 11.5px; color: var(--text-muted);
     font-weight: 500; margin-top: 2px;
   }
   .agent-reset {
@@ -2031,19 +2055,46 @@
     border-radius: 12px;
     padding: 14px 14px 12px;
     cursor: pointer;
-    transition: all 0.15s;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease, background 0.15s ease;
     text-align: left;
     font-family: inherit;
     color: var(--text);
+    position: relative;
+    overflow: hidden;
   }
+  /* Hover affordance: lift + accent border + subtle gradient sweep */
+  .agent-chip::before {
+    content: "";
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, var(--accent-tint) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.18s ease;
+    pointer-events: none;
+  }
+  .agent-chip:hover::before { opacity: 1; }
   .agent-chip:hover {
     border-color: var(--accent);
-    transform: translateY(-1px);
-    box-shadow: 0 6px 18px rgba(29,158,117,0.12);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(29,158,117,0.18);
   }
-  .agent-chip .ac-icon { font-size: 22px; display: block; margin-bottom: 6px; }
-  .agent-chip .ac-label { font-weight: 600; font-size: 13.5px; }
-  .agent-chip .ac-blurb { color: var(--text-muted); font-size: 11.5px; margin-top: 3px; }
+  /* Press affordance — chip dips slightly when clicked */
+  .agent-chip:active { transform: translateY(0); transition: transform 0.05s; }
+  .agent-chip .ac-icon { font-size: 24px; display: block; margin-bottom: 6px; position: relative; }
+  .agent-chip .ac-label { font-weight: 700; font-size: 14px; position: relative; letter-spacing: -0.005em; }
+  .agent-chip .ac-blurb { color: var(--text-muted); font-size: 11.5px; margin-top: 4px; line-height: 1.5; position: relative; }
+  /* Tiny arrow that appears on hover — affordance cue that this is a button */
+  .agent-chip::after {
+    content: "→";
+    position: absolute;
+    top: 14px; right: 14px;
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 16px;
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: opacity 0.18s ease, transform 0.18s ease;
+  }
+  .agent-chip:hover::after { opacity: 1; transform: translateX(0); }
   .agent-step {
     display: grid;
     grid-template-columns: 32px 1fr;
