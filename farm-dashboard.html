@@ -5740,6 +5740,489 @@ This application supports starting organic-transition certification for ≥1 ha.
           ]
         };
       }
+    },
+    {
+      id: 'composting',
+      keywords: ['堆肥', '怎麼做堆肥', '製作堆肥', '腐熟', 'c/n', '碳氮比', '翻堆', 'compost', 'composting', 'c:n ratio', 'turn pile'],
+      topic: { zh: '堆肥製作', en: 'Composting how-to' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '堆肥成功的關鍵：碳氮比 25-30:1 + 翻 3 次 + 等 60-90 天', en: 'Compost success = C:N ratio 25-30:1 + 3 turns + 60-90 days' },
+          situation: { zh: '堆肥不是「把廚餘埋進土裡」— 那叫埋廢物。真正的堆肥要達到 50-65°C 高溫殺死病原和雜草種子，然後降溫腐熟。失敗最常見原因：碳氮比錯（太多綠、少棕色）+ 缺氧（沒翻）+ 太乾或太濕。',
+                       en: 'Composting isn\'t "burying food scraps" — that\'s waste burial. Real compost reaches 50-65°C (kills pathogens + weed seeds), then cools to mature. Most common failures: wrong C:N ratio (too much green, not enough brown) + lack of oxygen (no turning) + too dry or too wet.' },
+          actions: [
+            { zh: '1. <strong>材料配比 — 棕色 : 綠色 = 3:1（體積）</strong>。棕色 = 稻草 / 落葉 / 木屑（高碳）；綠色 = 廚餘 / 牲畜糞 / 修剪植物（高氮）。',
+              en: '1. <strong>Mix browns : greens = 3:1 by volume</strong>. Browns = straw / leaves / wood chips (high C); greens = food scraps / manure / fresh prunings (high N).' },
+            { zh: '2. <strong>堆 1 m³ 以上才會升溫</strong>。第 2-3 天溫度應到 50-65°C。沒升溫 = 翻一次 + 加水到「擰得出微濕」。',
+              en: '2. <strong>Pile ≥ 1 m³ to heat properly</strong>. Days 2-3 should hit 50-65°C. No heat = turn it + add water to "squeeze drips a few drops".' },
+            { zh: '3. <strong>翻堆時機：第 7、21、45 天各一次</strong>。每次翻把外圈調到中心。3 次後讓它「靜置成熟」30-45 天。',
+              en: '3. <strong>Turning schedule: days 7, 21, 45</strong>. Each turn moves outer material to the center. After 3 turns, let it "mature undisturbed" 30-45 days.' },
+            { zh: '4. <strong>完成判斷</strong>：黑褐色 + 鬆軟 + 帶土壤味（不臭）+ 看不出原本材料。捏不出形狀就表示太乾，可加水重新堆。',
+              en: '4. <strong>Doneness</strong>: dark brown + crumbly + earthy smell (not foul) + raw materials unrecognizable. Won\'t hold shape when squeezed = too dry, rewet + restart.' },
+            { zh: '5. <strong>禁忌</strong>：肉類、油脂、奶製品（招鼠和臭味）、病害植物殘體、養殖場糞便混藥渣（除非有機認證的雞糞）、犬貓糞便（病原）。',
+              en: '5. <strong>Avoid</strong>: meat, fats, dairy (rats + smell), diseased plant material, factory-farm manure with antibiotic residue (unless cert organic chicken manure), dog/cat feces (pathogens).' }
+          ],
+          checklist: {
+            title: { zh: '堆肥前準備清單', en: 'Pre-composting checklist' },
+            items: [
+              { zh: '<strong>場地</strong> — 3 × 3 m，平整、排水好、遮陽（防止過熱乾燥）', en: '<strong>Site</strong> — 3×3m, level, drains well, partial shade (prevents drying)' },
+              { zh: '<strong>工具</strong> — 草耙、堆肥溫度計（NT$ 300-800）、鏟子、防水布', en: '<strong>Tools</strong> — pitchfork, compost thermometer (NT$ 300-800), shovel, tarp' },
+              { zh: '<strong>棕色儲備</strong> — 至少 3 立方公尺稻草 / 落葉備用（綠色容易過剩，棕色容易缺）', en: '<strong>Brown reserve</strong> — at least 3 m³ straw / leaves stockpiled (greens often surplus, browns often short)' },
+              { zh: '<strong>水源</strong> — 場地旁要有水管，定期補水', en: '<strong>Water source</strong> — hose at site for periodic moisture adjustment' }
+            ]
+          },
+          pitfalls: {
+            title: { zh: '常見堆肥問題', en: 'Common compost problems' },
+            items: [
+              { zh: '<strong>臭味 = 缺氧</strong> 立即翻堆 + 加棕色材料', en: '<strong>Bad smell = anaerobic</strong> Turn immediately + add brown material' },
+              { zh: '<strong>不升溫 = 太乾或氮不夠</strong> 加水 + 綠色材料', en: '<strong>No heat = too dry or low N</strong> Add water + green material' },
+              { zh: '<strong>長蛆 / 招蒼蠅 = 廚餘暴露</strong> 蓋一層棕色或土覆住', en: '<strong>Maggots / flies = exposed food</strong> Cover with brown material or soil' },
+              { zh: '<strong>太濕、有水滲</strong> 翻堆 + 加乾棕色 + 鋪上防水布擋雨', en: '<strong>Too wet, leaching</strong> Turn + add dry browns + tarp against rain' }
+            ]
+          },
+          links: [
+            { label: { zh: '看投資回收（堆肥）', en: 'Practice ROI (compost)' }, href: '#sec-roi' }
+          ]
+        };
+      }
+    },
+    {
+      id: 'aphids_pests',
+      keywords: ['蚜蟲', '介殼蟲', '葉蟬', '飛蝨', '吃葉蟲', '小蟲', 'aphid', 'scale insect', 'leafhopper', 'whitefly', 'leaf-eating'],
+      topic: { zh: '吸食 / 啃食害蟲', en: 'Sucking / chewing pests' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '不要直接噴藥 — 先看密度，再選 IPM 階梯', en: 'Don\'t spray first — assess density, then climb the IPM ladder' },
+          situation: { zh: 'IPM（綜合防治）= 監測 → 物理 → 生物 → 必要時最低劑量化學。多數蚜蟲、介殼蟲、葉蟬問題在密度低時用物理或生物防治就能控制 — 化學藥劑是「噴了 = 益蟲也死 = 病蟲反撲」的最後手段。',
+                       en: 'IPM (integrated pest management) = monitor → physical → biological → minimum-dose chemical if needed. Most aphid / scale / leafhopper problems at low density resolve with physical or biological means — chemical spray kills beneficials too → pest rebound is worse next round.' },
+          actions: [
+            { zh: '1. <strong>監測 — 每 3 天巡田 1 次</strong>。看葉背、新梢、芽點。每株 < 10 隻 = 不急；> 30 隻或快速擴散 = 行動。',
+              en: '1. <strong>Monitor — scout every 3 days</strong>. Check leaf undersides, new shoots, growing tips. Under 10/plant = no rush; 30+/plant or fast spread = act.' },
+            { zh: '2. <strong>物理 — 水柱沖洗</strong>。早晨用強水柱沖葉背可去除 60-80% 的蚜蟲。3-5 天一次連續 2 週。',
+              en: '2. <strong>Physical — water blast</strong>. Morning strong-water spray on leaf undersides removes 60-80% of aphids. Repeat every 3-5 days for 2 weeks.' },
+            { zh: '3. <strong>生物 — 引入瓢蟲 / 草蛉</strong>。農會、生物防治公司可購買（NT$ 200-500/百隻）。釋放後 1-2 週見效。要先停所有化學藥劑 7 天。',
+              en: '3. <strong>Biological — release ladybugs / lacewings</strong>. Available from farmers associations or biocontrol companies (NT$ 200-500/100 insects). 1-2 wks to take effect. Stop all chemicals 7 days before release.' },
+            { zh: '4. <strong>溫和噴劑</strong>（友善 / 有機可用）— 苦楝油（neem）、皂液（pure castile soap 1:30 稀釋）、辣椒大蒜液。每 7 天噴 1 次，連續 3 次。',
+              en: '4. <strong>Gentle sprays</strong> (friendly + organic OK) — neem oil, pure castile soap (1:30 dilution), garlic-chili spray. Every 7 days for 3 rounds.' },
+            { zh: '5. <strong>化學最後手段</strong>— 如必要選擇對益蟲傷害最小的（陶斯松、賽達松等）。一定要看標籤、遵守安全採收間隔。記在「農事日誌」。',
+              en: '5. <strong>Chemical last resort</strong> — pick lowest-impact-on-beneficials product. Read label + observe pre-harvest interval. Log in Activity Log.' }
+          ],
+          resources: {
+            title: { zh: '在地資源', en: 'Local resources' },
+            items: [
+              { zh: '縣農業改良場 — 免費害蟲鑑定（拍照上傳或現場帶蟲過去）', en: 'County improvement station — free pest ID (photo or bring specimen)' },
+              { zh: '生物防治公司：苗栗農改場「天敵昆蟲」、苗栗區「蟲博士」（NT$ 200-500/份）', en: 'Biocontrol suppliers: Miaoli Improvement Station "Beneficial Insects", "Bug Doctor" (NT$ 200-500/batch)' },
+              { zh: '<a href="https://www.tactri.gov.tw/" target="_blank" rel="noopener">tactri.gov.tw</a> — 農業藥物毒物試驗所有害蟲資料庫', en: '<a href="https://www.tactri.gov.tw/" target="_blank" rel="noopener">tactri.gov.tw</a> — TACTRI pest reference database' }
+            ]
+          },
+          links: []
+        };
+      }
+    },
+    {
+      id: 'snail_slug',
+      keywords: ['蝸牛', '蛞蝓', '福壽螺', '吃苗', '咬幼苗', '夜行', 'snail', 'slug', 'apple snail', 'eating seedlings'],
+      topic: { zh: '蝸牛 / 蛞蝓 / 福壽螺', en: 'Snails / slugs / apple snail' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '蝸牛蛞蝓是夜行軍 — 用「陷阱 + 隔離」打白天的牌', en: 'Snails + slugs are night fighters — beat them with daytime "traps + barriers"' },
+          situation: { zh: '台灣稻田、菜園、果園都有蝸牛 / 蛞蝓問題。福壽螺特別嚴重 — 一晚可吃完整片秧苗。化學農藥（聚乙醛、保米寧）對水生生態有害且越來越多通路不接受。',
+                       en: 'Taiwan paddies, vegetable plots, orchards all face snail / slug pressure. Apple snails especially severe — can devour a seedling tray overnight. Chemical molluscicides (metaldehyde, niclosamide) harm aquatic ecosystem + increasingly rejected by channels.' },
+          actions: [
+            { zh: '1. <strong>啤酒陷阱</strong>— 淺盤埋入土中至邊緣與地面齊平，倒入啤酒到 2/3 滿。每 10 平方公尺 1 個，每 3 天更換。蝸牛 / 蛞蝓被吸引爬入溺死。',
+              en: '1. <strong>Beer trap</strong> — sink a shallow dish to ground level, fill 2/3 with beer. 1 per 10 m², replace every 3 days. Snails / slugs attracted, drown.' },
+            { zh: '2. <strong>晨間人工捕捉</strong>— 清晨 5-7 點蝸牛蛞蝓還在外面活動。連續抓 2-3 週可降低 70%。',
+              en: '2. <strong>Hand-pick at dawn</strong> — 5-7am snails + slugs still active outside. 2-3 weeks of dawn picking cuts population 70%.' },
+            { zh: '3. <strong>銅帶 / 木灰圈</strong>— 苗床周圍鋪寬 5 cm 的銅帶或木灰，蝸牛黏液接觸銅 / 鹼會痛得不過。',
+              en: '3. <strong>Copper strip / wood-ash circle</strong> — 5cm-wide copper tape or wood ash ring around seedling beds. Snail mucus reacts with copper / alkali — they won\'t cross.' },
+            { zh: '4. <strong>福壽螺：誘集卵塊 + 鴨 / 鯉魚生物防治</strong>— 找到粉紅卵塊用刀刮掉踩碎。稻田放鴨可吃幼螺，但要等秧苗站穩 2-3 週後再放。',
+              en: '4. <strong>Apple snail: collect egg masses + duck / carp biocontrol</strong> — find pink egg clusters, scrape + crush. Release ducks to paddy field after seedlings establish 2-3 weeks (eats juveniles).' },
+            { zh: '5. <strong>磷酸鐵</strong>（有機認可）— 如必須用藥，磷酸鐵（iron phosphate）對哺乳類無害、被環境分解。但仍是最後手段。',
+              en: '5. <strong>Iron phosphate</strong> (organic-allowed) — if chemical needed, iron phosphate is non-toxic to mammals + breaks down naturally. But still last resort.' }
+          ],
+          links: []
+        };
+      }
+    },
+    {
+      id: 'fruit_fly',
+      keywords: ['果實蠅', '東方果實蠅', '針蜂', '果蛆', '橘小實蠅', 'fruit fly', 'oriental fruit fly', 'maggot in fruit'],
+      topic: { zh: '果實蠅 / 針蜂', en: 'Fruit fly' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '果實蠅靠「誘殺 + 套袋 + 田間衛生」三線打擊', en: 'Fruit fly fought on 3 fronts: trap + bag + sanitation' },
+          situation: { zh: '東方果實蠅 / 橘小實蠅是台灣果園頭號害蟲。一隻雌成蟲可產 800 顆卵，幼蟲鑽入果實 = 整顆爛掉。靠單一方法防治不夠 — 必須三線並行。',
+                       en: 'Oriental fruit fly + melon fly are Taiwan\'s #1 orchard pest. One female lays 800 eggs; larvae bore into fruit → whole fruit rots. Single-tactic control fails — must combine 3 lines of defense.' },
+          actions: [
+            { zh: '1. <strong>誘殺 — 甲基丁香油 / 釋利松誘餌器</strong>。每公頃 8-12 個，掛在離地 1.5-2m。每 30-45 天補充誘餌。雄蟲被吸引死亡 = 雌蟲無法授精。',
+              en: '1. <strong>Lure traps — methyl eugenol / cuelure</strong>. 8-12 traps per ha, hung 1.5-2m above ground. Refill bait every 30-45 days. Males attracted + killed = females can\'t mate.' },
+            { zh: '2. <strong>套袋 — 開花後 2-3 週果實坐穩就套</strong>。蓮霧、芒果、楊桃、棗子等都適用。專用套袋 NT$ 1-3/個，可重複用 2-3 季。',
+              en: '2. <strong>Fruit bagging — apply 2-3 wks post-bloom after set</strong>. Works for wax apple, mango, star fruit, jujube etc. Specialty bags NT$ 1-3/each, reusable 2-3 seasons.' },
+            { zh: '3. <strong>田間衛生 — 每天撿掉地上落果</strong>。落果 = 幼蟲化蛹 = 下一波蟲。撿起來深埋 30cm 或燙過殺死幼蟲。',
+              en: '3. <strong>Sanitation — collect ground-fall fruit DAILY</strong>. Fallen fruit = larvae pupate = next wave of flies. Bury 30cm deep or hot-water treat to kill larvae.' },
+            { zh: '4. <strong>農會聯防</strong>— 鄰近果農一起做誘殺最有效。一個人做、隔壁不做 = 飛來飛去沒效果。產銷班集體採購誘餌可省 30%。',
+              en: '4. <strong>Area-wide neighbor coordination</strong> — joint trapping with adjacent orchards is most effective. Solo trapping while neighbors don\'t = flies move between farms = useless. Production-group bulk buying cuts bait cost 30%.' },
+            { zh: '5. <strong>抗性管理</strong>— 如必須化學藥劑，每季輪換 2-3 種作用機制不同的，避免果實蠅產生抗性。',
+              en: '5. <strong>Resistance management</strong> — if chemicals needed, rotate 2-3 different mode-of-action products each season to prevent fly resistance.' }
+          ],
+          links: []
+        };
+      }
+    },
+    {
+      id: 'fungal_disease',
+      keywords: ['霉菌', '白粉病', '銹病', '炭疽病', '露菌病', '腐爛', '病害', 'fungal', 'mildew', 'rust', 'anthracnose', 'blight', 'fungus', 'rot'],
+      topic: { zh: '黴菌 / 真菌病害', en: 'Fungal diseases' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '真菌病害 = 預防 9 倍勝過治療', en: 'Fungal disease = 9× more value in prevention than cure' },
+          situation: { zh: '一旦看到白粉、銹斑、炭疽（黑或褐色斑塊）、露菌（葉背絨毛狀），意味病原已大量繁殖，只能控制蔓延，不能逆轉。永續路：環境管理 + 抗病品種 + 早期介入。',
+                       en: 'Once you see powdery mildew, rust spots, anthracnose (black/brown patches), or downy mildew (fuzzy growth on leaf undersides), the pathogen has already established — you can only contain spread, not reverse damage. Sustainable path: environmental management + resistant varieties + early intervention.' },
+          actions: [
+            { zh: '1. <strong>環境 — 通風 + 不要在葉子上澆水</strong>。植株間距夠寬 + 修剪過密枝葉 + 滴灌不噴灑。多數真菌需要葉面濕度 4-6 小時才能感染。',
+              en: '1. <strong>Environment — airflow + don\'t water leaves</strong>. Adequate plant spacing + prune dense canopy + drip irrigation not overhead. Most fungi need 4-6hrs leaf wetness to infect.' },
+            { zh: '2. <strong>品種選擇</strong>— 種前查抗病品種（縣農改場提供清單）。選錯品種 = 每季都打仗；選對 = 半數問題消失。',
+              en: '2. <strong>Variety selection</strong> — research resistant cultivars before planting (county improvement station has lists). Wrong variety = battle every season; right variety = half the problems disappear.' },
+            { zh: '3. <strong>早期介入 — 看到第一片病葉就處理</strong>。摘除 + 燒掉（不要堆肥），鄰近植株噴小蘇打液（1 茶匙 / 公升）或銅劑（友善認可）。',
+              en: '3. <strong>Early intervention — act on the first diseased leaf</strong>. Remove + burn (don\'t compost). Spray surrounding plants with baking soda solution (1 tsp/L) or copper (friendly-allowed).' },
+            { zh: '4. <strong>輪作 + 不留病株</strong>— 同科作物 3 年不種同一塊地。收成後病株、田間落葉全部清除焚燒，不要翻入土。',
+              en: '4. <strong>Rotation + remove diseased plants</strong> — 3-year break for same-family crops on each plot. After harvest, remove + burn diseased material + fallen leaves; don\'t till them under.' },
+            { zh: '5. <strong>必要化學藥劑 — 預防勝過治療</strong>。系統性殺菌劑（如三泰芬）必須在發病前噴。發病後再噴只能控制不能逆轉。',
+              en: '5. <strong>If chemical needed — prevention beats cure</strong>. Systemic fungicides (e.g. triadimefon) must be applied BEFORE symptoms. Post-symptom = containment only, no reversal.' }
+          ],
+          links: []
+        };
+      }
+    },
+    {
+      id: 'beneficial_insects',
+      keywords: ['益蟲', '瓢蟲', '草蛉', '寄生蜂', '螳螂', '蜜蜂', '授粉', 'beneficial', 'ladybug', 'lacewing', 'parasitic wasp', 'mantis', 'bee', 'pollinator'],
+      topic: { zh: '益蟲 / 授粉昆蟲', en: 'Beneficial insects / pollinators' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '益蟲不是「買來釋放」 — 是「給牠們家就會自己來」', en: 'Beneficials aren\'t "buy and release" — give them a home and they show up' },
+          situation: { zh: '台灣果園 + 菜園的隱形勞動力：瓢蟲（吃蚜蟲）、草蛉（吃多種小蟲）、寄生蜂（鑽進害蟲體內）、蜜蜂 + 獨居蜂（授粉）。化學農藥滅掉益蟲是農業最大的隱性成本。一個健康的益蟲族群 = 每年免費省 NT$ 20-50k/ha 的「自然防治」服務。',
+                       en: 'Taiwan orchards + veg plots\' invisible workforce: ladybugs (eat aphids), lacewings (eat various small pests), parasitic wasps (bore into pest bodies), honeybees + solitary bees (pollination). Killing beneficials with chemicals is agriculture\'s biggest hidden cost. A healthy beneficial population = NT$ 20-50k/ha/yr free "natural pest control" service.' },
+          actions: [
+            { zh: '1. <strong>停藥週</strong>— 至少留 1 個區塊不噴藥 6 個月，益蟲會自己進駐。整場停藥 = 12-18 個月後生態恢復穩定。',
+              en: '1. <strong>No-spray refuge</strong> — keep at least 1 zone chemical-free for 6 months; beneficials colonize it. Full-farm no-spray = ecosystem recovers in 12-18 months.' },
+            { zh: '2. <strong>蜜源植物</strong>— 田邊種金盞花、香蜂草、向日葵、田菁、芫荽 — 全年有花 = 全年有益蟲。每 100m² 留 10-15m² 給「益蟲花圃」。',
+              en: '2. <strong>Nectar plants</strong> — plant marigolds, lemon balm, sunflower, sesbania, coriander on field edges. Year-round flowers = year-round beneficials. Allocate 10-15m² per 100m² as "beneficial garden".' },
+            { zh: '3. <strong>蟲蟲旅館</strong>— 廢木頭、竹筒、麥稈束、鬆軟泥土 — 為獨居蜂、瓢蟲、草蛉提供越冬棲所。DIY 成本 NT$ 100-500。',
+              en: '3. <strong>Insect hotels</strong> — drilled wood, bamboo tubes, straw bundles, loose soil patches — overwintering habitat for solitary bees, ladybugs, lacewings. DIY cost NT$ 100-500.' },
+            { zh: '4. <strong>外購益蟲（短期）</strong>— 蚜蟲爆發時，農會 / 苗栗農改場「天敵昆蟲」販售瓢蟲（NT$ 200-500/100 隻）。釋放前 7 天停所有殺蟲劑。',
+              en: '4. <strong>Buy beneficials (short-term)</strong> — during aphid outbreak, farmers association / Miaoli Improvement Station sells ladybugs (NT$ 200-500/100). Stop ALL insecticide 7 days before release.' },
+            { zh: '5. <strong>授粉蜂保護</strong>— 開花期前後 14 天不噴任何藥劑，包括有機殺蟲劑（含苦楝油）。蜜蜂受影響後群體弱化，第二年就少了。',
+              en: '5. <strong>Pollinator protection</strong> — no spray of ANY product (including organic ones like neem) within 14 days before/after bloom. Bees affected = weak colony = fewer next year.' }
+          ],
+          links: []
+        };
+      }
+    },
+    {
+      id: 'seed_saving',
+      keywords: ['留種', '保種', '自家種子', '原生種', '種子', '採種', 'seed saving', 'save seeds', 'heritage seed', 'isolate', 'open-pollinated'],
+      topic: { zh: '留種 / 保種', en: 'Seed saving' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '留種 = 自家品系 + 省 NT$ 5-15k/年 + 適應性年年累積', en: 'Save seeds = your own line + save NT$ 5-15k/yr + compound adaptation' },
+          situation: { zh: '商業 F1 種子每包 NT$ 100-500，但種出來的後代品質不穩定。永續農戶的長期路線：從適合自己田的品種留種，5-10 代後就有「你的農場限定品系」。注意：雜交種（F1）不適合留種；開放授粉種（OP）才適合。',
+                       en: 'Commercial F1 seeds run NT$ 100-500/packet, but their offspring is unstable. Sustainable long-term path: save seeds from varieties that thrive on your land; after 5-10 generations you have a "your-farm-only line". Note: F1 hybrids don\'t reproduce true; only open-pollinated (OP) varieties are suitable.' },
+          actions: [
+            { zh: '1. <strong>挑變種源</strong>— 找「開放授粉」品系（包裝會寫 OP）。台灣常見可留種品種：紅鬚玉米、台南 1 號番茄、地方傳統品種如「紅羅蔓」。',
+              en: '1. <strong>Choose OP varieties</strong> — look for "open-pollinated" on packaging. Common Taiwan OP saveable varieties: Red Bearded Corn, Tainan No. 1 Tomato, traditional landraces like "紅羅蔓".' },
+            { zh: '2. <strong>隔離距離 — 避免雜交</strong>。同種不同品種要隔離 ≥ 100m（自花授粉如番茄豆類）或 ≥ 800m（風媒授粉如玉米、十字花科）。',
+              en: '2. <strong>Isolation distance — prevent cross-pollination</strong>. Same-species different-varieties: ≥100m apart (self-pollinated like tomato/beans) or ≥800m (wind-pollinated like corn / Brassica).' },
+            { zh: '3. <strong>選種準則 — 留最好不留最差</strong>。從健康、產量好、品質佳的植株留種，不是從吃剩或長不好的。「選擇壓力」是 5 代後品系改進的關鍵。',
+              en: '3. <strong>Selection criteria — save best, not leftover</strong>. Save seeds from healthy, high-yield, quality plants — NOT from leftovers or weak ones. "Selection pressure" is what makes the line improve over 5 generations.' },
+            { zh: '4. <strong>處理 + 乾燥</strong>— 番茄 / 黃瓜的種子要發酵 3-4 天去除果膠；豆類直接曬乾。最終水分 < 8%（咬破種子應碎不韌）。',
+              en: '4. <strong>Process + dry</strong> — tomato / cucumber seeds need 3-4 day fermentation to remove gel; beans just sun-dry. Final moisture < 8% (bite test: seed should crack, not bend).' },
+            { zh: '5. <strong>儲存 — 玻璃罐 + 矽膠乾燥劑 + 冷藏</strong>。標籤寫品種、收成日期、農場代號。多數蔬菜種子冷藏可保存 3-5 年。',
+              en: '5. <strong>Storage — glass jar + silica gel + refrigerator</strong>. Label with variety, harvest date, farm ID. Most vegetable seeds last 3-5 years refrigerated.' },
+            { zh: '6. <strong>發芽率測試</strong>— 種植前 2 週，取 20 顆種子放濕紙巾上 5-7 天，看幾顆發芽。> 80% 健康；< 60% 該換批。',
+              en: '6. <strong>Germination test</strong> — 2 weeks before planting, take 20 seeds on moist paper towel for 5-7 days, count sprouts. > 80% healthy; < 60% replace the batch.' }
+          ],
+          links: []
+        };
+      }
+    },
+    {
+      id: 'companion_planting',
+      keywords: ['伴生', '套作', '混種', '間作', '搭配種', '套種', 'companion', 'intercrop', 'mixed planting', 'polyculture'],
+      topic: { zh: '伴生植物 / 套作', en: 'Companion planting' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '套作不是迷信 — 是「互補資源」+「彼此防蟲」', en: 'Companion planting isn\'t superstition — it\'s "resource sharing" + "mutual pest defense"' },
+          situation: { zh: '單作（一塊地一種作物）= 病蟲一旦進入沒有阻擋。套作（兩種以上作物混種）= 資源互補（一個用上層光、一個用下層空間）+ 害蟲被氣味干擾 + 一個生病不會全倒。台灣傳統「稻 + 鴨」、「玉米 + 豆」都是經驗智慧。',
+                       en: 'Monoculture (one crop per plot) = nothing stops a pest once it gets in. Polyculture (two+ crops together) = resource-sharing (one uses canopy light, the other uses ground space) + pest scent-disrupted + one disease ≠ total loss. Taiwan\'s traditional "rice + duck", "corn + bean" reflects this experiential wisdom.' },
+          actions: [
+            { zh: '1. <strong>三姐妹（玉米 + 豆 + 南瓜）</strong>— 經典北美原住民組合：玉米支撐豆藤、豆固氮、南瓜葉覆蓋防雜草。台灣春夏作可試。',
+              en: '1. <strong>Three Sisters (corn + bean + squash)</strong> — classic Native American combo: corn supports bean vines, bean fixes N, squash leaves smother weeds. Try in Taiwan spring/summer crops.' },
+            { zh: '2. <strong>蔬菜 + 香草驅蟲</strong>— 番茄 + 羅勒、十字花科 + 蔥韭（驅小菜蛾）、紅蘿蔔 + 芫荽（驅蚜蟲）、果園 + 金盞花。',
+              en: '2. <strong>Vegetables + pest-repelling herbs</strong> — tomato + basil; brassica + chives/leeks (repel diamondback moth); carrot + coriander (repel aphids); orchard + marigold.' },
+            { zh: '3. <strong>避免「同科」搭配</strong>— 茄科（番茄、辣椒、茄子）不要一起套作，會共享同樣的害蟲。十字花科（高麗菜、芥菜）也一樣。',
+              en: '3. <strong>Avoid "same family" combinations</strong> — Solanaceae (tomato, pepper, eggplant) shouldn\'t companion plant — they share pests. Same for Brassicaceae (cabbage, mustard).' },
+            { zh: '4. <strong>實驗思維</strong>— 找 1 個小塊地（5m × 5m）試 1 個組合 1 季。記錄產量、病蟲、勞動量。成功再放大。',
+              en: '4. <strong>Experiment mindset</strong> — pick a 5m × 5m plot to trial 1 combination for 1 season. Track yield, pests, labor. Scale up only on success.' },
+            { zh: '5. <strong>果園行間覆蓋作物也是套作</strong>— 田菁、太陽麻、三葉草 — 固氮 + 防雜草 + 引益蟲。看「果樹專屬」答案。',
+              en: '5. <strong>Orchard alley cover crops are also companion planting</strong> — sesbania, sunn hemp, clover — N fixation + weed suppression + beneficials. See "Fruit / orchard" answer.' }
+          ],
+          links: [
+            { label: { zh: '看輪作答案', en: 'See crop rotation' }, href: '#sec-agent' }
+          ]
+        };
+      }
+    },
+    {
+      id: 'fertilizer_timing',
+      keywords: ['施肥', '施肥時機', 'npk', '肥料', '基肥', '追肥', '葉面噴施', 'fertilizer timing', 'fertilize', 'when to fertilize', 'side dress'],
+      topic: { zh: '施肥時機 / NPK', en: 'Fertilizer timing / NPK' },
+      answer(inp, r) {
+        return {
+          headline: { zh: 'NPK 不是「全程都施一樣」 — 不同生育期需要不同元素', en: 'NPK isn\'t "same throughout" — growth stage dictates which element' },
+          situation: { zh: '撒肥料的常見錯誤：整季施同一種綜合肥。實際上植物在不同生育階段對 N（氮、葉）、P（磷、根 + 花）、K（鉀、果 + 抗逆境）的需求差異很大。施錯時機 = 浪費肥料 + 養分流失污染環境。',
+                       en: 'Common fertilizing mistake: applying the same balanced fertilizer all season. Actually plants need different N (nitrogen / leaves), P (phosphorus / roots + flowering), K (potassium / fruit + stress tolerance) at different stages. Wrong timing = wasted fertilizer + nutrient runoff.' },
+          actions: [
+            { zh: '1. <strong>基肥（種植前 7-14 天）</strong>— 高 P 為主（如「魚骨粉」+ 堆肥），翻入根區。建立根系 + 早期生長必備。',
+              en: '1. <strong>Base fertilizer (7-14 days before planting)</strong> — high P focus (e.g. fish bone meal + compost), worked into root zone. Establishes roots + early growth.' },
+            { zh: '2. <strong>苗期 → 旺盛生長期</strong>（蔬果類 4-8 週）— 高 N 為主。葉菜全程偏 N；果菜（番茄、茄子）這階段 N 重，開花前轉 K。',
+              en: '2. <strong>Seedling → vegetative</strong> (4-8 wks for vegetables) — high N. Leafy stays N-focused throughout; fruiting crops (tomato, eggplant) heavy on N here, switch to K before flowering.' },
+            { zh: '3. <strong>開花 → 結果期</strong>— 減 N、加 K + 少量 P。N 太多 = 葉子茂盛但不結果。',
+              en: '3. <strong>Flowering → fruiting</strong> — reduce N, increase K + small P. Too much N = lush leaves but no fruit set.' },
+            { zh: '4. <strong>採收前 1-2 週</strong>— 停止氮肥（除非還在持續採收）。氮殘留會降低品質和保存期限。',
+              en: '4. <strong>1-2 weeks before harvest</strong> — stop N (unless ongoing harvest). N residue degrades quality + shelf life.' },
+            { zh: '5. <strong>葉面噴施 (foliar)</strong>— 快速補微量元素或急救。早晨或傍晚噴，濃度稀（0.1-0.3%）。不能取代根部施肥。',
+              en: '5. <strong>Foliar spray</strong> — fast micronutrient supplement or rescue. Morning/evening application, dilute (0.1-0.3%). Doesn\'t replace root feeding.' }
+          ],
+          pitfalls: {
+            title: { zh: '常見施肥錯誤', en: 'Common fertilizing mistakes' },
+            items: [
+              { zh: '<strong>施過頭</strong> — 葉緣燒黑、植株萎縮。每次施 50% 比規格少，1 週後看反應再決定加量', en: '<strong>Over-application</strong> — leaf-edge burn, plant stunt. Start at 50% of label rate, observe 1 week before deciding to increase' },
+              { zh: '<strong>葉面殘留</strong> — 化肥碰到葉子會灼傷。施肥後立刻沖一點水到葉面', en: '<strong>Foliage residue</strong> — chemical fertilizer on leaves burns. Always rinse off leaves after application' },
+              { zh: '<strong>下雨前施</strong> — 大雨會把養分沖到地下水或溪流（環境污染 + 罰款）。看天氣 24 小時內無大雨再施', en: '<strong>Applying before heavy rain</strong> — washes nutrients into groundwater / streams (pollution + fines). Check forecast: no heavy rain for 24hrs before applying' },
+              { zh: '<strong>單純看 N 數字大小</strong> — 緩釋型 vs 速效型差很多。緩釋型可一次施一季，速效型要分批', en: '<strong>Looking at only N number</strong> — slow-release vs fast-release differ greatly. Slow-release can be season-long; fast-release must be split applications' }
+            ]
+          },
+          links: [
+            { label: { zh: '看堆肥製作', en: 'See composting' }, href: '#sec-agent' }
+          ]
+        };
+      }
+    },
+    {
+      id: 'pruning',
+      keywords: ['修剪', '剪枝', '整枝', '疏果', '冬剪', '夏剪', 'prune', 'pruning', 'thin', 'trim', 'cut back'],
+      topic: { zh: '修剪 / 整枝', en: 'Pruning' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '修剪是「結構工程」+ 「光線管理」 — 不是「修齊好看」', en: 'Pruning is "structural engineering" + "light management" — not "tidying up"' },
+          situation: { zh: '正確的修剪可以提升果樹產量 30-50% + 減少病蟲 + 方便採收。錯誤的修剪會傷植株、引起病害、損失整年產量。原則：「斜切、靠近基部、不留樁、不修超過 25% 樹冠」。',
+                       en: 'Correct pruning can boost orchard yield 30-50% + reduce pests + ease harvest. Wrong pruning damages plants, invites disease, costs a year\'s harvest. Principles: "angled cut, close to base, no stubs, don\'t remove > 25% of canopy".' },
+          actions: [
+            { zh: '1. <strong>冬剪 vs 夏剪不同目的</strong>。冬剪（落葉 / 休眠期）= 塑形 + 強剪，刺激春季新梢；夏剪（生長季）= 微調 + 控制過密，不刺激萌芽。',
+              en: '1. <strong>Winter vs summer pruning have different goals</strong>. Winter (dormancy) = shape + heavy prune, stimulates spring shoots; summer (growing season) = fine-tune + thin density, doesn\'t stimulate sprouting.' },
+            { zh: '2. <strong>「三刪」原則</strong>— 刪枯枝、刪交叉枝、刪向內生長的枝。這三類佔 80% 該剪的，剪完樹型立刻清爽。',
+              en: '2. <strong>"3-cut" rule</strong> — remove dead branches, crossing branches, inward-growing branches. These 3 categories = 80% of what needs pruning; after cutting, tree shape clarifies immediately.' },
+            { zh: '3. <strong>工具要利、要乾淨</strong>— 鈍刀傷植物。每剪 3-5 棵樹消毒一次（70% 酒精），防止病害傳染。剪後傷口大於 2 cm 塗封蠟。',
+              en: '3. <strong>Sharp + clean tools</strong> — dull blades damage plants. Sanitize between every 3-5 trees (70% alcohol) to prevent disease spread. Seal wounds > 2cm with pruning wax.' },
+            { zh: '4. <strong>果樹特殊 — 疏果</strong>。果實坐穩後（如蓮霧坐果 3-4 週後），每串只留 2-3 顆健康果，其他都摘掉。剩下的果實大、甜、賣相好。',
+              en: '4. <strong>For fruit trees — thin the fruit</strong>. After fruit-set (e.g. 3-4 wks for wax apple), keep only 2-3 healthy fruits per cluster, remove the rest. Remaining fruits become bigger, sweeter, marketable.' },
+            { zh: '5. <strong>不確定 → 不剪</strong>。修剪錯誤比不修剪危害更大。先觀察 1 年再動刀。或請農會 / 農改場果樹專家現場示範一次。',
+              en: '5. <strong>Unsure → don\'t cut</strong>. Wrong pruning is worse than no pruning. Observe 1 year before cutting. Or have farmers association / improvement station fruit-tree expert demonstrate once on-site.' }
+          ],
+          links: []
+        };
+      }
+    },
+    {
+      id: 'irrigation_how',
+      keywords: ['澆水', '灌溉時機', '什麼時候澆', '澆多少', '葉子下垂', 'watering', 'when to water', 'how much water', 'wilting'],
+      topic: { zh: '灌溉時機與量', en: 'Irrigation timing + volume' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '看土壤、看植物、看天氣 — 不是「每天定時定量」', en: 'Watch soil, plant, weather — NOT "fixed schedule + fixed volume"' },
+          situation: { zh: '過度澆水比缺水更常見、更危險（爛根 + 病害）。永續澆水 = 「深而少」 — 每次澆透讓水滲到根區（15-30 cm 深），間隔長些讓根「找水」往下長。表面澆少量天天澆 = 根淺 + 弱。',
+                       en: 'Overwatering is more common + more dangerous than underwatering (root rot + disease). Sustainable watering = "deep + infrequent" — soak each time to reach root zone (15-30cm), space watering longer so roots "seek water" by growing down. Shallow daily watering = shallow weak roots.' },
+          actions: [
+            { zh: '1. <strong>食指測試</strong>— 食指戳入土 5 cm。乾 = 該澆；濕 = 等。比任何定時表都準。',
+              en: '1. <strong>Finger test</strong> — push index finger 5cm into soil. Dry = water; moist = wait. More accurate than any timer.' },
+            { zh: '2. <strong>澆水時間 — 清晨 5-9 點最好</strong>。葉面在傍晚日落前要乾，否則濕葉 + 夜間溫度 = 真菌天堂。中午澆水蒸發 50% 浪費。',
+              en: '2. <strong>Best watering time — early morning 5-9am</strong>. Leaves must dry before evening; wet leaves + night temps = fungal heaven. Noon watering loses 50% to evaporation.' },
+            { zh: '3. <strong>滴灌或微噴 > 澆灌</strong>— 滴灌節水 40-50%、防葉面病害、不長雜草。設備 NT$ 30-60k/分地，2-3 年回本（含補助）。',
+              en: '3. <strong>Drip / micro-spray > flood irrigation</strong> — drip saves 40-50% water + prevents foliar disease + suppresses weeds. NT$ 30-60k per 0.1ha, 2-3yr payback with subsidy.' },
+            { zh: '4. <strong>覆蓋（mulch）保水</strong>— 稻草、木屑、覆蓋作物殘體鋪 5-10 cm 厚。減少蒸發 50-70% + 防雜草 + 慢分解成有機質。',
+              en: '4. <strong>Mulch retains moisture</strong> — straw, wood chips, cover crop residue 5-10cm thick. Cuts evaporation 50-70% + suppresses weeds + slowly decomposes to organic matter.' },
+            { zh: '5. <strong>植物訊號</strong>— 早晨葉子下垂 + 摸土壤是乾 = 缺水；早晨葉子下垂 + 土壤濕 = 過水（爛根警報）。傍晚下垂可能只是熱應力，第二天早上會恢復。',
+              en: '5. <strong>Plant signals</strong> — morning wilt + dry soil = thirsty; morning wilt + wet soil = overwatered (root rot warning). Evening wilt may just be heat stress, recovers by morning.' }
+          ],
+          links: [
+            { label: { zh: '看水資源管理', en: 'Water management' }, href: '#sec-agent' }
+          ]
+        };
+      }
+    },
+    {
+      id: 'weed_mgmt',
+      keywords: ['雜草', '除草', '草', '抑草', '草劑', '芒草', 'weed', 'weeding', 'herbicide', 'weed control', 'suppress'],
+      topic: { zh: '雜草管理', en: 'Weed management' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '永續除草 = 抑制 > 殺光 — 雜草不一定是敵人', en: 'Sustainable weed mgmt = suppress > eradicate — weeds aren\'t always the enemy' },
+          situation: { zh: '完全除盡雜草 = 土壤裸露 = 水分流失 + 沖蝕 + 益蟲沒地方躲。永續路：把雜草「壓制在能接受的水平」，並用它們的優點（覆蓋土壤、引益蟲、深根帶上養分）。化學除草劑越用越多、土壤越退化，是死循環。',
+                       en: 'Complete weed eradication = bare soil = moisture loss + erosion + no beneficial habitat. Sustainable path: suppress weeds to a tolerable level + leverage their benefits (soil cover, beneficial habitat, deep-rooted nutrient mining). Chemical herbicides degrade soil → need more next year. Vicious cycle.' },
+          actions: [
+            { zh: '1. <strong>覆蓋（mulching）— 最高效</strong>。稻草、木屑、紙板、塑膠布、覆蓋作物殘體 — 鋪 5-10 cm 厚阻光阻草。NT$ 5-20k/分地，效果一整季。',
+              en: '1. <strong>Mulching — most effective</strong>. Straw, wood chips, cardboard, plastic, cover crop residue — 5-10cm thick blocks light + smothers weeds. NT$ 5-20k/0.1ha for a full season.' },
+            { zh: '2. <strong>覆蓋作物</strong>— 田休耕期種田菁、毛苕子 — 自己壓制雜草 + 後續還田作綠肥。零除草成本還能改良土壤。',
+              en: '2. <strong>Cover crops</strong> — plant sesbania / vetch during fallow periods — they suppress weeds themselves + provide green manure later. Zero weeding cost + soil improvement.' },
+            { zh: '3. <strong>機械 + 手工</strong>— 中耕機、鋤頭、火焰除草器（在塑膠布或硬地上小心使用）。耗時但精準，適合行間。',
+              en: '3. <strong>Mechanical + hand</strong> — cultivator, hoe, flame weeder (use carefully on plastic mulch or hard surfaces). Time-consuming but precise; good for row spaces.' },
+            { zh: '4. <strong>關鍵期管理</strong>— 雜草「種子結出來前」拔最划算（一根當年的草 = 明年 100 根）。穀類田開花前、果園春末是黃金期。',
+              en: '4. <strong>Critical window mgmt</strong> — pull weeds BEFORE they seed (1 weed this year = 100 next year). Grain fields pre-flowering, orchards late spring = golden windows.' },
+            { zh: '5. <strong>耐受少量雜草</strong>— 5-10% 雜草覆蓋不影響主作物產量還能增加多樣性。完美無草是強迫症，不是農業科學。',
+              en: '5. <strong>Tolerate some weeds</strong> — 5-10% weed cover doesn\'t harm yield and adds biodiversity. Pursuit of "perfectly weed-free" is OCD, not agronomy.' }
+          ],
+          links: []
+        };
+      }
+    },
+    {
+      id: 'mulching',
+      keywords: ['覆蓋', '稻草覆蓋', '塑膠布', '木屑', '抑草布', 'mulch', 'straw', 'wood chips', 'ground cover', 'sheet mulch'],
+      topic: { zh: '覆蓋 (mulching)', en: 'Mulching' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '一次覆蓋 = 抑草 + 保水 + 控溫 + 養土 4 效益', en: 'One mulch layer = 4 benefits: weed control + moisture + temperature + soil building' },
+          situation: { zh: '覆蓋材料把土壤蓋起來，外觀變了，但功能多重提升：防雜草 70-90%、減少蒸發 50%、夏季降土溫 5-10°C、慢慢分解變成有機質。是永續農場「投入產出比最高」的單一動作。',
+                       en: 'Mulching covers the soil. Looks different, but multi-benefit: weed suppression 70-90%, evaporation -50%, summer soil temp -5-10°C, slowly decomposes into organic matter. Highest ROI single action on a sustainable farm.' },
+          actions: [
+            { zh: '1. <strong>選材料</strong>— 稻草（最常見、便宜、半年分解）、木屑（持久、防雜草強、但慢分解）、紙板（適合「壓制重雜草區」）、覆蓋作物殘體（自家來源）。塑膠布只在嚴重雜草壓力下用、用完要回收。',
+              en: '1. <strong>Material choice</strong> — straw (cheapest, decomposes in 6 mo), wood chips (long-lasting, strong weed block, slow decay), cardboard (good for "weed-heavy zones"), cover crop residue (free). Plastic only under severe weed pressure + recycle after use.' },
+            { zh: '2. <strong>厚度 5-10 cm</strong>— 太薄沒效（< 3 cm），太厚會阻氧（> 15 cm）。距植株基部留 5 cm 空圈，避免莖部腐爛。',
+              en: '2. <strong>Thickness 5-10cm</strong> — too thin = no effect (< 3cm); too thick = oxygen-starved (> 15cm). Leave 5cm gap around plant base to prevent stem rot.' },
+            { zh: '3. <strong>時機 — 種苗種下 2-3 週、植株穩定後鋪</strong>。太早鋪 = 苗找不到光；太晚 = 雜草已長出。',
+              en: '3. <strong>Timing — 2-3 wks after planting, once seedlings stable</strong>. Too early = blocks seedling emergence; too late = weeds already established.' },
+            { zh: '4. <strong>果園行間最划算</strong>— 鋪木屑或落葉，一次可撐 1-2 年。果園地表覆蓋 + 灌溉節水 = 雙效。',
+              en: '4. <strong>Orchards: best ROI for alleys</strong> — wood chip or leaf mulch lasts 1-2 yrs. Orchard ground cover + irrigation savings = double benefit.' },
+            { zh: '5. <strong>禁忌：剛施過化肥 / 除草劑的地不要立即蓋</strong>— 殘留會被覆蓋層困住傷植株。等 2-3 週讓藥劑分解。',
+              en: '5. <strong>Avoid: don\'t mulch over freshly applied chemical fertilizer / herbicide</strong> — residue trapped under mulch can damage plants. Wait 2-3 weeks for breakdown.' }
+          ],
+          links: []
+        };
+      }
+    },
+    {
+      id: 'nutrient_deficiency',
+      keywords: ['葉子黃', '葉黃', '葉片變色', '長不大', '長不好', '生長慢', '缺氮', '缺鉀', 'yellow leaves', 'stunted', 'deficiency', 'discolored', 'pale'],
+      topic: { zh: '營養缺乏徵狀', en: 'Nutrient deficiency symptoms' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '葉子顏色變化 = 植物在跟你說話 — 學讀懂這 5 種訊號', en: 'Leaf color change = the plant is talking — learn these 5 signals' },
+          situation: { zh: '不同養分缺乏會在不同的葉位顯示不同症狀。看對地方 = 對症下藥。多數人「補綜合肥」其實是浪費，正確識別缺什麼能省錢 + 解問題。',
+                       en: 'Different nutrient deficiencies show as different symptoms on different leaf positions. Reading the signs right = targeted fix. Most farmers just "add balanced fertilizer" which is wasteful; correct identification saves money + actually fixes the issue.' },
+          actions: [
+            { zh: '1. <strong>整株發黃（老葉先黃，新葉綠）= 缺氮 N</strong>。最常見。補綠肥、堆肥、有機氮源（魚肥、雞糞）。',
+              en: '1. <strong>Whole-plant yellowing (old leaves first, new leaves stay green) = N deficiency</strong>. Most common. Add green manure, compost, organic N sources (fish emulsion, chicken manure).' },
+            { zh: '2. <strong>老葉葉緣枯黃捲曲 = 缺鉀 K</strong>。果菜類最易缺。補草木灰、海藻肥、香蕉皮堆肥。',
+              en: '2. <strong>Old leaf margins yellow + curl = K deficiency</strong>. Most common in fruiting crops. Add wood ash, kelp meal, banana peel compost.' },
+            { zh: '3. <strong>葉片葉脈間發黃，但葉脈仍綠 = 缺鐵 Fe / 鎂 Mg</strong>。常見於鹼性土壤（pH > 7.5）。先測 pH 修土，再葉面噴施。',
+              en: '3. <strong>Interveinal yellowing (yellow between veins, veins still green) = Fe / Mg deficiency</strong>. Common in alkaline soil (pH > 7.5). Test pH + correct first, then foliar spray micronutrients.' },
+            { zh: '4. <strong>葉片紫紅、生長停滯 = 缺磷 P</strong>。多在低溫 + 早春出現。補魚骨粉、骨粉、磷礦粉。',
+              en: '4. <strong>Purplish leaves + stunted growth = P deficiency</strong>. Often in cold + early spring. Add fish bone meal, bone meal, rock phosphate.' },
+            { zh: '5. <strong>新葉變形、頂芽枯死 = 缺鈣 Ca / 硼 B</strong>。番茄底腐病典型。撒石灰調 pH + 補硼砂（極少量 1g/10L 水）。',
+              en: '5. <strong>New leaves distorted + apical death = Ca / B deficiency</strong>. Classic for tomato blossom-end rot. Add lime (raise pH) + tiny boron (1g borax/10L water).' },
+            { zh: '不確定 → 送土壤檢驗（NT$ 1,500-3,000）+ 葉片分析（NT$ 800-1,500）。比亂補錯肥便宜。',
+              en: 'Unsure → soil test (NT$ 1,500-3,000) + leaf analysis (NT$ 800-1,500). Cheaper than misapplying the wrong fertilizer.' }
+          ],
+          links: [
+            { label: { zh: '看土壤檢測', en: 'See soil test' }, href: '#sec-agent' }
+          ]
+        };
+      }
+    },
+    {
+      id: 'crop_calendar',
+      keywords: ['月份', '季節', '什麼時候種', '時令', '農曆', '春耕', '秋作', 'planting calendar', 'season', 'when to plant', 'spring', 'autumn'],
+      topic: { zh: '台灣作物時令', en: 'Taiwan crop calendar' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '台灣四季作物分配 — 跟著時令種事半功倍', en: 'Taiwan seasonal crop calendar — work with the seasons, double the result' },
+          situation: { zh: '台灣亞熱帶 → 4 季溫差大，每個季節適合不同作物。逆季種 = 病蟲多、產量低、品質差。順季種 = 自然防禦力 + 產量穩定。',
+                       en: 'Taiwan\'s subtropical climate has distinct seasons → each suits different crops. Off-season planting = more pests, lower yield, lower quality. In-season = natural defenses + stable yield.' },
+          actions: [
+            { zh: '1. <strong>春作（2-4 月）</strong>— 番茄、茄子、辣椒、瓜類、玉米、毛豆、葉菜（小白菜、青江菜）、馬鈴薯。',
+              en: '1. <strong>Spring (Feb-Apr)</strong> — tomato, eggplant, pepper, cucurbits, corn, soybean, leafy (bok choy, etc.), potato.' },
+            { zh: '2. <strong>夏作（5-7 月）</strong>— 空心菜、莧菜、地瓜葉、絲瓜、苦瓜、秋葵、九層塔、辣椒（接續春作）。',
+              en: '2. <strong>Summer (May-Jul)</strong> — water spinach, amaranth, sweet potato leaves, loofah, bitter gourd, okra, Thai basil, pepper (continued from spring).' },
+            { zh: '3. <strong>秋作（8-10 月）</strong>— 高麗菜、花椰菜、芥蘭、白蘿蔔、紅蘿蔔、菠菜、青蔥、香菜、洋蔥。',
+              en: '3. <strong>Autumn (Aug-Oct)</strong> — cabbage, cauliflower, kale, daikon, carrot, spinach, scallion, coriander, onion.' },
+            { zh: '4. <strong>冬作（11-1 月）</strong>— 高麗菜（續秋）、結球萵苣、芥菜、青花筍、豌豆、蠶豆、草莓。',
+              en: '4. <strong>Winter (Nov-Jan)</strong> — cabbage (continued), iceberg lettuce, mustard, broccolini, peas, fava beans, strawberry.' },
+            { zh: '5. <strong>稻米</strong>— 一期作 1-2 月插秧，6-7 月收。二期作 7-8 月插秧，11-12 月收。雙期作對土地壓力大，永續路可考慮一期 + 綠肥。',
+              en: '5. <strong>Rice</strong> — first crop transplant Jan-Feb, harvest Jun-Jul; second crop transplant Jul-Aug, harvest Nov-Dec. Double-cropping stresses land; sustainable option = single crop + green manure.' }
+          ],
+          resources: {
+            title: { zh: '詳細時令表', en: 'Detailed calendars' },
+            items: [
+              { zh: '<a href="https://www.afa.gov.tw/" target="_blank" rel="noopener">農糧署</a> 季節推薦作物（依各縣公告為準）', en: '<a href="https://www.afa.gov.tw/" target="_blank" rel="noopener">MOA AFA</a> seasonal crop recommendations (per-county)' },
+              { zh: '所在縣農業改良場有「在地作物年曆」可索取', en: 'Your county Improvement Station has "local crop almanac" available on request' }
+            ]
+          },
+          links: []
+        };
+      }
+    },
+    {
+      id: 'bird_wildlife',
+      keywords: ['鳥', '麻雀', '白頭翁', '猴子', '山豬', '果子狸', '驅趕', '網', 'bird', 'sparrow', 'bulbul', 'monkey', 'wild pig', 'netting', 'wildlife damage'],
+      topic: { zh: '鳥獸防治', en: 'Bird / wildlife damage' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '鳥獸不是「敵人」是「鄰居」— 用阻擋不用驅趕', en: 'Birds + wildlife aren\'t enemies — they\'re neighbors. Use barriers, not deterrents' },
+          situation: { zh: '鳥獸長期適應 = 「驅趕方法」3-6 個月失效（聲音 / 視覺 / 假人）。永續路 = 物理阻擋 + 接受一定損耗 + 保護自然天敵（讓貓頭鷹、蛇進入）。',
+                       en: 'Birds + wildlife adapt over time = "deterrent" methods (sound, visual, scarecrow) fail in 3-6 months. Sustainable path = physical barriers + accept some loss + preserve natural predators (let owls + snakes in).' },
+          actions: [
+            { zh: '1. <strong>果樹套袋 / 全網覆蓋</strong>— 最確實。專用果袋 NT$ 1-3/個（可重複用）。果園全網覆蓋設備 NT$ 50-150k/分地，多年使用。',
+              en: '1. <strong>Fruit bagging / full netting</strong> — most effective. Specialty fruit bags NT$ 1-3 each (reusable). Full-orchard netting NT$ 50-150k per 0.1ha, multi-year use.' },
+            { zh: '2. <strong>視覺 + 聲音「組合輪換」</strong>— 反光帶、假鷹、不規則時間的爆音器、CD 片掛樹上。每 2-3 週換組合，鳥群才不會適應。',
+              en: '2. <strong>Visual + sound "rotation combo"</strong> — reflective tape, fake hawks, random-timed bangers, CDs on trees. Rotate combinations every 2-3 weeks so birds can\'t adapt.' },
+            { zh: '3. <strong>大型動物（猴 / 山豬）— 通電圍籬</strong>。NT$ 30-80k/分地 + 太陽能電源。一次安裝 = 數年使用。',
+              en: '3. <strong>Larger wildlife (monkeys / wild pigs) — electric fencing</strong>. NT$ 30-80k per 0.1ha + solar power. One install = years of protection.' },
+            { zh: '4. <strong>保護天敵</strong>— 不要趕走貓頭鷹、青蛇、紅尾伯勞、紅隼。這些是免費的鳥獸防治。提供築巢箱、不噴農藥。',
+              en: '4. <strong>Protect natural predators</strong> — don\'t drive away owls, racers, shrikes, kestrels. They\'re free wildlife control. Provide nest boxes + don\'t spray chemicals.' },
+            { zh: '5. <strong>農作物天然災害保險</strong>— 涵蓋鳥獸損害的部分（依縣有保有，農會問）。一旦損失嚴重要保險加上「主管機關天然災害現金救助」雙軌。',
+              en: '5. <strong>Crop insurance with wildlife coverage</strong> — some counties offer (ask farmers association). Heavy damage = combine insurance claim + "natural disaster cash aid" from county Ag Bureau.' }
+          ],
+          links: []
+        };
+      }
+    },
+    {
+      id: 'greenhouse',
+      keywords: ['溫室', '網室', '塑膠布', '簡易設施', '隧道棚', '塑膠棚', 'greenhouse', 'tunnel', 'high tunnel', 'shade house', 'net house'],
+      topic: { zh: '簡易設施 / 溫室', en: 'Greenhouse / tunnels' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '溫室不一定划算 — 先評估「ROI vs 風險」再蓋', en: 'Greenhouses aren\'t always worth it — assess ROI vs risk before building' },
+          situation: { zh: '簡易塑膠棚到全自動溫室成本 NT$ 30k-1.5M/分地。台灣多數小農過度投資溫室，5-10 年後才發現「賺的錢不夠回本」。要看你的「作物 × 市場 × 氣候」三角形成不成立。',
+                       en: 'Simple plastic tunnels to fully automated greenhouses range NT$ 30k-1.5M per 0.1ha. Many Taiwan small farms over-invest in greenhouses, only realizing 5-10 years later "the income doesn\'t cover payback". Check your "crop × market × climate" triangle first.' },
+          actions: [
+            { zh: '1. <strong>適合溫室 vs 露地 — 4 個檢查</strong>：(a) 作物高價（蓮霧、有機番茄、香草）？(b) 季節錯位有溢價（冬天種夏蔬）？(c) 颱風 / 病蟲壓力大？(d) 市場願意接受溫室產品？4 項都 yes 才考慮。',
+              en: '1. <strong>Greenhouse vs open-field — 4 checks</strong>: (a) high-value crop (wax apple, organic tomato, herbs)? (b) off-season pricing premium (summer veg in winter)? (c) high typhoon / pest pressure? (d) market accepts greenhouse produce? Only consider when all 4 = yes.' },
+            { zh: '2. <strong>分階段投資</strong>— 別一次蓋豪華型。先做「簡易隧道棚」（NT$ 30-50k/分地）驗證 1-2 季 → 升級「強固型」（NT$ 100-200k）→ 最後「自動控溫」（NT$ 500k+）。',
+              en: '2. <strong>Phase investment</strong> — don\'t build top-tier first. Start with "simple tunnel" (NT$ 30-50k/0.1ha) to validate 1-2 seasons → upgrade to "reinforced" (NT$ 100-200k) → finally "automated climate" (NT$ 500k+).' },
+            { zh: '3. <strong>關鍵：通風設計</strong>— 台灣夏季溫室常達 45°C+ 把作物烤死。屋頂開窗、側面捲簾、強制風扇 — 不通風的溫室 = 死亡溫室。',
+              en: '3. <strong>Key: ventilation design</strong> — Taiwan summer greenhouses can hit 45°C+ + cook crops. Roof vents, roll-up sides, forced fans. Unventilated greenhouse = death trap.' },
+            { zh: '4. <strong>申請補助</strong>— 農業部「精緻農業設施」+ 「災害復原」+ 縣級「永續農業設施」可疊加，補助可達 50-70%。看「補助清單」面板。',
+              en: '4. <strong>Apply for subsidies</strong> — MOA "Precision Ag Facility" + "Disaster Recovery" + county "Sustainable Ag Facility" can stack, totaling 50-70% subsidy. See Subsidies panel.' },
+            { zh: '5. <strong>颱風檢查</strong>— 結構要承受 17 級風（依縣級規範）。便宜型颱風一過就垮 = 全年產量歸零 + 修復費。寧可多花 30% 買強固型。',
+              en: '5. <strong>Typhoon-proofing</strong> — structure must withstand cat-5 winds (per county code). Cheap versions collapse in one typhoon = year\'s yield gone + repair cost. Pay 30% more for reinforced.' }
+          ],
+          links: [
+            { label: { zh: '看補助', en: 'Subsidies' }, href: '#sec-income' }
+          ]
+        };
+      }
     }
   ];
 
@@ -5840,7 +6323,24 @@ This application supports starting organic-transition certification for ≥1 ha.
     cert_body_compare:   ['cert_question', 'organic_transition', 'find_buyers'],
     off_season:          ['how_diversify', 'cash_short', 'find_mentor'],
     soil_ph:             ['soil_test', 'practice_invest', 'reduce_cost'],
-    record_keeping:      ['compare_peers', 'tax_accounting', 'goal_setting']
+    record_keeping:      ['compare_peers', 'tax_accounting', 'goal_setting'],
+    composting:          ['fertilizer_timing', 'crop_rotation', 'soil_ph'],
+    aphids_pests:        ['beneficial_insects', 'fungal_disease', 'companion_planting'],
+    snail_slug:          ['aphids_pests', 'crop_rice', 'beneficial_insects'],
+    fruit_fly:           ['crop_fruit', 'pest_disease', 'aphids_pests'],
+    fungal_disease:      ['irrigation_how', 'crop_rotation', 'pest_disease'],
+    beneficial_insects:  ['aphids_pests', 'companion_planting', 'fungal_disease'],
+    seed_saving:         ['crop_veg', 'find_mentor', 'how_diversify'],
+    companion_planting:  ['crop_rotation', 'beneficial_insects', 'aphids_pests'],
+    fertilizer_timing:   ['composting', 'soil_ph', 'nutrient_deficiency'],
+    pruning:             ['crop_fruit', 'find_mentor', 'fruit_fly'],
+    irrigation_how:      ['water_mgmt', 'fungal_disease', 'mulching'],
+    weed_mgmt:           ['mulching', 'crop_rotation', 'composting'],
+    mulching:            ['weed_mgmt', 'irrigation_how', 'composting'],
+    nutrient_deficiency: ['fertilizer_timing', 'soil_ph', 'soil_test'],
+    crop_calendar:       ['crop_rotation', 'crop_veg', 'crop_rice'],
+    bird_wildlife:       ['pest_disease', 'climate_risk', 'crop_fruit'],
+    greenhouse:          ['crop_veg', 'climate_risk', 'subsidies_available']
   };
 
   // ── Recent questions history (per-farm, localStorage) ───────────
