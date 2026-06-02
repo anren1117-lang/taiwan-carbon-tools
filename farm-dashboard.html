@@ -2676,7 +2676,7 @@
     </form>
     <!-- Quick-chip shortcuts — 1-tap most-asked questions -->
     <div class="agent-quick-chips" id="agentQuickChips" aria-label="Common questions">
-      <span class="agent-quick-label" data-zh="常見問題" data-en="Common questions">常見問題</span>
+      <span class="agent-quick-label" data-zh="💼 經營問題" data-en="💼 Business">💼 經營問題</span>
       <button class="agent-quick" onclick="askQuick('我能拿什麼補助？')" data-zh="💰 什麼補助？" data-en="💰 What subsidies?">💰 什麼補助？</button>
       <button class="agent-quick" onclick="askQuick('我的產品應該賣多少錢？')" data-zh="🏷️ 怎麼定價？" data-en="🏷️ How to price?">🏷️ 怎麼定價？</button>
       <button class="agent-quick" onclick="askQuick('買家嫌我貴怎麼辦？')" data-zh="🎭 買家嫌貴" data-en="🎭 Buyer says expensive">🎭 買家嫌貴</button>
@@ -2686,6 +2686,19 @@
       <button class="agent-quick" onclick="askQuick('怎麼跟買家介紹我自己？')" data-zh="📄 怎麼跟買家介紹" data-en="📄 Pitch yourself">📄 怎麼跟買家介紹</button>
       <button class="agent-quick" onclick="askQuick('我做得好不好？')" data-zh="🔀 我做得好嗎" data-en="🔀 How am I doing">🔀 我做得好嗎</button>
       <button class="agent-quick" onclick="askQuick('我覺得太累、撐不下去')" data-zh="🆘 撐不下去" data-en="🆘 Burning out">🆘 撐不下去</button>
+    </div>
+    <!-- Agricultural-knowledge quick chips — surfaces the 17 ag-science KB entries -->
+    <div class="agent-quick-chips" id="agentAgChips" aria-label="Agricultural knowledge">
+      <span class="agent-quick-label" data-zh="🌾 種植知識" data-en="🌾 Farming knowledge">🌾 種植知識</span>
+      <button class="agent-quick" onclick="askQuick('蚜蟲怎麼處理？')" data-zh="🐛 病蟲害" data-en="🐛 Pests">🐛 病蟲害</button>
+      <button class="agent-quick" onclick="askQuick('堆肥怎麼做？')" data-zh="🌿 堆肥製作" data-en="🌿 Composting">🌿 堆肥製作</button>
+      <button class="agent-quick" onclick="askQuick('什麼時候該澆水？')" data-zh="💦 澆水時機" data-en="💦 Watering">💦 澆水時機</button>
+      <button class="agent-quick" onclick="askQuick('什麼時候施肥？NPK 怎麼用？')" data-zh="🧪 施肥時機" data-en="🧪 Fertilizer">🧪 施肥時機</button>
+      <button class="agent-quick" onclick="askQuick('怎麼修剪果樹？')" data-zh="✂️ 修剪整枝" data-en="✂️ Pruning">✂️ 修剪整枝</button>
+      <button class="agent-quick" onclick="askQuick('葉子變黃怎麼辦？')" data-zh="🍃 葉子變黃" data-en="🍃 Yellow leaves">🍃 葉子變黃</button>
+      <button class="agent-quick" onclick="askQuick('什麼季節種什麼？')" data-zh="📅 時令作物" data-en="📅 Crop calendar">📅 時令作物</button>
+      <button class="agent-quick" onclick="askQuick('怎麼自己留種？')" data-zh="🌱 留種技術" data-en="🌱 Seed saving">🌱 留種技術</button>
+      <button class="agent-quick" onclick="askQuick('真菌病害怎麼辦？')" data-zh="🍄 真菌病害" data-en="🍄 Fungal disease">🍄 真菌病害</button>
     </div>
     <div id="agentBody"></div>
   </section>
@@ -6409,6 +6422,15 @@ This application supports starting organic-transition certification for ≥1 ha.
     '哪裡可以賣？要找什麼通路？': { zh: '哪裡可以賣？要找什麼通路？', en: 'Where can I sell? Which channels should I pitch?' },
     '怎麼跟買家介紹我自己？': { zh: '怎麼跟買家介紹我自己？', en: 'How do I introduce myself to a buyer?' },
     '我做得好不好？': { zh: '我做得好不好？', en: 'How am I doing compared to other farms?' },
+    '蚜蟲怎麼處理？':            { zh: '蚜蟲怎麼處理？',            en: 'How do I deal with aphids and sucking pests?' },
+    '堆肥怎麼做？':              { zh: '堆肥怎麼做？',              en: 'How do I make compost properly?' },
+    '什麼時候該澆水？':          { zh: '什麼時候該澆水？',          en: 'When + how much should I water?' },
+    '什麼時候施肥？NPK 怎麼用？': { zh: '什麼時候施肥？NPK 怎麼用？', en: 'When to fertilize? How to use NPK by growth stage?' },
+    '怎麼修剪果樹？':            { zh: '怎麼修剪果樹？',            en: 'How do I prune fruit trees correctly?' },
+    '葉子變黃怎麼辦？':          { zh: '葉子變黃怎麼辦？',          en: 'Leaves are turning yellow — what nutrient is missing?' },
+    '什麼季節種什麼？':          { zh: '什麼季節種什麼？',          en: 'What should I plant in each Taiwan season?' },
+    '怎麼自己留種？':            { zh: '怎麼自己留種？',            en: 'How do I save my own seeds?' },
+    '真菌病害怎麼辦？':          { zh: '真菌病害怎麼辦？',          en: 'How do I prevent + manage fungal disease?' },
     '我覺得太累、撐不下去': { zh: '我覺得太累、撐不下去', en: 'I\'m exhausted and want to give up' }
   };
   // One-tap quick-chip → submit through the same pipeline as a typed
