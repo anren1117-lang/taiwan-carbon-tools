@@ -503,6 +503,93 @@
   .cal-legend { display: flex; gap: 14px; margin-top: 14px; font-size: 12.5px; color: var(--ink-soft); align-items: center; flex-wrap: wrap; }
   .cal-leg-swatch { display: inline-block; width: 16px; height: 12px; border-radius: 3px; vertical-align: middle; margin-right: 6px; }
 
+  /* CARE CALENDAR + BUILD PLAN */
+  .month-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  .month-row {
+    display: grid; grid-template-columns: 70px 1fr; gap: 18px;
+    padding: 14px 16px;
+    background: rgba(255,255,255,0.5);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    transition: all .2s;
+  }
+  .month-row.current {
+    background: linear-gradient(135deg, rgba(110,126,96,0.15), rgba(196,160,76,0.10));
+    border-color: var(--sage);
+    box-shadow: 0 4px 16px -8px rgba(110,126,96,0.4);
+  }
+  .month-row .m-num {
+    font-family: var(--serif); font-size: 30px; font-weight: 700;
+    color: var(--forest); line-height: 1;
+  }
+  .month-row .m-season {
+    font-size: 11px; letter-spacing: 0.12em; color: var(--clay-deep);
+    text-transform: uppercase; margin-top: 4px;
+  }
+  .month-row .m-body { min-width: 0; }
+  .m-block { margin-bottom: 8px; }
+  .m-block:last-child { margin-bottom: 0; }
+  .m-block .label {
+    font-size: 11px; letter-spacing: 0.12em; color: var(--sage-deep);
+    font-weight: 600; text-transform: uppercase; margin-bottom: 6px;
+    display: inline-flex; align-items: center; gap: 5px;
+  }
+  .m-pills { display: flex; flex-wrap: wrap; gap: 5px; }
+  .m-pill {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: rgba(255,255,255,0.65);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 4px 11px;
+    font-size: 12px; color: var(--forest);
+    font-family: inherit; cursor: pointer;
+    transition: all .15s;
+  }
+  .m-pill:hover { background: var(--forest); color: var(--paper); border-color: var(--forest); }
+  .m-pill.bloom { background: rgba(184,107,156,0.13); color: #8C3B6A; border-color: rgba(184,107,156,0.3); }
+  .m-pill.bloom:hover { background: #8C3B6A; color: white; }
+  .m-pill.fruit { background: rgba(201,118,76,0.13); color: #8C4A2A; border-color: rgba(201,118,76,0.3); }
+  .m-pill.fruit:hover { background: #8C4A2A; color: white; }
+  .m-pill.prune { background: rgba(80,120,160,0.12); color: #3D6086; border-color: rgba(80,120,160,0.3); }
+  .m-pill.fert  { background: rgba(80,140,90,0.12); color: var(--sage-deep); border-color: rgba(80,140,90,0.3); }
+  .m-pill.warn  { background: rgba(178,58,48,0.10); color: #8C2A22; border-color: rgba(178,58,48,0.28); }
+  .m-empty { font-size: 12px; color: var(--ink-soft); font-style: italic; font-family: var(--serif); }
+
+  /* BUILD PLAN */
+  .phase-list { display: flex; flex-direction: column; gap: 14px; }
+  .phase {
+    position: relative;
+    padding: 18px 20px 18px 64px;
+    background: rgba(255,255,255,0.55);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+  }
+  .phase-num {
+    position: absolute; top: 18px; left: 18px;
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--forest); color: var(--paper);
+    font-family: var(--serif); font-size: 16px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .phase-title { font-family: var(--serif); font-size: 18px; font-weight: 600; color: var(--forest); margin-bottom: 4px; }
+  .phase-time { font-size: 11.5px; color: var(--clay-deep); margin-bottom: 10px; letter-spacing: 0.06em; }
+  .phase-text { font-size: 14px; line-height: 1.65; color: var(--ink); }
+  .phase ul { margin-top: 8px; padding-left: 18px; }
+  .phase ul li { font-size: 13.5px; line-height: 1.65; color: var(--ink-soft); margin-bottom: 4px; }
+  .phase-plants { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+
+  /* SUSTAINABILITY chips */
+  .sustain-row { display: flex; gap: 8px; flex-wrap: wrap; margin: 4px 0 18px; }
+  .sustain-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 7px 13px; border-radius: 999px;
+    font-size: 12.5px; font-weight: 600;
+    border: 1px solid;
+  }
+  .sustain-chip.co2 { background: rgba(110,126,96,0.12); color: var(--sage-deep); border-color: rgba(110,126,96,0.32); }
+  .sustain-chip.water { background: rgba(80,120,160,0.10); color: #3D6086; border-color: rgba(80,120,160,0.28); }
+  .sustain-chip.bio { background: rgba(196,160,76,0.13); color: #8C6F1E; border-color: rgba(196,160,76,0.30); }
+
   /* SHOPPING LIST */
   .shop-frame { padding: 18px; background: rgba(255,255,255,0.55); border: 1px solid var(--line); border-radius: 18px; }
   .shop-table { width: 100%; border-collapse: collapse; font-size: 14px; }
@@ -1745,6 +1832,269 @@ const PLANT_META = {
 PLANTS.forEach((p) => Object.assign(p, PLANT_META[p.id] || { native: true }));
 
 // ─────────────────────────────────────────────────────────────
+// DEEP / EXPERT data layer
+//   TIER_BASELINES — sensible defaults so every plant has values for the
+//     sustainability metrics and the care calendar, derived from typical
+//     mature-plant rules of thumb. CO2 and water values are deliberately
+//     conservative — they're estimates for "what to expect", not promises.
+//   EXPERT_META — per-plant overrides where reliable specific data exists.
+//     Fields:
+//       soil_ph: [min, max]            — pH tolerance range
+//       hardy_c:                        — minimum tolerated temperature (°C)
+//       grow_rate: "slow|med|fast"     — visual growth pace
+//       lifespan_yr: [min, max]        — typical mature lifespan
+//       propagation_zh / _en           — how to propagate
+//       issues_zh / _en (array)        — common pests / diseases in Taiwan
+//       water_l_wk                     — litres per plant per week (established)
+//       co2_kg_yr                      — rough CO2 absorbed per plant per year
+//       ethno_zh / _en                 — traditional / cultural uses
+//       prune_months (array)           — months when pruning is best
+//       fertilize_months (array)       — months when feeding helps
+// ─────────────────────────────────────────────────────────────
+const TIER_BASELINES = {
+  T: { co2_kg_yr: 18, water_l_wk: 30, lifespan_yr: [40, 100], grow_rate: "med",
+       soil_ph: [5.5, 7.2], hardy_c: 0,
+       propagation_zh: "種子 (秋採)、移植 2-3 年生苗", propagation_en: "Seed (autumn); transplant 2-3 yr saplings",
+       issues_zh: ["天牛", "葉斑病"], issues_en: ["Longhorn beetles", "Leaf spot"],
+       prune_months: [1, 2, 12], fertilize_months: [3, 9] },
+  S: { co2_kg_yr: 3,  water_l_wk: 8,  lifespan_yr: [10, 30],  grow_rate: "med",
+       soil_ph: [5.5, 7.5], hardy_c: 0,
+       propagation_zh: "扦插 (春夏)、種子", propagation_en: "Softwood cuttings (spring-summer), seed",
+       issues_zh: ["介殼蟲", "蚜蟲"], issues_en: ["Scale insects", "Aphids"],
+       prune_months: [2, 11], fertilize_months: [3, 6, 9] },
+  G: { co2_kg_yr: 0.4, water_l_wk: 1.5, lifespan_yr: [2, 10], grow_rate: "fast",
+       soil_ph: [5.5, 7.5], hardy_c: -2,
+       propagation_zh: "分株、種子、扦插", propagation_en: "Division, seed, cutting",
+       issues_zh: ["蝸牛", "黴病"], issues_en: ["Snails/slugs", "Mildew"],
+       prune_months: [2, 11], fertilize_months: [3, 6, 9] },
+  W: { co2_kg_yr: 0.5, water_l_wk: 0,  lifespan_yr: [3, 15],  grow_rate: "med",
+       soil_ph: [6.0, 7.5], hardy_c: 5,
+       propagation_zh: "分株、根莖", propagation_en: "Division, rhizome",
+       issues_zh: ["藻類過度生長", "蚊蚋"], issues_en: ["Algal bloom", "Mosquitoes"],
+       prune_months: [3, 11], fertilize_months: [4, 7] },
+  C: { co2_kg_yr: 4,  water_l_wk: 10, lifespan_yr: [5, 25],  grow_rate: "fast",
+       soil_ph: [5.5, 7.2], hardy_c: 0,
+       propagation_zh: "扦插、壓條、種子", propagation_en: "Cuttings, layering, seed",
+       issues_zh: ["白粉病", "捲葉"], issues_en: ["Powdery mildew", "Leaf curl"],
+       prune_months: [2, 11], fertilize_months: [3, 6, 9] },
+};
+
+const EXPERT_META = {
+  pittosporum: {
+    soil_ph: [6.0, 8.0], hardy_c: -5, grow_rate: "slow", lifespan_yr: [30, 60],
+    co2_kg_yr: 6, water_l_wk: 8,
+    propagation_zh: "扦插 (夏)、種子 (秋採新鮮)", propagation_en: "Cuttings (summer), fresh seed (autumn)",
+    issues_zh: ["介殼蟲", "葉枯病"], issues_en: ["Scale insects", "Leaf blight"],
+    ethno_zh: "傳統海岸防風林樹種；嫩芽古稱「七里香芽」可食。", ethno_en: "Traditional coastal shelterbelt; young shoots historically edible.",
+    prune_months: [2, 6], fertilize_months: [3, 9],
+  },
+  cherry: {
+    soil_ph: [5.5, 6.8], hardy_c: -8, grow_rate: "med", lifespan_yr: [40, 80],
+    co2_kg_yr: 12, water_l_wk: 18,
+    propagation_zh: "嫁接（接穗於山櫻砧木）、種子", propagation_en: "Grafting (scion on wild cherry rootstock), seed",
+    issues_zh: ["流膠病", "蚜蟲", "捲葉蛾"], issues_en: ["Gummosis", "Aphids", "Leaf rollers"],
+    ethno_zh: "原住民泰雅族文化中的春日花信；花蜜為紅胸啄花鳥重要食物。", ethno_en: "Spring flower marker in Atayal indigenous culture; nectar is key for fire-breasted flowerpeckers.",
+    prune_months: [3, 4], fertilize_months: [3, 9],
+  },
+  bischofia: {
+    soil_ph: [5.0, 7.5], hardy_c: -2, grow_rate: "fast", lifespan_yr: [80, 300],
+    co2_kg_yr: 32, water_l_wk: 45,
+    propagation_zh: "種子 (秋採)，發芽率高", propagation_en: "Seed (autumn) — high germination",
+    issues_zh: ["天牛", "腐心病"], issues_en: ["Longhorn beetles", "Heart rot"],
+    ethno_zh: "台灣多處「老樹公」為茄苳；木材傳統作砧板與農具柄。", ethno_en: "Many 'sacred old trees' in Taiwan villages are bischofia; timber traditionally used for cutting boards and tool handles.",
+    prune_months: [12, 1], fertilize_months: [3, 9],
+  },
+  cinnamomum: {
+    soil_ph: [5.5, 7.2], hardy_c: -5, grow_rate: "med", lifespan_yr: [100, 500],
+    co2_kg_yr: 28, water_l_wk: 40,
+    propagation_zh: "種子（去果肉後即播）、扦插", propagation_en: "Seed (sow immediately after de-pulping), cuttings",
+    issues_zh: ["樟白介殼蟲", "煤煙病"], issues_en: ["Camphor scale", "Sooty mold"],
+    ethno_zh: "台灣最重要的歷史經濟樹；19 世紀全球樟腦 75% 來自台灣。原住民視為神聖樹。", ethno_en: "Taiwan's most important historical economic tree — 75% of the world's camphor came from Taiwan in the 19th century. Sacred to many indigenous peoples.",
+    prune_months: [2], fertilize_months: [3, 9],
+  },
+  koelreuteria: {
+    soil_ph: [5.5, 7.5], hardy_c: -10, grow_rate: "fast", lifespan_yr: [40, 80],
+    co2_kg_yr: 15, water_l_wk: 25,
+    propagation_zh: "種子（秋採，冬季層積處理後春播）", propagation_en: "Seed (autumn collect, cold stratify, sow in spring)",
+    issues_zh: ["紅姬緣椿象（果實上）"], issues_en: ["Red bug (on the seed capsules)"],
+    ethno_zh: "1980 年代後成為台灣標誌性行道樹；種子曾用於做念珠。", ethno_en: "Iconic Taiwan street tree since the 1980s; seeds historically used as rosary beads.",
+    prune_months: [12, 1, 2], fertilize_months: [3, 9],
+  },
+  melia: {
+    soil_ph: [6.0, 7.5], hardy_c: -8, grow_rate: "fast", lifespan_yr: [30, 60],
+    co2_kg_yr: 16, water_l_wk: 22,
+    propagation_zh: "種子（秋採，去果肉發芽率最高）", propagation_en: "Seed (autumn; de-pulp for best germination)",
+    issues_zh: ["天牛幼蟲蛀幹", "蚜蟲"], issues_en: ["Longhorn beetle borers", "Aphids"],
+    ethno_zh: "台灣傳統「四月雪」春景樹；木材輕軟用於樂器。", ethno_en: "Traditional 'April snow' spring tree of Taiwan; light timber used for musical instruments.",
+    prune_months: [12, 1], fertilize_months: [3, 9],
+  },
+  broussonetia: {
+    soil_ph: [5.5, 8.0], hardy_c: -8, grow_rate: "fast", lifespan_yr: [20, 50],
+    co2_kg_yr: 14, water_l_wk: 15,
+    propagation_zh: "種子（鳥傳）、根萌生", propagation_en: "Seed (bird-dispersed), root suckers",
+    issues_zh: ["白粉病", "葉斑"], issues_en: ["Powdery mildew", "Leaf spot"],
+    ethno_zh: "南島語族用樹皮製樹皮布（tapa）；台灣阿美族傳統素材。", ethno_en: "Austronesian peoples make bark cloth (tapa); a traditional material of Taiwan's Amis people.",
+    prune_months: [12, 1], fertilize_months: [3],
+  },
+  hibiscus_til: {
+    soil_ph: [6.0, 8.5], hardy_c: 0, grow_rate: "fast", lifespan_yr: [30, 60],
+    co2_kg_yr: 14, water_l_wk: 18,
+    propagation_zh: "扦插（春夏）、種子", propagation_en: "Cuttings (spring-summer), seed",
+    issues_zh: ["紅蜘蛛", "白粉蝨"], issues_en: ["Red spider mites", "Whitefly"],
+    ethno_zh: "葉片是傳統粿、粽的天然包葉；達悟族用於蘭嶼日常。", ethno_en: "Leaves are traditional wrappers for rice cakes and dumplings; central to Tao people's daily life on Lanyu.",
+    prune_months: [12, 1], fertilize_months: [3, 6, 9],
+  },
+  pongamia: {
+    soil_ph: [6.5, 8.5], hardy_c: 5, grow_rate: "med", lifespan_yr: [40, 80],
+    co2_kg_yr: 22, water_l_wk: 18,
+    propagation_zh: "種子（秋採，浸水 24h 再播）", propagation_en: "Seed (autumn; soak 24h before sowing)",
+    issues_zh: ["蚜蟲", "蛾類幼蟲"], issues_en: ["Aphids", "Moth larvae"],
+    ethno_zh: "種子油為傳統油燈燃料；現代研究為航空生質燃料原料。", ethno_en: "Seed oil was traditional lamp fuel; modern research targets aviation biofuel.",
+    prune_months: [12, 1], fertilize_months: [3],
+  },
+  melastoma: {
+    soil_ph: [4.5, 6.5], hardy_c: 0, grow_rate: "med", lifespan_yr: [8, 20],
+    co2_kg_yr: 2, water_l_wk: 6,
+    propagation_zh: "扦插（夏季）、種子", propagation_en: "Cuttings (summer), seed",
+    issues_zh: ["介殼蟲", "葉斑病"], issues_en: ["Scale insects", "Leaf spot"],
+    ethno_zh: "果實鳥類最愛；紫紅花是台灣低海拔原生授粉蜂的主食。", ethno_en: "Fruit is a bird favorite; magenta flowers are a primary food for native lowland bee pollinators.",
+    prune_months: [11, 12], fertilize_months: [3, 6, 9],
+  },
+  ardisia: {
+    soil_ph: [5.0, 6.5], hardy_c: -2, grow_rate: "slow", lifespan_yr: [15, 40],
+    co2_kg_yr: 1.5, water_l_wk: 4,
+    propagation_zh: "種子（鳥傳）、扦插", propagation_en: "Seed (bird-dispersed), cuttings",
+    issues_zh: ["介殼蟲", "粉介殼蟲"], issues_en: ["Scale insects", "Mealybugs"],
+    ethno_zh: "紅果象徵吉祥，傳統年節盆栽；台灣早期作為春節「萬兩金」吉祥植物。", ethno_en: "Red fruit symbolizes good fortune; traditional Lunar New Year container plant in Taiwan.",
+    prune_months: [3], fertilize_months: [3, 9],
+  },
+  alpinia: {
+    soil_ph: [5.5, 6.8], hardy_c: 5, grow_rate: "fast", lifespan_yr: [10, 30],
+    co2_kg_yr: 3, water_l_wk: 10,
+    propagation_zh: "分株（春季）", propagation_en: "Division (spring)",
+    issues_zh: ["蚜蟲", "鏽病"], issues_en: ["Aphids", "Rust"],
+    ethno_zh: "葉片包月桃粽；阿美族與排灣族傳統食物與工藝重要素材。", ethno_en: "Leaves wrap traditional 月桃粽 rice dumplings; key material in Amis and Paiwan indigenous food and craft.",
+    prune_months: [2], fertilize_months: [3, 6, 9],
+  },
+  murraya: {
+    soil_ph: [6.0, 7.5], hardy_c: 0, grow_rate: "slow", lifespan_yr: [20, 60],
+    co2_kg_yr: 3, water_l_wk: 5,
+    propagation_zh: "種子（秋採新鮮即播）、扦插", propagation_en: "Fresh seed (autumn) or cuttings",
+    issues_zh: ["柑橘潛葉蛾", "鳳蝶幼蟲"], issues_en: ["Citrus leaf miner", "Swallowtail caterpillars"],
+    ethno_zh: "鳳蝶科幼蟲食草；種植可吸引鳳蝶來繁殖。", ethno_en: "Larval host plant for swallowtail butterflies — planting attracts them to breed.",
+    prune_months: [2, 6, 9], fertilize_months: [3, 6, 9],
+  },
+  gardenia: {
+    soil_ph: [5.0, 6.5], hardy_c: -2, grow_rate: "slow", lifespan_yr: [15, 40],
+    co2_kg_yr: 2, water_l_wk: 7,
+    propagation_zh: "扦插 (春夏)、種子", propagation_en: "Cuttings (spring-summer), seed",
+    issues_zh: ["缺鐵黃化", "粉介殼蟲", "白粉病"], issues_en: ["Iron-deficiency chlorosis", "Mealybugs", "Powdery mildew"],
+    ethno_zh: "果實為傳統黃色染料來源；中醫用於清熱。", ethno_en: "Fruit is a traditional yellow dye source; used in Chinese medicine for 'clearing heat'.",
+    prune_months: [3], fertilize_months: [3, 6, 9],
+  },
+  liriope: {
+    soil_ph: [5.5, 7.5], hardy_c: -10, grow_rate: "med", lifespan_yr: [5, 20],
+    co2_kg_yr: 0.3, water_l_wk: 1,
+    propagation_zh: "分株（春秋兩季皆可）", propagation_en: "Division (spring or autumn)",
+    issues_zh: ["蝸牛", "鏽病"], issues_en: ["Snails", "Rust"],
+    prune_months: [2], fertilize_months: [3, 9],
+  },
+  nephrolepis: {
+    soil_ph: [5.0, 6.5], hardy_c: 0, grow_rate: "fast", lifespan_yr: [5, 15],
+    co2_kg_yr: 0.4, water_l_wk: 2,
+    propagation_zh: "分株、走莖", propagation_en: "Division, runners",
+    issues_zh: ["粉介殼蟲", "葉枯"], issues_en: ["Mealybugs", "Leaf tip burn"],
+    prune_months: [3], fertilize_months: [4, 7],
+  },
+  lily_tw: {
+    soil_ph: [5.5, 7.0], hardy_c: -8, grow_rate: "med", lifespan_yr: [3, 10],
+    co2_kg_yr: 0.3, water_l_wk: 1.5,
+    propagation_zh: "種子（自播性極強）、球根分株", propagation_en: "Seed (vigorously self-seeding), bulb division",
+    issues_zh: ["蚜蟲", "百合甲蟲"], issues_en: ["Aphids", "Lily beetle"],
+    ethno_zh: "台灣特有種，1900 年代輸出歐美栽培；是「台灣」植物學主權象徵。", ethno_en: "Taiwan endemic — exported to Europe and the US in the 1900s; a symbol of Taiwan's botanical sovereignty.",
+    prune_months: [11], fertilize_months: [3, 5],
+  },
+  miscanthus: {
+    soil_ph: [5.0, 7.5], hardy_c: -10, grow_rate: "fast", lifespan_yr: [10, 25],
+    co2_kg_yr: 1.5, water_l_wk: 2,
+    propagation_zh: "分株（早春）", propagation_en: "Division (early spring)",
+    issues_zh: ["蚜蟲", "鏽病"], issues_en: ["Aphids", "Rust"],
+    ethno_zh: "台灣秋景符號；阿美族傳統屋頂草料；種子為小型鳥類食物。", ethno_en: "Symbol of Taiwan's autumn landscape; traditional Amis thatch material; seeds feed small birds.",
+    prune_months: [2], fertilize_months: [3],
+  },
+  portulaca: {
+    soil_ph: [5.5, 8.0], hardy_c: 0, grow_rate: "fast", lifespan_yr: [1, 2],
+    co2_kg_yr: 0.2, water_l_wk: 0.5,
+    propagation_zh: "種子（自播）、扦插（極易發根）", propagation_en: "Seed (self-sows), cuttings (root very easily)",
+    issues_zh: ["蝸牛"], issues_en: ["Snails"],
+    ethno_zh: "傳統野菜「豬母乳」；Omega-3 含量極高；阿美族炒蛋名菜。", ethno_en: "Traditional wild green known as '豬母乳'; very high omega-3; classic Amis fried-egg dish ingredient.",
+    prune_months: [], fertilize_months: [4, 7],
+  },
+  nuphar: {
+    soil_ph: [6.0, 7.5], hardy_c: 5, grow_rate: "slow", lifespan_yr: [5, 20],
+    co2_kg_yr: 0.6, water_l_wk: 0,
+    propagation_zh: "根莖分株（春季）", propagation_en: "Rhizome division (spring)",
+    issues_zh: ["藻類過度生長", "蚜蟲"], issues_en: ["Algae overgrowth", "Aphids"],
+    ethno_zh: "台灣特有水生植物，瀕危等級；植群恢復可改善小型水域生態。", ethno_en: "Taiwan-endemic aquatic; endangered. Re-establishing populations improves small water-body ecology.",
+    prune_months: [11], fertilize_months: [4],
+  },
+  ipomoea_pc: {
+    soil_ph: [6.0, 8.5], hardy_c: 2, grow_rate: "fast", lifespan_yr: [3, 10],
+    co2_kg_yr: 0.5, water_l_wk: 1,
+    propagation_zh: "扦插（節點極易發根）、種子", propagation_en: "Cuttings (nodes root readily), seed",
+    issues_zh: ["蚜蟲（極少）"], issues_en: ["Aphids (rare)"],
+    ethno_zh: "原住民達悟族傳統使用；防止海岸沙地流失的關鍵物種。", ethno_en: "Used by indigenous Tao people; key species preventing coastal sand erosion.",
+    prune_months: [], fertilize_months: [],
+  },
+  scaevola: {
+    soil_ph: [6.5, 8.5], hardy_c: 5, grow_rate: "fast", lifespan_yr: [10, 30],
+    co2_kg_yr: 3, water_l_wk: 5,
+    propagation_zh: "扦插（極易發根）、種子", propagation_en: "Cuttings (root easily), seed",
+    issues_zh: ["極少病蟲害"], issues_en: ["Few pests / diseases"],
+    ethno_zh: "達悟族與阿美族沿海生活的傳統植物；木材耐海水。", ethno_en: "Traditional coastal-life plant for Tao and Amis peoples; seawater-resistant wood.",
+    prune_months: [12, 1], fertilize_months: [],
+  },
+  asplenium_n: {
+    soil_ph: [5.0, 6.5], hardy_c: 5, grow_rate: "med", lifespan_yr: [10, 25],
+    co2_kg_yr: 0.8, water_l_wk: 3,
+    propagation_zh: "孢子繁殖（緩慢）；不可分株", propagation_en: "Spore propagation (slow); does not divide",
+    issues_zh: ["介殼蟲", "葉枯"], issues_en: ["Scale insects", "Frond tip burn"],
+    ethno_zh: "嫩芽為原住民傳統食材「山蘇」；現代列為高山民宿招牌野菜。", ethno_en: "Young fronds are the traditional indigenous edible '山蘇'; now a signature mountain-lodge dish.",
+    prune_months: [3], fertilize_months: [4, 7],
+  },
+  basil: {
+    soil_ph: [5.5, 7.0], hardy_c: 10, grow_rate: "fast", lifespan_yr: [0.5, 1],
+    co2_kg_yr: 0.15, water_l_wk: 1.5,
+    propagation_zh: "種子（春播）、扦插（24h 即生根）", propagation_en: "Seed (spring) or cuttings (root within 24h)",
+    issues_zh: ["蚜蟲", "白粉病"], issues_en: ["Aphids", "Powdery mildew"],
+    ethno_zh: "台灣三杯料理、煎蛋的靈魂香料；地中海羅勒同屬不同種。", ethno_en: "Soul ingredient of Taiwan's three-cup dishes and basil omelette; same genus as Mediterranean basil but different species.",
+    prune_months: [], fertilize_months: [5, 7, 9],
+  },
+  plumeria: {
+    soil_ph: [6.0, 7.5], hardy_c: 5, grow_rate: "slow", lifespan_yr: [30, 70],
+    co2_kg_yr: 6, water_l_wk: 8,
+    propagation_zh: "扦插（剪段陰乾 1 週後扦插）", propagation_en: "Cuttings (cut, dry shaded 1 week, then plant)",
+    issues_zh: ["銹病", "蚜蟲", "冷傷"], issues_en: ["Rust", "Aphids", "Cold damage"],
+    ethno_zh: "東南亞與夏威夷代表花；台灣常見於廟宇庭院與民宿。", ethno_en: "Iconic flower of SE Asia and Hawaii; common at Taiwan temples and B&Bs.",
+    prune_months: [12, 1], fertilize_months: [4, 7],
+  },
+  bougainvillea: {
+    soil_ph: [5.5, 7.5], hardy_c: 0, grow_rate: "fast", lifespan_yr: [20, 50],
+    co2_kg_yr: 5, water_l_wk: 6,
+    propagation_zh: "硬枝扦插（秋冬）", propagation_en: "Hardwood cuttings (autumn-winter)",
+    issues_zh: ["介殼蟲", "蚜蟲"], issues_en: ["Scale insects", "Aphids"],
+    prune_months: [2, 7], fertilize_months: [3, 6, 9],
+  },
+};
+
+// Resolve expert/baseline values for a plant ID with a single helper.
+function expert(p) {
+  const base = TIER_BASELINES[p.tier] || TIER_BASELINES.G;
+  const over = EXPERT_META[p.id] || {};
+  return { ...base, ...over };
+}
+
+// ─────────────────────────────────────────────────────────────
 // Wizard option sets
 // ─────────────────────────────────────────────────────────────
 const SPACE_OPTIONS = [
@@ -2711,6 +3061,8 @@ function renderResult() {
         </button>
       </div>
 
+      ${renderSustainChips(recs)}
+
       <div class="tabs" role="tablist">
         ${[
           { k:"preview",   zh:"實景參考",     en:"Realistic" },
@@ -2718,6 +3070,8 @@ function renderResult() {
           { k:"iso3d",     zh:"3D 視角",      en:"3D view" },
           { k:"layers",    zh:"復層配置",     en:"Layered design" },
           { k:"calendar",  zh:"花期月曆",     en:"Bloom calendar" },
+          { k:"care",      zh:"養護月曆",     en:"Care calendar" },
+          { k:"build",     zh:"施工指南",     en:"Build plan" },
           { k:"shopping",  zh:"採購清單",     en:"Shopping list" },
           { k:"dict",      zh:"植物字典",     en:"Plant dictionary" },
         ].map(tab => `
@@ -2754,6 +3108,8 @@ function renderTabPanel(recs, layers) {
     case "iso3d":    host.innerHTML = render3D(layers, recs); wire3DInteractions(); break;
     case "layers":   host.innerHTML = renderLayers(layers, recs); wireLayerCards(); break;
     case "calendar": host.innerHTML = renderCalendar(recs); break;
+    case "care":     host.innerHTML = renderCareCalendar(recs); wireCarePlantChips(); break;
+    case "build":    host.innerHTML = renderBuildPlan(layers, recs); wireBuildPlantChips(); break;
     case "shopping": host.innerHTML = renderShopping(recs); wireShoppingControls(); break;
     case "dict":     host.innerHTML = renderDictionary(); wireDictionary(); break;
   }
@@ -2926,6 +3282,45 @@ function wirePlanInteractions() {
   document.querySelectorAll(".plan-plant").forEach((g) => {
     g.addEventListener("click", () => openDrawer(g.dataset.id));
   });
+}
+
+// ── Sustainability roll-up — aggregates per-plant CO2, water, and ecological
+//    support tags into 3 headline chips on the result page.
+function renderSustainChips(recs) {
+  const top = recs.slice(0, 8);
+  if (!top.length) return "";
+
+  // Use shopping-list quantities so the totals match what the user actually plans to plant.
+  let totalCO2 = 0;
+  let totalWater = 0;
+  const supportTagsSet = new Set();
+  top.forEach(p => {
+    const qty = state.qty[p.id] ?? 1;
+    const e = expert(p);
+    totalCO2 += (e.co2_kg_yr || 0) * qty;
+    totalWater += (e.water_l_wk || 0) * qty;
+    (p.supports_zh || []).forEach(s => supportTagsSet.add(s));
+  });
+
+  // Tree-equivalent for CO2 — a typical urban tree absorbs ~22 kg CO2/yr.
+  const treeEq = (totalCO2 / 22).toFixed(1);
+  const ecoCount = supportTagsSet.size;
+
+  return `
+    <div class="sustain-row">
+      <span class="sustain-chip co2">
+        🌳 <span data-zh="約 ${totalCO2.toFixed(0)} kg CO₂ / 年 · 約 ${treeEq} 棵都市樹"
+                data-en="≈ ${totalCO2.toFixed(0)} kg CO₂ / yr · ~${treeEq} urban-tree equivalent">約 ${totalCO2.toFixed(0)} kg CO₂ / 年 · 約 ${treeEq} 棵都市樹</span>
+      </span>
+      <span class="sustain-chip water">
+        💧 <span data-zh="約 ${totalWater.toFixed(0)} L / 週 · 估算用水"
+                data-en="≈ ${totalWater.toFixed(0)} L / week · estimated water">約 ${totalWater.toFixed(0)} L / 週 · 估算用水</span>
+      </span>
+      <span class="sustain-chip bio">
+        🐝 <span data-zh="${ecoCount} 種生態貢獻"
+                data-en="${ecoCount} ecological roles">${ecoCount} 種生態貢獻</span>
+      </span>
+    </div>`;
 }
 
 // ── TAB: REALISTIC PREVIEW (Pollinations.ai) ────────────────
@@ -3315,6 +3710,211 @@ function wireLayerCards() {
   });
 }
 
+// ── TAB: CARE CALENDAR (month-by-month garden tasks) ────────
+// Reads bloom / fruit / prune / fertilize / common-issues data per plant and
+// rolls it up into 12 month rows: enjoy-now, fruit, prune, fertilize, pest watch.
+function renderCareCalendar(recs) {
+  const top = recs.slice(0, 10);
+  const months = MONTHS[state.lang];
+  const seasonLabel = (m) =>
+    (m === 12 || m <= 2) ? t("冬 · WINTER", "WINTER") :
+    (m <= 5) ? t("春 · SPRING", "SPRING") :
+    (m <= 8) ? t("夏 · SUMMER", "SUMMER") :
+    t("秋 · AUTUMN", "AUTUMN");
+
+  // Heuristic seasonal pest warnings — generic enough to apply across plants.
+  const seasonalWarnings = {
+    3: { zh: "春季蚜蟲爆發期 — 檢查新芽是否捲縮、油亮", en: "Aphid season — check new shoots for curling or oily sheen" },
+    4: { zh: "梅雨將至 — 加強排水，避免根腐病",          en: "Plum-rain season approaching — improve drainage to prevent root rot" },
+    5: { zh: "高濕高溫 — 觀察葉片白粉病徵兆",              en: "High humidity + heat — watch for powdery mildew" },
+    6: { zh: "颱風季開始 — 為大喬木檢查支撐與固定",        en: "Typhoon season begins — check staking on canopy trees" },
+    7: { zh: "盛夏 — 容器植物可能需要每日澆水",            en: "Peak summer — container plants may need daily watering" },
+    8: { zh: "高溫午後 — 葉片噴水降溫，但避免日照下噴",    en: "Hot afternoons — mist for cooling, but never under direct sun" },
+    9: { zh: "颱風尾季 — 修剪過長枝以減少風阻",            en: "Late typhoon season — prune over-long branches to reduce wind load" },
+    10: { zh: "秋涼 — 補施緩效肥支援冬前生長",             en: "Cool autumn — apply slow-release fertilizer for pre-winter growth" },
+    11: { zh: "落葉樹開始休眠 — 計劃明春的修剪",           en: "Deciduous trees enter dormancy — plan next spring's pruning" },
+    12: { zh: "冬季少水 — 多數植物減少澆水頻率 1/2",        en: "Winter cool — most plants need watering ~50% less often" },
+    1: { zh: "深冬休眠 — 是大幅度修剪落葉樹的好時機",      en: "Deep winter dormancy — best time for hard-pruning deciduous trees" },
+    2: { zh: "早春前 — 大多數果樹與灌木此時修剪最理想",    en: "Pre-spring — ideal pruning window for most fruit and flowering shrubs" },
+  };
+
+  const today = new Date();
+  const curM = today.getMonth() + 1;
+
+  const rows = [];
+  for (let m = 1; m <= 12; m++) {
+    const bloom = top.filter(p => (p.bloom || []).includes(m));
+    const fruit = top.filter(p => (p.fruit || []).includes(m));
+    const prune = top.filter(p => (expert(p).prune_months || []).includes(m));
+    const fert  = top.filter(p => (expert(p).fertilize_months || []).includes(m));
+    const warning = seasonalWarnings[m];
+
+    const pillsHtml = (plants, kind) => plants.length
+      ? `<div class="m-pills">${plants.map(p => `<button class="m-pill ${kind}" data-id="${p.id}"><span data-zh="${p.zh}" data-en="${p.en}">${p.zh}</span></button>`).join("")}</div>`
+      : `<span class="m-empty" data-zh="無" data-en="—">無</span>`;
+
+    rows.push(`
+      <div class="month-row ${m === curM ? "current" : ""}">
+        <div>
+          <div class="m-num">${m}</div>
+          <div class="m-season">${seasonLabel(m)}${m === curM ? " · " + t("本月", "Now") : ""}</div>
+        </div>
+        <div class="m-body">
+          ${bloom.length ? `<div class="m-block"><div class="label">🌸 <span data-zh="花期" data-en="Bloom">花期</span></div>${pillsHtml(bloom, "bloom")}</div>` : ""}
+          ${fruit.length ? `<div class="m-block"><div class="label">🍎 <span data-zh="果期" data-en="Fruit">果期</span></div>${pillsHtml(fruit, "fruit")}</div>` : ""}
+          ${prune.length ? `<div class="m-block"><div class="label">✂️ <span data-zh="修剪" data-en="Prune">修剪</span></div>${pillsHtml(prune, "prune")}</div>` : ""}
+          ${fert.length  ? `<div class="m-block"><div class="label">🌱 <span data-zh="施肥" data-en="Fertilize">施肥</span></div>${pillsHtml(fert, "fert")}</div>` : ""}
+          ${warning ? `<div class="m-block"><div class="label">⚠ <span data-zh="本月注意" data-en="Watch out">本月注意</span></div><div class="m-pill warn" data-zh="${warning.zh}" data-en="${warning.en}">${warning.zh}</div></div>` : ""}
+          ${(!bloom.length && !fruit.length && !prune.length && !fert.length && !warning) ? `<span class="m-empty" data-zh="這個月沒有特別任務 — 享受花園吧" data-en="No tasks this month — just enjoy the garden">這個月沒有特別任務 — 享受花園吧</span>` : ""}
+        </div>
+      </div>`);
+  }
+
+  return `
+    <h2 class="subtitle" data-zh="養護月曆 · Care Calendar" data-en="Year-round Care Calendar">養護月曆 · Care Calendar</h2>
+    <p class="lead-small"
+       data-zh="自動依照你的推薦植物生成 12 個月的具體任務 — 何時欣賞花、何時修剪、何時施肥、何時注意病蟲。本月會標亮。"
+       data-en="Auto-generated 12-month garden tasks from your recommended plants — when to enjoy bloom, prune, feed, watch for pests. Current month is highlighted.">
+       自動依照你的推薦植物生成 12 個月的具體任務 — 何時欣賞花、何時修剪、何時施肥、何時注意病蟲。本月會標亮。</p>
+    <div class="month-grid">${rows.join("")}</div>`;
+}
+
+function wireCarePlantChips() {
+  document.querySelectorAll(".month-row .m-pill[data-id]").forEach(el =>
+    el.addEventListener("click", () => openDrawer(el.dataset.id)));
+}
+
+// ── TAB: BUILD PLAN (step-by-step installation guide) ───────
+// Generates an installation sequence from the chosen plants: site prep, hardscape,
+// canopy → shrubs → ground, mulch + initial care, first-3-months establishment.
+function renderBuildPlan(layers, recs) {
+  const top = recs.slice(0, 8);
+  const canopy = top.filter(p => p.tier === "T");
+  const shrubs = top.filter(p => p.tier === "S");
+  const ground = top.filter(p => p.tier === "G");
+  const water  = top.filter(p => p.tier === "W");
+  const climb  = top.filter(p => p.tier === "C");
+  const realW = state.widthM || SPACE_DEFAULTS[state.space].w;
+  const realD = state.depthM || SPACE_DEFAULTS[state.space].d;
+  const area  = (realW * realD).toFixed(1);
+
+  // Total water sketch — rough total for first 3 months establishment
+  const estWaterPerWeek = top.reduce((acc, p) => acc + (state.qty[p.id] || 1) * expert(p).water_l_wk, 0).toFixed(0);
+
+  function plantChips(arr) {
+    if (!arr.length) return "";
+    return `<div class="phase-plants">${arr.map(p => `<button class="m-pill" data-id="${p.id}"><span data-zh="${p.zh}" data-en="${p.en}">${p.zh}</span></button>`).join("")}</div>`;
+  }
+
+  // Best planting window for Taiwan landscape work
+  const bestWindow = t("3–5 月（春）或 10–11 月（秋）— 避開盛夏與颱風期",
+                       "March–May (spring) or October–November (autumn) — avoid peak summer and typhoons");
+
+  const phases = [
+    {
+      title: t("01 · 場地準備", "01 · Site Preparation"),
+      time: t("時程：1–3 天", "Timeline: 1–3 days"),
+      body: `
+        <ul>
+          <li>${t("清除雜物、雜草根與石塊；劃出 " + area + " m² 的種植範圍。", "Clear debris, weed roots, and rocks. Mark out the " + area + " m² planting area.")}</li>
+          <li>${t("檢測排水：挖 30 cm 深小坑灌滿水，若 4 小時內排不掉，需加設排水層或抬高土床。", "Test drainage: dig a 30 cm test hole, fill with water — if it hasn't drained in 4 hours, add a drainage layer or raise the bed.")}</li>
+          <li>${t("土壤檢測（建議）：花市買 NT$ 200 的 pH/濕度檢測棒，依結果調整。", "Soil test (recommended): a NT$ 200 pH/moisture probe from a flower market is enough. Amend per result.")}</li>
+          <li>${t("依結果加入：有機堆肥 30%（保水保肥）、珍珠岩 / 椰塊 20%（透氣）、現地土 50%。", "Amend mix: 30% compost (moisture + nutrients), 20% perlite or coco coir (aeration), 50% local soil.")}</li>
+        </ul>`,
+    },
+    {
+      title: t("02 · 基礎硬體", "02 · Hardscape & infrastructure"),
+      time: t("時程：1–3 天（若有水景則 +2 天）", "Timeline: 1–3 days (+2 days if water feature)"),
+      body: `
+        <ul>
+          <li>${state.space === "balcony"
+            ? t("陽台：確認地板承重（一般陽台 ≤ 200 kg/m²）。大型盆放角落，避免均布超重。", "Balcony: confirm load rating (typical ≤ 200 kg/m²). Put large containers in corners — distributed weight can exceed the rating.")
+            : state.space === "rooftop"
+            ? t("頂樓：必須裝防水層 + 排水板；種植土深度 ≥ 30 cm。建議找土水師傅或景觀公司處理。", "Rooftop: must have waterproofing + drainage board; planting soil depth ≥ 30 cm. Hire a contractor for the waterproofing layer.")
+            : t("庭院：規劃步道、邊界石或木材圍欄。考慮自動灑水管線。", "Yard: lay out paths, edging (stone or timber). Consider an irrigation line for established planting.")}</li>
+          ${water.length ? `<li>${t("水景：水池或水缽容量 ≥ 100 L，水深 30–60 cm。先放水後加植物。", "Water feature: pond or basin ≥ 100 L, depth 30–60 cm. Fill water first, then plant.")}</li>` : ""}
+          ${climb.length ? `<li>${t("藤本支架：棚架或牆面鋼絲架，距離牆面 8 cm 確保通風。", "Climber support: pergola or wire grid 8 cm from the wall for air flow.")}</li>` : ""}
+        </ul>`,
+    },
+    canopy.length ? {
+      title: t("03 · 上層 · 喬木 / 大灌木", "03 · Upper · Canopy / Large shrubs"),
+      time: t("時程：半天 — 最後再裝飾", "Timeline: half day — plant first, decorate last"),
+      body: `
+        <p style="margin-bottom: 10px;">${t("先種骨架。挖洞為土球 2 倍寬、1 倍深；土球面與地表齊平；填土時夯實。回填後立刻澆水至飽和。",
+                                          "Start with the bones. Dig holes 2× rootball width × 1× depth; rootball top flush with grade; firm soil as you backfill. Saturate with water immediately.")}</p>
+        ${plantChips(canopy)}`,
+    } : null,
+    shrubs.length ? {
+      title: t("04 · 中層 · 灌木", "04 · Middle · Shrubs"),
+      time: t("時程：半天", "Timeline: half day"),
+      body: `
+        <p style="margin-bottom: 10px;">${t("在喬木下方與旁側種植；保持 60–100 cm 間距讓成株後不互相擠壓。",
+                                          "Plant under and beside canopy; space 60–100 cm so mature plants don't crowd.")}</p>
+        ${plantChips(shrubs)}`,
+    } : null,
+    ground.length ? {
+      title: t("05 · 地被", "05 · Ground layer"),
+      time: t("時程：半天", "Timeline: half day"),
+      body: `
+        <p style="margin-bottom: 10px;">${t("覆蓋所有裸土；3–4 株 / m² 即可。是抑制雜草、保水、降溫的關鍵。",
+                                          "Cover all bare soil; 3–4 plants per m² is enough. Critical for suppressing weeds, retaining moisture, and cooling the bed.")}</p>
+        ${plantChips(ground)}`,
+    } : null,
+    water.length ? {
+      title: t("06 · 水景植物", "06 · Water plants"),
+      time: t("時程：1–2 小時", "Timeline: 1–2 hours"),
+      body: `
+        <p style="margin-bottom: 10px;">${t("放入種植籃 + 水生土 + 緩釋肥；沉入適合水深位置。靜待水體穩定 2 週後再放魚（若有）。",
+                                          "Set into planting baskets with aquatic soil + slow-release fertilizer; submerge to the right depth. Wait 2 weeks for the water to balance before adding fish (if any).")}</p>
+        ${plantChips(water)}`,
+    } : null,
+    {
+      title: t("07 · 覆蓋層與初期照顧", "07 · Mulch + establishment care"),
+      time: t("時程：當日完成 / 接下來 90 天觀察", "Timeline: same day + 90-day watch"),
+      body: `
+        <ul>
+          <li>${t("鋪 3–5 cm 厚有機覆蓋層（樹皮 / 椰殼纖維 / 稻草），離植物莖部留 5 cm 空間。", "Spread 3–5 cm of organic mulch (bark / coir / straw), keeping 5 cm clear around plant stems.")}</li>
+          <li>${t("頭 2 週：每日澆水至土壤深 15 cm 都濕潤。約 " + estWaterPerWeek + " L / 週（全部植物估算）。", "First 2 weeks: water daily until top 15 cm is moist. Roughly " + estWaterPerWeek + " L / week (total across all plants).")}</li>
+          <li>${t("第 3 – 8 週：每 2–3 天澆水。觀察葉色變黃、萎凋等警示訊號。", "Weeks 3–8: water every 2–3 days. Watch for yellowing, wilting — early signs of stress.")}</li>
+          <li>${t("第 8 週後：依推薦植物的水分需求標籤回到正常頻率。", "After week 8: switch to each plant's normal watering rhythm by its water tag.")}</li>
+          <li>${t("最佳種植時段：", "Best planting window: ") + bestWindow}</li>
+        </ul>`,
+    },
+    {
+      title: t("08 · 第 1 年觀察", "08 · First-year observation"),
+      time: t("時程：12 個月持續觀察", "Timeline: 12 months ongoing"),
+      body: `
+        <ul>
+          <li>${t("第 1 個月：90% 存活率為合格 — 死苗於 4 週內補種。", "Month 1: ≥ 90% survival is the standard — replace any losses within 4 weeks.")}</li>
+          <li>${t("第 3 個月：開始建立每月例行（見「養護月曆」分頁）。", "Month 3: kick off the monthly routine (see the Care Calendar tab).")}</li>
+          <li>${t("第 6 個月：若土壤板結，輕鬆鬆土 + 加入有機質。", "Month 6: if soil has compacted, lightly fork it and add organic matter.")}</li>
+          <li>${t("第 12 個月：盤點哪些植物表現好 / 不好，是否需要調整配置。", "Month 12: review which plants thrived vs struggled — adjust the design if needed.")}</li>
+        </ul>`,
+    },
+  ].filter(Boolean);
+
+  return `
+    <h2 class="subtitle" data-zh="施工指南 · Build Plan" data-en="Build Plan — Step-by-step Install">施工指南 · Build Plan</h2>
+    <p class="lead-small"
+       data-zh="從場地整理到第 1 年觀察的完整施工步驟。基於你的 ${area} m² 空間與推薦植物自動生成。"
+       data-en="Complete installation sequence from site prep to year-1 observation. Auto-generated for your ${area} m² and recommended plants.">
+       從場地整理到第 1 年觀察的完整施工步驟。基於你的 ${area} m² 空間與推薦植物自動生成。</p>
+    <div class="phase-list">
+      ${phases.map((p, i) => `
+        <div class="phase">
+          <div class="phase-num">${i + 1}</div>
+          <div class="phase-title">${p.title}</div>
+          <div class="phase-time">${p.time}</div>
+          <div class="phase-text">${p.body}</div>
+        </div>`).join("")}
+    </div>`;
+}
+
+function wireBuildPlantChips() {
+  document.querySelectorAll(".phase .m-pill[data-id]").forEach(el =>
+    el.addEventListener("click", () => openDrawer(el.dataset.id)));
+}
+
 // ── TAB: BLOOM CALENDAR ─────────────────────────────────────
 function renderCalendar(recs) {
   const top = recs.slice(0, 8);
@@ -3625,6 +4225,62 @@ function openDrawer(id) {
           <div class="drawer-block-title" data-zh="養護指南" data-en="Care Guide">養護指南</div>
           <p class="drawer-text" data-zh="${plant.care_zh}" data-en="${plant.care_en}">${plant.care_zh}</p>
         </div>
+
+        ${(() => {
+          const e = expert(plant);
+          const growLabel = { slow:t("慢","slow"), med:t("中","medium"), fast:t("快","fast") }[e.grow_rate] || "—";
+          const lifespan = e.lifespan_yr ? `${e.lifespan_yr[0]}–${e.lifespan_yr[1]}` : "—";
+          return `
+            <div class="drawer-block">
+              <div class="drawer-block-title" data-zh="深入資料 · DEEP PROFILE" data-en="Deep Profile">深入資料 · DEEP PROFILE</div>
+              <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 14px 18px; margin-top: 10px;">
+                <div>
+                  <div style="font-size:11px; color:var(--ink-soft); letter-spacing:0.05em;" data-zh="土壤 pH" data-en="Soil pH">土壤 pH</div>
+                  <div style="font-size:14px; font-weight:600; color:var(--forest); margin-top:3px; font-family:var(--serif);">${e.soil_ph[0]} – ${e.soil_ph[1]}</div>
+                </div>
+                <div>
+                  <div style="font-size:11px; color:var(--ink-soft); letter-spacing:0.05em;" data-zh="耐寒下限" data-en="Cold tolerance">耐寒下限</div>
+                  <div style="font-size:14px; font-weight:600; color:var(--forest); margin-top:3px; font-family:var(--serif);">${e.hardy_c}°C</div>
+                </div>
+                <div>
+                  <div style="font-size:11px; color:var(--ink-soft); letter-spacing:0.05em;" data-zh="生長速度" data-en="Growth rate">生長速度</div>
+                  <div style="font-size:14px; font-weight:600; color:var(--forest); margin-top:3px; font-family:var(--serif);" data-zh="${growLabel}" data-en="${growLabel}">${growLabel}</div>
+                </div>
+                <div>
+                  <div style="font-size:11px; color:var(--ink-soft); letter-spacing:0.05em;" data-zh="壽命" data-en="Lifespan">壽命</div>
+                  <div style="font-size:14px; font-weight:600; color:var(--forest); margin-top:3px; font-family:var(--serif);">${lifespan} <span style="font-size:11px;opacity:0.7;" data-zh="年" data-en="yr">年</span></div>
+                </div>
+                <div>
+                  <div style="font-size:11px; color:var(--ink-soft); letter-spacing:0.05em;" data-zh="估算 CO₂" data-en="Est. CO₂">估算 CO₂</div>
+                  <div style="font-size:14px; font-weight:600; color:var(--sage-deep); margin-top:3px; font-family:var(--serif);">${e.co2_kg_yr} <span style="font-size:11px;opacity:0.7;">kg/yr</span></div>
+                </div>
+                <div>
+                  <div style="font-size:11px; color:var(--ink-soft); letter-spacing:0.05em;" data-zh="估算用水" data-en="Est. water">估算用水</div>
+                  <div style="font-size:14px; font-weight:600; color:#3D6086; margin-top:3px; font-family:var(--serif);">${e.water_l_wk} <span style="font-size:11px;opacity:0.7;">L/週</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="drawer-block">
+              <div class="drawer-block-title" data-zh="繁殖方式 · PROPAGATION" data-en="Propagation">繁殖方式 · PROPAGATION</div>
+              <p class="drawer-text" data-zh="${e.propagation_zh ?? "—"}" data-en="${e.propagation_en ?? "—"}">${e.propagation_zh ?? "—"}</p>
+            </div>
+
+            ${e.issues_zh && e.issues_zh.length ? `
+              <div class="drawer-block">
+                <div class="drawer-block-title" data-zh="常見病蟲害" data-en="Common pests / diseases">常見病蟲害</div>
+                <div class="drawer-supports">
+                  ${(state.lang === "zh" ? e.issues_zh : e.issues_en).map(s => `<span class="chip" style="background:rgba(178,58,48,0.10); color:#8C2A22; border-color:rgba(178,58,48,0.28);">${s}</span>`).join("")}
+                </div>
+              </div>` : ""}
+
+            ${e.ethno_zh ? `
+              <div class="drawer-block">
+                <div class="drawer-block-title" data-zh="文化 / 民族植物學 · ETHNOBOTANY" data-en="Cultural / ethnobotanical">文化 / 民族植物學 · ETHNOBOTANY</div>
+                <p class="drawer-text" data-zh="${e.ethno_zh}" data-en="${e.ethno_en}">${e.ethno_zh}</p>
+              </div>` : ""}
+          `;
+        })()}
 
         <div class="drawer-block">
           <div class="drawer-block-title" data-zh="生態貢獻" data-en="Ecological role">生態貢獻</div>

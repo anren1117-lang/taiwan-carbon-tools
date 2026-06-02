@@ -2260,6 +2260,86 @@
     text-decoration: none;
   }
   .ag-answer-links a:hover { background: var(--accent); color: #fff; }
+
+  /* Multi-approach cards — when one question has multiple strategic
+     paths (e.g. low-effort vs high-payoff vs collaborative), show
+     them side-by-side so the farmer picks based on their situation
+     instead of being told there is one right answer. */
+  .ag-approaches {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--border);
+  }
+  .ag-approaches-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 10px;
+  }
+  .ag-approaches-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px;
+  }
+  .ag-approach-card {
+    padding: 12px 14px;
+    border-radius: 9px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    font-size: 12.5px;
+    line-height: 1.55;
+  }
+  .ag-approach-card.tone-easy        { border-left: 3px solid #16a34a; background: linear-gradient(180deg, rgba(22, 163, 74, 0.04) 0%, var(--bg-card) 60%); }
+  .ag-approach-card.tone-balanced    { border-left: 3px solid #2563eb; background: linear-gradient(180deg, rgba(37, 99, 235, 0.04) 0%, var(--bg-card) 60%); }
+  .ag-approach-card.tone-bold        { border-left: 3px solid #d97706; background: linear-gradient(180deg, rgba(217, 119, 6, 0.04) 0%, var(--bg-card) 60%); }
+  .ag-approach-card.tone-collab      { border-left: 3px solid #7c3aed; background: linear-gradient(180deg, rgba(124, 58, 237, 0.04) 0%, var(--bg-card) 60%); }
+  @media (prefers-color-scheme: dark) {
+    .ag-approach-card.tone-easy      { background: linear-gradient(180deg, rgba(22, 163, 74, 0.10) 0%, var(--bg-card) 70%); }
+    .ag-approach-card.tone-balanced  { background: linear-gradient(180deg, rgba(96, 165, 250, 0.10) 0%, var(--bg-card) 70%); }
+    .ag-approach-card.tone-bold      { background: linear-gradient(180deg, rgba(251, 191, 36, 0.10) 0%, var(--bg-card) 70%); }
+    .ag-approach-card.tone-collab    { background: linear-gradient(180deg, rgba(167, 139, 250, 0.10) 0%, var(--bg-card) 70%); }
+  }
+  .ag-approach-tag {
+    font-size: 10.5px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 5px;
+    display: inline-block;
+  }
+  .ag-approach-card.tone-easy     .ag-approach-tag { color: #16a34a; }
+  .ag-approach-card.tone-balanced .ag-approach-tag { color: #2563eb; }
+  .ag-approach-card.tone-bold     .ag-approach-tag { color: #d97706; }
+  .ag-approach-card.tone-collab   .ag-approach-tag { color: #7c3aed; }
+  @media (prefers-color-scheme: dark) {
+    .ag-approach-card.tone-easy     .ag-approach-tag { color: #4ade80; }
+    .ag-approach-card.tone-balanced .ag-approach-tag { color: #60a5fa; }
+    .ag-approach-card.tone-bold     .ag-approach-tag { color: #fbbf24; }
+    .ag-approach-card.tone-collab   .ag-approach-tag { color: #a78bfa; }
+  }
+  .ag-approach-summary {
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+    line-height: 1.4;
+  }
+  .ag-approach-bullets {
+    margin: 0 0 6px 16px;
+    padding: 0;
+    color: var(--text);
+    font-size: 12px;
+    line-height: 1.55;
+  }
+  .ag-approach-bullets li { margin-bottom: 2px; }
+  .ag-approach-who {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-style: italic;
+    border-top: 1px dotted var(--border);
+    padding-top: 5px;
+    margin-top: 4px;
+  }
+
   /* Related-question chips — appears at the bottom of each answer */
   .ag-related {
     margin-top: 14px;
@@ -2435,6 +2515,124 @@
     gap: 10px;
     margin-top: 14px;
   }
+
+  /* Browse all topics — expandable category-grouped index.
+     Third discovery path beyond typing the question + clicking
+     quick-chips. Renders all 80+ KB entries grouped by category. */
+  .agent-browse {
+    margin: 14px 0 0;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--bg-subtle);
+  }
+  .agent-browse > summary {
+    cursor: pointer;
+    padding: 11px 16px;
+    font-weight: 700;
+    font-size: 13.5px;
+    color: var(--text);
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+  }
+  .agent-browse > summary::-webkit-details-marker { display: none; }
+  .agent-browse > summary::after {
+    content: "▾";
+    color: var(--text-muted);
+    transition: transform 0.18s ease;
+  }
+  .agent-browse[open] > summary::after { transform: rotate(180deg); }
+  .agent-browse > summary:hover { background: var(--accent-tint); }
+  .agent-browse-count {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-left: 8px;
+  }
+  .agent-browse-body {
+    padding: 4px 16px 14px;
+    border-top: 1px solid var(--border);
+  }
+  .agent-browse-cat {
+    margin-top: 12px;
+  }
+  .agent-browse-cat-title {
+    font-size: 10.5px;
+    font-weight: 800;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin-bottom: 6px;
+    padding-top: 6px;
+    border-top: 1px dashed var(--border);
+  }
+  .agent-browse-cat:first-child .agent-browse-cat-title {
+    border-top: none;
+    padding-top: 0;
+  }
+  .agent-browse-cat-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 5px 8px;
+  }
+  .agent-browse-topic {
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--text);
+    padding: 5px 9px;
+    border-radius: 5px;
+    font-size: 12px;
+    text-align: left;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.12s ease, border-color 0.12s ease;
+  }
+  .agent-browse-topic:hover {
+    background: var(--accent-tint);
+    border-color: var(--accent);
+    color: var(--accent-dark, var(--accent));
+  }
+
+  /* Typing indicator — 3 bouncing dots while the agent "thinks"
+     before its bubble appears. Pure visual delay (~500ms) to make
+     the chat feel responsive rather than instant. */
+  .chat-typing {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    margin: 8px 0 4px;
+  }
+  .chat-typing .chat-avatar { /* reuse existing avatar styling */
+    flex-shrink: 0;
+  }
+  .chat-typing-bubble {
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    border-radius: 18px 18px 18px 4px;
+    padding: 12px 16px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .chat-typing-dot {
+    width: 7px;
+    height: 7px;
+    background: var(--text-muted);
+    border-radius: 50%;
+    animation: chat-typing-bounce 1.2s infinite ease-in-out;
+  }
+  .chat-typing-dot:nth-child(2) { animation-delay: 0.18s; }
+  .chat-typing-dot:nth-child(3) { animation-delay: 0.36s; }
+  @keyframes chat-typing-bounce {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+    30%           { transform: translateY(-5px); opacity: 1; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .chat-typing-dot { animation: none; opacity: 0.7; }
+  }
+
   .agent-chip {
     background: var(--bg-card);
     border: 1px solid var(--border);
@@ -2903,6 +3101,16 @@
       <button class="agent-quick" onclick="askQuick('怎麼做農場創新實驗？')" data-zh="🧪 創新實驗" data-en="🧪 Innovation">🧪 創新實驗</button>
       <button class="agent-quick" onclick="askQuick('壞年怎麼復原？')" data-zh="🌧️ 壞年復原" data-en="🌧️ Bad year recovery">🌧️ 壞年復原</button>
     </div>
+
+    <!-- Browse all topics — third discovery path beyond typing + chips. -->
+    <details class="agent-browse">
+      <summary>
+        <span data-zh="📚 瀏覽全部主題" data-en="📚 Browse all topics">📚 瀏覽全部主題</span>
+        <span class="agent-browse-count" id="agentBrowseCount"></span>
+      </summary>
+      <div class="agent-browse-body" id="agentBrowseBody"></div>
+    </details>
+
     <div id="agentBody"></div>
   </section>
 
@@ -4949,6 +5157,47 @@ This application supports starting organic-transition certification for ≥1 ha.
             { zh: '3. <strong>遞延支出</strong> — 與供應商談月結 60-90 天，把採購延到收成後付款。',
               en: '3. <strong>Defer expense</strong> — negotiate net-60 to net-90 with suppliers, push purchases past harvest income.' }
           ],
+          approaches: {
+            title: { zh: '4 條路徑 — 依時間壓力選', en: '4 paths — pick by urgency' },
+            items: [
+              { tone: 'easy',
+                tag: { zh: 'A · 馬上有現金', en: 'A · Cash this week' },
+                summary: { zh: '與買家談「提前出貨換預付」', en: 'Pre-paid early shipment with existing buyer' },
+                bullets: [
+                  { zh: '挑 1 個熟悉買家，提議下次出貨提早 2 週、預付 30%', en: 'Pick 1 buyer; propose ship 2wk early, 30% prepay' },
+                  { zh: '不靠借貸、不增成本，1-3 天可入帳', en: 'No loan, no extra cost, cash in 1-3 days' },
+                  { zh: '上限：只能解 1-2 個月的小缺口', en: 'Cap: only solves 1-2mo of small gaps' }
+                ],
+                who: { zh: '適合：缺口 < NT$50k 且關係穩定', en: 'For: gap < NT$50k, stable relationships' } },
+              { tone: 'balanced',
+                tag: { zh: 'B · 結構性 — 預售模式', en: 'B · Structural — pre-sell' },
+                summary: { zh: 'CSA / 訂閱箱建立預收貨款的常態現金流', en: 'CSA / subscription as permanent pre-paid cash channel' },
+                bullets: [
+                  { zh: '從 25 戶起跑，8-12 週預收 = 提前 2-3 個月入帳', en: 'Start 25 households; 8-12wk prepay = cash 2-3mo ahead' },
+                  { zh: '需要：每週更新內容 + 出貨穩定度', en: 'Needs: weekly content + delivery reliability' },
+                  { zh: '6-12 個月內把現金週期重塑為「永遠提前」', en: 'In 6-12mo, cash cycle becomes "always-ahead"' }
+                ],
+                who: { zh: '適合：缺口 = 時序問題、年度有獲利', en: 'For: timing problem, profitable annually' } },
+              { tone: 'bold',
+                tag: { zh: 'C · 周轉貸款', en: 'C · Bridge loan' },
+                summary: { zh: '農會 / 信合社青農貸款補足缺口', en: 'Farmers assoc / credit union youth-farmer loan' },
+                bullets: [
+                  { zh: '額度 = 缺口 × 1.3（含緩衝），年利率 1.5-3%', en: 'Line = gap × 1.3 (buffer), 1.5-3% APR' },
+                  { zh: '缺口前 30-45 天申請，避免拖到追繳期', en: 'Apply 30-45d before gap; avoid late fees' },
+                  { zh: '注意：別用來補長期虧損，那是飲鴆止渴', en: 'Warning: don\'t use to plug chronic losses — that worsens it' }
+                ],
+                who: { zh: '適合：缺口大但是一次性、年度有獲利', en: 'For: large but one-off gap, annually profitable' } },
+              { tone: 'collab',
+                tag: { zh: 'D · 集體採購延付', en: 'D · Collective net-60' },
+                summary: { zh: '與其他農友共同向供應商談延後付款', en: 'Negotiate net-60 with suppliers as a group' },
+                bullets: [
+                  { zh: '集體議價力大 — 5-10 戶聯合即可成案', en: '5-10 farms jointly = strong bargaining leverage' },
+                  { zh: '通常延 60-90 天，把採購壓力移到收成後', en: 'Typically 60-90d push, aligns payment to harvest' },
+                  { zh: '同時可團購壓單價 — 雙重節省', en: 'Bonus: bulk pricing — double savings' }
+                ],
+                who: { zh: '適合：產銷班成員、區域內有 3+ 同類農場', en: 'For: producer-group member, 3+ similar farms nearby' } }
+            ]
+          },
           links: [
             { label: { zh: '看現金流月曆', en: 'See Cash Flow Calendar' }, href: '#sec-cashflow' }
           ]
@@ -4995,6 +5244,47 @@ This application supports starting organic-transition certification for ≥1 ha.
             { zh: '3. 屋頂光電 / 設備電動化 — 5-10 年回本，有政府補助加成。先確認屋頂結構或機具年限。',
               en: '3. Rooftop solar / equipment electrification — 5-10 year payback with subsidy stacking. Verify roof structure or equipment age first.' }
           ],
+          approaches: {
+            title: { zh: '4 種投資節奏 — 看你的現金狀況', en: '4 investment rhythms — match your cash position' },
+            items: [
+              { tone: 'easy',
+                tag: { zh: 'A · 零投資', en: 'A · Zero capital' },
+                summary: { zh: '改流程不花錢 — 殘株還田 + 覆蓋作物', en: 'Process changes only — residue retention + cover crops' },
+                bullets: [
+                  { zh: '0-1 年回本，當年化肥可少 10-20%', en: '0-1yr payback; 10-20% fertilizer savings year 1' },
+                  { zh: '同時開始符合「友善耕作」+ VM0042 條件', en: 'Simultaneously starts qualifying for Friendly + VM0042' },
+                  { zh: '唯一成本：學習與調整時間', en: 'Only cost: learning + adjustment time' }
+                ],
+                who: { zh: '適合：現金緊、想先驗證效果', en: 'For: cash-tight, want to validate first' } },
+              { tone: 'balanced',
+                tag: { zh: 'B · 中投資', en: 'B · Mid-tier' },
+                summary: { zh: 'NT$ 30-100k — 堆肥廠 / 滴灌 / 中小型機具', en: 'NT$ 30-100k — composting + drip + small equipment' },
+                bullets: [
+                  { zh: '1-3 年回本，多數有 30-50% 政府補助', en: '1-3yr payback; 30-50% government subsidy on most' },
+                  { zh: '節省化學投入 + 提升產量穩定度', en: 'Cuts chemical inputs + stabilizes yield' },
+                  { zh: '先看補助再下訂 — 否則錯失 NT$ 10-50k', en: 'Apply for subsidy BEFORE buying — otherwise miss NT$ 10-50k' }
+                ],
+                who: { zh: '適合：有 6-12 個月緩衝、願意走流程', en: 'For: 6-12mo buffer, willing to file paperwork' } },
+              { tone: 'bold',
+                tag: { zh: 'C · 大投資', en: 'C · Large capital' },
+                summary: { zh: 'NT$ 200k+ — 太陽能 / 設備電動化 / 冷藏倉', en: 'NT$ 200k+ — solar + electrification + cold storage' },
+                bullets: [
+                  { zh: '5-10 年回本但 20+ 年資產，省下長期電費', en: '5-10yr payback, 20+yr asset; massive long-run savings' },
+                  { zh: '必須走補助 + 青農低利貸款組合', en: 'Must combine subsidy + youth-farmer low-interest loan' },
+                  { zh: '先做能源診斷 — 半天免費評估，避免買錯規格', en: 'Get free energy audit first — half-day on-site avoids spec mistakes' }
+                ],
+                who: { zh: '適合：有穩定收入、長期經營意向', en: 'For: stable income, long-term commitment' } },
+              { tone: 'collab',
+                tag: { zh: 'D · 共同投資', en: 'D · Co-invest' },
+                summary: { zh: '與鄰近農場合資冷藏倉 / 機具', en: 'Co-invest in shared cold storage / equipment with neighbors' },
+                bullets: [
+                  { zh: '單戶買不起的設備，3-5 戶分擔變可負擔', en: 'Equipment unaffordable solo becomes affordable with 3-5 farms' },
+                  { zh: '簽合作協議：使用時數、分攤維修、退場條款', en: 'Sign agreement: hours, maintenance share, exit clause' },
+                  { zh: '小心：合作破裂風險 — 一定要書面化', en: 'Beware: partnership breakdown — always written' }
+                ],
+                who: { zh: '適合：有 3+ 信得過的同類農友', en: 'For: 3+ trustworthy similar farms nearby' } }
+            ]
+          },
           links: [
             { label: { zh: '看投資回收計算機', en: 'Practice ROI Switchboard' }, href: '#sec-roi' }
           ]
@@ -5041,6 +5331,47 @@ This application supports starting organic-transition certification for ≥1 ha.
             { zh: '3. 別只挑最賺的 — 通路組合要分散：1 個穩定（學校 / 區域物流）+ 1-2 個溢價（CSA / 餐廳）。',
               en: '3. Don\'t pick only the highest-margin — diversify: 1 stable (school / distributor) + 1-2 premium (CSA / restaurant).' }
           ],
+          approaches: {
+            title: { zh: '4 種通路策略 — 選 1-2 個組合', en: '4 channel strategies — combine 1-2' },
+            items: [
+              { tone: 'easy',
+                tag: { zh: 'A · 穩定底盤', en: 'A · Stable floor' },
+                summary: { zh: '農會 + 學校午餐 + 區域物流（毛利 15-25%）', en: 'Farmers assoc + school lunch + regional distributor (15-25% margin)' },
+                bullets: [
+                  { zh: '每月固定出貨量，現金可預測', en: 'Predictable monthly volume + cash' },
+                  { zh: '入門條件低：產銷履歷 + 友善耕作即可', en: 'Low bar: TGAP + Friendly Farming certs is enough' },
+                  { zh: '缺點：毛利薄，撐不起單一通路' , en: 'Downside: thin margin, can\'t be the only channel' }
+                ],
+                who: { zh: '適合：才剛起步、想先有穩定收入', en: 'For: just starting, need predictable cash first' } },
+              { tone: 'bold',
+                tag: { zh: 'B · 故事溢價', en: 'B · Story premium' },
+                summary: { zh: '餐廳直供 + 精品超市（毛利 40-60%）', en: 'Chef-direct + premium grocers (40-60% margin)' },
+                bullets: [
+                  { zh: '每週 5-10 公斤起，量小但價高', en: '5-10kg/week starter; small volume, high price' },
+                  { zh: '需要：清楚的農場故事 + 1-2 樣明星產品', en: 'Needs: clear farm story + 1-2 hero products' },
+                  { zh: '冷鏈與送貨自理 — 每週 1-2 趟', en: 'Cold-chain + own delivery, 1-2 runs/week' }
+                ],
+                who: { zh: '適合：有時間講故事、會做產品差異化', en: 'For: time to tell story, can differentiate' } },
+              { tone: 'balanced',
+                tag: { zh: 'C · 訂閱關係', en: 'C · Subscription' },
+                summary: { zh: 'CSA / 訂閱箱 — 預收 8-12 週貨款（毛利 35-50%）', en: 'CSA / subscription box — pre-paid 8-12 weeks (35-50% margin)' },
+                bullets: [
+                  { zh: '解決現金流時序問題（核心優勢）', en: 'Solves the cash-timing gap (key advantage)' },
+                  { zh: '需要：能寫每週更新信、能客服', en: 'Needs: weekly newsletter + customer service' },
+                  { zh: '25-40 戶起跑，初期靠社群與口碑', en: 'Start with 25-40 households via community + word-of-mouth' }
+                ],
+                who: { zh: '適合：怕單一買家斷單、要穩現金流', en: 'For: avoid single-buyer risk, stabilize cash flow' } },
+              { tone: 'collab',
+                tag: { zh: 'D · 共同品牌', en: 'D · Collective brand' },
+                summary: { zh: '加入產銷班 / 合作社 / 區域品牌（毛利 25-40%）', en: 'Join producer co-op / regional brand (25-40% margin)' },
+                bullets: [
+                  { zh: '共享品牌、共享通路、共享行銷成本', en: 'Shared brand + channels + marketing cost' },
+                  { zh: '每月有理監事會議與品管要求', en: 'Monthly meetings + quality control standards' },
+                  { zh: '個人故事感被稀釋，但量穩、議價力大', en: 'Personal story diluted, but volume + bargaining stable' }
+                ],
+                who: { zh: '適合：不擅長單打獨鬥、想規模化', en: 'For: not a solo seller, wants scale' } }
+            ]
+          },
           links: [
             { label: { zh: '看定價工作室', en: 'Pricing Studio' }, href: '#sec-pricing' },
             { label: { zh: '看市場媒合', en: 'Market matching' }, href: '#sec-market' }
@@ -5441,6 +5772,55 @@ This application supports starting organic-transition certification for ≥1 ha.
             { zh: '4. <strong>不孤單</strong> — 衛福部安心專線 1925（24h）、張老師 1980。「想放棄」的念頭不丟臉，是健康訊號。',
               en: '4. <strong>You\'re not alone</strong> — MOHW mental health hotline 1925 (24h), Teacher Chang 1980. The "I want to quit" thought isn\'t shameful — it\'s a health signal.' }
           ],
+          approaches: {
+            title: { zh: '依「累的根源」選不同解法', en: 'Pick by the root cause of your exhaustion' },
+            items: [
+              { tone: 'easy',
+                tag: { zh: 'A · 體力累', en: 'A · Physical' },
+                summary: { zh: '身體在抗議 — 工序與工具重新設計', en: 'Body is protesting — redesign tasks + tools' },
+                bullets: [
+                  { zh: '把彎腰 / 重複動作換成站姿 / 機械輔助', en: 'Swap bending + repetitive motion for standing / mechanical help' },
+                  { zh: '工作 90 分鐘強制 10 分鐘休息（番茄鐘）', en: 'Force 10min rest every 90min of work (pomodoro)' },
+                  { zh: '看醫生 — 慢性肩 / 膝 / 腰問題 = 早治療差很多', en: 'See a doctor — chronic shoulder/knee/back issues benefit hugely from early treatment' }
+                ],
+                who: { zh: '適合：身體痛點明顯、年齡 40+', en: 'For: clear body-pain points, age 40+' } },
+              { tone: 'balanced',
+                tag: { zh: 'B · 心累', en: 'B · Mental' },
+                summary: { zh: '心理透支 — 連結 + 暫時抽離', en: 'Emotionally depleted — connect + step back' },
+                bullets: [
+                  { zh: '每週 1 次跟另一個農友通話（不抱怨，純分享）', en: 'Weekly call with another farmer (not venting, just sharing)' },
+                  { zh: '一年 1 趟 3-5 天的「離農假」— 別人代管', en: 'Once a year, 3-5 day "farm-free" vacation — someone else minds it' },
+                  { zh: '如果有「不想活」念頭，立刻撥 1925', en: 'If thoughts of self-harm appear, call 1925 immediately' }
+                ],
+                who: { zh: '適合：身體還能撐、但情緒緊繃', en: 'For: body still OK, emotionally taut' } },
+              { tone: 'bold',
+                tag: { zh: 'C · 經濟壓力', en: 'C · Financial' },
+                summary: { zh: '錢不夠才累 — 解決現金流才能真正休息', en: 'Cash pressure drives the burnout — fix cash flow to rest for real' },
+                bullets: [
+                  { zh: '看「現金流」答案：CSA / 周轉貸款 / 預售', en: 'See Cash Flow answer: CSA / bridge loan / pre-sell' },
+                  { zh: '把補助領齊（多數人少領 NT$30-100k/yr）', en: 'Claim all subsidies (most under-claim NT$30-100k/yr)' },
+                  { zh: '考慮「最小可永續」規模 — 不是越大越好', en: 'Consider "minimum sustainable" scale — bigger isn\'t better' }
+                ],
+                who: { zh: '適合：每月看帳單就焦慮', en: 'For: bills cause anxiety each month' } },
+              { tone: 'collab',
+                tag: { zh: 'D · 孤單', en: 'D · Isolation' },
+                summary: { zh: '一個人在田 = 慢性透支，找連結', en: 'Solo in the field = chronic drain; find connection' },
+                bullets: [
+                  { zh: '加入在地產銷班 / 友善農業協會 — 每月碰面', en: 'Join local producer group / friendly-farm association — monthly meet-ups' },
+                  { zh: '招 WWOOFer / 學生實習 — 多 1 個人就差很多', en: 'Take a WWOOFer / intern — +1 person changes everything' },
+                  { zh: '家人也算「同伴」— 把週末勞動換成週末分享', en: 'Family counts as "team" — swap weekend labor for weekend sharing' }
+                ],
+                who: { zh: '適合：白天田裡常一個人、社交少', en: 'For: alone in field most days, low social contact' } }
+            ]
+          },
+          resources: {
+            title: { zh: '緊急資源（24h）', en: 'Emergency resources (24h)' },
+            items: [
+              { zh: '衛福部安心專線 <strong>1925</strong>（24 小時免費）', en: 'MOHW mental health hotline <strong>1925</strong> (24h free)' },
+              { zh: '張老師專線 <strong>1980</strong>（國語 / 台語）', en: 'Teacher Chang hotline <strong>1980</strong> (Mandarin / Taiwanese)' },
+              { zh: '生命線 <strong>1995</strong>（自殺防治）', en: 'Lifeline <strong>1995</strong> (suicide prevention)' }
+            ]
+          },
           links: []
         };
       }
@@ -6057,6 +6437,47 @@ This application supports starting organic-transition certification for ≥1 ha.
               { zh: '<strong>不升溫 = 太乾或氮不夠</strong> 加水 + 綠色材料', en: '<strong>No heat = too dry or low N</strong> Add water + green material' },
               { zh: '<strong>長蛆 / 招蒼蠅 = 廚餘暴露</strong> 蓋一層棕色或土覆住', en: '<strong>Maggots / flies = exposed food</strong> Cover with brown material or soil' },
               { zh: '<strong>太濕、有水滲</strong> 翻堆 + 加乾棕色 + 鋪上防水布擋雨', en: '<strong>Too wet, leaching</strong> Turn + add dry browns + tarp against rain' }
+            ]
+          },
+          approaches: {
+            title: { zh: '4 種堆肥方法 — 依場地與時間選', en: '4 composting methods — pick by space + time' },
+            items: [
+              { tone: 'easy',
+                tag: { zh: 'A · 靜置堆肥', en: 'A · Cold pile' },
+                summary: { zh: '懶人法 — 堆好不翻，等 6-12 個月', en: 'Lazy method — pile and wait 6-12 months' },
+                bullets: [
+                  { zh: '不翻不管，自然腐熟', en: 'No turning, decomposes naturally' },
+                  { zh: '優點：零勞力。缺點：慢、不殺種子', en: 'Pro: zero labor. Con: slow, doesn\'t kill weed seeds' },
+                  { zh: '養分淺、品質一般，但能用', en: 'Lower nutrient density but functional' }
+                ],
+                who: { zh: '適合：場地有限、時間多、量不大', en: 'For: limited space, abundant time, low volume' } },
+              { tone: 'balanced',
+                tag: { zh: 'B · 高溫翻堆', en: 'B · Hot turned' },
+                summary: { zh: '標準法 — 60-90 天 + 翻 3 次 = 高品質', en: 'Standard — 60-90 days + 3 turns = high quality' },
+                bullets: [
+                  { zh: '50-65°C 高溫殺病原 + 雜草種子', en: '50-65°C kills pathogens + weed seeds' },
+                  { zh: '需要 1 m³ 以上堆積 + 定期監測', en: 'Needs ≥1 m³ pile + regular monitoring' },
+                  { zh: '養分密度最高，最受田間歡迎', en: 'Highest nutrient density, gold standard' }
+                ],
+                who: { zh: '適合：1 公頃以上、產量穩定、有耙堆工具', en: 'For: 1+ ha, stable output, has turning tools' } },
+              { tone: 'bold',
+                tag: { zh: 'C · 蚯蚓堆肥', en: 'C · Vermicompost' },
+                summary: { zh: '蚯蚓加速 — 4-8 週、室內可做、無臭', en: 'Worms accelerate — 4-8 weeks, indoor, no smell' },
+                bullets: [
+                  { zh: '紅蚯蚓 (Eisenia fetida)，1 公斤起跑', en: 'Red wigglers (Eisenia fetida), 1kg starter' },
+                  { zh: '蚯蚓糞養分濃度是堆肥 2-3 倍', en: 'Worm castings 2-3× nutrient density of compost' },
+                  { zh: '高經濟價值副產品：蚯蚓本身可賣作飼料', en: 'Bonus: worms themselves sellable as feed' }
+                ],
+                who: { zh: '適合：精緻蔬果、面積小、想做副產品', en: 'For: high-value veg/fruit, small area, side-revenue' } },
+              { tone: 'collab',
+                tag: { zh: 'D · 共用堆肥場', en: 'D · Shared compost yard' },
+                summary: { zh: '社區型 — 多戶共用大型設施', en: 'Community-scale — shared facility, multi-farm' },
+                bullets: [
+                  { zh: '可申請農業部廢棄資源利用補助 30-50%', en: 'Eligible for MOA waste-resource subsidy 30-50%' },
+                  { zh: '機械翻堆 + 木屑回收循環', en: 'Mechanical turner + wood-chip recycling loop' },
+                  { zh: '大幅降低個別農戶建置成本', en: 'Drastically cuts per-farm setup cost' }
+                ],
+                who: { zh: '適合：產銷班、合作社、社區農業', en: 'For: producer groups, co-ops, community ag' } }
             ]
           },
           links: [
@@ -7410,12 +7831,16 @@ This application supports starting organic-transition certification for ≥1 ha.
   window.askRecent = function(q) {
     const inp = readInputs();
     const r = calcFromInputs(inp);
-    const match = findBestAnswer(q);
+    const intent = detectConversationalIntent(q, agentState.thread);
+    let match;
+    if (intent.type !== 'lookup' && intent.type !== 'empty') {
+      match = buildConversationalResponse(intent, agentState.thread, inp, r);
+    }
+    if (!match) match = findBestAnswer(q);
     agentState.lastQuestion = q;
     agentState.lastAnswer = match;
     pushRecentQuestion(q);
-    pushThread(q, match);
-    renderAgentChat();
+    pushThreadWithTyping(q, match);
     document.getElementById('sec-agent').scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
@@ -7465,12 +7890,16 @@ This application supports starting organic-transition certification for ≥1 ha.
     const question = pair ? (currentLang === 'en' ? pair.en : pair.zh) : zhKey;
     const inp = readInputs();
     const r = calcFromInputs(inp);
-    const match = findBestAnswer(question);
+    const intent = detectConversationalIntent(question, agentState.thread);
+    let match;
+    if (intent.type !== 'lookup' && intent.type !== 'empty') {
+      match = buildConversationalResponse(intent, agentState.thread, inp, r);
+    }
+    if (!match) match = findBestAnswer(question);
     agentState.lastQuestion = question;
     agentState.lastAnswer = match;
     pushRecentQuestion(question);
-    pushThread(question, match);
-    renderAgentChat();
+    pushThreadWithTyping(question, match);
     document.getElementById('sec-agent').scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
@@ -7499,13 +7928,8 @@ This application supports starting organic-transition certification for ≥1 ha.
     agentState.lastQuestion = q;
     agentState.lastAnswer = match;
     pushRecentQuestion(q);
-    pushThread(q, match);
-    renderAgentChat();
+    pushThreadWithTyping(q, match);
     inputEl.value = '';
-    setTimeout(() => {
-      const latest = document.querySelector('.chat-latest');
-      if (latest) latest.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }, 50);
     return false;
   };
 
@@ -7533,6 +7957,30 @@ This application supports starting organic-transition certification for ≥1 ha.
       if (!spec || !spec.items || spec.items.length === 0) return '';
       const items = spec.items.map(it => `<li>${isZh ? it.zh : it.en}</li>`).join('');
       return `<div class="ag-answer-section"><h4>${icon} ${isZh ? spec.title.zh : spec.title.en}</h4><ul>${items}</ul></div>`;
+    }
+
+    // Multi-approach renderer — for questions where multiple distinct
+    // strategic paths exist (low-effort / high-payoff / collaborative).
+    // Each card shows a tone-colored tag, summary line, bullet points,
+    // and a "who this fits" footer so the farmer self-selects.
+    function approachesBlock(spec) {
+      if (!spec || !spec.items || spec.items.length === 0) return '';
+      const title = isZh ? (spec.title && spec.title.zh) || '不同切入方式' : (spec.title && spec.title.en) || 'Different approaches';
+      const cards = spec.items.map(a => {
+        const tone = a.tone || 'balanced';
+        const tag = isZh ? a.tag.zh : a.tag.en;
+        const summary = isZh ? a.summary.zh : a.summary.en;
+        const bullets = (a.bullets || []).map(b => `<li>${isZh ? b.zh : b.en}</li>`).join('');
+        const who = a.who ? `<div class="ag-approach-who">${isZh ? a.who.zh : a.who.en}</div>` : '';
+        return `
+          <div class="ag-approach-card tone-${tone}">
+            <span class="ag-approach-tag">${tag}</span>
+            <div class="ag-approach-summary">${summary}</div>
+            ${bullets ? `<ul class="ag-approach-bullets">${bullets}</ul>` : ''}
+            ${who}
+          </div>`;
+      }).join('');
+      return `<div class="ag-approaches"><div class="ag-approaches-title">🧭 ${title}</div><div class="ag-approaches-grid">${cards}</div></div>`;
     }
 
     const userBubble = `<div class="chat-turn user"><div class="chat-bubble-user">${escapeHtml(q)}</div></div>`;
@@ -7575,6 +8023,7 @@ This application supports starting organic-transition certification for ≥1 ha.
             <h4>${isZh ? '🎯 具體行動' : '🎯 Concrete action'}</h4>
             <ol>${actionsHtml}</ol>
           </div>
+          ${approachesBlock(ans.approaches)}
           ${extraSection(ans.checklist, '✅')}
           ${extraSection(ans.timeline,  '📅')}
           ${extraSection(ans.pitfalls,  '⚠️')}
@@ -7606,6 +8055,22 @@ This application supports starting organic-transition certification for ≥1 ha.
 
     const turnsHtml = agentState.thread.map((turn, i) => {
       const isLast = i === agentState.thread.length - 1;
+      // Typing indicator — show user bubble + bouncing-dots agent
+      // bubble instead of the full answer, for ~500ms after a new
+      // question is asked. Makes the chat feel like the agent is
+      // "thinking" instead of replying instantly.
+      if (turn._typing) {
+        const userBub = `<div class="chat-turn user"><div class="chat-bubble-user">${escapeHtml(turn.q)}</div></div>`;
+        return userBub + `
+          <div class="chat-turn agent chat-latest chat-typing">
+            <div class="chat-avatar">🌱</div>
+            <div class="chat-typing-bubble" aria-label="${isZh ? '思考中' : 'Thinking'}">
+              <span class="chat-typing-dot"></span>
+              <span class="chat-typing-dot"></span>
+              <span class="chat-typing-dot"></span>
+            </div>
+          </div>`;
+      }
       // Use the stored full match (preserves closure-bound conversational
       // responses); fall back to KB lookup if only id was stored.
       const match = turn.match || (turn.matchId ? AGENT_KB.find(e => e.id === turn.matchId) : null);
@@ -7621,29 +8086,89 @@ This application supports starting organic-transition certification for ≥1 ha.
     body.innerHTML = `<div class="chat-thread">${turnsHtml}${followupPrompt}</div>`;
   }
 
+  // Show typing indicator briefly before committing the real answer.
+  // Net effect: user gets immediate "I heard you" feedback, then the
+  // full answer ~500ms later — feels like a real chat conversation.
+  function pushThreadWithTyping(q, match) {
+    agentState.thread.push({ q, _typing: true, ts: Date.now() });
+    if (agentState.thread.length > AGENT_THREAD_MAX) agentState.thread.shift();
+    renderAgentChat();
+    setTimeout(() => {
+      const last = agentState.thread[agentState.thread.length - 1];
+      if (!last || last.q !== q) return;
+      delete last._typing;
+      last.match = match || null;
+      last.matchId = match ? match.id : null;
+      renderAgentChat();
+      const latest = document.querySelector('.chat-latest');
+      if (latest) latest.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 520);
+  }
+
   // Backwards-compat wrapper — kept for any external callers, but
   // delegates to renderAgentChat which renders the full thread.
   function renderAgentAnswer(q, match, inp, r) {
     renderAgentChat();
   }
 
+  // Browse-all-topics index — third discovery path beyond typing and
+  // quick-chips. Groups every KB entry by category so a farmer can
+  // scan the full menu and tap a specific topic without guessing
+  // keywords. Re-renders on language change.
+  const BROWSE_CATEGORIES = [
+    { key: 'biz',    zh: '💼 經營 / 通路 / 補助',     en: '💼 Business / channels / subsidies',
+      ids: ['cash_short', 'find_buyers', 'subsidies_available', 'price_too_low', 'buyer_expensive',
+            'how_diversify', 'practice_invest', 'losing_money', 'reduce_cost', 'compare_peers',
+            'pitch_buyer', 'pricing_premium', 'goal_setting', 'climate_risk', 'cert_question',
+            'soil_test', 'what_to_do_now', 'hiring_labor', 'succession', 'marketing_social',
+            'storage_coldchain', 'packaging_rules', 'tax_accounting', 'land_tenure', 'when_scale',
+            'find_mentor'] },
+    { key: 'agro',   zh: '🌾 田間農藝',                en: '🌾 Field agronomy',
+      ids: ['pest_disease', 'aphids_pests', 'fungal_disease', 'crop_rotation', 'composting',
+            'water_mgmt', 'fertilizer_timing', 'organic_transition', 'fruit_pruning',
+            'yellow_leaves', 'seasonal_planting', 'seed_saving'] },
+    { key: 'method', zh: '🌳 農法 / 方法論',          en: '🌳 Farming methods',
+      ids: ['method_comparison', 'natural_fukuoka', 'knf_korean', 'permaculture',
+            'shumei_natural', 'regenerative', 'biodynamic', 'sheet_mulch'] },
+    { key: 'life',   zh: '🧘 生活 / 家庭 / 健康',     en: '🧘 Life / family / health',
+      ids: ['daily_schedule', 'farmer_health', 'family_balance', 'loneliness', 'burnout',
+            'farmer_identity', 'insurance_plan', 'retirement_plan', 'innovation_experiments',
+            'bad_year_recovery'] }
+  ];
+  function renderAgentBrowseIndex() {
+    const body = document.getElementById('agentBrowseBody');
+    const count = document.getElementById('agentBrowseCount');
+    if (!body) return;
+    const isZh = currentLang !== 'en';
+    const total = AGENT_KB.length;
+    if (count) count.textContent = isZh ? `共 ${total} 個主題` : `${total} topics`;
+    const cats = BROWSE_CATEGORIES.map(cat => {
+      const items = cat.ids
+        .map(id => AGENT_KB.find(e => e.id === id))
+        .filter(Boolean)
+        .map(e => `<button class="agent-browse-topic" onclick="askAgentTopic('${e.id}')">${isZh ? e.topic.zh : e.topic.en}</button>`)
+        .join('');
+      if (!items) return '';
+      return `
+        <div class="agent-browse-cat">
+          <div class="agent-browse-cat-title">${isZh ? cat.zh : cat.en}</div>
+          <div class="agent-browse-cat-list">${items}</div>
+        </div>`;
+    }).join('');
+    body.innerHTML = cats;
+  }
+
   // Jump directly to a KB topic answer (used by related-chip clicks)
   window.askAgentTopic = function(topicId) {
     const entry = AGENT_KB.find(e => e.id === topicId);
     if (!entry) return;
-    const inp = readInputs();
-    const r = calcFromInputs(inp);
     const isZh = currentLang !== 'en';
     const synthQ = isZh ? entry.topic.zh : entry.topic.en;
     agentState.lastQuestion = synthQ;
     agentState.lastAnswer = entry;
     pushRecentQuestion(synthQ);
-    pushThread(synthQ, entry);
-    renderAgentChat();
-    setTimeout(() => {
-      const latest = document.querySelector('.chat-latest');
-      if (latest) latest.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }, 50);
+    pushThreadWithTyping(synthQ, entry);
+    document.getElementById('sec-agent').scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   // Simple HTML escape for user-provided question text
@@ -11743,6 +12268,8 @@ Applicant: ${ownerName} (signature)
     document.getElementById('langToggle').textContent = lang === 'zh' ? 'English' : '中文';
     try { localStorage.setItem('tct_lang', lang); } catch (e) {}
     render();
+    renderAgentBrowseIndex();
+    renderAgentChat();
   }
 
   // ── Multi-tenant loader ──────────────────────────────────────────
@@ -12205,6 +12732,7 @@ Applicant: ${ownerName} (signature)
 
     applyLang(savedLang);
     renderFarmStatusBadge();
+    renderAgentBrowseIndex();
     // Reveal main content + hide the loader now that the dashboard
     // is fully rendered (a tick after applyLang triggers first render).
     requestAnimationFrame(() => document.body.classList.remove('loading'));
