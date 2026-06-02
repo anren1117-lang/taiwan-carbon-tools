@@ -1322,6 +1322,242 @@ const PLANTS = [
     care_zh:"全日照，沙質或排水良好土壤。極耐鹽耐旱。免維護。",
     care_en:"Full sun. Sandy or well-drained soil. Salt- and drought-bulletproof. Zero maintenance.",
     supports_zh:["海岸覆蓋","耐鹽","耐旱"], supports_en:["Sand cover","Salt tolerant","Drought-bulletproof"] },
+
+  // ─── Round 4: classic Taiwan street trees, magnolias, edibles, foliage ───
+  { id:"magnolia_denudata", zh:"玉蘭花", en:"Yulan Magnolia", lt:"Magnolia denudata",
+    tier:"T", type_zh:"喬木 · 引入常見", type_en:"Tree · cultivated",
+    sun:["full","part"], water:"med", height:[3,8], spread:[3,5],
+    spaces:["yard"], container_ok:false, zones:["N","C","E"],
+    role_zh:"早春白花", role_en:"Early-spring white blooms",
+    bloom:[2,3,4], fruit:[9,10],
+    color:"#F4F0E8", cost:1800,
+    note_zh:"早春先花後葉，潔白瓷碗般大花朵帶濃郁芳香，是台灣寺廟與庭院的經典「白玉蘭」。",
+    note_en:"Blooms before leafing in early spring. Pure white porcelain-bowl flowers with strong fragrance — a classic temple and garden tree in Taiwan.",
+    care_zh:"全日照至半日照，深厚排水良好土壤。盡量不要移植。",
+    care_en:"Full to part sun. Deep well-drained soil. Avoid transplanting once established.",
+    supports_zh:["早春芳香","蜂類","寺廟樹"], supports_en:["Spring fragrance","Bees","Temple heritage"] },
+
+  { id:"magnolia_figo", zh:"含笑花", en:"Banana Shrub", lt:"Magnolia figo",
+    tier:"S", type_zh:"灌木 · 引入常見", type_en:"Shrub · cultivated",
+    sun:["full","part"], water:"med", height:[1.5,3], spread:[1,2],
+    spaces:["balcony","yard"], container_ok:true,
+    role_zh:"香蕉香氣", role_en:"Banana-scented",
+    bloom:[3,4,5,6], fruit:[9,10],
+    color:"#E8D89C", cost:600,
+    note_zh:"奶黃色小花帶有獨特的香蕉香氣，含苞如「含笑」未開。可盆栽於陽台享受溫和的水果香。",
+    note_en:"Creamy-yellow small flowers with a distinctive banana scent. The half-opened buds look like a 'shy smile'. Great potted on a balcony for gentle fruity fragrance.",
+    care_zh:"全日照至半日照，喜微酸土壤。花後輕修。",
+    care_en:"Full to part sun. Slightly acidic soil. Light prune after bloom.",
+    supports_zh:["獨特香氣","盆栽"], supports_en:["Unique fragrance","Container-friendly"] },
+
+  { id:"aglaia", zh:"樹蘭", en:"Chinese Perfume Tree", lt:"Aglaia odorata",
+    tier:"S", type_zh:"灌木 · 引入常見", type_en:"Shrub · cultivated",
+    sun:["full","part"], water:"med", height:[1,3], spread:[1,2],
+    spaces:["balcony","rooftop","yard"], container_ok:true,
+    role_zh:"小金粒香", role_en:"Tiny golden fragrance",
+    bloom:[5,6,7,8,9,10], fruit:[],
+    color:"#E8C56A", cost:500,
+    note_zh:"細小金黃花朵如米粒，香氣似桂花更輕盈，常與茉莉、桂花並列為傳統「三大芳香灌木」。",
+    note_en:"Tiny golden flowers like rice grains, with osmanthus-like fragrance — one of three traditional 'fragrant shrubs' alongside jasmine and osmanthus.",
+    care_zh:"全日照至半日照，肥沃排水良好土壤。冬季略乾旱促花。",
+    care_en:"Full to part sun. Fertile well-drained soil. Slight winter dryness encourages bloom.",
+    supports_zh:["長期芳香","傳統三香"], supports_en:["Long fragrance","Classic three"] },
+
+  { id:"cassia_fistula", zh:"阿勃勒", en:"Golden Shower Tree", lt:"Cassia fistula",
+    tier:"T", type_zh:"大喬木 · 引入常見", type_en:"Large tree · cultivated",
+    sun:["full"], water:"med", height:[5,12], spread:[4,7],
+    spaces:["yard"], container_ok:false, zones:["S","C","E"],
+    role_zh:"夏日金雨", role_en:"Summer golden rain",
+    bloom:[5,6,7], fruit:[10,11,12],
+    color:"#F4C73A", cost:2000,
+    note_zh:"原產印度，現為台灣中南部最具代表性的行道樹之一，初夏垂下成串金黃花，宛如金色雨瀑。",
+    note_en:"Native to India, now one of central/southern Taiwan's iconic street trees. Cascading golden flower clusters in early summer — a 'golden rain'.",
+    care_zh:"全日照，深厚土壤。需大空間。中南部表現最佳。",
+    care_en:"Full sun. Deep soil. Needs space. Best in central/southern Taiwan.",
+    supports_zh:["蜂蝶蜜源","行道樹"], supports_en:["Pollinator nectar","Street tree"] },
+
+  { id:"delonix", zh:"鳳凰木", en:"Flame Tree", lt:"Delonix regia",
+    tier:"T", type_zh:"大喬木 · 引入常見", type_en:"Large tree · cultivated",
+    sun:["full"], water:"med", height:[5,15], spread:[6,10],
+    spaces:["yard"], container_ok:false, zones:["S","C"],
+    role_zh:"鳳凰花海", role_en:"Sea of flame flowers",
+    bloom:[5,6,7,8], fruit:[10,11,12,1,2],
+    color:"#E8362A", cost:2200,
+    note_zh:"原產馬達加斯加，是台灣畢業季「鳳凰花開」的鮮紅意象。傘形樹冠提供深邃遮蔭，需要大空間。",
+    note_en:"Native to Madagascar — the vibrant red 'graduation tree' of Taiwan. Umbrella-shaped canopy provides deep shade. Needs space.",
+    care_zh:"全日照，深厚土壤。初期需澆水建立，成樹後耐旱。冬季略落葉。",
+    care_en:"Full sun. Deep soil. Water during establishment; drought-tolerant when mature. Semi-deciduous in winter.",
+    supports_zh:["蜂鳥訪花","遮蔭","畢業樹"], supports_en:["Sunbird visitor","Shade","Graduation symbol"] },
+
+  { id:"lagerstroemia_lg", zh:"大花紫薇", en:"Queen Crape Myrtle", lt:"Lagerstroemia speciosa",
+    tier:"T", type_zh:"喬木 · 引入常見", type_en:"Tree · cultivated",
+    sun:["full"], water:"med", height:[4,10], spread:[3,6],
+    spaces:["yard"], container_ok:false,
+    role_zh:"夏日紫雲", role_en:"Summer purple clouds",
+    bloom:[5,6,7,8], fruit:[10,11,12],
+    color:"#9A5AB8", cost:1800,
+    note_zh:"原產南亞，紫色花序開滿整樹，夏日如紫雲飄落。是台灣公園與行道的明星樹種。",
+    note_en:"Native to South Asia. Tree covered in purple flower clusters all summer — 'purple clouds' on Taiwan's streets and parks.",
+    care_zh:"全日照，深厚土壤。冬季可重剪促花。",
+    care_en:"Full sun. Deep soil. Hard-prune in winter to encourage bloom.",
+    supports_zh:["蜂蝶蜜源","行道樹","夏花"], supports_en:["Pollinator nectar","Street tree","Summer bloom"] },
+
+  { id:"taxodium", zh:"落羽松", en:"Bald Cypress", lt:"Taxodium distichum",
+    tier:"T", type_zh:"落葉針葉樹 · 引入常見", type_en:"Deciduous conifer · cultivated",
+    sun:["full"], water:"med", height:[5,15], spread:[3,5],
+    spaces:["yard"], container_ok:false,
+    role_zh:"水岸紅秋", role_en:"Riverside red autumn",
+    bloom:[3,4], fruit:[10,11,12],
+    color:"#C84A2A", cost:1500,
+    note_zh:"原產北美，台灣近年水岸景觀的明星樹。直立圓錐樹形，秋冬轉橘紅後落葉，耐水耐旱皆佳。",
+    note_en:"Native to North America. A star of Taiwan's recent waterside landscapes. Conical form, orange-red autumn before leaf drop. Tolerates both wet and dry sites.",
+    care_zh:"全日照，可耐淹水或乾旱。基本免維護。",
+    care_en:"Full sun. Tolerates flooding or drought. Essentially zero maintenance.",
+    supports_zh:["秋色","水岸景觀"], supports_en:["Autumn color","Waterside"] },
+
+  { id:"ginkgo", zh:"銀杏", en:"Ginkgo", lt:"Ginkgo biloba",
+    tier:"T", type_zh:"落葉喬木 · 引入", type_en:"Deciduous tree · cultivated",
+    sun:["full"], water:"med", height:[4,15], spread:[3,6],
+    spaces:["yard"], container_ok:false, zones:["N","C","E"],
+    role_zh:"金黃秋葉", role_en:"Golden autumn leaves",
+    bloom:[3,4], fruit:[10,11],
+    color:"#E8C73A", cost:2500,
+    note_zh:"活化石植物，扇形葉秋冬轉金黃落葉，是中高海拔常見的觀賞樹。注意：雌樹果實有異味，建議選雄株。",
+    note_en:"Living fossil. Fan-shaped leaves turn brilliant gold in autumn. Note: female trees produce smelly fruit — pick a male tree.",
+    care_zh:"全日照，深厚土壤。慢生長但長壽。冬季落葉前金黃滿樹。",
+    care_en:"Full sun. Deep soil. Slow growing but long-lived. Brilliant gold canopy before winter leaf-drop.",
+    supports_zh:["秋色","活化石","長壽"], supports_en:["Autumn color","Living fossil","Long-lived"] },
+
+  { id:"casuarina", zh:"木麻黃", en:"Australian Pine", lt:"Casuarina equisetifolia",
+    tier:"T", type_zh:"海岸喬木 · 引入歸化", type_en:"Coastal tree · naturalized",
+    sun:["full"], water:"low", height:[5,15], spread:[3,5],
+    spaces:["yard"], container_ok:false, coastal_ok:true,
+    role_zh:"海岸防風林", role_en:"Coastal shelterbelt",
+    bloom:[3,4,5], fruit:[9,10,11],
+    color:"#5A6E48", cost:600,
+    note_zh:"來自澳洲，戰後成為台灣海岸防風林主力樹種，松針般細枝實為退化葉。極耐鹽風，是「西海岸線」的代表景觀。",
+    note_en:"From Australia, became Taiwan's main post-war coastal shelterbelt. The needle-like 'leaves' are actually reduced branches. Extremely salt- and wind-tolerant — defines Taiwan's west coast.",
+    care_zh:"全日照，極耐旱耐鹽。會自然落「松針」維護地表。",
+    care_en:"Full sun. Drought- and salt-bulletproof. Drops 'needles' that mulch the ground.",
+    supports_zh:["海岸防風","耐鹽","快速生長"], supports_en:["Coastal windbreak","Salt tolerant","Fast growing"] },
+
+  { id:"cordyline", zh:"朱蕉", en:"Ti Plant", lt:"Cordyline fruticosa",
+    tier:"S", type_zh:"灌木 · 引入常見", type_en:"Shrub · cultivated",
+    sun:["part","full"], water:"med", height:[1,2.5], spread:[0.8,1.5],
+    spaces:["balcony","rooftop","yard","indoor"], container_ok:true,
+    role_zh:"紅葉觀賞", role_en:"Red foliage focal",
+    bloom:[6,7,8], fruit:[],
+    color:"#A02A4A", cost:300,
+    note_zh:"來自太平洋島嶼，深紫紅或斑葉品種豐富，是熱帶風景觀的常見焦點。原住民部落視為「神聖植物」。",
+    note_en:"From Pacific islands. Deep purple-red or variegated cultivars are common tropical-design focals. Considered sacred by many Austronesian peoples.",
+    care_zh:"半日照至全日照，喜濕潤土壤。冬季避免低於 10°C。",
+    care_en:"Part to full sun. Moist soil. Protect from below 10°C in winter.",
+    supports_zh:["熱帶景觀","南島文化","葉色"], supports_en:["Tropical look","Austronesian heritage","Foliage color"] },
+
+  { id:"codiaeum", zh:"變葉木", en:"Croton", lt:"Codiaeum variegatum",
+    tier:"S", type_zh:"灌木 · 引入常見", type_en:"Shrub · cultivated",
+    sun:["full","part"], water:"med", height:[0.8,2], spread:[0.6,1.2],
+    spaces:["balcony","rooftop","yard"], container_ok:true,
+    role_zh:"彩色葉牆", role_en:"Color-foliage wall",
+    bloom:[], fruit:[],
+    color:"#E89A3A", cost:280,
+    note_zh:"來自南洋的彩葉灌木，葉片有紅、黃、綠、紫等多色斑紋。極耐熱與台灣夏天，是低維護的色彩來源。",
+    note_en:"South Pacific colored-foliage shrub. Leaves in red, yellow, green, purple variegation. Bulletproof in Taiwan summers — a low-maintenance color source.",
+    care_zh:"全日照至半日照，喜溫暖。冬季避免低於 10°C。",
+    care_en:"Full to part sun. Likes warmth. Protect from below 10°C in winter.",
+    supports_zh:["全年色彩","耐熱"], supports_en:["Year-round color","Heat tolerant"] },
+
+  // Edibles / herbs — bridge between landscape and food garden
+  { id:"basil", zh:"九層塔 / 羅勒", en:"Thai Basil", lt:"Ocimum basilicum",
+    tier:"G", type_zh:"草本 · 引入歸化（可食）", type_en:"Herb · naturalized (edible)",
+    sun:["full","part"], water:"med", height:[0.3,0.6], spread:[0.3,0.5],
+    spaces:["balcony","rooftop","yard"], container_ok:true,
+    role_zh:"香料地被", role_en:"Culinary groundcover",
+    bloom:[6,7,8,9,10], fruit:[],
+    color:"#6A8C3E", cost:80,
+    note_zh:"台灣家常料理不可或缺的香料，三杯料理、煎蛋的靈魂。陽台盆栽極易養活，邊摘邊吃。",
+    note_en:"Essential to Taiwanese home cooking — soul of three-cup dishes and basil omelette. Very easy in a pot on a balcony, pick as you cook.",
+    care_zh:"全日照至半日照，肥沃濕潤土壤。常摘心可延長壽命。冬季可能枯萎需重播。",
+    care_en:"Full to part sun. Fertile moist soil. Pinch tips to extend life. May die back in winter — re-sow.",
+    supports_zh:["可食料理","蜂類","台灣家常"], supports_en:["Edible cooking","Bees","Taiwan home cuisine"] },
+
+  { id:"perilla", zh:"紫蘇", en:"Perilla / Shiso", lt:"Perilla frutescens",
+    tier:"G", type_zh:"草本 · 引入歸化（可食）", type_en:"Herb · naturalized (edible)",
+    sun:["full","part"], water:"med", height:[0.4,0.8], spread:[0.3,0.5],
+    spaces:["balcony","rooftop","yard"], container_ok:true,
+    role_zh:"紫葉香料", role_en:"Purple-leaf herb",
+    bloom:[8,9,10], fruit:[],
+    color:"#6E3A6A", cost:100,
+    note_zh:"紫色葉片帶獨特芳香，可包飯、入梅醋、做天婦羅。日韓料理常用，台灣家庭近年也流行。",
+    note_en:"Purple leaves with a distinctive aroma — used as rice wraps, in pickled-plum vinegar, and tempura. Popular in Japanese/Korean cuisine and increasingly in Taiwan homes.",
+    care_zh:"全日照至半日照，肥沃土壤。會自播。",
+    care_en:"Full to part sun. Fertile soil. Self-seeds.",
+    supports_zh:["可食料理","蜂類","自播"], supports_en:["Edible","Bees","Self-seeding"] },
+
+  { id:"lemongrass", zh:"香茅", en:"Lemongrass", lt:"Cymbopogon citratus",
+    tier:"G", type_zh:"草本 · 引入常見（可食）", type_en:"Herb · cultivated (edible)",
+    sun:["full"], water:"med", height:[0.8,1.5], spread:[0.5,1],
+    spaces:["balcony","rooftop","yard"], container_ok:true,
+    role_zh:"檸香叢生", role_en:"Citrus-scented clump",
+    bloom:[], fruit:[],
+    color:"#A8B47A", cost:150,
+    note_zh:"叢生狀草本，葉片揉碎散發強烈檸檬香，是泰式、越南料理的關鍵香料。耐熱耐旱，可驅蚊。",
+    note_en:"Clumping herb whose crushed leaves release strong lemon scent. Key in Thai and Vietnamese cooking. Heat- and drought-tolerant, also repels mosquitoes.",
+    care_zh:"全日照，喜濕但耐旱。每年春季可分株。",
+    care_en:"Full sun. Likes moisture but drought tolerant. Divide in spring annually.",
+    supports_zh:["可食料理","驅蚊","耐旱"], supports_en:["Edible","Mosquito-repelling","Drought tolerant"] },
+
+  { id:"zephyranthes", zh:"韭蘭", en:"Rain Lily", lt:"Zephyranthes spp.",
+    tier:"G", type_zh:"球根 · 引入歸化", type_en:"Bulb · naturalized",
+    sun:["full","part"], water:"med", height:[0.15,0.3], spread:[0.15,0.3],
+    spaces:["balcony","rooftop","yard"], container_ok:true,
+    role_zh:"雨後群開", role_en:"Post-rain bloom",
+    bloom:[4,5,6,7,8,9,10], fruit:[],
+    color:"#E89AC2", cost:60,
+    note_zh:"雨後一夜抽花莖，粉紅或白色喇叭花同時綻放，是台灣夏日「雨後驚喜」的代表。葉細如韭。",
+    note_en:"Sends up flower stalks overnight after rain — pink or white trumpets bloom together. The 'rain surprise' of Taiwan summers. Leaves slender like chives.",
+    care_zh:"全日照至半日照，排水良好。會自然增殖。",
+    care_en:"Full to part sun. Good drainage. Naturalizes and multiplies.",
+    supports_zh:["雨後焦點","球根群植"], supports_en:["Post-rain focal","Bulb mass"] },
+
+  { id:"ceiba", zh:"美人樹", en:"Silk Floss Tree", lt:"Ceiba speciosa",
+    tier:"T", type_zh:"大喬木 · 引入常見", type_en:"Large tree · cultivated",
+    sun:["full"], water:"med", height:[6,15], spread:[5,9],
+    spaces:["yard"], container_ok:false,
+    role_zh:"秋日紫花", role_en:"Autumn pink-purple",
+    bloom:[9,10,11,12], fruit:[1,2,3],
+    color:"#E07AAA", cost:1800,
+    note_zh:"原產南美，深秋盛開粉紫色五瓣大花，乾燥蒴果裂開飄出白色棉絮。樹幹有錐刺，是台灣秋天的明星。",
+    note_en:"Native to South America. Late-autumn pink-purple five-petal flowers; seed pods burst into white cottony fluff. Spiny trunk. A Taiwan autumn star.",
+    care_zh:"全日照，深厚土壤。可耐旱。",
+    care_en:"Full sun. Deep soil. Drought tolerant.",
+    supports_zh:["秋花","蜂蝶","景觀焦點"], supports_en:["Autumn bloom","Pollinators","Landscape focal"] },
+
+  { id:"bombax", zh:"木棉", en:"Cotton Tree", lt:"Bombax ceiba",
+    tier:"T", type_zh:"大喬木 · 引入常見", type_en:"Large tree · cultivated",
+    sun:["full"], water:"med", height:[8,20], spread:[5,9],
+    spaces:["yard"], container_ok:false, zones:["S","C","E"],
+    role_zh:"春日紅花", role_en:"Spring red blooms",
+    bloom:[2,3,4], fruit:[5,6,7],
+    color:"#E84A2A", cost:1500,
+    note_zh:"春日先花後葉，大型橘紅花朵綴滿光禿枝條，蒴果裂開飄出白色棉絮。台南、高雄市花。",
+    note_en:"Flowers before leafing in spring — large orange-red blooms cover bare branches; seed pods release white kapok fluff. City flower of Tainan and Kaohsiung.",
+    care_zh:"全日照，深厚土壤。需要大空間。",
+    care_en:"Full sun. Deep soil. Needs space.",
+    supports_zh:["蜂鳥訪花","春花","市花"], supports_en:["Sunbird visitor","Spring bloom","City flower"] },
+
+  { id:"spathodea", zh:"火焰木", en:"African Tulip Tree", lt:"Spathodea campanulata",
+    tier:"T", type_zh:"大喬木 · 引入常見", type_en:"Large tree · cultivated",
+    sun:["full"], water:"med", height:[6,15], spread:[4,7],
+    spaces:["yard"], container_ok:false, zones:["S","C"],
+    role_zh:"橘紅鬱金香", role_en:"Orange tulip flowers",
+    bloom:[3,4,5,6,11,12], fruit:[8,9,10],
+    color:"#E83A1A", cost:1500,
+    note_zh:"原產非洲，橘紅色鬱金香狀花朵集中於樹冠頂端，遠看如「火焰」。常見於台灣中南部行道。",
+    note_en:"Native to Africa. Orange-red tulip-like flowers cluster at the canopy top — a 'flame' from a distance. Common in central/southern Taiwan streets.",
+    care_zh:"全日照，深厚土壤。中南部表現最佳。",
+    care_en:"Full sun. Deep soil. Best in central/southern Taiwan.",
+    supports_zh:["蜂鳥訪花","花期長"], supports_en:["Sunbird visitor","Long bloom"] },
 ];
 
 // ─────────────────────────────────────────────────────────────
@@ -1409,6 +1645,26 @@ const PLANT_META = {
   nymphaea:      { native:false, origin_zh:"全球園藝雜交", origin_en:"Global horticultural hybrids", mature_yr:2, pet_safe:true, fragrance:1, sourcing_zh:"水生植物專賣", sourcing_en:"Aquatic plant specialists", companions:["nuphar","philydrum","cephalanthus"] },
   lycoris:       { native:true,  origin_zh:"台灣低海拔", origin_en:"Taiwan lowlands", mature_yr:2, pet_safe:false, fragrance:0, sourcing_zh:"球根專賣、原生苗圃", sourcing_en:"Bulb specialists, native nurseries", companions:["liriope","duchesnea","dianella"] },
   ipomoea_pc:    { native:true,  origin_zh:"台灣海岸、泛熱帶", origin_en:"Taiwan coast, pan-tropics", mature_yr:1, pet_safe:true, fragrance:0, sourcing_zh:"海岸採種、復育苗圃", sourcing_en:"Wild coastal seed, restoration nurseries", companions:["scaevola","pittosporum","sida"] },
+
+  // Round 4 additions
+  magnolia_denudata: { native:false, origin_zh:"中國中部", origin_en:"Central China", mature_yr:6, pet_safe:true, fragrance:3, sourcing_zh:"花市、寺廟苗圃", sourcing_en:"Flower markets, temple nurseries", companions:["liriope","camellia","duchesnea"] },
+  magnolia_figo: { native:false, origin_zh:"中國南部", origin_en:"Southern China", mature_yr:3, pet_safe:true, fragrance:3, sourcing_zh:"花市、苗圃", sourcing_en:"Flower markets, nurseries", companions:["liriope","ardisia","duchesnea"] },
+  aglaia: { native:false, origin_zh:"東南亞", origin_en:"Southeast Asia", mature_yr:3, pet_safe:true, fragrance:3, sourcing_zh:"花市、芳香植物專賣", sourcing_en:"Flower markets, fragrance plant specialists", companions:["jasminum_sambac","osmanthus","murraya"] },
+  cassia_fistula: { native:false, origin_zh:"印度", origin_en:"India", mature_yr:6, pet_safe:true, fragrance:1, sourcing_zh:"行道樹工程、原生樹苗場", sourcing_en:"Street-tree contractors, native tree nurseries", companions:["liriope","miscanthus","sida"] },
+  delonix: { native:false, origin_zh:"馬達加斯加", origin_en:"Madagascar", mature_yr:8, pet_safe:true, fragrance:0, sourcing_zh:"行道樹工程、果樹場", sourcing_en:"Street-tree contractors, orchards", companions:["liriope","portulaca","sida"] },
+  lagerstroemia_lg: { native:false, origin_zh:"南亞、東南亞", origin_en:"South & SE Asia", mature_yr:5, pet_safe:true, fragrance:0, sourcing_zh:"行道樹苗場、花市", sourcing_en:"Street tree nurseries, flower markets", companions:["liriope","duchesnea","camellia"] },
+  taxodium: { native:false, origin_zh:"北美洲", origin_en:"North America", mature_yr:6, pet_safe:true, fragrance:0, sourcing_zh:"水岸景觀苗場、苗圃", sourcing_en:"Waterside landscape nurseries", companions:["liriope","miscanthus","nephrolepis"] },
+  ginkgo: { native:false, origin_zh:"中國（活化石）", origin_en:"China (living fossil)", mature_yr:12, pet_safe:true, fragrance:0, sourcing_zh:"造型樹專賣、長壽樹苗場", sourcing_en:"Sculptural tree specialists, longevity nurseries", companions:["liriope","duchesnea","nephrolepis"] },
+  casuarina: { native:false, origin_zh:"澳洲", origin_en:"Australia", mature_yr:5, pet_safe:true, fragrance:0, sourcing_zh:"海岸防風工程", sourcing_en:"Coastal windbreak projects", companions:["pittosporum","scaevola","sida"] },
+  cordyline: { native:false, origin_zh:"太平洋島嶼", origin_en:"Pacific islands", mature_yr:2, pet_safe:false, fragrance:0, sourcing_zh:"花市、室內植物店", sourcing_en:"Flower markets, indoor plant stores", companions:["liriope","nephrolepis","ardisia"] },
+  codiaeum: { native:false, origin_zh:"南太平洋", origin_en:"South Pacific", mature_yr:2, pet_safe:false, fragrance:0, sourcing_zh:"花市、苗圃普遍", sourcing_en:"Common at flower markets and nurseries", companions:["liriope","duchesnea","miscanthus"] },
+  basil: { native:false, origin_zh:"亞洲熱帶", origin_en:"Tropical Asia", mature_yr:1, pet_safe:true, fragrance:2, sourcing_zh:"傳統市場、菜苗攤", sourcing_en:"Traditional markets, veg-seedling stalls", companions:["perilla","lemongrass","portulaca"] },
+  perilla: { native:false, origin_zh:"東亞", origin_en:"East Asia", mature_yr:1, pet_safe:true, fragrance:2, sourcing_zh:"傳統市場、香料菜苗", sourcing_en:"Traditional markets, herb seedlings", companions:["basil","lemongrass","portulaca"] },
+  lemongrass: { native:false, origin_zh:"南亞", origin_en:"South Asia", mature_yr:1, pet_safe:true, fragrance:2, sourcing_zh:"東南亞食材店、菜苗攤", sourcing_en:"SE Asian groceries, seedling stalls", companions:["basil","perilla","pandanus"] },
+  zephyranthes: { native:false, origin_zh:"美洲（已歸化）", origin_en:"Americas (naturalized)", mature_yr:1, pet_safe:false, fragrance:0, sourcing_zh:"花市、球根專賣", sourcing_en:"Flower markets, bulb specialists", companions:["liriope","duchesnea","sida"] },
+  ceiba: { native:false, origin_zh:"南美洲", origin_en:"South America", mature_yr:6, pet_safe:true, fragrance:0, sourcing_zh:"行道樹苗場", sourcing_en:"Street tree nurseries", companions:["liriope","portulaca","miscanthus"] },
+  bombax: { native:false, origin_zh:"南亞、東南亞", origin_en:"South & SE Asia", mature_yr:8, pet_safe:true, fragrance:0, sourcing_zh:"行道樹苗場、市花苗圃", sourcing_en:"Street-tree nurseries, city-flower nurseries", companions:["liriope","sida","miscanthus"] },
+  spathodea: { native:false, origin_zh:"非洲", origin_en:"Africa", mature_yr:6, pet_safe:true, fragrance:0, sourcing_zh:"行道樹工程", sourcing_en:"Street-tree contractors", companions:["liriope","duchesnea","sida"] },
 };
 // Merge meta into each plant for downstream use.
 PLANTS.forEach((p) => Object.assign(p, PLANT_META[p.id] || { native: true }));
@@ -2380,6 +2636,7 @@ function renderResult() {
       <div class="tabs" role="tablist">
         ${[
           { k:"plan",      zh:"俯瞰平面圖",   en:"Garden plan" },
+          { k:"iso3d",     zh:"3D 視角",      en:"3D view" },
           { k:"layers",    zh:"復層配置",     en:"Layered design" },
           { k:"calendar",  zh:"花期月曆",     en:"Bloom calendar" },
           { k:"shopping",  zh:"採購清單",     en:"Shopping list" },
@@ -2414,6 +2671,7 @@ function renderTabPanel(recs, layers) {
   if (!host) return;
   switch (state.resultTab) {
     case "plan":     host.innerHTML = renderPlan(layers, recs); wirePlanInteractions(); break;
+    case "iso3d":    host.innerHTML = render3D(layers, recs); wire3DInteractions(); break;
     case "layers":   host.innerHTML = renderLayers(layers, recs); wireLayerCards(); break;
     case "calendar": host.innerHTML = renderCalendar(recs); break;
     case "shopping": host.innerHTML = renderShopping(recs); wireShoppingControls(); break;
@@ -2585,6 +2843,180 @@ function layoutPlan(plants, dims, space) {
 }
 
 function wirePlanInteractions() {
+  document.querySelectorAll(".plan-plant").forEach((g) => {
+    g.addEventListener("click", () => openDrawer(g.dataset.id));
+  });
+}
+
+// ── TAB: 3D ISOMETRIC VIEW ──────────────────────────────────
+// Same plant layout as the 2D plan, but projected to isometric so the user
+// can actually "see" how the garden stacks vertically. Each plant becomes
+// a trunk (cylinder) + crown (ellipse with highlight + ground shadow);
+// painter's-algorithm depth sort handles overlap.
+function render3D(layers, recs) {
+  const realW = state.widthM || SPACE_DEFAULTS[state.space].w;
+  const realD = state.depthM || SPACE_DEFAULTS[state.space].d;
+  const area = (realW * realD).toFixed(1);
+
+  // Reuse the same 2D layout the plan view uses for plant placement,
+  // but feed it nominal pixel dims — we'll re-project to isometric next.
+  const baseDims = { w: 600, h: 400 };
+  const plantsForPlan = layers.filter(l => l.plant).map(l => l.plant);
+  const placed = layoutPlan(plantsForPlan, baseDims, state.space);
+
+  // Isometric projection: rotate the plane by 30°, foreshorten Y.
+  // SVG y grows downward — so larger source-y → larger projected-y (further "into" the picture toward viewer).
+  const cos30 = Math.cos(Math.PI / 6);
+  const sin30 = Math.sin(Math.PI / 6);
+  const planeW = baseDims.w, planeH = baseDims.h;
+
+  // Choose SVG size that comfortably contains the diamond + tallest plant.
+  const svgW = 720, svgH = 520;
+  // Centre the iso plane horizontally; leave headroom on top for the tallest tree.
+  const cx = svgW / 2;
+  const cyBase = svgH - 80;
+
+  function project(x, y, z = 0) {
+    // Centre the plane on the origin first
+    const px = x - planeW / 2;
+    const py = y - planeH / 2;
+    const ix = (px - py) * cos30 * 0.6;
+    const iy = (px + py) * sin30 * 0.6;
+    return { ix: cx + ix, iy: cyBase + iy - z };
+  }
+
+  // Corner projection for the ground quad
+  const c0 = project(0, 0);
+  const c1 = project(planeW, 0);
+  const c2 = project(planeW, planeH);
+  const c3 = project(0, planeH);
+  const groundPoly = [c0, c1, c2, c3].map(p => `${p.ix.toFixed(1)},${p.iy.toFixed(1)}`).join(" ");
+
+  // Subtle grid lines on the iso plane — 8 divisions
+  const N = 8;
+  let gridLines = "";
+  for (let i = 1; i < N; i++) {
+    const a = project((planeW / N) * i, 0);
+    const b = project((planeW / N) * i, planeH);
+    const c = project(0, (planeH / N) * i);
+    const d = project(planeW, (planeH / N) * i);
+    gridLines += `<line x1="${a.ix.toFixed(1)}" y1="${a.iy.toFixed(1)}" x2="${b.ix.toFixed(1)}" y2="${b.iy.toFixed(1)}" stroke="rgba(0,0,0,0.05)" stroke-width="1"/>`;
+    gridLines += `<line x1="${c.ix.toFixed(1)}" y1="${c.iy.toFixed(1)}" x2="${d.ix.toFixed(1)}" y2="${d.iy.toFixed(1)}" stroke="rgba(0,0,0,0.05)" stroke-width="1"/>`;
+  }
+
+  // Heights & crown sizes per tier (in SVG units; not real metres)
+  const TIER_3D = {
+    T: { trunkH: 90,  crownR: 38, crownAspect: 0.9, trunkW: 8 },   // canopy
+    S: { trunkH: 36,  crownR: 22, crownAspect: 0.9, trunkW: 5 },   // shrub
+    G: { trunkH: 0,   crownR: 14, crownAspect: 0.5, trunkW: 0 },   // groundcover (flat blob)
+    W: { trunkH: 0,   crownR: 18, crownAspect: 0.45, trunkW: 0 },  // water (flat blue oval)
+    C: { trunkH: 60,  crownR: 14, crownAspect: 1.6, trunkW: 4 },   // climber (tall narrow)
+  };
+
+  // Painter's algorithm — sort by ground-projected iy ascending so back plants draw first
+  const drawList = placed.map(p => {
+    const ground = project(p.x, p.y, 0);
+    return { p, ground, sortKey: ground.iy };
+  }).sort((a, b) => a.sortKey - b.sortKey);
+
+  const plantSvgs = drawList.map(({ p, ground }) => {
+    const tier = TIER_3D[p.tier] || TIER_3D.G;
+    // Size adjusted by plant spread (bigger spread → bigger crown)
+    const spreadFactor = Math.max(0.7, Math.min(1.7, (p.spread?.[1] || 1) / 1.5));
+    const crownR  = tier.crownR  * spreadFactor;
+    const crownRy = crownR * tier.crownAspect;
+    const trunkH  = tier.trunkH;
+    const trunkW  = tier.trunkW;
+
+    // Shadow ellipse at ground level — wider and faded
+    const shadow = `<ellipse cx="${ground.ix.toFixed(1)}" cy="${(ground.iy + 3).toFixed(1)}" rx="${(crownR * 1.15).toFixed(1)}" ry="${(crownR * 0.32).toFixed(1)}" fill="rgba(44,53,38,0.22)"/>`;
+
+    // Trunk — drawn as a small parallelogram for canopy/shrub/climber tiers
+    let trunk = "";
+    if (trunkH > 0 && trunkW > 0) {
+      // Trunk top sits trunkH above the ground projection
+      const tx = ground.ix;
+      const tyBot = ground.iy;
+      const tyTop = ground.iy - trunkH;
+      trunk = `<rect x="${(tx - trunkW/2).toFixed(1)}" y="${tyTop.toFixed(1)}" width="${trunkW}" height="${trunkH}" fill="url(#trunkGrad)" rx="2"/>`;
+    }
+
+    // Crown — for canopy/shrub: ellipse at trunk top; for ground/water: flat ellipse at ground
+    const cyCrown = ground.iy - trunkH - (trunkH > 0 ? crownRy * 0.4 : 0);
+    let crown;
+    if (p.tier === "W") {
+      // Water plant — flat blue ripple instead of a crown
+      crown = `
+        <ellipse cx="${ground.ix.toFixed(1)}" cy="${ground.iy.toFixed(1)}" rx="${crownR.toFixed(1)}" ry="${crownRy.toFixed(1)}" fill="rgba(70,130,170,0.35)"/>
+        <ellipse cx="${ground.ix.toFixed(1)}" cy="${ground.iy.toFixed(1)}" rx="${(crownR * 0.65).toFixed(1)}" ry="${(crownRy * 0.55).toFixed(1)}" fill="rgba(70,130,170,0.18)"/>
+        <circle cx="${ground.ix.toFixed(1)}" cy="${(ground.iy - 3).toFixed(1)}" r="${(crownR * 0.4).toFixed(1)}" fill="${p.color}"/>`;
+    } else {
+      // Tree / shrub / ground / climber — coloured crown with darker base + lighter highlight
+      crown = `
+        <ellipse cx="${ground.ix.toFixed(1)}" cy="${cyCrown.toFixed(1)}" rx="${crownR.toFixed(1)}" ry="${crownRy.toFixed(1)}" fill="${p.color}"/>
+        <ellipse cx="${(ground.ix - crownR * 0.25).toFixed(1)}" cy="${(cyCrown - crownRy * 0.3).toFixed(1)}" rx="${(crownR * 0.55).toFixed(1)}" ry="${(crownRy * 0.4).toFixed(1)}" fill="rgba(255,255,255,0.32)"/>
+        <ellipse cx="${(ground.ix + crownR * 0.2).toFixed(1)}" cy="${(cyCrown + crownRy * 0.35).toFixed(1)}" rx="${(crownR * 0.5).toFixed(1)}" ry="${(crownRy * 0.35).toFixed(1)}" fill="rgba(0,0,0,0.16)"/>`;
+    }
+
+    // Label below the shadow
+    const labelY = ground.iy + 18;
+    const labelEn = p.en.length > 22 ? p.en.slice(0, 20) + "…" : p.en;
+    const labelText = state.lang === "zh" ? p.zh : labelEn;
+    const label = `<text x="${ground.ix.toFixed(1)}" y="${labelY.toFixed(1)}" text-anchor="middle" font-size="11" font-family="Noto Serif TC" fill="#3F4A37" font-weight="600">${labelText}</text>`;
+
+    return `<g class="plan-plant" data-id="${p.id}" style="cursor:pointer;">${shadow}${trunk}${crown}${label}</g>`;
+  }).join("");
+
+  // Sun marker — bigger in 3D, placed by orientation
+  const orient = state.orientation || "S";
+  let sunX, sunY;
+  switch (orient) {
+    case "S": sunX = svgW - 70; sunY = 50; break;
+    case "E": sunX = 50; sunY = svgH * 0.4; break;
+    case "W": sunX = svgW - 50; sunY = svgH * 0.4; break;
+    case "N": sunX = 70; sunY = svgH - 100; break;
+  }
+  const sun = `
+    <g transform="translate(${sunX}, ${sunY})">
+      <circle r="22" fill="#F4D67E" stroke="#C9A84C" stroke-width="1.8" opacity="0.95"/>
+      <circle r="30" fill="none" stroke="#F4D67E" stroke-width="1" stroke-dasharray="2 4" opacity="0.6"/>
+      <text x="0" y="6" text-anchor="middle" font-size="18">☀</text>
+    </g>`;
+
+  return `
+    <h2 class="subtitle" data-zh="3D 視角 · Isometric View" data-en="3D Isometric View">3D 視角 · Isometric View</h2>
+    <p class="lead-small"
+       data-zh="從 30° 等角度俯視你的景觀，喬木立起、灌木中層、地被在地。圓圈尺寸對應冠幅，圓柱代表樹幹。點植物查看養護指南。"
+       data-en="A 30° isometric view of your garden — canopy stands tall, shrubs in the middle, groundcover on the ground. Circle size = mature spread; columns = trunks. Tap a plant for the care guide.">
+       從 30° 等角度俯視你的景觀，喬木立起、灌木中層、地被在地。圓圈尺寸對應冠幅，圓柱代表樹幹。點植物查看養護指南。</p>
+    <div class="plan-frame">
+      <svg viewBox="0 0 ${svgW} ${svgH}" class="plan-svg" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <linearGradient id="trunkGrad" x1="0" x2="1" y1="0" y2="0">
+            <stop offset="0%"   stop-color="#3E2A1A"/>
+            <stop offset="45%"  stop-color="#6B4D2E"/>
+            <stop offset="100%" stop-color="#4A3320"/>
+          </linearGradient>
+          <radialGradient id="groundGrad" cx="50%" cy="50%" r="60%">
+            <stop offset="0%"  stop-color="rgba(196,184,144,0.32)"/>
+            <stop offset="100%" stop-color="rgba(196,184,144,0.05)"/>
+          </radialGradient>
+        </defs>
+        <polygon points="${groundPoly}" fill="url(#groundGrad)" stroke="#C9C3B4" stroke-width="1.2"/>
+        ${gridLines}
+        ${sun}
+        ${plantSvgs}
+        <text x="${(c3.ix + 12).toFixed(1)}" y="${(c3.iy + 24).toFixed(1)}" font-size="11" fill="#5A5C50" font-family="Noto Serif TC" font-style="italic">${realW}m × ${realD}m ≈ ${area} m²</text>
+      </svg>
+      <div class="plan-legend">
+        <span class="plan-legend-item"><span class="plan-legend-dot" style="background:linear-gradient(180deg,#6B4D2E,#4A3320)"></span>${t("樹幹","Trunk")}</span>
+        <span class="plan-legend-item"><span class="plan-legend-dot" style="background:rgba(70,130,170,0.45)"></span>${t("水景","Water")}</span>
+        <span class="plan-legend-item"><span class="plan-legend-dot" style="background:rgba(0,0,0,0.22)"></span>${t("陰影","Shadow")}</span>
+      </div>
+    </div>`;
+}
+
+function wire3DInteractions() {
   document.querySelectorAll(".plan-plant").forEach((g) => {
     g.addEventListener("click", () => openDrawer(g.dataset.id));
   });
@@ -2829,6 +3261,11 @@ function renderDictionary() {
        data-zh="瀏覽全部 ${PLANTS.length} 種植物。可搜尋名稱、原產地或拉丁名；可依分層、原生／外來、芳香、寵物安全篩選。"
        data-en="Browse all ${PLANTS.length} plants. Search by name, origin, or Latin name; filter by layer, native status, fragrance, and pet-safety.">
        瀏覽全部 ${PLANTS.length} 種植物。可搜尋名稱、原產地或拉丁名；可依分層、原生／外來、芳香、寵物安全篩選。</p>
+    <p class="lead-small" style="margin-top: -10px; padding: 12px 14px; background: rgba(168,138,106,0.12); border-radius: 12px; border-left: 3px solid var(--clay);"
+       data-zh="這份字典涵蓋台灣最常被栽種的 ${PLANTS.length}+ 種植物（含原生與引入），仍在持續擴充。要找更冷僻的物種？查詢 <a href='https://www.inaturalist.org/places/taiwan' target='_blank' rel='noopener' style='color:var(--sage-deep);font-weight:600;'>iNaturalist Taiwan</a>（公民科學資料庫，超過 1 萬筆物種紀錄）或 <a href='https://taiwannativeplants.com/' target='_blank' rel='noopener' style='color:var(--sage-deep);font-weight:600;'>台灣原生植物保育協會</a>。"
+       data-en="This dictionary covers the ${PLANTS.length}+ most commonly planted species in Taiwan (natives + cultivated). Looking for more obscure species? Try <a href='https://www.inaturalist.org/places/taiwan' target='_blank' rel='noopener' style='color:var(--sage-deep);font-weight:600;'>iNaturalist Taiwan</a> (citizen-science database, 10,000+ species) or the <a href='https://taiwannativeplants.com/' target='_blank' rel='noopener' style='color:var(--sage-deep);font-weight:600;'>Taiwan Native Plant Society</a>.">
+       這份字典涵蓋台灣最常被栽種的 ${PLANTS.length}+ 種植物（含原生與引入），仍在持續擴充。要找更冷僻的物種？查詢 <a href='https://www.inaturalist.org/places/taiwan' target='_blank' rel='noopener' style='color:var(--sage-deep);font-weight:600;'>iNaturalist Taiwan</a>（公民科學資料庫，超過 1 萬筆物種紀錄）或 <a href='https://taiwannativeplants.com/' target='_blank' rel='noopener' style='color:var(--sage-deep);font-weight:600;'>台灣原生植物保育協會</a>。
+    </p>
 
     <div class="dict-toolbar">
       <input class="dict-search" id="dictSearch" type="text"
