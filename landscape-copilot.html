@@ -250,6 +250,72 @@
   .layer-row.empty:hover { transform: none; border-color: var(--line); box-shadow: none; }
   .layer-row.empty .layer-plant-name { font-style: italic; color: var(--ink-soft); font-size: 13.5px; font-weight: 400; }
 
+  /* small per-plant aspect badges (on rec cards) */
+  .rec-badges { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; align-items: center; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 2px 8px; border-radius: 999px;
+    font-size: 10.5px; font-weight: 600; letter-spacing: 0.03em;
+    border: 1px solid transparent;
+  }
+  .badge.native { background: rgba(110,126,96,0.18); color: var(--sage-deep); border-color: rgba(110,126,96,0.35); }
+  .badge.intro  { background: rgba(168,138,106,0.18); color: var(--clay-deep); border-color: rgba(168,138,106,0.35); }
+  .badge.frag   { background: rgba(196,160,76,0.16); color: #8C6F1E; border-color: rgba(196,160,76,0.32); }
+  .badge.pet    { background: rgba(80,120,160,0.14); color: #3D6086; border-color: rgba(80,120,160,0.3); }
+  .badge.toxic  { background: rgba(178,58,48,0.12); color: #8C2A22; border-color: rgba(178,58,48,0.28); }
+
+  /* native filter toggle on the result page */
+  .filter-row { display: flex; gap: 10px; flex-wrap: wrap; margin: -10px 0 26px; align-items: center; }
+  .filter-toggle {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,0.5);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 8px 16px;
+    cursor: pointer; font-family: inherit;
+    font-size: 13px; color: var(--ink-soft);
+    transition: all .2s;
+  }
+  .filter-toggle:hover { border-color: var(--sage); color: var(--forest); }
+  .filter-toggle.on { background: var(--sage-deep); color: var(--paper); border-color: var(--sage-deep); }
+  .filter-toggle .count { opacity: 0.7; font-size: 11.5px; }
+
+  /* drawer additions for new aspects */
+  .drawer-fragrance-bar { display: inline-flex; gap: 3px; align-items: center; }
+  .frag-pip { width: 8px; height: 8px; border-radius: 50%; background: var(--line); }
+  .frag-pip.on { background: #C9A84C; }
+  .drawer-companions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .companion-pill {
+    background: rgba(255,255,255,0.6); border: 1px solid var(--line);
+    border-radius: 999px; padding: 5px 11px; cursor: pointer;
+    font-size: 12px; color: var(--forest); font-family: inherit;
+    transition: all .2s;
+  }
+  .companion-pill:hover { background: var(--forest); color: var(--paper); border-color: var(--forest); }
+
+  /* GEOCODE button row in details step */
+  .addr-action-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+  .addr-btn {
+    padding: 8px 14px;
+    background: rgba(255,255,255,0.55);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font-family: inherit;
+    font-size: 12.5px;
+    color: var(--forest);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all .2s;
+  }
+  .addr-btn:hover:not(:disabled) { border-color: var(--sage); background: rgba(255,255,255,0.85); }
+  .addr-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .addr-status { font-size: 12px; color: var(--ink-soft); font-family: var(--serif); font-style: italic; padding: 6px 0; min-height: 18px; }
+  .addr-status.ok { color: var(--sage-deep); }
+  .addr-status.err { color: #B23A30; }
+  .addr-privacy { font-size: 11px; color: var(--ink-soft); margin-top: 6px; opacity: 0.75; line-height: 1.5; }
+
   /* recommendation grid */
   .rec-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
   .rec-card { padding: 18px; border-radius: 16px; background: rgba(255,255,255,0.5); border: 1px solid var(--line); cursor: pointer; transition: all .3s; display: flex; flex-direction: column; font-family: inherit; text-align: left; }
@@ -720,7 +786,216 @@ const PLANTS = [
     care_zh:"全日照至半日照，需要支撐物，花後輕修保持形狀。",
     care_en:"Full to part sun. Needs support. Light prune after bloom to maintain shape.",
     supports_zh:["夜行性昆蟲","芳香"], supports_en:["Nocturnal pollinators","Fragrance"] },
+
+  // ─── 8 additional natives ───────────────────────────────────
+  { id:"lily_tw", zh:"台灣百合", en:"Formosan Lily", lt:"Lilium formosanum",
+    tier:"G", type_zh:"草本 · 台灣特有", type_en:"Perennial · Taiwan endemic",
+    sun:["full","part"], water:"med", height:[0.8,1.5], spread:[0.3,0.5],
+    spaces:["balcony","rooftop","yard"], container_ok:true,
+    role_zh:"夏夜焦點", role_en:"Summer-night focal",
+    bloom:[6,7,8], fruit:[9,10],
+    color:"#F5F0E8", cost:280,
+    note_zh:"台灣特有的高大百合，純白色喇叭花朵在夏夜散發甜香，能自播繁衍。從海邊到 3000m 山區都能見到，是台灣最具代表性的野百合。",
+    note_en:"Taiwan-endemic tall lily. Pure white trumpet flowers release sweet scent on summer nights and self-seed reliably. Found from coast to 3000m — Taiwan's iconic wild lily.",
+    care_zh:"全日照至半日照，秋季栽植球根，排水良好。高大花莖須立支柱。",
+    care_en:"Full to part sun. Plant bulbs in autumn. Well-drained soil. Stake the tall flower stems.",
+    supports_zh:["夜行性蛾類","台灣特有","自播性強"], supports_en:["Night moths","Taiwan endemic","Self-seeding"] },
+
+  { id:"callicarpa", zh:"紫珠", en:"Formosan Beautyberry", lt:"Callicarpa formosana",
+    tier:"S", type_zh:"灌木 · 台灣特有", type_en:"Shrub · Taiwan endemic",
+    sun:["full","part"], water:"med", height:[1,2], spread:[1,1.5],
+    spaces:["yard","rooftop"], container_ok:true,
+    role_zh:"秋季紫果", role_en:"Autumn purple berries",
+    bloom:[6,7], fruit:[10,11,12],
+    color:"#8B4F9C", cost:450,
+    note_zh:"台灣特有的優雅灌木，夏初開粉紅色細碎花，秋冬結串串鮮豔紫色漿果，是鳥類的盛宴。",
+    note_en:"Elegant Taiwan-endemic shrub. Dainty pink summer flowers followed by vivid purple berry clusters — a winter feast for birds.",
+    care_zh:"半日照至全日照，適應多種土壤，晚冬修剪促分枝。",
+    care_en:"Part to full sun. Adaptable to many soils. Late-winter prune encourages branching.",
+    supports_zh:["秋冬誘鳥","台灣特有"], supports_en:["Winter bird food","Taiwan endemic"] },
+
+  { id:"hibiscus_til", zh:"黃槿", en:"Sea Hibiscus", lt:"Hibiscus tiliaceus",
+    tier:"T", type_zh:"喬木 · 海岸原生", type_en:"Tree · coastal native",
+    sun:["full"], water:"med", height:[3,7], spread:[3,5],
+    spaces:["yard"], container_ok:false, coastal_ok:true,
+    role_zh:"海岸大樹", role_en:"Coastal canopy",
+    bloom:[4,5,6,7,8,9], fruit:[10,11],
+    color:"#F5C24A", cost:1200,
+    note_zh:"台灣海岸代表性原生樹種，黃花一日由黃轉橘紅，心形葉片傳統作為「粿葉」蒸炊使用。極耐鹽風，是海岸防風的經典樹種。",
+    note_en:"Iconic Taiwan coastal native. Yellow flowers shift to orange-red within a day; heart-shaped leaves traditionally wrap steamed rice cakes (粿葉). Extremely salt- and wind-tolerant — classic shoreline tree.",
+    care_zh:"全日照，極耐鹽風，沙質或海岸土壤皆可。修剪需求少。",
+    care_en:"Full sun. Salt- and wind-bulletproof. Sandy/coastal soils fine. Minimal pruning.",
+    supports_zh:["海岸生態","民族植物","耐鹽風"], supports_en:["Coastal ecosystem","Ethnobotanical","Salt/wind tolerant"] },
+
+  { id:"melia", zh:"苦楝", en:"Chinaberry / Persian Lilac", lt:"Melia azedarach",
+    tier:"T", type_zh:"喬木 · 原生", type_en:"Tree · native",
+    sun:["full"], water:"low", height:[4,8], spread:[3,5],
+    spaces:["yard"], container_ok:false,
+    role_zh:"春日花樹", role_en:"Spring fragrant tree",
+    bloom:[3,4], fruit:[9,10,11,12],
+    color:"#C8B8D8", cost:800,
+    note_zh:"台灣低海拔重要原生樹，春日開淡紫色羽狀花序，清香瀰漫，秋冬黃色漿果是紅尾伯勞、灰喜鵲等鳥類重要食物。",
+    note_en:"Important Taiwan-native lowland tree. Lavender panicles bloom in spring with sweet fragrance; yellow autumn berries feed shrikes and magpies.",
+    care_zh:"全日照，建立後耐旱。土壤適應性極強。",
+    care_en:"Full sun. Drought tolerant once established. Highly adaptable to soil.",
+    supports_zh:["春季蜜源","冬季誘鳥","落葉觀察"], supports_en:["Spring nectar","Winter bird food","Deciduous interest"] },
+
+  { id:"quercus_g", zh:"青剛櫟", en:"Ring-cup Oak", lt:"Quercus glauca",
+    tier:"T", type_zh:"常綠喬木 · 原生", type_en:"Evergreen tree · native",
+    sun:["full","part"], water:"med", height:[4,10], spread:[3,5],
+    spaces:["yard"], container_ok:false,
+    role_zh:"常綠原生橡", role_en:"Native evergreen oak",
+    bloom:[4,5], fruit:[9,10,11],
+    color:"#4A5A36", cost:1500,
+    note_zh:"台灣常見的原生常綠橡樹，深綠光亮葉片，秋日橡實是松鼠與鳥類的關鍵食物。慢生長但長壽，是復育森林的核心物種。",
+    note_en:"Common native evergreen oak. Glossy dark green leaves; autumn acorns are key food for squirrels and birds. Slow but long-lived — core reforestation species.",
+    care_zh:"全日照至半日照，建立後耐瘠土。慢生長初期可灌溉。",
+    care_en:"Full to part sun. Tolerates poor soils once established. Water young trees while they establish.",
+    supports_zh:["松鼠棲地","鳥類食物","復育關鍵"], supports_en:["Squirrel habitat","Bird food","Reforestation core"] },
+
+  { id:"pongamia", zh:"水黃皮", en:"Indian Beech", lt:"Pongamia pinnata",
+    tier:"T", type_zh:"海岸喬木 · 原生", type_en:"Coastal tree · native",
+    sun:["full"], water:"low", height:[4,10], spread:[4,6],
+    spaces:["yard"], container_ok:false, coastal_ok:true,
+    role_zh:"海岸防風", role_en:"Coastal windbreak",
+    bloom:[4,5,6], fruit:[9,10,11,12],
+    color:"#B89C7C", cost:1200,
+    note_zh:"台灣海岸與河口的原生樹，粉白色蝶形花朵成串，種子含油脂可榨油。極耐鹽鹼，是海邊景觀的優秀庇蔭樹。",
+    note_en:"Native to Taiwan coast and estuaries. Cascades of pinkish-white pea flowers; oily seeds yield biofuel. Very salt-tolerant — an excellent coastal shade tree.",
+    care_zh:"全日照，極耐旱耐鹽，建立後幾乎免維護。",
+    care_en:"Full sun. Drought- and salt-bulletproof. Near zero maintenance once established.",
+    supports_zh:["海岸復育","蜂類蜜源","耐鹽"], supports_en:["Coastal restoration","Bee nectar","Salt tolerant"] },
+
+  { id:"tricyrtis", zh:"台灣油點草", en:"Formosan Toad Lily", lt:"Tricyrtis formosana",
+    tier:"G", type_zh:"草本 · 台灣特有", type_en:"Perennial · Taiwan endemic",
+    sun:["part","shade"], water:"med", height:[0.4,0.7], spread:[0.3,0.5],
+    spaces:["balcony","yard","indoor"], container_ok:true,
+    role_zh:"陰生秋花", role_en:"Autumn shade flower",
+    bloom:[8,9,10], fruit:[11],
+    color:"#9C7AB0", cost:320,
+    note_zh:"台灣特有的優雅多年生草本，秋日綻放紫色斑點如蘭花般的花朵，是樹蔭下、北向陽台最美的秋色焦點。",
+    note_en:"Elegant Taiwan-endemic perennial. Orchid-like purple-spotted autumn flowers — stunning focal under trees or on north-facing balconies.",
+    care_zh:"半日照至遮陰，喜濕潤排水良好土壤。夏季加厚覆蓋。避免烈日直曬。",
+    care_en:"Part shade to shade. Moist well-drained soil. Summer mulch. Avoid hot direct sun.",
+    supports_zh:["秋季蜂類","台灣特有","耐陰"], supports_en:["Autumn pollinators","Taiwan endemic","Shade-loving"] },
+
+  { id:"gardenia", zh:"山黃梔", en:"Cape Jasmine", lt:"Gardenia jasminoides",
+    tier:"S", type_zh:"灌木 · 原生", type_en:"Shrub · native",
+    sun:["full","part"], water:"med", height:[1,2], spread:[1,1.5],
+    spaces:["balcony","rooftop","yard"], container_ok:true,
+    role_zh:"芳香白花", role_en:"Fragrant white flowers",
+    bloom:[5,6,7], fruit:[9,10,11,12],
+    color:"#F4EFE0", cost:350,
+    note_zh:"台灣原生的山黃梔，夏初純白花朵濃郁香氣，秋季橘紅果實是傳統染料的來源。庭院與陽台的經典芳香之選。",
+    note_en:"Native Taiwan gardenia. Pure white early-summer flowers with intense fragrance; orange autumn fruits are a traditional dye source. Classic fragrant choice for yards and balconies.",
+    care_zh:"全日照至半日照，喜微酸排水良好土壤。黃葉常為缺鐵，可施螯合鐵。",
+    care_en:"Full to part sun. Slightly acidic well-drained soil. Yellow leaves often signal iron deficiency — apply chelated iron.",
+    supports_zh:["夜行性蛾","染料","芳香"], supports_en:["Night moths","Natural dye","Fragrance"] },
+
+  // ─── 3 common non-native ornamentals (clearly tagged) ───────
+  { id:"plumeria", zh:"雞蛋花", en:"Frangipani", lt:"Plumeria obtusa",
+    tier:"T", type_zh:"小喬木 · 外來常見", type_en:"Small tree · introduced",
+    sun:["full"], water:"low", height:[2,4], spread:[2,3],
+    spaces:["yard","rooftop","balcony"], container_ok:true,
+    zones:["S","C"],
+    role_zh:"熱帶花樹", role_en:"Tropical flowering tree",
+    bloom:[4,5,6,7,8,9,10], fruit:[],
+    color:"#F4D8C0", cost:800,
+    note_zh:"來自中南美洲的熱帶花樹（非台灣原生）。白黃花朵帶濃郁甜香，是廟宇與民宿的常見樹種。南部最佳，北部需冬季保護。",
+    note_en:"Tropical flowering tree from the Americas (not native to Taiwan). Intensely fragrant white-yellow blooms, common at temples and B&Bs. Thrives in southern Taiwan; needs winter protection in the north.",
+    care_zh:"全日照，耐旱。冬季減少澆水。北部需避免冬季冷雨。",
+    care_en:"Full sun. Drought tolerant. Reduce winter water. North Taiwan: protect from cold winter rain.",
+    supports_zh:["夜行性蛾","芳香","外來"], supports_en:["Night moths","Fragrance","Non-native"] },
+
+  { id:"hibiscus_rs", zh:"朱槿", en:"Tropical Hibiscus", lt:"Hibiscus rosa-sinensis",
+    tier:"S", type_zh:"灌木 · 外來常見", type_en:"Shrub · introduced",
+    sun:["full","part"], water:"med", height:[1,3], spread:[1,2],
+    spaces:["balcony","rooftop","yard"], container_ok:true,
+    role_zh:"全年花朵", role_en:"Year-round blooms",
+    bloom:[1,2,3,4,5,6,7,8,9,10,11,12], fruit:[],
+    color:"#D94865", cost:280,
+    note_zh:"台灣最常見的觀賞性朱槿（非原生但廣泛栽培）。花色豐富，幾乎全年開花，蜂蝶極愛。",
+    note_en:"Most common ornamental hibiscus in Taiwan (non-native but widely cultivated). Diverse colors, near year-round bloom, beloved by bees and butterflies.",
+    care_zh:"全日照至半日照，規律澆水與施肥。晚冬修剪定型。",
+    care_en:"Full to part sun. Regular watering and fertilizer. Prune for shape in late winter.",
+    supports_zh:["全年蜜源","蜂蝶","外來"], supports_en:["Year-round nectar","Bees/butterflies","Non-native"] },
+
+  { id:"bougainvillea", zh:"九重葛", en:"Bougainvillea", lt:"Bougainvillea spectabilis",
+    tier:"C", type_zh:"藤本灌木 · 外來常見", type_en:"Climbing shrub · introduced",
+    sun:["full"], water:"low", height:[2,5], spread:[2,4],
+    spaces:["yard","rooftop","balcony"], container_ok:true, coastal_ok:true,
+    role_zh:"色彩牆面", role_en:"Colorful wall cover",
+    bloom:[4,5,6,7,8,9,10,11,12], fruit:[],
+    color:"#D9457A", cost:250,
+    note_zh:"來自南美洲的耐旱攀緣灌木（非原生）。彩色「花」實為苞片，紫紅、白、橘等多色，是頂樓和陽台最強健的色彩來源。",
+    note_en:"Drought-tolerant climbing shrub from South America (non-native). The 'flowers' are actually colored bracts — magenta, white, orange. Toughest color source for hot rooftops and balconies.",
+    care_zh:"全日照，耐旱。過度澆水反而減花。重剪促開花。耐鹽風。",
+    care_en:"Full sun. Drought tolerant — over-watering reduces flowering. Hard prune to promote bloom. Salt- and wind-tolerant.",
+    supports_zh:["蜂蝶","全年觀賞","外來"], supports_en:["Pollinators","Year-round display","Non-native"] },
 ];
+
+// ─────────────────────────────────────────────────────────────
+// PLANT_META — augmented data for every plant.
+//   native:     true = Taiwan native, false = introduced ornamental
+//   origin_zh/en: where the plant is natively from
+//   mature_yr:  years until visually mature/established
+//   pet_safe:   true = generally non-toxic to dogs/cats (still avoid eating)
+//   fragrance:  0 none, 1 subtle, 2 noticeable, 3 strong
+//   sourcing_zh/en: where to find it in Taiwan
+//   companions: plant IDs that pair well in a layered design
+// Merged into PLANTS at module load so renderers can read them as one object.
+// ─────────────────────────────────────────────────────────────
+const PLANT_META = {
+  // Canopy / structural — natives
+  pittosporum:  { native:true, origin_zh:"台灣海岸、東亞", origin_en:"Taiwan coast, East Asia", mature_yr:5, pet_safe:false, fragrance:2, sourcing_zh:"林試所、海岸線苗圃", sourcing_en:"TFRI, coastal nurseries", companions:["miscanthus","sida","dianella"] },
+  cherry:       { native:true, origin_zh:"台灣特有", origin_en:"Taiwan endemic", mature_yr:6, pet_safe:true, fragrance:1, sourcing_zh:"林務局原生苗圃、特生中心", sourcing_en:"Forestry Bureau, TESRI", companions:["liriope","duchesnea","ardisia"] },
+  bischofia:    { native:true, origin_zh:"台灣低海拔、東亞", origin_en:"Taiwan lowlands, East Asia", mature_yr:8, pet_safe:true, fragrance:0, sourcing_zh:"原生樹苗場", sourcing_en:"Native tree nurseries", companions:["liriope","nephrolepis","ardisia"] },
+  michelia:     { native:true, origin_zh:"台灣中低海拔", origin_en:"Taiwan low–mid mountains", mature_yr:7, pet_safe:true, fragrance:3, sourcing_zh:"林試所、原生苗圃", sourcing_en:"TFRI, native nurseries", companions:["liriope","dianella","piper"] },
+  broussonetia: { native:true, origin_zh:"台灣、東亞", origin_en:"Taiwan, East Asia", mature_yr:3, pet_safe:true, fragrance:0, sourcing_zh:"郊野自播 / 原生苗圃", sourcing_en:"Self-seeded / native nurseries", companions:["sida","miscanthus","dianella"] },
+  chionanthus:  { native:true, origin_zh:"台灣北部、東亞", origin_en:"N. Taiwan, East Asia", mature_yr:6, pet_safe:true, fragrance:2, sourcing_zh:"原生樹木場、台大實驗林", sourcing_en:"Native tree nurseries, NTU experimental forest", companions:["liriope","ardisia","duchesnea"] },
+
+  // Shrubs — natives
+  melastoma:    { native:true, origin_zh:"台灣低海拔", origin_en:"Taiwan lowlands", mature_yr:2, pet_safe:true, fragrance:0, sourcing_zh:"花市、原生苗圃", sourcing_en:"Flower markets, native nurseries", companions:["liriope","duchesnea","piper"] },
+  ardisia:      { native:true, origin_zh:"台灣、東亞", origin_en:"Taiwan, East Asia", mature_yr:3, pet_safe:false, fragrance:1, sourcing_zh:"花市、原生苗圃", sourcing_en:"Flower markets, native nurseries", companions:["nephrolepis","liriope","piper"] },
+  alpinia:      { native:true, origin_zh:"台灣、琉球、東亞", origin_en:"Taiwan, Ryukyu, East Asia", mature_yr:2, pet_safe:true, fragrance:3, sourcing_zh:"傳統市場、原住民部落", sourcing_en:"Traditional markets, indigenous communities", companions:["nephrolepis","liriope","duchesnea"] },
+  hibiscus_tw:  { native:true, origin_zh:"台灣特有", origin_en:"Taiwan endemic", mature_yr:3, pet_safe:true, fragrance:0, sourcing_zh:"特生中心、植物園", sourcing_en:"TESRI, botanic gardens", companions:["sida","miscanthus","liriope"] },
+  murraya:      { native:true, origin_zh:"台灣、東南亞", origin_en:"Taiwan, SE Asia", mature_yr:3, pet_safe:false, fragrance:3, sourcing_zh:"花市、苗圃普遍", sourcing_en:"Flower markets, common nurseries", companions:["liriope","dianella","duchesnea"] },
+  cephalanthus: { native:true, origin_zh:"台灣濕地（稀有）", origin_en:"Rare Taiwan wetlands", mature_yr:4, pet_safe:true, fragrance:1, sourcing_zh:"濕地復育機構、特生中心", sourcing_en:"Wetland restoration orgs, TESRI", companions:["philydrum","nuphar"] },
+  mulberry_sm:  { native:true, origin_zh:"台灣低海拔", origin_en:"Taiwan lowlands", mature_yr:2, pet_safe:true, fragrance:0, sourcing_zh:"果樹苗場、農會", sourcing_en:"Fruit nurseries, farmers' assoc.", companions:["sida","miscanthus","liriope"] },
+
+  // Ground / perennial — natives
+  sida:         { native:true, origin_zh:"全球泛熱帶 / 台灣", origin_en:"Pan-tropical / Taiwan", mature_yr:1, pet_safe:true, fragrance:0, sourcing_zh:"野地採種、種子行", sourcing_en:"Wild seed / seed shops", companions:["miscanthus","dianella","liriope"] },
+  liriope:      { native:true, origin_zh:"台灣、東亞", origin_en:"Taiwan, East Asia", mature_yr:1, pet_safe:true, fragrance:0, sourcing_zh:"花市批發普遍", sourcing_en:"Common at wholesale flower markets", companions:["nephrolepis","duchesnea","ardisia"] },
+  dianella:     { native:true, origin_zh:"台灣、亞太", origin_en:"Taiwan, Asia-Pacific", mature_yr:2, pet_safe:false, fragrance:0, sourcing_zh:"原生地被苗圃", sourcing_en:"Native groundcover nurseries", companions:["sida","miscanthus","liriope"] },
+  duchesnea:    { native:true, origin_zh:"台灣、東亞", origin_en:"Taiwan, East Asia", mature_yr:1, pet_safe:true, fragrance:0, sourcing_zh:"野地分株、苗圃", sourcing_en:"Wild division, nurseries", companions:["liriope","ardisia","nephrolepis"] },
+  miscanthus:   { native:true, origin_zh:"台灣丘陵", origin_en:"Taiwan hills", mature_yr:2, pet_safe:true, fragrance:0, sourcing_zh:"野地分株、景觀苗圃", sourcing_en:"Wild division, landscape nurseries", companions:["sida","dianella"] },
+  nephrolepis:  { native:true, origin_zh:"台灣、全球泛熱帶", origin_en:"Taiwan, pan-tropics", mature_yr:1, pet_safe:true, fragrance:0, sourcing_zh:"花市、室內植物店", sourcing_en:"Flower markets, indoor plant stores", companions:["liriope","ardisia","piper"] },
+
+  // Water / wetland — natives
+  nuphar:       { native:true, origin_zh:"台灣特有", origin_en:"Taiwan endemic", mature_yr:2, pet_safe:true, fragrance:0, sourcing_zh:"水生植物專賣、復育中心", sourcing_en:"Aquatic plant specialists, restoration centers", companions:["philydrum","cephalanthus"] },
+  philydrum:    { native:true, origin_zh:"台灣濕地", origin_en:"Taiwan wetlands", mature_yr:2, pet_safe:true, fragrance:0, sourcing_zh:"水生植物農場", sourcing_en:"Aquatic plant farms", companions:["nuphar","cephalanthus"] },
+
+  // Climbers — natives
+  piper:        { native:true, origin_zh:"台灣低海拔", origin_en:"Taiwan lowlands", mature_yr:2, pet_safe:false, fragrance:0, sourcing_zh:"特用植物苗場", sourcing_en:"Specialty plant farms", companions:["nephrolepis","ardisia","liriope"] },
+  jasminum:     { native:true, origin_zh:"台灣低海拔", origin_en:"Taiwan lowlands", mature_yr:2, pet_safe:true, fragrance:3, sourcing_zh:"花市、藤本苗圃", sourcing_en:"Flower markets, vine nurseries", companions:["liriope","duchesnea","sida"] },
+
+  // New natives
+  lily_tw:      { native:true, origin_zh:"台灣特有", origin_en:"Taiwan endemic", mature_yr:2, pet_safe:false, fragrance:3, sourcing_zh:"特生中心、林務局原生苗圃", sourcing_en:"TESRI, Forestry Bureau native nurseries", companions:["liriope","sida","dianella"] },
+  callicarpa:   { native:true, origin_zh:"台灣特有", origin_en:"Taiwan endemic", mature_yr:3, pet_safe:true, fragrance:1, sourcing_zh:"特生中心、原生苗圃", sourcing_en:"TESRI, native nurseries", companions:["liriope","duchesnea","ardisia"] },
+  hibiscus_til: { native:true, origin_zh:"台灣海岸、印太", origin_en:"Taiwan coast, Indo-Pacific", mature_yr:5, pet_safe:true, fragrance:1, sourcing_zh:"海岸復育苗圃、林務局", sourcing_en:"Coastal restoration nurseries, Forestry Bureau", companions:["pittosporum","broussonetia","pongamia"] },
+  melia:        { native:true, origin_zh:"台灣低海拔、東亞", origin_en:"Taiwan lowlands, East Asia", mature_yr:4, pet_safe:false, fragrance:2, sourcing_zh:"原生樹木場、農業改良場", sourcing_en:"Native tree nurseries, agricultural research stations", companions:["liriope","dianella","miscanthus"] },
+  quercus_g:    { native:true, origin_zh:"台灣低中海拔", origin_en:"Taiwan low–mid elevations", mature_yr:10, pet_safe:true, fragrance:0, sourcing_zh:"林務局原生樹苗場", sourcing_en:"Forestry Bureau native nurseries", companions:["liriope","nephrolepis","ardisia"] },
+  pongamia:     { native:true, origin_zh:"台灣海岸、印太", origin_en:"Taiwan coast, Indo-Pacific", mature_yr:5, pet_safe:false, fragrance:1, sourcing_zh:"海岸復育苗圃", sourcing_en:"Coastal restoration nurseries", companions:["pittosporum","broussonetia","hibiscus_til"] },
+  tricyrtis:    { native:true, origin_zh:"台灣特有", origin_en:"Taiwan endemic", mature_yr:2, pet_safe:true, fragrance:0, sourcing_zh:"特生中心、特用花卉農場", sourcing_en:"TESRI, specialty flower farms", companions:["nephrolepis","ardisia","liriope"] },
+  gardenia:     { native:true, origin_zh:"台灣、東亞", origin_en:"Taiwan, East Asia", mature_yr:3, pet_safe:true, fragrance:3, sourcing_zh:"花市、苗圃普遍", sourcing_en:"Common at flower markets and nurseries", companions:["liriope","duchesnea","dianella"] },
+
+  // Introduced ornamentals — non-native
+  plumeria:     { native:false, origin_zh:"中南美洲（經玻里尼西亞引入）", origin_en:"Central America (via Polynesia)", mature_yr:4, pet_safe:false, fragrance:3, sourcing_zh:"花市、熱帶花卉專賣", sourcing_en:"Flower markets, tropical specialists", companions:["hibiscus_rs","pittosporum"] },
+  hibiscus_rs:  { native:false, origin_zh:"中國南部、東南亞", origin_en:"Southern China, SE Asia", mature_yr:1, pet_safe:true, fragrance:0, sourcing_zh:"花市、苗圃普遍", sourcing_en:"Common at flower markets and nurseries", companions:["liriope","duchesnea","miscanthus"] },
+  bougainvillea:{ native:false, origin_zh:"南美洲", origin_en:"South America", mature_yr:1, pet_safe:true, fragrance:0, sourcing_zh:"花市、苗圃普遍", sourcing_en:"Common at flower markets and nurseries", companions:["miscanthus","sida","jasminum"] },
+};
+// Merge meta into each plant for downstream use.
+PLANTS.forEach((p) => Object.assign(p, PLANT_META[p.id] || { native: true }));
 
 // ─────────────────────────────────────────────────────────────
 // Wizard option sets
@@ -777,8 +1052,15 @@ const state = {
   resultTab: "plan",
   selectedPlantId: null,
   qty: {},
+  nativeOnly: false,     // filter recommendations to native plants only
   lang: "zh",
 };
+
+// Fragrance icon helper — small pips for 0-3 levels.
+function fragranceBar(level) {
+  if (level == null || level === 0) return "";
+  return `<span class="drawer-fragrance-bar">${[0,1,2].map(i => `<span class="frag-pip ${i < level ? "on" : ""}"></span>`).join("")}</span>`;
+}
 
 // Default dimensions per space type — applied when entering Details step
 const SPACE_DEFAULTS = {
@@ -993,13 +1275,19 @@ function renderDetails() {
                 輸入地址、縣市，或關鍵字（如：「台南市安平區」、「淡水」、「Hualien」）。我們不上傳，純前端判斷氣候區。</span>
           <input class="field-input" id="addressInput" type="text"
                  value="${escapeHtml(state.address)}"
-                 placeholder="${t('例：台北市大安區 / Taipei Daan', 'e.g. Taipei Daan / 高雄鼓山')}" />
+                 placeholder="${t('例：台南市安平區 安北路 100 號', 'e.g. 100 Anbei Rd, Anping, Tainan')}" />
+          <div class="addr-action-row">
+            <button class="addr-btn" id="geocodeBtn" type="button">🔍 <span data-zh="查詢地址" data-en="Look up address">查詢地址</span></button>
+            <button class="addr-btn" id="geolocateBtn" type="button">📍 <span data-zh="用我的位置" data-en="Use my location">用我的位置</span></button>
+          </div>
+          <div class="addr-status" id="addrStatus"></div>
           <div class="detected-chip-row" id="detectedChips">
-            ${det
-              ? `${det.county ? `<span class="detected-chip">📍 ${det.county}${det.zone ? `（${state.lang === "zh" ? ZONE_LABEL[det.zone].zh : ZONE_LABEL[det.zone].en}）` : ""}</span>` : `<span class="detected-chip">🌏 ${state.lang === "zh" ? ZONE_LABEL[det.zone].zh : ZONE_LABEL[det.zone].en}</span>`}
-                 ${det.coastal ? `<span class="detected-chip coastal">🌊 ${t("近海岸 · 偏好耐鹽植物","Coastal · prefer salt-tolerant")}</span>` : ""}`
-              : `<span class="detected-chip muted">${t("未指定區域 → 將使用 中部 · 溫和 預設","No region → defaults to Central · moderate")}</span>`
-            }
+            ${renderDetectedChips(det)}
+          </div>
+          <div class="addr-privacy"
+               data-zh="* 「查詢地址」會將地址送至 OpenStreetMap Nominatim 解析經緯度，不儲存。「用我的位置」需瀏覽器授權，僅取座標再反查行政區。"
+               data-en="* 'Look up' sends the address to OpenStreetMap Nominatim to resolve coordinates; nothing is stored. 'Use my location' needs browser permission — only coords are taken, then reverse-geocoded.">
+               * 「查詢地址」會將地址送至 OpenStreetMap Nominatim 解析經緯度，不儲存。「用我的位置」需瀏覽器授權，僅取座標再反查行政區。
           </div>
         </div>
 
@@ -1040,27 +1328,169 @@ function renderDetails() {
   wireDetails();
 }
 
+function renderDetectedChips(det) {
+  if (!det) return `<span class="detected-chip muted">${t("未指定區域 → 將使用 中部 · 溫和 預設","No region → defaults to Central · moderate")}</span>`;
+  const zoneLabel = state.lang === "zh" ? ZONE_LABEL[det.zone].zh : ZONE_LABEL[det.zone].en;
+  const pieces = [];
+  if (det.display) {
+    pieces.push(`<span class="detected-chip">📍 ${escapeHtml(det.display)}</span>`);
+  } else if (det.county) {
+    pieces.push(`<span class="detected-chip">📍 ${det.county}（${zoneLabel}）</span>`);
+  } else {
+    pieces.push(`<span class="detected-chip">🌏 ${zoneLabel}</span>`);
+  }
+  if (det.lat != null && det.lng != null) {
+    pieces.push(`<span class="detected-chip muted">${det.lat.toFixed(3)}, ${det.lng.toFixed(3)}</span>`);
+  }
+  if (det.coastal) {
+    pieces.push(`<span class="detected-chip coastal">🌊 ${t("近海岸 · 偏好耐鹽植物","Coastal · prefer salt-tolerant")}</span>`);
+  }
+  return pieces.join("");
+}
+
+function refreshDetectedChips() {
+  const host = document.getElementById("detectedChips");
+  if (host) host.innerHTML = renderDetectedChips(state.detected);
+}
+
+function setAddrStatus(text, kind = "") {
+  const el = document.getElementById("addrStatus");
+  if (!el) return;
+  el.className = "addr-status" + (kind ? ` ${kind}` : "");
+  el.textContent = text || "";
+}
+
+// Pull a usable Taiwan county name from Nominatim address details.
+// Nominatim sometimes returns city / county / state — try each.
+function pickCountyFromAddress(addr) {
+  if (!addr) return null;
+  // Try common Nominatim address fields, in order of specificity for Taiwan ROC areas.
+  const candidates = [addr.county, addr.city, addr.state, addr.region, addr.province];
+  for (const c of candidates) {
+    if (!c) continue;
+    for (const key of Object.keys(COUNTY_ZONES)) {
+      if (c.includes(key)) return { county: key, zone: COUNTY_ZONES[key] };
+    }
+  }
+  return null;
+}
+
+async function geocodeAddress(query) {
+  const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&countrycodes=tw&format=jsonv2&addressdetails=1&limit=1&accept-language=zh-TW,en`;
+  const resp = await fetch(url, { headers: { "Accept": "application/json" } });
+  if (!resp.ok) throw new Error("Nominatim " + resp.status);
+  const arr = await resp.json();
+  if (!arr.length) return null;
+  return arr[0];
+}
+
+async function reverseGeocode(lat, lng) {
+  const url = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=jsonv2&addressdetails=1&accept-language=zh-TW,en`;
+  const resp = await fetch(url, { headers: { "Accept": "application/json" } });
+  if (!resp.ok) throw new Error("Nominatim " + resp.status);
+  return await resp.json();
+}
+
+function buildDetectedFromNominatim(result) {
+  if (!result) return null;
+  const lat = parseFloat(result.lat);
+  const lng = parseFloat(result.lon);
+  const cz = pickCountyFromAddress(result.address) || { county: null, zone: "C" };
+  // Coastal heuristic: any coastal keyword in display_name or in any address part
+  const allText = (result.display_name || "") + " " +
+                  Object.values(result.address || {}).join(" ");
+  const coastal = COASTAL_KEYWORDS.some(k => allText.includes(k));
+  const display = (result.address?.suburb || result.address?.town || result.address?.village || result.address?.city_district || "") +
+                  (cz.county ? (result.address?.suburb || result.address?.town ? "·" : "") + cz.county : "");
+  return {
+    county: cz.county,
+    zone: cz.zone,
+    coastal,
+    lat: isFinite(lat) ? lat : null,
+    lng: isFinite(lng) ? lng : null,
+    display: display.trim() || result.display_name?.split(",").slice(0, 2).join(",").trim() || null,
+  };
+}
+
 function wireDetails() {
   const addrEl = document.getElementById("addressInput");
   const wEl = document.getElementById("widthInput");
   const dEl = document.getElementById("depthInput");
   const areaEl = document.getElementById("areaDisplay");
+  const geocodeBtn = document.getElementById("geocodeBtn");
+  const geolocateBtn = document.getElementById("geolocateBtn");
 
-  // Address: detect on input (debounced)
+  // Address: still do cheap keyword detection on input as the user types — covers offline use.
   let to;
   addrEl.addEventListener("input", (e) => {
     state.address = e.target.value;
     clearTimeout(to);
     to = setTimeout(() => {
-      state.detected = detectLocation(state.address);
-      // Re-render only the detected-chip row so the user doesn't lose input focus
-      const chipsHost = document.getElementById("detectedChips");
-      const det = state.detected;
-      chipsHost.innerHTML = det
-        ? `${det.county ? `<span class="detected-chip">📍 ${det.county}${det.zone ? `（${state.lang === "zh" ? ZONE_LABEL[det.zone].zh : ZONE_LABEL[det.zone].en}）` : ""}</span>` : `<span class="detected-chip">🌏 ${state.lang === "zh" ? ZONE_LABEL[det.zone].zh : ZONE_LABEL[det.zone].en}</span>`}
-           ${det.coastal ? `<span class="detected-chip coastal">🌊 ${t("近海岸 · 偏好耐鹽植物","Coastal · prefer salt-tolerant")}</span>` : ""}`
-        : `<span class="detected-chip muted">${t("未指定區域 → 將使用 中部 · 溫和 預設","No region → defaults to Central · moderate")}</span>`;
+      // Only update if we don't already have a real geocoded result (don't overwrite real coordinates with keyword guess)
+      if (!state.detected || !state.detected.lat) {
+        state.detected = detectLocation(state.address);
+        refreshDetectedChips();
+      }
     }, 250);
+  });
+
+  // 🔍 Look up — forward geocode via Nominatim
+  geocodeBtn?.addEventListener("click", async () => {
+    const q = (state.address || "").trim();
+    if (!q) { setAddrStatus(t("先輸入地址再查詢","Type an address first"), "err"); return; }
+    geocodeBtn.disabled = true;
+    setAddrStatus(t("查詢中…","Searching…"));
+    try {
+      const r = await geocodeAddress(q);
+      if (!r) {
+        state.detected = detectLocation(q);  // fallback to keyword
+        refreshDetectedChips();
+        setAddrStatus(t("找不到地址 · 已用關鍵字推測","Not found · using keyword guess"), "err");
+      } else {
+        state.detected = buildDetectedFromNominatim(r);
+        refreshDetectedChips();
+        setAddrStatus(t("✓ 已定位","✓ Located"), "ok");
+      }
+    } catch (err) {
+      state.detected = detectLocation(q);
+      refreshDetectedChips();
+      setAddrStatus(t("網路問題 · 已用關鍵字推測","Network issue · using keyword guess"), "err");
+    } finally {
+      geocodeBtn.disabled = false;
+    }
+  });
+
+  // 📍 Use my location — browser geolocation + reverse geocode
+  geolocateBtn?.addEventListener("click", () => {
+    if (!navigator.geolocation) {
+      setAddrStatus(t("瀏覽器不支援定位","Browser doesn't support geolocation"), "err");
+      return;
+    }
+    geolocateBtn.disabled = true;
+    setAddrStatus(t("取得位置中… 請允許瀏覽器存取","Getting location… please allow access"));
+    navigator.geolocation.getCurrentPosition(async (pos) => {
+      try {
+        const { latitude, longitude } = pos.coords;
+        const r = await reverseGeocode(latitude, longitude);
+        // reverseGeocode result has the same shape; lat/lon are top-level strings
+        r.lat = latitude; r.lon = longitude;
+        state.detected = buildDetectedFromNominatim(r);
+        state.address = state.detected.display || state.address;
+        document.getElementById("addressInput").value = state.address;
+        refreshDetectedChips();
+        setAddrStatus(t("✓ 已定位","✓ Located"), "ok");
+      } catch (err) {
+        setAddrStatus(t("反查失敗，請改用「查詢地址」","Reverse-geocode failed — try 'Look up address'"), "err");
+      } finally {
+        geolocateBtn.disabled = false;
+      }
+    }, (err) => {
+      geolocateBtn.disabled = false;
+      const msg = err.code === 1
+        ? t("已拒絕定位權限","Location permission denied")
+        : t("無法取得位置","Couldn't get location");
+      setAddrStatus(msg, "err");
+    }, { timeout: 12000, maximumAge: 60_000 });
   });
 
   // Dimensions: live area update
@@ -1213,7 +1643,9 @@ function renderNav() {
 // ─────────────────────────────────────────────────────────────
 function initShoppingQty() {
   const scored = scorePlants();
-  const compatible = scored.filter(p => p.score >= 30).slice(0, 8);
+  let compatible = scored.filter(p => p.score >= 30);
+  if (state.nativeOnly) compatible = compatible.filter(p => p.native);
+  compatible = compatible.slice(0, 8);
   state.qty = {};
 
   // Scale default quantities to the actual area when known. Rough nursery-density rules:
@@ -1235,8 +1667,13 @@ function initShoppingQty() {
 
 function renderResult() {
   const scored = scorePlants();
-  const recs = scored.filter(p => p.score >= 30);
-  const layers = buildLayers(scored);
+  // Apply native-only filter at the result level (scoring stays the same so the
+  // filter can be toggled live without recomputing scores).
+  const all = scored.filter(p => p.score >= 30);
+  const recs = state.nativeOnly ? all.filter(p => p.native) : all;
+  const nativeCount = all.filter(p => p.native).length;
+  const introCount = all.length - nativeCount;
+  const layers = buildLayers(state.nativeOnly ? scored.filter(p => p.native) : scored);
 
   const sunLabel = SUN_OPTIONS.find(o => o.key === state.sun);
   const waterLabel = WATER_OPTIONS.find(o => o.key === state.water);
@@ -1269,6 +1706,13 @@ function renderResult() {
         }).join("")}
       </div>
 
+      <div class="filter-row">
+        <button class="filter-toggle ${state.nativeOnly ? "on" : ""}" id="nativeFilterBtn">
+          🌱 <span data-zh="${state.nativeOnly ? "只看原生" : "包含外來"}" data-en="${state.nativeOnly ? "Native only" : "Include non-native"}">${state.nativeOnly ? "只看原生" : "包含外來"}</span>
+          <span class="count">· ${state.nativeOnly ? nativeCount : `${nativeCount}+${introCount}`}</span>
+        </button>
+      </div>
+
       <div class="tabs" role="tablist">
         ${[
           { k:"plan",      zh:"俯瞰平面圖",   en:"Garden plan" },
@@ -1287,6 +1731,14 @@ function renderResult() {
 
   app.querySelectorAll(".tab").forEach((t) => {
     t.addEventListener("click", () => { state.resultTab = t.dataset.tab; renderTabPanel(recs, layers); applyLanguage(); });
+  });
+
+  document.getElementById("nativeFilterBtn")?.addEventListener("click", () => {
+    state.nativeOnly = !state.nativeOnly;
+    // Re-init shopping qty when filter changes — top-8 list shifts
+    initShoppingQty();
+    renderResult();
+    applyLanguage();
   });
 
   renderTabPanel(recs, layers);
@@ -1521,6 +1973,14 @@ function renderLayers(layers, recs) {
           <div class="rec-name" data-zh="${p.zh}" data-en="${p.en}">${p.zh}</div>
           <div class="rec-latin">${p.lt}</div>
           <div class="rec-type" data-zh="${p.type_zh} · ${p.role_zh}" data-en="${p.type_en} · ${p.role_en}">${p.type_zh} · ${p.role_zh}</div>
+          <div class="rec-badges">
+            ${p.native
+              ? `<span class="badge native">🌱 <span data-zh="原生" data-en="Native">原生</span></span>`
+              : `<span class="badge intro">🌍 <span data-zh="外來" data-en="Introduced">外來</span></span>`}
+            ${p.fragrance >= 2 ? `<span class="badge frag">🌸 <span data-zh="芳香" data-en="Fragrant">芳香</span></span>` : ""}
+            ${p.pet_safe === false ? `<span class="badge toxic" title="${t('寵物需注意 · 葉/果可能含毒','Caution: leaves/fruit may be toxic to pets')}">⚠ <span data-zh="寵物注意" data-en="Pet caution">寵物注意</span></span>` : ""}
+            ${p.mature_yr ? `<span class="badge pet">⏱ ${p.mature_yr}<span data-zh="年" data-en="y">年</span></span>` : ""}
+          </div>
           <div class="rec-reasons">
             ${(state.lang === "zh" ? p.reasons_zh : p.reasons_en).slice(0, 3).map(r => `<span class="rec-tag">${r}</span>`).join("")}
           </div>
@@ -1696,24 +2156,38 @@ function openDrawer(id) {
         <div class="drawer-en" data-zh="${plant.en}" data-en="${plant.zh}">${plant.en}</div>
         <div class="drawer-latin">${plant.lt}</div>
 
+        <div class="rec-badges" style="margin: 14px 0 4px;">
+          ${plant.native
+            ? `<span class="badge native">🌱 <span data-zh="原生" data-en="Native">原生</span></span>`
+            : `<span class="badge intro">🌍 <span data-zh="外來常見" data-en="Introduced">外來常見</span></span>`}
+          ${plant.fragrance >= 2 ? `<span class="badge frag">🌸 ${fragranceBar(plant.fragrance)}</span>` : ""}
+          ${plant.pet_safe === true ? `<span class="badge pet">🐾 <span data-zh="寵物安全" data-en="Pet-safe">寵物安全</span></span>` : ""}
+          ${plant.pet_safe === false ? `<span class="badge toxic">⚠ <span data-zh="寵物注意" data-en="Pet caution">寵物注意</span></span>` : ""}
+        </div>
+
         <div class="drawer-meta">
           <div class="meta-cell">
             <div class="meta-label" data-zh="角色" data-en="Role">角色</div>
             <div class="meta-val" data-zh="${plant.role_zh}" data-en="${plant.role_en}">${plant.role_zh}</div>
           </div>
           <div class="meta-cell">
-            <div class="meta-label" data-zh="高度" data-en="Height">高度</div>
-            <div class="meta-val">${plant.height[0]}–${plant.height[1]} m</div>
+            <div class="meta-label" data-zh="高度 × 冠幅" data-en="Height × Spread">高度 × 冠幅</div>
+            <div class="meta-val">${plant.height[0]}–${plant.height[1]} × ${plant.spread[0]}–${plant.spread[1]} m</div>
           </div>
           <div class="meta-cell">
-            <div class="meta-label" data-zh="冠幅" data-en="Spread">冠幅</div>
-            <div class="meta-val">${plant.spread[0]}–${plant.spread[1]} m</div>
+            <div class="meta-label" data-zh="成熟期" data-en="To mature">成熟期</div>
+            <div class="meta-val" data-zh="約 ${plant.mature_yr ?? "—"} 年" data-en="~ ${plant.mature_yr ?? "—"} years">約 ${plant.mature_yr ?? "—"} 年</div>
           </div>
         </div>
 
         <div class="drawer-block">
           <div class="drawer-block-title" data-zh="關於這株植物" data-en="About this plant">關於這株植物</div>
           <p class="drawer-text" data-zh="${plant.note_zh}" data-en="${plant.note_en}">${plant.note_zh}</p>
+        </div>
+
+        <div class="drawer-block">
+          <div class="drawer-block-title" data-zh="原產地 · ORIGIN" data-en="Origin">原產地 · ORIGIN</div>
+          <p class="drawer-text" data-zh="${plant.origin_zh ?? "—"}" data-en="${plant.origin_en ?? "—"}">${plant.origin_zh ?? "—"}</p>
         </div>
 
         <div class="drawer-block">
@@ -1728,11 +2202,32 @@ function openDrawer(id) {
           </div>
         </div>
 
-        <div class="drawer-foot" data-zh="Biodiversity Living System · 原生植物資料庫" data-en="Biodiversity Living System · Native Plant Database">Biodiversity Living System · 原生植物資料庫</div>
+        ${plant.companions && plant.companions.length ? `
+          <div class="drawer-block">
+            <div class="drawer-block-title" data-zh="搭配建議" data-en="Companion plants">搭配建議</div>
+            <div class="drawer-companions">
+              ${plant.companions.map(cid => {
+                const c = PLANTS.find(x => x.id === cid);
+                if (!c) return "";
+                return `<button class="companion-pill" data-cid="${cid}"><span data-zh="${c.zh}" data-en="${c.en}">${c.zh}</span></button>`;
+              }).join("")}
+            </div>
+          </div>` : ""}
+
+        <div class="drawer-block">
+          <div class="drawer-block-title" data-zh="哪裡可以買 · SOURCING" data-en="Where to find · SOURCING">哪裡可以買 · SOURCING</div>
+          <p class="drawer-text" data-zh="${plant.sourcing_zh ?? "—"}" data-en="${plant.sourcing_en ?? "—"}">${plant.sourcing_zh ?? "—"}</p>
+        </div>
+
+        <div class="drawer-foot" data-zh="Biodiversity Living System · 植物資料庫" data-en="Biodiversity Living System · Plant Database">Biodiversity Living System · 植物資料庫</div>
       </div>
     </div>`;
   document.getElementById("drawerOverlay").addEventListener("click", closeDrawer);
   document.getElementById("drawerClose").addEventListener("click", (e) => { e.stopPropagation(); closeDrawer(); });
+  // Companion pill clicks → switch the drawer to the companion plant
+  document.querySelectorAll(".companion-pill").forEach((el) => {
+    el.addEventListener("click", (e) => { e.stopPropagation(); openDrawer(el.dataset.cid); });
+  });
   applyLanguage();
 }
 

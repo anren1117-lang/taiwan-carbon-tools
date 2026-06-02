@@ -2700,6 +2700,17 @@
       <button class="agent-quick" onclick="askQuick('怎麼自己留種？')" data-zh="🌱 留種技術" data-en="🌱 Seed saving">🌱 留種技術</button>
       <button class="agent-quick" onclick="askQuick('真菌病害怎麼辦？')" data-zh="🍄 真菌病害" data-en="🍄 Fungal disease">🍄 真菌病害</button>
     </div>
+    <!-- Farming methodology quick chips — alternative ag philosophies -->
+    <div class="agent-quick-chips" id="agentMethodChips" aria-label="Farming methodologies">
+      <span class="agent-quick-label" data-zh="🌳 農法選擇" data-en="🌳 Farming methods">🌳 農法選擇</span>
+      <button class="agent-quick" onclick="askQuick('慣行、友善、有機差別是什麼？')" data-zh="🟢 慣行 / 友善 / 有機差別" data-en="🟢 Conventional vs Friendly vs Organic">🟢 慣行 / 友善 / 有機差別</button>
+      <button class="agent-quick" onclick="askQuick('自然農法怎麼做？')" data-zh="🌾 自然農法 (福岡)" data-en="🌾 Natural farming (Fukuoka)">🌾 自然農法 (福岡)</button>
+      <button class="agent-quick" onclick="askQuick('KNF 韓國天然農業是什麼？')" data-zh="🧫 KNF / JADAM 微生物農法" data-en="🧫 KNF / JADAM">🧫 KNF / JADAM 微生物農法</button>
+      <button class="agent-quick" onclick="askQuick('樸門設計是什麼？')" data-zh="🌳 樸門 Permaculture" data-en="🌳 Permaculture">🌳 樸門 Permaculture</button>
+      <button class="agent-quick" onclick="askQuick('秀明自然農法怎麼做？')" data-zh="🌸 秀明自然農法" data-en="🌸 Shumei">🌸 秀明自然農法</button>
+      <button class="agent-quick" onclick="askQuick('再生農業是什麼？')" data-zh="♻️ 再生農業" data-en="♻️ Regenerative">♻️ 再生農業</button>
+      <button class="agent-quick" onclick="askQuick('厚土栽培怎麼做？')" data-zh="🥞 厚土栽培（不挖土）" data-en="🥞 Sheet mulching">🥞 厚土栽培（不挖土）</button>
+    </div>
     <div id="agentBody"></div>
   </section>
 
@@ -6236,6 +6247,249 @@ This application supports starting organic-transition certification for ≥1 ha.
           ]
         };
       }
+    },
+    {
+      id: 'natural_farming',
+      keywords: ['自然農法', '福岡', '不耕不施', '無為農法', '自然農', 'natural farming', 'fukuoka', 'no-till no-fertilizer', 'do-nothing farming'],
+      topic: { zh: '自然農法 (福岡式)', en: 'Natural farming (Fukuoka)' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '自然農法不是「什麼都不做」 — 是「把工作交給大自然」', en: 'Natural farming isn\'t "do nothing" — it\'s "let nature do the work"' },
+          situation: { zh: '福岡正信的「自然農法」常被誤解。它的核心 4 原則是：不翻耕、不施肥（含有機肥）、不除草（壓制不剷除）、不用農藥。看似激進，但已在日本、台灣、印度有 50+ 年實踐案例。台灣適合自然農法的是稻米、根莖類、果樹；葉菜類因產期短，挑戰較大。轉型期 3-5 年產量會下降 30-50%，之後可能達甚至超過慣行。',
+                       en: 'Fukuoka Masanobu\'s "natural farming" is often misunderstood. Its 4 core principles: no tillage, no fertilizer (including organic), no weeding (suppress, don\'t pull), no chemicals. Sounds extreme but has 50+ years of practice in Japan, Taiwan, India. Best-suited Taiwan crops: rice, root vegetables, fruit trees. Leafy vegetables harder due to short cycles. Transition period: 3-5 years, yields drop 30-50% before potentially matching or exceeding conventional.' },
+          actions: [
+            { zh: '1. <strong>從一塊地開始 (≤ 0.1 ha)</strong> — 不要全場轉。選一塊次要的田試 3 年。福岡稻麥連續耕作（夏稻 + 冬麥）是經典模式。',
+              en: '1. <strong>Start with one plot (≤ 0.1 ha)</strong> — don\'t convert the whole farm. Pick a non-primary plot to trial for 3 years. Fukuoka\'s rice-barley continuous cropping (summer rice + winter barley) is the classic template.' },
+            { zh: '2. <strong>白三葉 / 紫雲英覆蓋作物撒播</strong> — 收成前撒種，作物收成後新苗已起身。永遠不裸土。',
+              en: '2. <strong>Broadcast white clover / Chinese milk vetch cover crops</strong> — sow before harvesting main crop; new seedlings emerge as you harvest. Never leave soil bare.' },
+            { zh: '3. <strong>稻草直接還田</strong> — 收成後稻草不收走、不堆肥、不焚燒。直接覆蓋整片田 5-10 cm 厚。1-2 個月分解成為下季的有機質。',
+              en: '3. <strong>Rice straw returned in place</strong> — after harvest, don\'t remove, compost, or burn straw. Mulch the whole field 5-10cm thick. Decomposes in 1-2 months into next season\'s organic matter.' },
+            { zh: '4. <strong>泥團 (seed ball)</strong> — 福岡發明的種子保護法：把種子、土、堆肥揉成小團，曬乾後直接撒。鳥啃不到、不需翻土、發芽率高。',
+              en: '4. <strong>Seed balls (nendo dango)</strong> — Fukuoka\'s seed protection: roll seeds with clay + compost into marble-size balls, sun-dry, then broadcast. Birds can\'t eat them, no tillage needed, high germination.' },
+            { zh: '5. <strong>觀察記錄 → 不要照搬書</strong> — 福岡的方法在他的氣候 / 土壤條件下發展出來。台灣氣候、害蟲、土壤都不同。每塊地都要自己「觀察學習」3 年才知道哪些通用、哪些要調整。',
+              en: '5. <strong>Observe + log → don\'t copy the book</strong> — Fukuoka\'s method evolved under his specific climate / soil. Taiwan differs in climate, pests, soil. Each plot needs 3 years of personal observation to know what generalizes vs needs adjustment.' }
+          ],
+          pitfalls: {
+            title: { zh: '常見誤解', en: 'Common misconceptions' },
+            items: [
+              { zh: '<strong>「自然農法 = 放著不管」</strong> — 錯。觀察、撒種、覆蓋稻草、補種覆蓋作物都要做，只是不翻耕不施肥', en: '<strong>"Natural farming = neglect"</strong> — wrong. You still observe, broadcast seeds, mulch with straw, plant cover crops. Just no tillage / fertilizer' },
+              { zh: '<strong>「立刻能達到原本產量」</strong> — 第 1-3 年通常掉 30-50%。撐不過經濟壓力者請選友善耕作', en: '<strong>"Yields match conventional from year 1"</strong> — wrong. Years 1-3 drop 30-50%. Those who can\'t weather the economic stress should choose Friendly Farming instead' },
+              { zh: '<strong>「適合所有作物」</strong> — 不是。台灣的葉菜類週期短 + 病蟲壓力大，自然農法困難。從稻米 / 根莖類 / 果樹開始', en: '<strong>"Works for everything"</strong> — no. Taiwan\'s leafy vegetables have short cycles + high pest pressure, hard with natural farming. Start with rice / root vegetables / fruit trees' }
+            ]
+          },
+          resources: {
+            title: { zh: '深入學習資源', en: 'Deeper learning' },
+            items: [
+              { zh: '<strong>《一根稻草的革命》</strong> — 福岡正信原著，方智出版有中譯本。必讀', en: '<strong>"The One-Straw Revolution"</strong> — Fukuoka\'s original book, multiple translations. Required reading' },
+              { zh: '台灣自然農法協會 — Facebook 群組「台灣自然農法實踐交流」', en: 'Taiwan Natural Farming Association — Facebook group "Taiwan Natural Farming Practice Exchange"' },
+              { zh: '宜蘭穀東俱樂部、新竹幸福農莊、台南大山自然農場 — 全台有實踐示範場可拜訪', en: 'Yilan Gu-Dong Club, Hsinchu Happy Farm, Tainan Da-Shan Natural Farm — practicing demonstration farms across Taiwan, open for visits' }
+            ]
+          },
+          links: []
+        };
+      }
+    },
+    {
+      id: 'knf_korean',
+      keywords: ['韓國天然農業', 'knf', '微生物', 'imo', 'fpj', 'lab', '酵素', '本土微生物', 'korean natural farming', 'jadam', 'microbial culture', 'fermented plant juice'],
+      topic: { zh: '韓國天然農業 (KNF/JADAM)', en: 'Korean Natural Farming (KNF/JADAM)' },
+      answer(inp, r) {
+        return {
+          headline: { zh: 'KNF 用「自製微生物配方」取代化肥農藥 — 成本極低', en: 'KNF replaces chemicals + fertilizer with DIY microbial cultures — costs near zero' },
+          situation: { zh: '趙漢珪的韓國天然農業 (KNF) 和 JADAM 是同源不同流派。核心是「本土微生物 (IMO)」+「植物發酵液 (FPJ)」+「乳酸菌 (LAB)」+「天然驅蟲液」等自製配方。台灣近年在小農圈快速擴散，因為成本低 + 不依賴外購投入品 + 可以「自己造肥」。比有機認證友善（成本是有機的 1/5）。',
+                       en: 'Master Cho Han-Kyu\'s KNF and JADAM share roots but differ in style. Core = Indigenous Microorganisms (IMO) + Fermented Plant Juice (FPJ) + Lactic Acid Bacteria (LAB) + natural pest deterrents — all DIY. Spreading fast in Taiwan small-farm circles: low cost + no external input dependency + "make your own fertilizer". Friendlier than organic cert (cost 1/5 of organic).' },
+          actions: [
+            { zh: '1. <strong>本土微生物 (IMO) 收集</strong> — 蒸熟米飯放在山林下竹箱 3-5 天 → 收集到的白色黴菌就是本地土壤微生物。混堆肥 / 噴植株 = 強化土壤生態。',
+              en: '1. <strong>Collect Indigenous Microorganisms (IMO)</strong> — place steamed rice in a bamboo box on forest floor 3-5 days → collect the white mycelium = your local soil microbes. Mix into compost / spray on plants = supercharge soil ecology.' },
+            { zh: '2. <strong>植物發酵液 (FPJ)</strong> — 取早晨 3-4 點露水重的新芽（生長最旺盛時段）+ 紅糖 1:1 重量，密封發酵 7 天。稀釋 500-1000 倍噴施 = 植物生長強壯促進劑。零成本，自己田裡的材料。',
+              en: '2. <strong>Fermented Plant Juice (FPJ)</strong> — collect new shoots at 3-4am (most active growth, dew-heavy) + brown sugar 1:1 by weight, seal + ferment 7 days. Dilute 500-1000× as foliar spray = plant-growth booster. Zero cost, your own field materials.' },
+            { zh: '3. <strong>乳酸菌 (LAB)</strong> — 米泔水 (洗米水) 靜置 7 天 → 表層分離出乳酸菌液 → 加牛奶 1:10 再發酵 7 天 → 過濾。稀釋 500-1000 倍噴施 = 抑制病害 + 改善土壤。',
+              en: '3. <strong>Lactic Acid Bacteria (LAB)</strong> — let rice rinse water sit 7 days → collect top layer → add milk 1:10 + ferment another 7 days → filter. Dilute 500-1000× as spray = disease suppression + soil improvement.' },
+            { zh: '4. <strong>天然驅蟲液</strong> — 辣椒 + 大蒜 + 米酒 + 紅糖密封發酵 7 天。蚜蟲、蛀蟲、毛蟲都有效。稀釋 500 倍噴施。',
+              en: '4. <strong>Natural pest deterrent</strong> — chili + garlic + rice wine + brown sugar sealed 7 days. Works against aphids, borers, caterpillars. Dilute 500× to spray.' },
+            { zh: '5. <strong>學習路徑</strong>— 不要看 YouTube 自學亂做。台灣的 KNF / JADAM 工作坊（NT$ 3,000-8,000/2 天）會手把手帶你做一輪。發酵錯了會失敗甚至傷害植物。',
+              en: '5. <strong>Learning path</strong> — don\'t self-teach from YouTube. Taiwan KNF / JADAM workshops (NT$ 3,000-8,000 / 2 days) walk you through one cycle hands-on. Wrong fermentation fails or damages plants.' }
+          ],
+          checklist: {
+            title: { zh: '入門前準備', en: 'Beginner prep' },
+            items: [
+              { zh: '<strong>容器</strong> — 玻璃罐 / 陶罐 5-20 L 數個（NT$ 50-300/個）', en: '<strong>Containers</strong> — glass / ceramic jars 5-20L, several (NT$ 50-300 each)' },
+              { zh: '<strong>紅糖</strong> — 大量（不要白糖）', en: '<strong>Brown sugar</strong> — bulk (not white sugar)' },
+              { zh: '<strong>米泔水 / 米酒 / 牛奶</strong> — 各小量', en: '<strong>Rice rinse water / rice wine / milk</strong> — small amounts each' },
+              { zh: '<strong>溫度計 + pH 試紙</strong> — 監測發酵狀態', en: '<strong>Thermometer + pH strips</strong> — monitor fermentation' },
+              { zh: '<strong>背負式噴霧器</strong> — 應用配方時用，NT$ 800-2,500', en: '<strong>Backpack sprayer</strong> — for application, NT$ 800-2,500' }
+            ]
+          },
+          resources: {
+            title: { zh: '學習資源', en: 'Learning resources' },
+            items: [
+              { zh: '<strong>KNF 中文社團</strong> — Facebook「KNF 韓國天然農業中文交流」', en: '<strong>KNF Chinese community</strong> — Facebook "KNF Korean Natural Farming Chinese Exchange"' },
+              { zh: '<strong>JADAM 中譯本</strong> — 趙永相博士的《有機農業萬萬歲》、《JADAM 有機栽培》', en: '<strong>JADAM Chinese books</strong> — Dr. Cho Young-Sang\'s "Long Live Organic Farming", "JADAM Organic Cultivation"' },
+              { zh: '<strong>實踐示範場</strong>— 台中外埔「自然農夫」、宜蘭「微生物農場」', en: '<strong>Demonstration farms</strong> — Taichung Waipu "Natural Farmer", Yilan "Microbe Farm"' }
+            ]
+          },
+          links: []
+        };
+      }
+    },
+    {
+      id: 'permaculture',
+      keywords: ['樸門', '永續設計', '森林園藝', '食物森林', '分區', 'permaculture', 'forest garden', 'food forest', 'zone design'],
+      topic: { zh: '樸門設計 (Permaculture)', en: 'Permaculture' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '樸門不是「種菜方法」 — 是「設計農場系統的思考框架」', en: 'Permaculture isn\'t a "way to grow" — it\'s a thinking framework for designing whole-farm systems' },
+          situation: { zh: '比爾·莫立森的樸門 (Permaculture = permanent agriculture) 是「設計學」，重點是把農場當成生態系設計，而不是逐項管理。3 原則：照顧地球、照顧人、共享盈餘。在台灣最常見的應用是「食物森林」（多層次果樹 + 灌木 + 草本 + 根莖）+「水資源整合」+「分區設計」（依使用頻率把工作區安排在離家近 vs 遠的距離）。',
+                       en: 'Bill Mollison\'s Permaculture (= permanent agriculture) is a design discipline — treat the farm as an ecosystem to design, not a list of tasks to manage. 3 ethics: care for earth, care for people, share surplus. Most common Taiwan application: "food forest" (multi-layer fruit + shrub + herb + root) + integrated water management + "zone design" (organize work areas by visit frequency).' },
+          actions: [
+            { zh: '1. <strong>分區 (Zone) 設計</strong> — Zone 0 住家、Z1 廚房菜園 (天天去)、Z2 蔬果區 (週去 2-3 次)、Z3 果園穀物 (週 1 次)、Z4 半野放 (月 1 次)、Z5 野地 (不去)。把高需求作物擺近，省走路時間 30%+。',
+              en: '1. <strong>Zone design</strong> — Zone 0 home, Z1 kitchen garden (daily), Z2 vegetables (2-3×/wk), Z3 orchard + grain (weekly), Z4 semi-wild (monthly), Z5 wilderness (untouched). Put high-touch crops close — saves 30%+ walking time.' },
+            { zh: '2. <strong>食物森林 (food forest) 七層</strong>— 大喬木（核桃、酪梨）→ 小喬木（柑橘、楊桃）→ 灌木（藍莓、桑椹）→ 草本（蔬菜香草）→ 根莖（地瓜、薑黃）→ 攀爬植物（葡萄、奇異果）→ 覆蓋地表（蕃薯葉、清明草）。模仿森林結構，自我維持。',
+                en: '2. <strong>Food forest 7 layers</strong> — canopy (walnut, avocado) → understory (citrus, star fruit) → shrubs (blueberry, mulberry) → herbs (vegetables + herbs) → roots (sweet potato, turmeric) → vines (grapes, kiwi) → ground cover (sweet potato leaves, chickweed). Mimics forest structure, self-maintains.' },
+            { zh: '3. <strong>水資源整合</strong> — 等高線設計（swale）讓雨水滲入而不流失。屋頂雨水蓄水池 + 灰水回收。乾旱台灣這個能救命。',
+              en: '3. <strong>Integrated water</strong> — contour design (swales) makes rain infiltrate instead of run off. Rooftop rainwater catchment + greywater recycling. Lifesaver in Taiwan\'s drier regions.' },
+            { zh: '4. <strong>「邊緣效應」</strong>— 兩個生態系交界處（如森林邊緣、水池邊）生命力最旺。設計時故意創造更多「邊緣」（彎曲池塘邊、不規則果園邊界）= 提高生產力 + 生物多樣性。',
+              en: '4. <strong>"Edge effect"</strong> — boundaries between ecosystems (forest edge, pond edge) are most vital. Deliberately design more edges (curvy pond shoreline, irregular orchard boundary) = higher productivity + biodiversity.' },
+            { zh: '5. <strong>觀察先於行動</strong>— 樸門經典口號「Observe + Interact」。買地後第一年「不種任何東西」，只觀察陽光、風向、排水、土壤、野生動植物。年底再決定佈局。多數新農夫跳過這步，3 年後悔。',
+              en: '5. <strong>Observe before act</strong> — Permaculture mantra: "Observe + Interact". After buying land, "plant nothing the first year"; just observe sun, wind, drainage, soil, wildlife. Decide layout after a year. Most new farmers skip this and regret it 3 years later.' }
+          ],
+          resources: {
+            title: { zh: '台灣樸門資源', en: 'Taiwan permaculture resources' },
+            items: [
+              { zh: '<strong>大地旅人環境工作室</strong> — 台灣樸門認證 PDC 設計師最大訓練單位', en: '<strong>Earth Passenger Environmental Studio</strong> — Taiwan\'s largest Permaculture Design Certificate (PDC) training body' },
+              { zh: '<strong>《向大自然學設計》</strong>— 大地旅人著，台灣本土樸門入門書', en: '<strong>"Learn Design from Nature"</strong> — Earth Passenger\'s Taiwan-context permaculture intro' },
+              { zh: '<strong>新店半天工作室、宜蘭觀照農場、屏東大樹</strong>— 全台示範場可參訪', en: '<strong>Demonstration sites</strong> — Half-Day Studio (Xindian), Guan-Zhao Farm (Yilan), Big Tree (Pingtung)' },
+              { zh: '<strong>PDC 課程 (72 小時)</strong>— NT$ 25,000-40,000，國際認證樸門設計師執照', en: '<strong>PDC course (72 hrs)</strong> — NT$ 25,000-40,000, internationally-recognized Permaculture Design Certificate' }
+            ]
+          },
+          links: []
+        };
+      }
+    },
+    {
+      id: 'shumei',
+      keywords: ['秀明', '岡田茂吉', '秀明農法', '無肥料栽培', '不施肥', 'shumei', 'mokichi okada', 'no-fertilizer farming'],
+      topic: { zh: '秀明自然農法', en: 'Shumei natural farming' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '秀明 = 不施肥、不農藥、純淨水 — 比自然農法更極端', en: 'Shumei = no fertilizer, no chemicals, pure water — even stricter than Fukuoka' },
+          situation: { zh: '日本岡田茂吉的秀明自然農法是極簡派：不施任何肥料（包括堆肥）、不用任何農藥、用乾淨水源、自家留種、心懷感恩。比福岡的自然農法更嚴格。台灣有少數實踐者，產量比慣行少 40-60%，但訴求「最純淨食物」+「精神實踐」的客群願意付 3-5 倍價格。屬於「價格頂層」但「規模有限」的小眾路線。',
+                       en: 'Master Mokichi Okada\'s Shumei is the minimalist school: no fertilizer (including compost), no chemicals, pure water, save own seeds, gratitude practice. Stricter than Fukuoka. Few Taiwan practitioners; yields drop 40-60% vs conventional, but customers seeking "pure food + spiritual practice" pay 3-5× price. Top-price tier but limited-scale niche.' },
+          actions: [
+            { zh: '1. <strong>適合 vs 不適合 — 三檢查</strong>：(a) 你的土壤已健康（前主人沒大量化肥）？(b) 你有 3-5 年沒收入的緩衝？(c) 你有現成的高端客群願意付溢價？三個都 yes 才考慮。',
+              en: '1. <strong>Suitability — 3 checks</strong>: (a) is your soil already healthy (no heavy chemical history)? (b) do you have 3-5 yrs of income runway? (c) do you have existing high-end customers willing to pay premium? Only consider if all 3 = yes.' },
+            { zh: '2. <strong>水源測試先做</strong>— 秀明強調水源「純淨」。地下水 + 山泉 + 自集雨水皆可；自來水（含氯）+ 灌溉渠（污染）不行。送 SGS / 工研院測一次水質（NT$ 1,500-3,000）。',
+              en: '2. <strong>Test water source first</strong> — Shumei emphasizes "pure water". Groundwater + spring + harvested rain OK; tap water (chlorine) + irrigation canals (pollution) not. Send sample to SGS / ITRI for water test (NT$ 1,500-3,000).' },
+            { zh: '3. <strong>自家留種 ≥ 3 代</strong>— 商業種子（F1）長期效果差。從現有作物中選最強壯的留種，5-10 代後形成「適應你田的品系」。看「留種」答案。',
+              en: '3. <strong>Save own seeds ≥ 3 generations</strong> — commercial F1 seeds underperform long-term. Select strongest plants for seed; after 5-10 generations you have "land-adapted varieties". See "Seed saving" answer.' },
+            { zh: '4. <strong>找客群比種好更重要</strong>— 高溢價作物（NT$ 200-500/kg）的買家不多。先建立 20-30 戶忠實客戶（CSA / 訂閱），再開始大面積轉作。',
+              en: '4. <strong>Find customers before scaling</strong> — high-premium produce (NT$ 200-500/kg) has limited buyers. Build 20-30 loyal customers (CSA / subscription) FIRST, then expand acreage.' },
+            { zh: '5. <strong>不要邊轉型邊質疑</strong>— 秀明是「信念實踐」+「自然觀察」的綜合，產量恢復需要 5-8 年。半途回頭浪費所有累積。確定要做才開始。',
+              en: '5. <strong>Don\'t convert + question simultaneously</strong> — Shumei is "belief practice + natural observation" combined; yield recovery takes 5-8 yrs. Halfway turnaround wastes all accumulated effort. Commit fully or don\'t start.' }
+          ],
+          resources: {
+            title: { zh: '台灣秀明資源', en: 'Taiwan Shumei resources' },
+            items: [
+              { zh: '<strong>秀明自然農法協會 (台灣)</strong> — 認證實踐者網絡，定期辦研習', en: '<strong>Shumei Natural Farming Association (Taiwan)</strong> — certified practitioner network, regular workshops' },
+              { zh: '<strong>苗栗、南投、宜蘭等</strong>有秀明示範農場可拜訪。拜訪是入門最快路徑', en: '<strong>Miaoli, Nantou, Yilan</strong> have Shumei demonstration farms open for visits. Site visits = fastest entry path' }
+            ]
+          },
+          links: []
+        };
+      }
+    },
+    {
+      id: 'regenerative_ag',
+      keywords: ['再生農業', '再生有機', '土壤再生', '碳農業', '再生畜牧', 'regenerative', 'soil regeneration', 'carbon farming', 'holistic grazing'],
+      topic: { zh: '再生農業', en: 'Regenerative agriculture' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '再生農業 = 「不只不傷害，還要修復」— 超越有機', en: 'Regenerative = "not just no-harm, actively restore" — beyond organic' },
+          situation: { zh: '近年國際興起的「再生農業」標準比有機更高：不僅停止化學投入，還要積極累積土壤碳、提升生物多樣性、改善水循環。Patagonia + General Mills + Nestlé 等大企業已要求供應商走再生路線。台灣才剛開始，但「碳匯先行區域試辦」就是這個方向。對小農意義：未來 5-10 年「再生認證」可能成為高溢價國際採購的入場券。',
+                       en: 'Internationally-rising "regenerative ag" sets a higher bar than organic: not just stop chemicals, but actively build soil carbon, biodiversity, and water cycle. Patagonia + General Mills + Nestlé now require suppliers on regenerative path. Taiwan just starting — but the Carbon Pilot Program is in this direction. For small farms: in 5-10 yrs "regenerative cert" may be the entry ticket to premium international procurement.' },
+          actions: [
+            { zh: '1. <strong>5 大支柱要全做</strong>— (a) 最小翻土 (b) 永遠覆蓋土壤 (c) 種類多元（單作禁止）(d) 整合動物（畜牧融入耕作系統）(e) 活根永遠在土裡（多季作物 + 覆蓋作物）。少一條 = 不算再生。',
+              en: '1. <strong>All 5 pillars required</strong> — (a) minimum tillage (b) keep soil covered (c) diversity (no monoculture) (d) integrate animals (livestock into cropping system) (e) living roots always in soil (multi-season + cover crops). Missing one = not regenerative.' },
+            { zh: '2. <strong>測量土壤碳 → 每 2 年</strong>— 再生農業的「證據」就是 SOC 累積。基準採樣 + 每 2 年複測（NT$ 1,500-3,000/次）。沒測 = 沒辦法證明自己是再生。',
+              en: '2. <strong>Measure soil C every 2 yrs</strong> — regenerative\'s "evidence" is SOC accumulation. Baseline sample + biennial retest (NT$ 1,500-3,000 each). Without data = can\'t prove you\'re regenerative.' },
+            { zh: '3. <strong>申請「碳匯先行區域試辦」</strong>— 農業部 + 環境部合作，補助 NT$ 20,000/ha + 未來碳信用可能性。看「補助清單」面板。',
+              en: '3. <strong>Apply for "Carbon Pilot Program"</strong> — joint MOA + MOENV initiative, NT$ 20k/ha subsidy + future carbon credit potential. See Subsidies panel.' },
+            { zh: '4. <strong>國際認證可遠期看 ROC / RA Cert</strong>— Regenerative Organic Certified（美國）、Regenagri（英國）。目前台灣還沒被廣泛承認，但 3-5 年內外銷 / 國際電商會開始要求。',
+              en: '4. <strong>International cert options (long-term)</strong> — Regenerative Organic Certified (USA), Regenagri (UK). Not yet widely recognized in Taiwan, but export / international e-commerce will start requiring within 3-5 yrs.' },
+            { zh: '5. <strong>放牧融入</strong>— 真正的再生需要動物參與。雞 / 鴨在作物收成後輪牧吃殘渣 + 留糞肥 = 模擬野牛遷徙模式。沒地方放牧的小農可考慮「拖車式雞舍」。',
+              en: '5. <strong>Integrate grazing</strong> — true regenerative needs animals. Chickens / ducks rotate on post-harvest fields, eating residue + leaving manure = mimics wild grazer migration. Small farms without space can use "chicken tractors" (mobile coops).' }
+          ],
+          links: [
+            { label: { zh: '看碳匯補助', en: 'Carbon pilot subsidy' }, href: '#sec-income' }
+          ]
+        };
+      }
+    },
+    {
+      id: 'farming_methods_compare',
+      keywords: ['慣行', '友善', '有機', '差別', '比較', '一樣嗎', '哪個好', 'conventional', 'friendly', 'organic', 'difference', 'compare methods'],
+      topic: { zh: '慣行 vs 友善 vs 有機', en: 'Conventional vs Friendly vs Organic' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '3 個級別差很多 — 認證難度、產量、毛利、客群都不一樣', en: '3 tiers differ a LOT — cert difficulty, yield, margin, customer base all different' },
+          situation: { zh: '台灣農業最常被混淆的 3 個詞。簡單一句：<strong>慣行 = 可以噴藥施化肥；友善 = 大幅減量但有彈性；有機 = 零化學 + 第三方驗證</strong>。但實際差異不只是「能不能噴藥」 — 包含轉型期、認證費、產量恢復、客群、通路、價格。',
+                       en: 'Taiwan ag\'s 3 most-confused terms. One-liner: <strong>conventional = chemical-OK; friendly = greatly reduced but flexible; organic = zero chemical + third-party verified</strong>. But real differences span more than spray rights — including transition period, cert fee, yield recovery, customer base, channel, price.' },
+          actions: [
+            { zh: '1. <strong>慣行（傳統）</strong>— 化肥 + 農藥 + 商業種子，依「合法用藥規範」即可。沒有額外認證費，但客群只能走拍賣市場 / 一般通路 / 學校。價格被市場價限制。台灣 80% 以上農場屬此。',
+              en: '1. <strong>Conventional</strong> — chemicals + commercial seed, following "legal pesticide regulations". No extra cert fee but channels limited to wholesale auction / generic retail / school. Price market-capped. 80%+ of Taiwan farms.' },
+            { zh: '2. <strong>友善耕作（登錄制）</strong>— 自我承諾「減量使用化學品 + 採用 ≥ 1 項土地管理做法」。免費登錄、無第三方驗證、無轉型期、可拿友善補助（NT$ 30k/ha）。客群包括主婦聯盟、里仁部分通路、CSA 訂閱戶。',
+              en: '2. <strong>Friendly Farming (registration-based)</strong> — self-commitment to "reduce chemicals + adopt ≥ 1 land-management practice". Free registration, NO third-party verification, no transition period, eligible for Friendly subsidy (NT$ 30k/ha). Customers include Homemakers Union, partial Leezen, CSA.' },
+            { zh: '3. <strong>有機（驗證制）</strong>— 零化學農藥 + 零化學肥料 + 第三方驗證機構驗證（TOAF/MOA/TAF-OC 等）。年費 NT$ 6,000-25,000。<strong>有 2 年轉型期</strong>（期間不能標「有機」但已按有機方式種）。產量初期下降 20-40%，5-7 年才回到接近慣行。但價格可達慣行 2-3 倍。',
+              en: '3. <strong>Organic (cert-based)</strong> — zero chemical pesticide + zero chemical fertilizer + third-party-verified (TOAF/MOA/TAF-OC etc). Annual fee NT$ 6,000-25,000. <strong>2-year transition</strong> (can\'t label "organic" yet but already farming organically). Initial yield drops 20-40%; recovers near-conventional in 5-7 yrs. But price can hit 2-3× conventional.' },
+            { zh: '4. <strong>「友善 → 有機」是經典路徑</strong>— 不要從慣行直跳有機（產量 + 現金流雙重壓力）。先做友善 2-3 年穩定 + 累積客群 + 攢轉型期緩衝，再開始有機轉型。',
+              en: '4. <strong>"Friendly → Organic" is the classic path</strong> — don\'t jump straight from conventional to organic (double pressure on yield + cash flow). Stabilize as Friendly for 2-3 yrs first, build customer base + transition runway, then convert.' },
+            { zh: '5. <strong>選擇邏輯</strong>— 看「現金壓力 vs 溢價野心」三角形：高現金壓力 → 慣行 + 部分友善；中等 → 友善 + 培養客群；低現金壓力 + 高溢價野心 → 有機轉型。沒有「正確答案」，只有「適合你的階段」。',
+              en: '5. <strong>Choice logic</strong> — assess "cash pressure vs premium ambition" triangle: high cash pressure → conventional + partial friendly; medium → friendly + build customer base; low cash + high ambition → organic transition. No "right answer", only "right for your stage".' }
+          ],
+          links: [
+            { label: { zh: '看認證階梯', en: 'See cert ladder' }, href: '#sec-survival' },
+            { label: { zh: '看補助清單', en: 'See subsidies' }, href: '#sec-income' }
+          ]
+        };
+      }
+    },
+    {
+      id: 'sheet_mulching',
+      keywords: ['厚土栽培', '厚厚的土', '紙板覆蓋', '簡單翻地', '不挖土', '建立菜園', 'sheet mulching', 'lasagna gardening', 'no-dig', 'build garden'],
+      topic: { zh: '厚土栽培 / 不挖土建園', en: 'Sheet mulching / no-dig garden building' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '不用挖土、不用翻耕，6 個月後變肥沃菜園', en: 'No digging, no tilling — fertile garden in 6 months' },
+          situation: { zh: '想擴菜園但土壤板結、雜草多、不想動大工程？厚土栽培（sheet mulching / lasagna gardening）是樸門經典技術：直接在現有土地上「層層堆疊」有機材料 → 紙板壓制雜草 → 6 個月後分解成最肥沃的種植層。比翻耕省 80% 體力、保留土壤生態、零化學投入。',
+                       en: 'Want to expand vegetable plots but soil is compacted, weedy, and you don\'t want major earthworks? Sheet mulching (a.k.a. lasagna gardening) is a permaculture classic: layer organic materials directly on top of existing land → cardboard suppresses weeds → 6 months later you have the most fertile planting layer. 80% less labor than tilling, preserves soil biology, zero chemical input.' },
+          actions: [
+            { zh: '1. <strong>選地 + 不除草</strong>— 選你要建菜園的位置，雜草不用先除（厚土栽培會壓死它們）。如果有大型雜草（茅草、芒草）可先割短 ≤ 10 cm。',
+              en: '1. <strong>Choose site + don\'t weed</strong> — pick where you want the garden; don\'t weed first (sheet mulch suppresses them). If huge weeds (alang grass, miscanthus), cut to ≤ 10 cm first.' },
+            { zh: '2. <strong>第 1 層：紙板或報紙</strong>— 直接鋪在地面，重疊 10 cm，沒間隙。紙板要先泡濕。紙板會阻光殺雜草、慢慢分解。',
+              en: '2. <strong>Layer 1: cardboard or newspaper</strong> — directly on ground, overlap 10cm, no gaps. Soak cardboard first. It blocks light, suppresses weeds, slowly decomposes.' },
+            { zh: '3. <strong>第 2 層：碳源（棕色）</strong>— 稻草、乾葉、木屑 10-15 cm 厚。提供長期分解的「碳骨架」。',
+              en: '3. <strong>Layer 2: brown (carbon)</strong> — straw, dry leaves, wood chips, 10-15cm thick. Provides slow-decomposing "carbon skeleton".' },
+            { zh: '4. <strong>第 3 層：氮源（綠色）</strong>— 廚餘、青草、咖啡渣、堆肥 5-10 cm。啟動分解的熱量。',
+              en: '4. <strong>Layer 3: green (nitrogen)</strong> — food scraps, grass clippings, coffee grounds, compost, 5-10cm. Sparks decomposition heat.' },
+            { zh: '5. <strong>第 4 層：再一層碳源 + 第 5 層成熟堆肥 5-8 cm + 第 6 層稻草覆蓋 10 cm</strong>。總厚度約 30-50 cm。澆透水。等 4-6 個月可開始種。急用可立即在堆上挖洞填袋裝土種瓜類 / 番茄。',
+              en: '5. <strong>Layer 4: more browns + Layer 5: mature compost 5-8cm + Layer 6: straw mulch 10cm</strong>. Total ~30-50cm thick. Soak with water. Wait 4-6 months to plant directly. Urgent? Pocket-plant cucurbits / tomatoes in soil-filled holes immediately on top.' },
+            { zh: '6. <strong>每年補頂</strong>— 厚土層每年下沉 10-20%（分解了）。秋天補一層稻草 + 堆肥 = 永久延續。',
+              en: '6. <strong>Top up yearly</strong> — sheet layer sinks 10-20% per year (decomposing). Autumn top-up of straw + compost = perpetual maintenance.' }
+          ],
+          pitfalls: {
+            title: { zh: '常見錯誤', en: 'Common mistakes' },
+            items: [
+              { zh: '<strong>紙板有膠帶 / 塑膠</strong> 全部撕掉，否則會塑膠污染', en: '<strong>Cardboard with tape / plastic</strong> remove all of it, otherwise plastic pollution' },
+              { zh: '<strong>沒澆水</strong> 厚土層乾枯就不會分解。每週至少澆一次到底', en: '<strong>Not watering</strong> dry sheet mulch doesn\'t decompose. Soak weekly to bottom' },
+              { zh: '<strong>太快種</strong> 月內就種 = 根扎不下去到地表（紙板還沒分解）。耐心等 4-6 個月', en: '<strong>Planting too soon</strong> within 1 month = roots can\'t reach ground (cardboard still intact). Wait 4-6 months' },
+              { zh: '<strong>用染色紙板</strong> 含化學染料污染土壤。只用素色紙板', en: '<strong>Dyed cardboard</strong> contains chemical dyes that contaminate. Use only plain brown' }
+            ]
+          },
+          links: [
+            { label: { zh: '看堆肥製作', en: 'See composting' }, href: '#sec-agent' }
+          ]
+        };
+      }
     }
   ];
 
@@ -6353,7 +6607,14 @@ This application supports starting organic-transition certification for ≥1 ha.
     nutrient_deficiency: ['fertilizer_timing', 'soil_ph', 'soil_test'],
     crop_calendar:       ['crop_rotation', 'crop_veg', 'crop_rice'],
     bird_wildlife:       ['pest_disease', 'climate_risk', 'crop_fruit'],
-    greenhouse:          ['crop_veg', 'climate_risk', 'subsidies_available']
+    greenhouse:          ['crop_veg', 'climate_risk', 'subsidies_available'],
+    natural_farming:        ['shumei', 'farming_methods_compare', 'crop_rice'],
+    knf_korean:             ['composting', 'fertilizer_timing', 'natural_farming'],
+    permaculture:           ['crop_rotation', 'companion_planting', 'sheet_mulching'],
+    shumei:                 ['natural_farming', 'seed_saving', 'farming_methods_compare'],
+    regenerative_ag:        ['practice_invest', 'subsidies_available', 'soil_test'],
+    farming_methods_compare:['cert_question', 'organic_transition', 'practice_invest'],
+    sheet_mulching:         ['composting', 'weed_mgmt', 'permaculture']
   };
 
   // ── Recent questions history (per-farm, localStorage) ───────────
@@ -6431,6 +6692,13 @@ This application supports starting organic-transition certification for ≥1 ha.
     '什麼季節種什麼？':          { zh: '什麼季節種什麼？',          en: 'What should I plant in each Taiwan season?' },
     '怎麼自己留種？':            { zh: '怎麼自己留種？',            en: 'How do I save my own seeds?' },
     '真菌病害怎麼辦？':          { zh: '真菌病害怎麼辦？',          en: 'How do I prevent + manage fungal disease?' },
+    '慣行、友善、有機差別是什麼？': { zh: '慣行、友善、有機差別是什麼？', en: 'What\'s the difference between conventional, friendly, and organic farming?' },
+    '自然農法怎麼做？':           { zh: '自然農法怎麼做？',           en: 'How do I practice Fukuoka-style natural farming?' },
+    'KNF 韓國天然農業是什麼？':    { zh: 'KNF 韓國天然農業是什麼？',    en: 'What is KNF (Korean Natural Farming) and how do I start?' },
+    '樸門設計是什麼？':           { zh: '樸門設計是什麼？',           en: 'What is permaculture and how do I apply it to my farm?' },
+    '秀明自然農法怎麼做？':       { zh: '秀明自然農法怎麼做？',       en: 'How does Shumei natural farming work?' },
+    '再生農業是什麼？':           { zh: '再生農業是什麼？',           en: 'What is regenerative agriculture?' },
+    '厚土栽培怎麼做？':           { zh: '厚土栽培怎麼做？',           en: 'How do I sheet-mulch to build a no-dig garden?' },
     '我覺得太累、撐不下去': { zh: '我覺得太累、撐不下去', en: 'I\'m exhausted and want to give up' }
   };
   // One-tap quick-chip → submit through the same pipeline as a typed
