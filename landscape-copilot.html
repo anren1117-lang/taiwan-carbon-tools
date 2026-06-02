@@ -293,6 +293,77 @@
   }
   .companion-pill:hover { background: var(--forest); color: var(--paper); border-color: var(--forest); }
 
+  /* AREA ESTIMATOR — inline collapsible toolkit */
+  .est-toggle {
+    margin-top: 8px;
+    background: none; border: none;
+    color: var(--sage-deep);
+    font-family: inherit; font-size: 12.5px; font-weight: 600;
+    cursor: pointer; padding: 4px 0;
+    text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; text-decoration-color: rgba(110,126,96,0.4);
+  }
+  .est-toggle:hover { color: var(--forest); text-decoration-color: var(--forest); }
+  .est-box {
+    margin-top: 12px;
+    background: rgba(255,255,255,0.55);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 16px;
+  }
+  .est-tabs { display: flex; gap: 4px; background: rgba(0,0,0,0.04); border-radius: 999px; padding: 3px; margin-bottom: 14px; }
+  .est-tab {
+    flex: 1; padding: 7px 10px; background: none; border: none; border-radius: 999px;
+    font-family: inherit; font-size: 12px; font-weight: 500;
+    color: var(--ink-soft); cursor: pointer; transition: all .2s;
+  }
+  .est-tab.on { background: var(--forest); color: var(--paper); font-weight: 600; }
+  .est-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .est-ref-row { display: grid; grid-template-columns: 1fr; gap: 6px; max-height: 200px; overflow-y: auto; padding-right: 4px; }
+  .est-ref-row::-webkit-scrollbar { width: 6px; }
+  .est-ref-row::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
+  .est-ref {
+    text-align: left; background: rgba(255,255,255,0.5);
+    border: 1px solid var(--line); border-radius: 10px;
+    padding: 9px 12px; cursor: pointer;
+    font-family: inherit; font-size: 12.5px; color: var(--ink);
+    display: flex; justify-content: space-between; align-items: center;
+    transition: all .2s;
+  }
+  .est-ref:hover { border-color: var(--sage); }
+  .est-ref.on { background: var(--forest); color: var(--paper); border-color: var(--forest); }
+  .est-ref .dim { font-family: var(--serif); font-style: italic; font-size: 11.5px; opacity: 0.7; }
+  .est-input { width: 100%; background: rgba(255,255,255,0.6); border: 1px solid var(--line); border-radius: 8px; padding: 9px 12px; font-family: inherit; font-size: 14px; color: var(--forest); text-align: right; }
+  .est-input:focus { outline: none; border-color: var(--sage); }
+  .est-input-lbl { font-size: 11px; color: var(--ink-soft); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px; display: block; }
+  .est-result {
+    margin-top: 12px; padding: 12px 14px;
+    background: rgba(110,126,96,0.12); border-radius: 10px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: var(--serif);
+  }
+  .est-result .lbl { font-size: 12px; color: var(--ink-soft); letter-spacing: 0.05em; }
+  .est-result .val { font-size: 18px; font-weight: 700; color: var(--forest); }
+  .est-apply { margin-top: 12px; width: 100%; }
+  .est-help { font-size: 11.5px; color: var(--ink-soft); line-height: 1.55; margin-bottom: 10px; font-family: var(--serif); font-style: italic; }
+
+  /* DICTIONARY view */
+  .dict-toolbar { display: grid; grid-template-columns: 1fr auto; gap: 10px; margin-bottom: 14px; align-items: center; }
+  .dict-search {
+    background: rgba(255,255,255,0.55); border: 1px solid var(--line); border-radius: 12px;
+    padding: 10px 14px; font-family: inherit; font-size: 14px; color: var(--forest);
+    width: 100%;
+  }
+  .dict-search:focus { outline: none; border-color: var(--sage); box-shadow: 0 0 0 3px rgba(138,154,123,0.18); }
+  .dict-count { font-size: 12.5px; color: var(--ink-soft); font-family: var(--serif); font-style: italic; }
+  .dict-chiprow { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+  .dict-chip {
+    background: rgba(255,255,255,0.5); border: 1px solid var(--line); border-radius: 999px;
+    padding: 6px 13px; font-family: inherit; font-size: 12px; color: var(--ink-soft); cursor: pointer;
+    transition: all .2s; display: inline-flex; align-items: center; gap: 5px;
+  }
+  .dict-chip:hover { color: var(--forest); border-color: var(--sage); }
+  .dict-chip.on { background: var(--forest); color: var(--paper); border-color: var(--forest); }
+
   /* GEOCODE button row in details step */
   .addr-action-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
   .addr-btn {
@@ -932,6 +1003,325 @@ const PLANTS = [
     care_zh:"全日照，耐旱。過度澆水反而減花。重剪促開花。耐鹽風。",
     care_en:"Full sun. Drought tolerant — over-watering reduces flowering. Hard prune to promote bloom. Salt- and wind-tolerant.",
     supports_zh:["蜂蝶","全年觀賞","外來"], supports_en:["Pollinators","Year-round display","Non-native"] },
+
+  // ─── Round 3: dictionary expansion (24 more — natives + popular ornamentals) ───
+  // Canopy — native shade and feature trees
+  { id:"cinnamomum", zh:"樟樹", en:"Camphor Tree", lt:"Cinnamomum camphora",
+    tier:"T", type_zh:"大喬木 · 原生", type_en:"Large tree · native",
+    sun:["full","part"], water:"med", height:[5,15], spread:[5,10],
+    spaces:["yard"], container_ok:false,
+    role_zh:"主樹遮蔭", role_en:"Anchor shade tree",
+    bloom:[4,5], fruit:[10,11,12],
+    color:"#3F5A2E", cost:2200,
+    note_zh:"台灣最具代表性的原生喬木之一，全株具樟腦香氣，是傳統「老樹公」與街道景觀的主角。長壽、耐汙染、根深，是大空間的首選遮蔭樹。",
+    note_en:"One of Taiwan's most iconic native trees. Whole tree exudes camphor scent — a classic village sacred tree and street-scape backbone. Long-lived, pollution-tolerant, deep-rooted — the first choice for large-space shade.",
+    care_zh:"全日照至半日照，深厚土壤。初期需澆水建立，成樹後耐旱。需要大空間（距建物 4m 以上）。",
+    care_en:"Full to part sun. Deep soil. Water during establishment. Mature trees are drought tolerant. Needs space (4m+ from buildings).",
+    supports_zh:["鳥類棲地","空氣淨化","民俗樹"], supports_en:["Bird habitat","Air purification","Cultural heritage"] },
+
+  { id:"koelreuteria", zh:"台灣欒樹", en:"Taiwan Golden-rain Tree", lt:"Koelreuteria henryi",
+    tier:"T", type_zh:"喬木 · 台灣特有", type_en:"Tree · Taiwan endemic",
+    sun:["full"], water:"med", height:[6,15], spread:[5,8],
+    spaces:["yard"], container_ok:false,
+    role_zh:"秋季四色", role_en:"Four-color autumn",
+    bloom:[9,10], fruit:[10,11,12],
+    color:"#E0A03A", cost:1800,
+    note_zh:"台灣特有種，秋日連續四色變化：綠葉→黃花→粉紅蒴果→褐色種子，被譽為「四色樹」。是行道樹與生態樹的完美結合。",
+    note_en:"Taiwan-endemic, famed for its four sequential autumn colors: green leaves → yellow flowers → pink seed capsules → brown seeds. The perfect blend of street tree and ecological tree.",
+    care_zh:"全日照，適應性極強。落葉樹，冬季可重剪整形。",
+    care_en:"Full sun. Highly adaptable. Deciduous — can be hard-pruned in winter for shape.",
+    supports_zh:["蜂蝶蜜源","誘鳥","台灣特有"], supports_en:["Pollinators","Bird food","Taiwan endemic"] },
+
+  { id:"liquidambar", zh:"楓香", en:"Formosan Sweetgum", lt:"Liquidambar formosana",
+    tier:"T", type_zh:"大喬木 · 原生", type_en:"Large tree · native",
+    sun:["full"], water:"med", height:[8,20], spread:[5,10],
+    spaces:["yard"], container_ok:false,
+    role_zh:"秋紅落葉", role_en:"Autumn-red foliage",
+    bloom:[3,4], fruit:[10,11,12],
+    color:"#B23A30", cost:2000,
+    note_zh:"台灣低中海拔原生大喬木，俗稱「台灣楓」，秋冬轉紅落葉，球形蒴果掛枝。是少數能在亞熱帶展現北國秋色的本土樹。",
+    note_en:"Taiwan-native large tree of low-mid mountains. Called the 'Taiwan maple' — autumn-red deciduous foliage with persistent spiky seed balls. One of few natives that brings northern-style autumn color to a subtropical garden.",
+    care_zh:"全日照，深厚排水良好土壤。需要大空間。",
+    care_en:"Full sun. Deep well-drained soil. Needs space.",
+    supports_zh:["秋色","誘鳥","落葉觀察"], supports_en:["Autumn color","Bird food","Deciduous interest"] },
+
+  { id:"osmanthus", zh:"桂花", en:"Sweet Osmanthus", lt:"Osmanthus fragrans",
+    tier:"S", type_zh:"灌木/小喬木 · 引入常見", type_en:"Shrub/small tree · cultivated",
+    sun:["full","part"], water:"med", height:[1.5,4], spread:[1,2.5],
+    spaces:["balcony","rooftop","yard"], container_ok:true,
+    role_zh:"芳香金粒", role_en:"Tiny fragrant gold",
+    bloom:[9,10,11,3,4], fruit:[],
+    color:"#E8C56A", cost:600,
+    note_zh:"原生於中國南方、栽培極廣的芳香常綠樹，秋日綻放細小金黃花，香氣甜潤瀰漫數十公尺。可作為盆栽或庭院芳香主角。",
+    note_en:"Native to southern China, widely cultivated. Tiny golden autumn flowers release sweet fragrance for tens of meters. Container or garden fragrance star.",
+    care_zh:"全日照至半日照，肥沃排水良好土壤。花後可輕修。耐旱性中等。",
+    care_en:"Full to part sun. Fertile well-drained soil. Light prune after bloom. Moderate drought tolerance.",
+    supports_zh:["濃郁芳香","秋花"], supports_en:["Intense fragrance","Autumn bloom"] },
+
+  { id:"wax_apple", zh:"蓮霧", en:"Wax Apple", lt:"Syzygium samarangense",
+    tier:"T", type_zh:"果樹 · 引入常見", type_en:"Fruit tree · cultivated",
+    sun:["full"], water:"med", height:[3,8], spread:[3,5],
+    spaces:["yard"], container_ok:false,
+    role_zh:"可食果樹", role_en:"Edible fruit tree",
+    bloom:[2,3,4], fruit:[4,5,6,11,12],
+    color:"#E84A5C", cost:1500,
+    note_zh:"台灣最具代表性的可食果樹之一，粉紅鈴狀果實清甜多汁。南部表現最佳，是家庭果園與屏東黑珍珠的明星。",
+    note_en:"One of Taiwan's most iconic edible fruit trees. Bell-shaped pink fruit, crisp and juicy. Best in southern Taiwan — backbone of home orchards and the famed Pingtung Black Pearl variety.",
+    care_zh:"全日照，肥沃土壤，規律施肥與澆水。冬季略乾旱可促花。",
+    care_en:"Full sun. Fertile soil. Regular feeding and watering. Slight winter dryness encourages bloom.",
+    supports_zh:["可食果","蜂類","家庭果園"], supports_en:["Edible","Bees","Home orchard"] },
+
+  { id:"livistona", zh:"蒲葵", en:"Chinese Fan Palm", lt:"Livistona chinensis",
+    tier:"T", type_zh:"棕櫚 · 原生", type_en:"Palm · native",
+    sun:["full","part"], water:"med", height:[3,10], spread:[3,5],
+    spaces:["yard"], container_ok:false, coastal_ok:true,
+    role_zh:"熱帶風骨架", role_en:"Tropical fan structure",
+    bloom:[3,4,5], fruit:[8,9,10,11],
+    color:"#5A7234", cost:2500,
+    note_zh:"台灣海岸與低海拔原生棕櫚，扇形大葉是傳統蒲扇的材料。耐風耐鹽，是熱帶風與海岸庭院的骨架植物。",
+    note_en:"Native Taiwan coastal palm. Massive fan-shaped leaves were traditional fan material. Salt- and wind-tolerant — backbone of tropical and coastal gardens.",
+    care_zh:"全日照至半日照，深厚土壤。耐旱耐鹽。除老葉外幾乎免維護。",
+    care_en:"Full to part sun. Deep soil. Salt- and drought-tolerant. Just remove old fronds; otherwise near zero maintenance.",
+    supports_zh:["海岸耐鹽","傳統工藝","熱帶感"], supports_en:["Salt tolerant","Traditional craft","Tropical feel"] },
+
+  { id:"lagerstroemia_sm", zh:"九芎", en:"Subcostate Crape Myrtle", lt:"Lagerstroemia subcostata",
+    tier:"T", type_zh:"小喬木 · 原生", type_en:"Small tree · native",
+    sun:["full"], water:"med", height:[3,8], spread:[3,5],
+    spaces:["yard"], container_ok:false,
+    role_zh:"剝皮樹幹", role_en:"Exfoliating bark",
+    bloom:[6,7,8], fruit:[10,11],
+    color:"#E8DCC8", cost:1500,
+    note_zh:"台灣原生小喬木，樹皮會自然剝落，露出光滑米黃色內皮，質感如肌膚，泰雅族稱為「猴不爬」。夏日開乳白色細小花序。",
+    note_en:"Taiwan-native small tree. Bark exfoliates naturally to reveal smooth cream-colored inner bark — skin-like texture. The Atayal call it 'monkey can't climb'. Creamy summer flower clusters.",
+    care_zh:"全日照，排水良好土壤。耐旱性強。冬季可重剪。",
+    care_en:"Full sun. Well-drained soil. Drought tolerant. Hard-prune in winter as needed.",
+    supports_zh:["原住民文化","樹皮質感","蜂類"], supports_en:["Indigenous heritage","Bark texture","Bees"] },
+
+  { id:"podocarpus", zh:"蘭嶼羅漢松", en:"Lanyu Podocarp", lt:"Podocarpus costalis",
+    tier:"T", type_zh:"常綠小喬木 · 台灣特有", type_en:"Evergreen small tree · Taiwan endemic",
+    sun:["full","part"], water:"low", height:[2,5], spread:[2,3],
+    spaces:["yard","rooftop"], container_ok:true, coastal_ok:true,
+    role_zh:"造型常綠", role_en:"Sculptural evergreen",
+    bloom:[3,4], fruit:[8,9,10],
+    color:"#3A5238", cost:2800,
+    note_zh:"蘭嶼特有的常綠針葉樹，深綠葉片緊密，可塑形為日式造型木，極耐鹽風與貧瘠土壤，是頂樓與海岸景觀的精品。",
+    note_en:"Endemic to Taiwan's Lanyu Island. Compact dark-green needles can be shaped Japanese-style. Salt-, wind-, and poverty-tolerant — a luxury choice for rooftops and coastal gardens.",
+    care_zh:"全日照至半日照，排水良好。慢生長，建立後幾乎免維護。",
+    care_en:"Full to part sun. Good drainage. Slow growing — near zero maintenance once established.",
+    supports_zh:["造型可塑","海岸植物","台灣特有"], supports_en:["Sculptural","Coastal","Taiwan endemic"] },
+
+  { id:"arenga", zh:"山棕", en:"Sugar Palm", lt:"Arenga engleri",
+    tier:"S", type_zh:"叢生棕櫚 · 原生", type_en:"Clumping palm · native",
+    sun:["part","shade"], water:"med", height:[1.5,3], spread:[1.5,2.5],
+    spaces:["yard"], container_ok:true,
+    role_zh:"叢生棕櫚", role_en:"Clumping palm",
+    bloom:[3,4], fruit:[8,9,10,11],
+    color:"#5A6238", cost:1500,
+    note_zh:"台灣低海拔原生叢生棕櫚，深綠羽狀葉提供熱帶森林感。耐陰、耐旱，是樹下與小空間的熱帶綠。",
+    note_en:"Native Taiwan clumping palm of low elevations. Dark green pinnate fronds give a tropical-forest feel. Shade- and drought-tolerant — tropical green for under-tree planting and small spaces.",
+    care_zh:"半日照至遮陰，建立後耐旱。除老葉外免維護。",
+    care_en:"Part shade to shade. Drought tolerant once established. Just remove old fronds.",
+    supports_zh:["耐陰","熱帶感","果實誘鳥"], supports_en:["Shade","Tropical","Bird-attracting fruit"] },
+
+  // Shrubs
+  { id:"rhododendron_tw", zh:"台灣杜鵑", en:"Formosan Azalea", lt:"Rhododendron formosanum",
+    tier:"S", type_zh:"灌木 · 台灣特有", type_en:"Shrub · Taiwan endemic",
+    sun:["part","full"], water:"med", height:[1.5,3], spread:[1.5,2.5],
+    spaces:["yard"], container_ok:true, zones:["N","C","E"],
+    role_zh:"春花群落", role_en:"Spring flower mass",
+    bloom:[3,4,5], fruit:[10,11],
+    color:"#E89AC2", cost:600,
+    note_zh:"台灣特有的常綠杜鵑，春日綻放粉紅至淡紫色喇叭花，是中海拔森林邊緣的代表性灌木。比園藝杜鵑更耐風雨。",
+    note_en:"Taiwan-endemic evergreen azalea. Pink to lavender trumpet flowers in spring. A signature shrub of mid-elevation forest edges, hardier than horticultural azaleas.",
+    care_zh:"半日照至全日照，排水良好的酸性土壤。花後輕修。",
+    care_en:"Part to full sun. Well-drained acidic soil. Light prune after bloom.",
+    supports_zh:["春季蜜源","台灣特有"], supports_en:["Spring nectar","Taiwan endemic"] },
+
+  { id:"camellia", zh:"茶花", en:"Camellia", lt:"Camellia japonica",
+    tier:"S", type_zh:"灌木 · 引入常見", type_en:"Shrub · cultivated",
+    sun:["part","shade"], water:"med", height:[1,3], spread:[1,2],
+    spaces:["balcony","yard"], container_ok:true, zones:["N","C","E"],
+    role_zh:"冬季花朵", role_en:"Winter blooming",
+    bloom:[12,1,2,3], fruit:[9,10],
+    color:"#C9405E", cost:800,
+    note_zh:"來自東亞的常綠灌木，冬日開紅、粉、白等大型花朵，是台灣冬季少有的色彩來源。耐陰，適合北向陽台與樹下。",
+    note_en:"Evergreen shrub from East Asia. Large red, pink, or white flowers through winter — a rare color source for the Taiwan winter garden. Shade-tolerant, suited to north-facing balconies and under-tree spots.",
+    care_zh:"半日照至遮陰，酸性土壤，忌強烈西曬。花後輕修。",
+    care_en:"Part to full shade. Acidic soil. Avoid harsh western sun. Light prune after bloom.",
+    supports_zh:["冬季花","耐陰","蜂類"], supports_en:["Winter bloom","Shade-loving","Bees"] },
+
+  { id:"jasminum_sambac", zh:"茉莉花", en:"Arabian Jasmine", lt:"Jasminum sambac",
+    tier:"S", type_zh:"灌木/藤本 · 引入常見", type_en:"Shrub/vine · cultivated",
+    sun:["full","part"], water:"med", height:[0.8,2], spread:[1,2],
+    spaces:["balcony","rooftop","yard"], container_ok:true,
+    role_zh:"芳香小花", role_en:"Fragrant small flowers",
+    bloom:[5,6,7,8,9,10], fruit:[],
+    color:"#F4EFE0", cost:280,
+    note_zh:"來自南亞的芳香灌木，是台灣茉莉花茶的主要香源。純白小花夜間最香，可盆栽於窗邊享受夏夜香氣。",
+    note_en:"South Asian fragrant shrub — the main scent source of Taiwan's jasmine tea. Pure white flowers are most fragrant at night. Pot at a window to enjoy summer-evening fragrance.",
+    care_zh:"全日照至半日照，肥沃排水良好土壤。冬季可重剪促春發。",
+    care_en:"Full to part sun. Fertile well-drained soil. Hard prune in winter for stronger spring growth.",
+    supports_zh:["濃郁芳香","可製茶","夜行性昆蟲"], supports_en:["Intense fragrance","Tea infusion","Night pollinators"] },
+
+  { id:"ixora", zh:"仙丹花", en:"Jungle Geranium", lt:"Ixora chinensis",
+    tier:"S", type_zh:"灌木 · 引入常見", type_en:"Shrub · cultivated",
+    sun:["full","part"], water:"med", height:[0.8,2], spread:[0.8,1.5],
+    spaces:["balcony","rooftop","yard"], container_ok:true,
+    role_zh:"群開繡球", role_en:"Cluster-blooming",
+    bloom:[4,5,6,7,8,9,10,11], fruit:[],
+    color:"#E84A5C", cost:200,
+    note_zh:"台灣最常見的紅花綠籬植物，繡球狀花序近全年開放，極受蝴蝶喜愛。耐熱、耐修剪，是公園綠帶的明星。",
+    note_en:"Taiwan's most ubiquitous red-flowered hedge plant. Round flower clusters bloom nearly year-round and butterflies love them. Heat- and trim-tolerant — park backbone.",
+    care_zh:"全日照至半日照，規律澆水與施肥。可頻繁修剪維持形狀。",
+    care_en:"Full to part sun. Regular watering and feeding. Tolerates frequent shaping.",
+    supports_zh:["全年蜜源","蝴蝶最愛","綠籬"], supports_en:["Year-round nectar","Butterfly favorite","Hedge"] },
+
+  { id:"scaevola", zh:"草海桐", en:"Sea Lettuce", lt:"Scaevola taccada",
+    tier:"S", type_zh:"灌木 · 海岸原生", type_en:"Shrub · coastal native",
+    sun:["full"], water:"low", height:[1,3], spread:[1.5,3],
+    spaces:["yard","rooftop"], container_ok:true, coastal_ok:true,
+    role_zh:"海岸防風", role_en:"Coastal windbreak",
+    bloom:[3,4,5,6,7,8,9,10], fruit:[8,9,10,11],
+    color:"#E8E0CC", cost:350,
+    note_zh:"台灣海岸線最強健的原生灌木，肉質深綠葉片，白色扇形小花連續開放。極耐鹽風與沙土，是海岸防風的首選。",
+    note_en:"Toughest native shrub of Taiwan's shoreline. Fleshy dark green leaves and continuous white fan-shaped flowers. Salt-, wind-, and sand-bulletproof — top choice for coastal windbreaks.",
+    care_zh:"全日照，沙質或排水良好土壤。極耐鹽。修剪需求極少。",
+    care_en:"Full sun. Sandy or well-drained soil. Salt-bulletproof. Minimal pruning.",
+    supports_zh:["海岸首選","耐鹽","蝶類食草"], supports_en:["Coastal first choice","Salt tolerant","Butterfly host"] },
+
+  // Ground / perennial / edible
+  { id:"portulaca", zh:"馬齒莧", en:"Common Purslane", lt:"Portulaca oleracea",
+    tier:"G", type_zh:"地被 · 原生（可食）", type_en:"Groundcover · native (edible)",
+    sun:["full"], water:"low", height:[0.05,0.2], spread:[0.3,0.6],
+    spaces:["balcony","rooftop","yard"], container_ok:true,
+    role_zh:"可食地被", role_en:"Edible groundcover",
+    bloom:[5,6,7,8,9,10], fruit:[],
+    color:"#E8B8A0", cost:60,
+    note_zh:"全球分布的肉質地被，台灣稱「豬母乳」，葉片可食微酸，富含 Omega-3，是傳統野菜，極耐旱。",
+    note_en:"Cosmopolitan succulent groundcover. Edible slightly sour leaves rich in omega-3 — a traditional Taiwan wild green. Extremely drought-tolerant.",
+    care_zh:"全日照，極耐旱貧瘠，幾乎免維護。",
+    care_en:"Full sun. Tolerates drought and poor soil. Near zero maintenance.",
+    supports_zh:["可食","野菜","耐旱先鋒"], supports_en:["Edible","Wild green","Drought pioneer"] },
+
+  { id:"pandanus", zh:"香蘭", en:"Pandan", lt:"Pandanus amaryllifolius",
+    tier:"G", type_zh:"草本 · 引入常見（可食）", type_en:"Perennial · cultivated (edible)",
+    sun:["part","full"], water:"med", height:[0.6,1.2], spread:[0.5,1],
+    spaces:["balcony","yard","indoor"], container_ok:true,
+    role_zh:"香料植物", role_en:"Culinary aromatic",
+    bloom:[], fruit:[],
+    color:"#5A8A3E", cost:200,
+    note_zh:"來自東南亞的香料植物，葉片有獨特的香米般芳香，可入飯、甜點、飲料。盆栽於陽台極易栽培。",
+    note_en:"Southeast Asian aromatic. Leaves carry a unique fragrant-rice scent used in rice, desserts, and drinks. Very easy on balconies as a potted plant.",
+    care_zh:"半日照至全日照，喜濕潤土壤。冬季避免低於 10°C。",
+    care_en:"Part to full sun. Moist soil. Protect from below 10°C in winter.",
+    supports_zh:["可食香料","東南亞料理"], supports_en:["Edible aromatic","SE Asian cooking"] },
+
+  { id:"paederia", zh:"雞屎藤", en:"Skunk Vine", lt:"Paederia foetida",
+    tier:"C", type_zh:"藤本 · 原生（可食）", type_en:"Vine · native (edible)",
+    sun:["part","full"], water:"med", height:[2,5], spread:[1,3],
+    spaces:["yard","balcony"], container_ok:true,
+    role_zh:"野菜藤本", role_en:"Edible wild vine",
+    bloom:[7,8,9], fruit:[10,11,12],
+    color:"#7A8C5A", cost:120,
+    note_zh:"台灣常見的野菜藤本，葉揉碎有特殊氣味（俗名來源），與雞蛋同炒是傳統家常菜。耐陰耐旱。",
+    note_en:"Common Taiwan edible vine. Crushed leaves have a strong smell (hence the name); fried with egg is a classic home dish. Shade- and drought-tolerant.",
+    care_zh:"半日照至全日照，需支撐物，幾乎免維護。",
+    care_en:"Part to full sun. Needs support. Near zero maintenance.",
+    supports_zh:["可食野菜","民俗藥用"], supports_en:["Edible wild green","Folk medicine"] },
+
+  { id:"crinum", zh:"文殊蘭", en:"Poison Bulb", lt:"Crinum asiaticum",
+    tier:"S", type_zh:"球根 · 海岸原生", type_en:"Bulb · coastal native",
+    sun:["full","part"], water:"med", height:[1,1.5], spread:[1,1.5],
+    spaces:["yard","rooftop"], container_ok:true, coastal_ok:true,
+    role_zh:"海岸大葉", role_en:"Coastal broadleaf",
+    bloom:[5,6,7,8,9], fruit:[10,11],
+    color:"#F4EFE0", cost:250,
+    note_zh:"台灣海岸原生大球根，肥厚帶狀葉與夜間芳香的白色蜘蛛狀花，是海岸防護林的下層植物。注意：全株具毒性，勿食。",
+    note_en:"Native Taiwan coastal bulb. Thick strappy leaves and night-fragrant white spider-like flowers — an understory of coastal protection forests. Note: all parts are toxic; do not eat.",
+    care_zh:"全日照至半日照，沙質或排水良好土壤。耐鹽耐旱。",
+    care_en:"Full to part sun. Sandy or well-drained soil. Salt- and drought-tolerant.",
+    supports_zh:["夜行性蛾","海岸植物","注意毒性"], supports_en:["Night moths","Coastal","Toxic — caution"] },
+
+  { id:"asplenium_n", zh:"鳥巢蕨", en:"Bird's-nest Fern", lt:"Asplenium nidus",
+    tier:"G", type_zh:"附生蕨 · 原生", type_en:"Epiphytic fern · native",
+    sun:["shade","part"], water:"med", height:[0.5,1.2], spread:[0.6,1.2],
+    spaces:["balcony","yard","indoor"], container_ok:true,
+    role_zh:"叢生蕨葉", role_en:"Rosette fern",
+    bloom:[], fruit:[],
+    color:"#5A7A3A", cost:300,
+    note_zh:"台灣常見的附生蕨類，亮綠色波浪葉片呈鳥巢狀展開，是傳統食用「山蘇」的來源。極耐陰，是樹下與北向陽台的主角。",
+    note_en:"Common native epiphytic fern. Glossy green wavy fronds form a 'nest' rosette — the source of edible '山蘇' in Taiwanese cuisine. Very shade-tolerant — a star under trees or on north-facing balconies.",
+    care_zh:"遮陰至半日照，喜濕潤空氣與微酸有機質土。可附生於樹幹或岩石。",
+    care_en:"Shade to part shade. Humid air, slightly acidic organic soil. Can be mounted on trunks or rocks.",
+    supports_zh:["可食","耐陰","熱帶感"], supports_en:["Edible","Shade","Tropical feel"] },
+
+  { id:"platycerium", zh:"鹿角蕨", en:"Staghorn Fern", lt:"Platycerium bifurcatum",
+    tier:"G", type_zh:"附生蕨 · 引入常見", type_en:"Epiphytic fern · cultivated",
+    sun:["part","shade"], water:"med", height:[0.4,1], spread:[0.4,1],
+    spaces:["balcony","yard","indoor"], container_ok:true,
+    role_zh:"壁掛蕨葉", role_en:"Mount-on-wall fern",
+    bloom:[], fruit:[],
+    color:"#7A8C5A", cost:600,
+    note_zh:"來自澳洲的著名附生蕨，鹿角狀葉片可掛牆裝飾，近年是台灣家庭最熱門的室內植物之一。",
+    note_en:"Famous epiphytic fern from Australia. Antler-shaped fronds — can be mounted on walls. One of Taiwan's most popular indoor plants in recent years.",
+    care_zh:"半日照至遮陰，可附板掛牆。定期浸水（將整片附板沉入水中 10 分鐘）。",
+    care_en:"Part to full shade. Mountable on a board. Soak the whole board for ~10 min when watering.",
+    supports_zh:["壁掛裝飾","室內植物","熱帶感"], supports_en:["Wall-mount art","Indoor","Tropical feel"] },
+
+  // Climbers
+  { id:"wisteria", zh:"紫藤", en:"Japanese Wisteria", lt:"Wisteria floribunda",
+    tier:"C", type_zh:"藤本 · 引入常見", type_en:"Vine · cultivated", zones:["N","C","E"],
+    sun:["full"], water:"med", height:[3,10], spread:[3,6],
+    spaces:["yard"], container_ok:false,
+    role_zh:"春季紫瀑", role_en:"Spring purple cascade",
+    bloom:[3,4], fruit:[9,10,11],
+    color:"#9A7AC2", cost:1200,
+    note_zh:"來自日本的落葉藤本，春日垂下紫色花瀑布，需強健棚架支撐。是日式庭院與婚禮花藝的明星，北部表現最佳。",
+    note_en:"Deciduous vine from Japan. Cascading purple flower 'waterfalls' in spring — needs a strong pergola. A star of Japanese-style gardens and wedding florals; best in northern Taiwan.",
+    care_zh:"全日照，深厚土壤，需強壯棚架。冬季硬修控制大小，夏季捲鬚輕修。",
+    care_en:"Full sun. Deep soil. Needs a strong pergola. Hard winter prune to control size; soft summer prune of tendrils.",
+    supports_zh:["春花瀑布","蜂類","注意毒性"], supports_en:["Spring cascade","Bees","Toxic seeds"] },
+
+  // Water
+  { id:"nymphaea", zh:"香水蓮", en:"Water Lily", lt:"Nymphaea spp.",
+    tier:"W", type_zh:"水生 · 引入常見", type_en:"Aquatic · cultivated",
+    sun:["full"], water:"high", height:[0,0.1], spread:[0.6,1.5],
+    spaces:["yard","rooftop"], container_ok:true,
+    role_zh:"水景花朵", role_en:"Water-feature blooms",
+    bloom:[4,5,6,7,8,9,10], fruit:[],
+    color:"#F0B4D0", cost:600,
+    note_zh:"園藝水蓮品種，粉、紫、白、黃花色齊全，是水盤與生態池最常見的觀賞水生植物。多數品種可全日開花。",
+    note_en:"Horticultural water lily varieties — pink, purple, white, yellow. The most common ornamental aquatic for water bowls and ponds. Most cultivars stay open all day.",
+    care_zh:"全日照，水深 30–60cm 靜水。容器內加肥土塊。冬季可剪去老葉。",
+    care_en:"Full sun. Still water 30–60cm deep. Mix soil block with slow-release fertilizer. Remove old leaves in winter.",
+    supports_zh:["蜻蜓棲地","水景核心"], supports_en:["Dragonfly habitat","Water-feature core"] },
+
+  // Ground / bulbs / coastal
+  { id:"lycoris", zh:"黃花石蒜", en:"Golden Spider Lily", lt:"Lycoris aurea",
+    tier:"G", type_zh:"球根 · 原生", type_en:"Bulb · native",
+    sun:["part","full"], water:"med", height:[0.4,0.6], spread:[0.2,0.3],
+    spaces:["balcony","yard"], container_ok:true,
+    role_zh:"秋日金光", role_en:"Autumn golden burst",
+    bloom:[8,9,10], fruit:[],
+    color:"#E8B23A", cost:200,
+    note_zh:"台灣低海拔原生球根，秋雨後突然抽花莖，金黃色蜘蛛狀花在無葉時盛放，是秋日驚艷的「彼岸花」黃色版。",
+    note_en:"Native Taiwan bulb of low elevations. After autumn rains it suddenly sends up bare flower stalks of golden spider-shaped blooms — the yellow counterpart to the famous 'red spider lily'.",
+    care_zh:"半日照至全日照，排水良好。夏季休眠期保持乾燥。",
+    care_en:"Part to full sun. Good drainage. Keep dry during summer dormancy.",
+    supports_zh:["秋季焦點","原生球根"], supports_en:["Autumn focal","Native bulb"] },
+
+  { id:"ipomoea_pc", zh:"馬鞍藤", en:"Beach Morning Glory", lt:"Ipomoea pes-caprae",
+    tier:"G", type_zh:"匍匐藤 · 海岸原生", type_en:"Creeping vine · coastal native",
+    sun:["full"], water:"low", height:[0.1,0.3], spread:[2,5],
+    spaces:["yard","rooftop"], container_ok:true, coastal_ok:true,
+    role_zh:"沙灘藤蔓", role_en:"Beach creeper",
+    bloom:[4,5,6,7,8,9,10,11], fruit:[],
+    color:"#C77ABE", cost:120,
+    note_zh:"台灣沙灘的代表性原生匍匐藤，肉質葉似馬鞍，紫紅喇叭花連開數月。極耐鹽風與烈日，是沙地最快速覆蓋的綠化植物。",
+    note_en:"Iconic native creeping vine of Taiwan beaches. Fleshy saddle-shaped leaves and purple-pink trumpet flowers for months. Salt-, wind-, and sun-bulletproof — fastest sand cover.",
+    care_zh:"全日照，沙質或排水良好土壤。極耐鹽耐旱。免維護。",
+    care_en:"Full sun. Sandy or well-drained soil. Salt- and drought-bulletproof. Zero maintenance.",
+    supports_zh:["海岸覆蓋","耐鹽","耐旱"], supports_en:["Sand cover","Salt tolerant","Drought-bulletproof"] },
 ];
 
 // ─────────────────────────────────────────────────────────────
@@ -993,6 +1383,32 @@ const PLANT_META = {
   plumeria:     { native:false, origin_zh:"中南美洲（經玻里尼西亞引入）", origin_en:"Central America (via Polynesia)", mature_yr:4, pet_safe:false, fragrance:3, sourcing_zh:"花市、熱帶花卉專賣", sourcing_en:"Flower markets, tropical specialists", companions:["hibiscus_rs","pittosporum"] },
   hibiscus_rs:  { native:false, origin_zh:"中國南部、東南亞", origin_en:"Southern China, SE Asia", mature_yr:1, pet_safe:true, fragrance:0, sourcing_zh:"花市、苗圃普遍", sourcing_en:"Common at flower markets and nurseries", companions:["liriope","duchesnea","miscanthus"] },
   bougainvillea:{ native:false, origin_zh:"南美洲", origin_en:"South America", mature_yr:1, pet_safe:true, fragrance:0, sourcing_zh:"花市、苗圃普遍", sourcing_en:"Common at flower markets and nurseries", companions:["miscanthus","sida","jasminum"] },
+
+  // Round 3 additions
+  cinnamomum:    { native:true,  origin_zh:"台灣、東亞", origin_en:"Taiwan, East Asia", mature_yr:10, pet_safe:false, fragrance:2, sourcing_zh:"林務局原生樹苗場、行道樹工程", sourcing_en:"Forestry Bureau native nurseries, street-tree contractors", companions:["liriope","nephrolepis","ardisia"] },
+  koelreuteria:  { native:true,  origin_zh:"台灣特有", origin_en:"Taiwan endemic", mature_yr:6, pet_safe:true, fragrance:1, sourcing_zh:"原生樹木場、行道樹工程", sourcing_en:"Native tree nurseries, street-tree contractors", companions:["liriope","miscanthus","sida"] },
+  liquidambar:   { native:true,  origin_zh:"台灣低中海拔", origin_en:"Taiwan low–mid elevations", mature_yr:8, pet_safe:true, fragrance:0, sourcing_zh:"林務局、原生樹苗場", sourcing_en:"Forestry Bureau, native tree nurseries", companions:["liriope","nephrolepis","dianella"] },
+  osmanthus:     { native:false, origin_zh:"中國南部、東亞", origin_en:"S. China, East Asia", mature_yr:5, pet_safe:true, fragrance:3, sourcing_zh:"花市、苗圃普遍", sourcing_en:"Common at flower markets and nurseries", companions:["liriope","duchesnea","camellia"] },
+  wax_apple:     { native:false, origin_zh:"馬來西亞、東南亞", origin_en:"Malaysia, SE Asia", mature_yr:4, pet_safe:true, fragrance:1, sourcing_zh:"果樹苗場、農會普遍", sourcing_en:"Fruit nurseries, farmers' assoc. (common)", companions:["liriope","sida","portulaca"] },
+  livistona:     { native:true,  origin_zh:"台灣海岸、華南", origin_en:"Taiwan coast, S. China", mature_yr:8, pet_safe:true, fragrance:0, sourcing_zh:"棕櫚專賣、海岸復育", sourcing_en:"Palm specialists, coastal restoration", companions:["pittosporum","scaevola","sida"] },
+  lagerstroemia_sm: { native:true, origin_zh:"台灣低海拔", origin_en:"Taiwan lowlands", mature_yr:5, pet_safe:true, fragrance:1, sourcing_zh:"原生樹木場、特生中心", sourcing_en:"Native tree nurseries, TESRI", companions:["liriope","miscanthus","dianella"] },
+  podocarpus:    { native:true,  origin_zh:"台灣蘭嶼特有", origin_en:"Taiwan endemic (Lanyu)", mature_yr:8, pet_safe:true, fragrance:0, sourcing_zh:"造型樹專賣、林試所", sourcing_en:"Sculptural tree specialists, TFRI", companions:["dianella","sida","liriope"] },
+  arenga:        { native:true,  origin_zh:"台灣、琉球", origin_en:"Taiwan, Ryukyu", mature_yr:5, pet_safe:true, fragrance:0, sourcing_zh:"棕櫚苗場、原生苗圃", sourcing_en:"Palm nurseries, native nurseries", companions:["nephrolepis","liriope","piper"] },
+  rhododendron_tw: { native:true, origin_zh:"台灣特有", origin_en:"Taiwan endemic", mature_yr:3, pet_safe:false, fragrance:0, sourcing_zh:"特生中心、原生苗圃", sourcing_en:"TESRI, native nurseries", companions:["liriope","duchesnea","nephrolepis"] },
+  camellia:      { native:false, origin_zh:"東亞", origin_en:"East Asia", mature_yr:4, pet_safe:true, fragrance:1, sourcing_zh:"花市、茶花專賣", sourcing_en:"Flower markets, camellia specialists", companions:["liriope","nephrolepis","ardisia"] },
+  jasminum_sambac: { native:false, origin_zh:"南亞", origin_en:"South Asia", mature_yr:2, pet_safe:true, fragrance:3, sourcing_zh:"花市、苗圃普遍", sourcing_en:"Common at flower markets and nurseries", companions:["liriope","duchesnea","murraya"] },
+  ixora:         { native:false, origin_zh:"華南、東南亞", origin_en:"S. China, SE Asia", mature_yr:2, pet_safe:true, fragrance:0, sourcing_zh:"花市、苗圃極普遍", sourcing_en:"Extremely common at markets and nurseries", companions:["liriope","duchesnea","sida"] },
+  scaevola:      { native:true,  origin_zh:"台灣海岸、印太", origin_en:"Taiwan coast, Indo-Pacific", mature_yr:2, pet_safe:true, fragrance:0, sourcing_zh:"海岸復育苗圃", sourcing_en:"Coastal restoration nurseries", companions:["ipomoea_pc","pittosporum","sida"] },
+  portulaca:     { native:true,  origin_zh:"全球泛分布", origin_en:"Cosmopolitan", mature_yr:1, pet_safe:true, fragrance:0, sourcing_zh:"野地採種、種子行", sourcing_en:"Wild seed, seed shops", companions:["sida","miscanthus","liriope"] },
+  pandanus:      { native:false, origin_zh:"東南亞", origin_en:"Southeast Asia", mature_yr:2, pet_safe:true, fragrance:2, sourcing_zh:"東南亞食材店、香料苗圃", sourcing_en:"SE Asian groceries, herb nurseries", companions:["liriope","alpinia","murraya"] },
+  paederia:      { native:true,  origin_zh:"台灣、亞洲", origin_en:"Taiwan, Asia", mature_yr:2, pet_safe:true, fragrance:0, sourcing_zh:"傳統市場、野菜苗場", sourcing_en:"Traditional markets, wild-green nurseries", companions:["liriope","murraya","jasminum"] },
+  crinum:        { native:true,  origin_zh:"台灣海岸、印太", origin_en:"Taiwan coast, Indo-Pacific", mature_yr:3, pet_safe:false, fragrance:2, sourcing_zh:"海岸復育、球根苗圃", sourcing_en:"Coastal restoration, bulb nurseries", companions:["pittosporum","scaevola","sida"] },
+  asplenium_n:   { native:true,  origin_zh:"台灣、亞洲熱帶", origin_en:"Taiwan, tropical Asia", mature_yr:2, pet_safe:true, fragrance:0, sourcing_zh:"花市、室內植物店、原住民市集", sourcing_en:"Flower markets, indoor plant stores, indigenous markets", companions:["nephrolepis","ardisia","piper"] },
+  platycerium:   { native:false, origin_zh:"澳洲", origin_en:"Australia", mature_yr:3, pet_safe:true, fragrance:0, sourcing_zh:"室內植物專賣、文青植物店", sourcing_en:"Indoor plant specialists, design plant shops", companions:["asplenium_n","nephrolepis","piper"] },
+  wisteria:      { native:false, origin_zh:"日本", origin_en:"Japan", mature_yr:4, pet_safe:false, fragrance:2, sourcing_zh:"日式庭園苗場", sourcing_en:"Japanese-garden specialists", companions:["liriope","duchesnea","camellia"] },
+  nymphaea:      { native:false, origin_zh:"全球園藝雜交", origin_en:"Global horticultural hybrids", mature_yr:2, pet_safe:true, fragrance:1, sourcing_zh:"水生植物專賣", sourcing_en:"Aquatic plant specialists", companions:["nuphar","philydrum","cephalanthus"] },
+  lycoris:       { native:true,  origin_zh:"台灣低海拔", origin_en:"Taiwan lowlands", mature_yr:2, pet_safe:false, fragrance:0, sourcing_zh:"球根專賣、原生苗圃", sourcing_en:"Bulb specialists, native nurseries", companions:["liriope","duchesnea","dianella"] },
+  ipomoea_pc:    { native:true,  origin_zh:"台灣海岸、泛熱帶", origin_en:"Taiwan coast, pan-tropics", mature_yr:1, pet_safe:true, fragrance:0, sourcing_zh:"海岸採種、復育苗圃", sourcing_en:"Wild coastal seed, restoration nurseries", companions:["scaevola","pittosporum","sida"] },
 };
 // Merge meta into each plant for downstream use.
 PLANTS.forEach((p) => Object.assign(p, PLANT_META[p.id] || { native: true }));
@@ -1048,13 +1464,46 @@ const state = {
   sun: null,
   water: null,
   goals: [],
+  // area estimator (inline, in details step)
+  estimatorOpen: false,
+  estimatorTab: "refs",   // refs | paces | tiles
+  estRefId: "queenbed",
+  estRefCountW: 1,
+  estRefCountD: 1,
+  estPaceLen: 0.65,        // metres per pace, adjustable
+  estPacesW: 5,
+  estPacesD: 3,
+  estTileSize: 0.6,        // metres per tile (60cm common in TW)
+  estTilesW: 5,
+  estTilesD: 3,
   // result
   resultTab: "plan",
   selectedPlantId: null,
   qty: {},
   nativeOnly: false,     // filter recommendations to native plants only
+  // dictionary view filters
+  dictQuery: "",
+  dictTier: "all",      // all | T | S | G | W | C
+  dictNative: "all",    // all | native | intro
+  dictFragOnly: false,
+  dictPetSafeOnly: false,
   lang: "zh",
 };
+
+// Area-estimator references — common things people can eyeball without a tape measure.
+// Each ref: { id, zh, en, w (m), d (m) } — the typical short × long dimensions.
+const AREA_REFS = [
+  { id:"queenbed",    zh:"雙人床（Queen）",  en:"Queen bed",          w:1.5, d:2.0 },
+  { id:"singlebed",   zh:"單人床",            en:"Single bed",         w:0.9, d:1.9 },
+  { id:"tatami",      zh:"榻榻米（1 帖）",   en:"Tatami (1 mat)",     w:0.91, d:1.82 },
+  { id:"park_space",  zh:"汽車停車格",        en:"Car parking space",  w:2.5, d:5.0 },
+  { id:"pingpong",    zh:"乒乓球桌",          en:"Ping-pong table",    w:1.52, d:2.74 },
+  { id:"deskset",     zh:"辦公桌（含椅）",   en:"Office desk + chair", w:1.4, d:1.4 },
+  { id:"diningtable", zh:"4 人餐桌",          en:"4-seat dining table", w:0.8, d:1.4 },
+  { id:"yoga",        zh:"瑜珈墊",            en:"Yoga mat",            w:0.6, d:1.8 },
+  { id:"step",        zh:"門口階梯（一階）", en:"Step (single tread)", w:1.0, d:0.3 },
+  { id:"sm_balcony",  zh:"標準陽台寬",        en:"Standard balcony width", w:3.0, d:1.0 },
+];
 
 // Fragrance icon helper — small pips for 0-3 levels.
 function fragranceBar(level) {
@@ -1231,12 +1680,31 @@ function renderSpace() {
     <div class="fade-up">
       <div class="kicker" data-zh="01 — 你的空間" data-en="01 — Your space">01 — 你的空間</div>
       <h1 class="title" data-zh="你想種在哪裡？" data-en="Where will you plant?">你想種在哪裡？</h1>
-      <p class="lead" data-zh="告訴我你的種植環境，AI 將從台灣原生植物資料庫為你配置。" data-en="Tell me your planting environment — I'll design from the Taiwan native plant database.">告訴我你的種植環境，AI 將從台灣原生植物資料庫為你配置。</p>
+      <p class="lead" data-zh="告訴我你的種植環境，AI 將從 ${PLANTS.length} 種台灣原生與常見植物中為你配置。" data-en="Tell me your planting environment — I'll design from ${PLANTS.length} Taiwan natives and common landscape plants.">告訴我你的種植環境，AI 將從 ${PLANTS.length} 種台灣原生與常見植物中為你配置。</p>
       <div class="grid cols-2">
         ${SPACE_OPTIONS.map(o => optCard(o, state.space === o.key)).join("")}
       </div>
+      <div style="margin-top: 28px; text-align: center;">
+        <button class="est-toggle" id="browseAllBtn" type="button" style="font-size: 13.5px;">
+          📖 <span data-zh="或：先瀏覽全部 ${PLANTS.length} 種植物 →" data-en="Or: browse all ${PLANTS.length} plants first →">或：先瀏覽全部 ${PLANTS.length} 種植物 →</span>
+        </button>
+      </div>
     </div>`;
   wireOptCards("space");
+  document.getElementById("browseAllBtn")?.addEventListener("click", () => {
+    // Jump to result page in "dict" tab so the user can browse without completing the wizard.
+    // Pre-fill defaults so scorePlants doesn't crash, and switch directly to the dictionary view.
+    if (!state.space) state.space = "balcony";
+    if (state.widthM == null) state.widthM = SPACE_DEFAULTS[state.space].w;
+    if (state.depthM == null) state.depthM = SPACE_DEFAULTS[state.space].d;
+    if (!state.sun) state.sun = "part";
+    if (!state.water) state.water = "med";
+    state.resultTab = "dict";
+    state.step = 5;
+    initShoppingQty();
+    render();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
 }
 
 function renderDetails() {
@@ -1304,6 +1772,10 @@ function renderDetails() {
             <span class="dim-unit">m</span>
           </div>
           <div class="dim-area" id="areaDisplay" data-zh="≈ ${area} m² 可用面積" data-en="≈ ${area} m² usable area">≈ ${area} m² 可用面積</div>
+          <button class="est-toggle" type="button" id="estToggleBtn">
+            🔧 <span data-zh="${state.estimatorOpen ? "收起估算工具" : "不會量？用估算工具"}" data-en="${state.estimatorOpen ? "Hide estimator" : "Don't know the size? Use the estimator"}">${state.estimatorOpen ? "收起估算工具" : "不會量？用估算工具"}</span>
+          </button>
+          ${state.estimatorOpen ? renderEstimator() : ""}
         </div>
 
         <div class="field">
@@ -1412,6 +1884,189 @@ function buildDetectedFromNominatim(result) {
   };
 }
 
+function renderEstimator() {
+  // Compute current estimate based on active tab
+  let estW = 0, estD = 0;
+  if (state.estimatorTab === "refs") {
+    const r = AREA_REFS.find(x => x.id === state.estRefId) || AREA_REFS[0];
+    estW = +(r.w * state.estRefCountW).toFixed(2);
+    estD = +(r.d * state.estRefCountD).toFixed(2);
+  } else if (state.estimatorTab === "paces") {
+    estW = +(state.estPaceLen * state.estPacesW).toFixed(2);
+    estD = +(state.estPaceLen * state.estPacesD).toFixed(2);
+  } else if (state.estimatorTab === "tiles") {
+    estW = +(state.estTileSize * state.estTilesW).toFixed(2);
+    estD = +(state.estTileSize * state.estTilesD).toFixed(2);
+  }
+  const estA = (estW * estD).toFixed(1);
+
+  const refsPanel = `
+    <p class="est-help"
+       data-zh="挑一個你能想像的物品，然後說它在你的空間裡能擺幾個。例如：「這片陽台大概擺得下 1 張 Queen 床 × 2」→ 寬 1 × 深 2。"
+       data-en="Pick something you can picture, then say how many fit. e.g. 'About 1 queen bed wide × 2 deep' fills 1.5 m × 4 m.">
+       挑一個你能想像的物品，然後說它在你的空間裡能擺幾個。例如：「這片陽台大概擺得下 1 張 Queen 床 × 2」→ 寬 1 × 深 2。</p>
+    <div class="est-ref-row">
+      ${AREA_REFS.map(r => `
+        <button class="est-ref ${state.estRefId === r.id ? "on" : ""}" data-ref="${r.id}">
+          <span data-zh="${r.zh}" data-en="${r.en}">${r.zh}</span>
+          <span class="dim">${r.w} × ${r.d} m</span>
+        </button>`).join("")}
+    </div>
+    <div class="est-grid" style="margin-top:14px;">
+      <div>
+        <label class="est-input-lbl" data-zh="沿著寬向擺 N 個" data-en="N along width">沿著寬向擺 N 個</label>
+        <input class="est-input" id="estRefCountW" type="number" min="0.5" max="20" step="0.5" value="${state.estRefCountW}" />
+      </div>
+      <div>
+        <label class="est-input-lbl" data-zh="沿著深向擺 N 個" data-en="N along depth">沿著深向擺 N 個</label>
+        <input class="est-input" id="estRefCountD" type="number" min="0.5" max="20" step="0.5" value="${state.estRefCountD}" />
+      </div>
+    </div>`;
+
+  const pacesPanel = `
+    <p class="est-help"
+       data-zh="走在你的空間上：自然步伐約 60-70 公分。沿著寬走幾步、深走幾步，輸入步數。若身高較高/較矮可調整步距。"
+       data-en="Walk your space — an adult stride is ~60-70 cm. Count paces along width × depth. Adjust the pace length if you're taller / shorter.">
+       走在你的空間上：自然步伐約 60-70 公分。沿著寬走幾步、深走幾步，輸入步數。</p>
+    <div class="est-grid">
+      <div>
+        <label class="est-input-lbl" data-zh="步距（公尺）" data-en="Pace length (m)">步距（公尺）</label>
+        <input class="est-input" id="estPaceLen" type="number" min="0.4" max="1" step="0.05" value="${state.estPaceLen}" />
+      </div>
+      <div></div>
+      <div>
+        <label class="est-input-lbl" data-zh="寬向步數" data-en="Paces along width">寬向步數</label>
+        <input class="est-input" id="estPacesW" type="number" min="1" max="50" step="1" value="${state.estPacesW}" />
+      </div>
+      <div>
+        <label class="est-input-lbl" data-zh="深向步數" data-en="Paces along depth">深向步數</label>
+        <input class="est-input" id="estPacesD" type="number" min="1" max="50" step="1" value="${state.estPacesD}" />
+      </div>
+    </div>`;
+
+  const tilesPanel = `
+    <p class="est-help"
+       data-zh="如果地面有方形地磚 — 數它們：台灣常見 60×60 cm 或 30×30 cm。輸入磚的邊長與寬向、深向各有幾塊。"
+       data-en="If your floor has square tiles, just count them. Common Taiwan sizes: 60×60 or 30×30 cm. Enter the tile side and how many fit along each direction.">
+       如果地面有方形地磚 — 數它們：台灣常見 60×60 cm 或 30×30 cm。</p>
+    <div class="est-grid">
+      <div>
+        <label class="est-input-lbl" data-zh="磚邊長（公尺）" data-en="Tile side (m)">磚邊長（公尺）</label>
+        <input class="est-input" id="estTileSize" type="number" min="0.1" max="1.2" step="0.05" value="${state.estTileSize}" />
+      </div>
+      <div></div>
+      <div>
+        <label class="est-input-lbl" data-zh="寬向磚數" data-en="Tiles along width">寬向磚數</label>
+        <input class="est-input" id="estTilesW" type="number" min="1" max="100" step="1" value="${state.estTilesW}" />
+      </div>
+      <div>
+        <label class="est-input-lbl" data-zh="深向磚數" data-en="Tiles along depth">深向磚數</label>
+        <input class="est-input" id="estTilesD" type="number" min="1" max="100" step="1" value="${state.estTilesD}" />
+      </div>
+    </div>`;
+
+  return `
+    <div class="est-box">
+      <div class="est-tabs" role="tablist">
+        <button class="est-tab ${state.estimatorTab === "refs" ? "on" : ""}" data-est-tab="refs">
+          <span data-zh="📐 常見物品" data-en="📐 Common items">📐 常見物品</span>
+        </button>
+        <button class="est-tab ${state.estimatorTab === "paces" ? "on" : ""}" data-est-tab="paces">
+          <span data-zh="👣 走步估" data-en="👣 Walking paces">👣 走步估</span>
+        </button>
+        <button class="est-tab ${state.estimatorTab === "tiles" ? "on" : ""}" data-est-tab="tiles">
+          <span data-zh="◻️ 數地磚" data-en="◻️ Count tiles">◻️ 數地磚</span>
+        </button>
+      </div>
+      ${state.estimatorTab === "refs" ? refsPanel : state.estimatorTab === "paces" ? pacesPanel : tilesPanel}
+      <div class="est-result">
+        <span class="lbl" data-zh="估算結果" data-en="Estimate">估算結果</span>
+        <span class="val">${estW} × ${estD} m  <span style="font-weight:400;font-size:13px;opacity:0.7;">· ${estA} m²</span></span>
+      </div>
+      <button class="cta est-apply" id="estApplyBtn" type="button">
+        ✓ <span data-zh="套用到尺寸" data-en="Apply to size">套用到尺寸</span>
+      </button>
+    </div>`;
+}
+
+function wireEstimator() {
+  // Tab switches
+  document.querySelectorAll(".est-tab").forEach((el) => {
+    el.addEventListener("click", () => {
+      state.estimatorTab = el.dataset.estTab;
+      const host = document.querySelector(".est-box");
+      if (host) host.outerHTML = renderEstimator();
+      wireEstimator();
+      applyLanguage();
+    });
+  });
+
+  // References list (refs mode)
+  document.querySelectorAll(".est-ref").forEach((el) => {
+    el.addEventListener("click", () => {
+      state.estRefId = el.dataset.ref;
+      document.querySelectorAll(".est-ref").forEach(r => r.classList.toggle("on", r.dataset.ref === state.estRefId));
+      refreshEstResult();
+    });
+  });
+
+  // Input listeners — re-compute the displayed estimate live without re-rendering everything
+  const fieldMap = {
+    estRefCountW: "estRefCountW", estRefCountD: "estRefCountD",
+    estPaceLen: "estPaceLen", estPacesW: "estPacesW", estPacesD: "estPacesD",
+    estTileSize: "estTileSize", estTilesW: "estTilesW", estTilesD: "estTilesD",
+  };
+  for (const [id, key] of Object.entries(fieldMap)) {
+    const el = document.getElementById(id);
+    if (!el) continue;
+    el.addEventListener("input", () => {
+      const v = parseFloat(el.value);
+      if (!isNaN(v)) state[key] = v;
+      refreshEstResult();
+    });
+  }
+
+  // Apply button — push into widthM/depthM and update the dimension inputs
+  document.getElementById("estApplyBtn")?.addEventListener("click", () => {
+    const { w, d } = computeEstimate();
+    state.widthM = w;
+    state.depthM = d;
+    const wEl = document.getElementById("widthInput");
+    const dEl = document.getElementById("depthInput");
+    const aEl = document.getElementById("areaDisplay");
+    if (wEl) wEl.value = w;
+    if (dEl) dEl.value = d;
+    const a = (w * d).toFixed(1);
+    if (aEl) { aEl.dataset.zh = `≈ ${a} m² 可用面積`; aEl.dataset.en = `≈ ${a} m² usable area`; aEl.textContent = aEl.dataset[state.lang]; }
+    // Close after applying
+    state.estimatorOpen = false;
+    renderDetails(); wireDetails(); applyLanguage();
+  });
+}
+
+function computeEstimate() {
+  let w = 0, d = 0;
+  if (state.estimatorTab === "refs") {
+    const r = AREA_REFS.find(x => x.id === state.estRefId) || AREA_REFS[0];
+    w = +(r.w * state.estRefCountW).toFixed(2);
+    d = +(r.d * state.estRefCountD).toFixed(2);
+  } else if (state.estimatorTab === "paces") {
+    w = +(state.estPaceLen * state.estPacesW).toFixed(2);
+    d = +(state.estPaceLen * state.estPacesD).toFixed(2);
+  } else if (state.estimatorTab === "tiles") {
+    w = +(state.estTileSize * state.estTilesW).toFixed(2);
+    d = +(state.estTileSize * state.estTilesD).toFixed(2);
+  }
+  return { w, d };
+}
+
+function refreshEstResult() {
+  const { w, d } = computeEstimate();
+  const a = (w * d).toFixed(1);
+  const v = document.querySelector(".est-result .val");
+  if (v) v.innerHTML = `${w} × ${d} m  <span style="font-weight:400;font-size:13px;opacity:0.7;">· ${a} m²</span>`;
+}
+
 function wireDetails() {
   const addrEl = document.getElementById("addressInput");
   const wEl = document.getElementById("widthInput");
@@ -1514,6 +2169,15 @@ function wireDetails() {
       document.querySelectorAll(".orient-btn").forEach((b) => b.classList.toggle("active", b.dataset.orient === state.orientation));
     });
   });
+
+  // Estimator toggle — re-render this step to show/hide the inline tool
+  document.getElementById("estToggleBtn")?.addEventListener("click", () => {
+    state.estimatorOpen = !state.estimatorOpen;
+    renderDetails(); wireDetails(); applyLanguage();
+  });
+
+  // If the estimator is currently open, wire its inner controls now
+  if (state.estimatorOpen) wireEstimator();
 }
 
 function escapeHtml(s) {
@@ -1719,6 +2383,7 @@ function renderResult() {
           { k:"layers",    zh:"復層配置",     en:"Layered design" },
           { k:"calendar",  zh:"花期月曆",     en:"Bloom calendar" },
           { k:"shopping",  zh:"採購清單",     en:"Shopping list" },
+          { k:"dict",      zh:"植物字典",     en:"Plant dictionary" },
         ].map(tab => `
           <button class="tab ${state.resultTab === tab.k ? "active" : ""}" data-tab="${tab.k}">
             <span data-zh="${tab.zh}" data-en="${tab.en}">${tab.zh}</span>
@@ -1752,6 +2417,7 @@ function renderTabPanel(recs, layers) {
     case "layers":   host.innerHTML = renderLayers(layers, recs); wireLayerCards(); break;
     case "calendar": host.innerHTML = renderCalendar(recs); break;
     case "shopping": host.innerHTML = renderShopping(recs); wireShoppingControls(); break;
+    case "dict":     host.innerHTML = renderDictionary(); wireDictionary(); break;
   }
   applyLanguage();
 }
@@ -2138,6 +2804,112 @@ window.exportShoppingCSV = function() {
   a.href = url; a.download = `landscape-plan-${state.space}.csv`; a.click();
   URL.revokeObjectURL(url);
 };
+
+// ── TAB: PLANT DICTIONARY (browse all) ──────────────────────
+function renderDictionary() {
+  const q = (state.dictQuery || "").trim().toLowerCase();
+  const filtered = PLANTS.filter(p => {
+    if (state.dictTier !== "all" && p.tier !== state.dictTier) return false;
+    if (state.dictNative === "native" && !p.native) return false;
+    if (state.dictNative === "intro"  && p.native)  return false;
+    if (state.dictFragOnly    && !(p.fragrance >= 2)) return false;
+    if (state.dictPetSafeOnly && p.pet_safe !== true) return false;
+    if (q) {
+      const hay = [p.zh, p.en, p.lt, p.role_zh, p.role_en, p.origin_zh, p.origin_en].join(" ").toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    return true;
+  });
+
+  const tierKey = (k) => ({ all:t("全部","All"), T:t("喬木","Canopy"), S:t("灌木","Shrub"), G:t("地被","Ground"), W:t("水生","Water"), C:t("藤本","Climber") })[k];
+
+  return `
+    <h2 class="subtitle" data-zh="植物字典 · Plant Dictionary" data-en="Plant Dictionary">植物字典 · Plant Dictionary</h2>
+    <p class="lead-small"
+       data-zh="瀏覽全部 ${PLANTS.length} 種植物。可搜尋名稱、原產地或拉丁名；可依分層、原生／外來、芳香、寵物安全篩選。"
+       data-en="Browse all ${PLANTS.length} plants. Search by name, origin, or Latin name; filter by layer, native status, fragrance, and pet-safety.">
+       瀏覽全部 ${PLANTS.length} 種植物。可搜尋名稱、原產地或拉丁名；可依分層、原生／外來、芳香、寵物安全篩選。</p>
+
+    <div class="dict-toolbar">
+      <input class="dict-search" id="dictSearch" type="text"
+             placeholder="${t('搜尋… 桂花 / Liquidambar / 海岸 / Taiwan endemic', 'Search… camphor / 月桃 / coast')}"
+             value="${escapeHtml(state.dictQuery)}" />
+      <span class="dict-count">${filtered.length} / ${PLANTS.length}</span>
+    </div>
+
+    <div class="dict-chiprow">
+      ${["all","T","S","G","W","C"].map(k => `
+        <button class="dict-chip ${state.dictTier === k ? "on" : ""}" data-tier="${k}">${tierKey(k)}</button>`).join("")}
+      <span style="width:1px; background: var(--line); margin: 0 4px;"></span>
+      <button class="dict-chip ${state.dictNative === "all"    ? "on" : ""}" data-native="all"><span data-zh="原生 + 外來" data-en="All">原生 + 外來</span></button>
+      <button class="dict-chip ${state.dictNative === "native" ? "on" : ""}" data-native="native">🌱 <span data-zh="原生" data-en="Native">原生</span></button>
+      <button class="dict-chip ${state.dictNative === "intro"  ? "on" : ""}" data-native="intro">🌍 <span data-zh="外來" data-en="Introduced">外來</span></button>
+      <span style="width:1px; background: var(--line); margin: 0 4px;"></span>
+      <button class="dict-chip ${state.dictFragOnly ? "on" : ""}" data-flag="frag">🌸 <span data-zh="芳香" data-en="Fragrant">芳香</span></button>
+      <button class="dict-chip ${state.dictPetSafeOnly ? "on" : ""}" data-flag="petsafe">🐾 <span data-zh="寵物安全" data-en="Pet-safe">寵物安全</span></button>
+    </div>
+
+    <div class="rec-grid">
+      ${filtered.length === 0
+        ? `<div style="grid-column:1/-1; padding:30px; text-align:center; color:var(--ink-soft); font-style:italic; font-family:var(--serif);"
+                data-zh="沒有符合條件的植物 — 試試放寬篩選"
+                data-en="No matches — try loosening the filters">沒有符合條件的植物 — 試試放寬篩選</div>`
+        : filtered.map(p => `
+        <button class="rec-card" data-id="${p.id}">
+          <div class="rec-head">
+            <div class="rec-swatch" style="background:${p.color}"></div>
+            <div class="rec-match" style="font-size:14px; color:var(--clay-deep);">${({T:"喬木",S:"灌木",G:"地被",W:"水生",C:"藤本"})[p.tier]}</div>
+          </div>
+          <div class="rec-name" data-zh="${p.zh}" data-en="${p.en}">${p.zh}</div>
+          <div class="rec-latin">${p.lt}</div>
+          <div class="rec-type" data-zh="${p.type_zh}" data-en="${p.type_en}">${p.type_zh}</div>
+          <div class="rec-badges">
+            ${p.native
+              ? `<span class="badge native">🌱 <span data-zh="原生" data-en="Native">原生</span></span>`
+              : `<span class="badge intro">🌍 <span data-zh="外來" data-en="Introduced">外來</span></span>`}
+            ${p.fragrance >= 2 ? `<span class="badge frag">🌸 ${fragranceBar(p.fragrance)}</span>` : ""}
+            ${p.pet_safe === false ? `<span class="badge toxic">⚠</span>` : ""}
+          </div>
+          <div class="rec-view" style="margin-top:auto; padding-top:14px;" data-zh="詳細 →" data-en="Details →">詳細 →</div>
+        </button>`).join("")}
+    </div>`;
+}
+
+function wireDictionary() {
+  document.getElementById("dictSearch")?.addEventListener("input", (e) => {
+    state.dictQuery = e.target.value;
+    const host = document.getElementById("tabPanel");
+    if (host) host.innerHTML = renderDictionary();
+    wireDictionary();
+    applyLanguage();
+    // Keep focus on the input after re-render
+    const s = document.getElementById("dictSearch");
+    if (s) { s.focus(); s.setSelectionRange(s.value.length, s.value.length); }
+  });
+  document.querySelectorAll(".dict-chip[data-tier]").forEach(el => {
+    el.addEventListener("click", () => { state.dictTier = el.dataset.tier; rerenderDict(); });
+  });
+  document.querySelectorAll(".dict-chip[data-native]").forEach(el => {
+    el.addEventListener("click", () => { state.dictNative = el.dataset.native; rerenderDict(); });
+  });
+  document.querySelectorAll(".dict-chip[data-flag]").forEach(el => {
+    el.addEventListener("click", () => {
+      if (el.dataset.flag === "frag") state.dictFragOnly = !state.dictFragOnly;
+      if (el.dataset.flag === "petsafe") state.dictPetSafeOnly = !state.dictPetSafeOnly;
+      rerenderDict();
+    });
+  });
+  document.querySelectorAll(".rec-card[data-id]").forEach(el => {
+    el.addEventListener("click", () => openDrawer(el.dataset.id));
+  });
+}
+
+function rerenderDict() {
+  const host = document.getElementById("tabPanel");
+  if (host) host.innerHTML = renderDictionary();
+  wireDictionary();
+  applyLanguage();
+}
 
 // ─────────────────────────────────────────────────────────────
 // PLANT DRAWER
