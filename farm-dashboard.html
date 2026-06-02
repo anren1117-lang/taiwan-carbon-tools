@@ -1694,6 +1694,82 @@
   .dash-print-btn:hover { background: var(--accent-dark); transform: translateY(-1px); }
   @media (max-width: 1340px) { .dash-print-btn { bottom: 16px; right: 16px; padding: 9px 14px; font-size: 12px; } }
 
+  /* ── Trust footer ───────────────────────────────────────────────
+     Quiet but credible: data sources, methodology link, version,
+     contact, disclaimer. Signals "this is real, maintained work"
+     to farmers + their buyers / off-takers / certifiers. */
+  .trust-footer {
+    max-width: 1180px;
+    margin: 48px auto 24px;
+    padding: 28px 32px;
+    background: var(--bg-subtle);
+    border-top: 3px solid var(--accent);
+    border-radius: 12px;
+    font-size: 12.5px;
+    line-height: 1.6;
+    color: var(--text-muted);
+  }
+  .trust-footer-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px 32px;
+    margin-bottom: 20px;
+  }
+  .trust-footer-col h4 {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 8px;
+  }
+  .trust-footer-col ul { list-style: none; padding: 0; margin: 0; }
+  .trust-footer-col li { margin: 0 0 4px; }
+  .trust-footer-col a { color: var(--text); text-decoration: none; border-bottom: 1px dotted var(--text-muted); }
+  .trust-footer-col a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+  .trust-footer-meta {
+    padding-top: 18px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 11.5px;
+    color: var(--text-muted);
+  }
+  .trust-footer-version {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .trust-footer-version code {
+    background: var(--bg-card);
+    padding: 2px 7px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--text);
+  }
+  .trust-footer-disclaimer {
+    margin-top: 10px;
+    font-size: 11px;
+    font-style: italic;
+    color: var(--text-muted);
+    opacity: 0.85;
+  }
+  @media (max-width: 900px) {
+    .trust-footer-grid { grid-template-columns: repeat(2, 1fr); gap: 20px 24px; }
+  }
+  @media (max-width: 540px) {
+    .trust-footer { margin: 32px 12px 20px; padding: 22px 18px; }
+    .trust-footer-grid { grid-template-columns: 1fr; gap: 18px; }
+    .trust-footer-meta { flex-direction: column; align-items: flex-start; }
+  }
+  @media print {
+    .trust-footer { display: none !important; }
+  }
+
   @media print {
     @page { size: A4; margin: 12mm 10mm; }
     body { background: white !important; color: black !important; font-size: 10.5pt; line-height: 1.45; }
@@ -12135,6 +12211,58 @@ Applicant: ${ownerName} (signature)
   }
   init();
 </script>
+
+<!-- ── Trust footer ─────────────────────────────────────────
+     Signals legitimacy: official data sources, version, contact,
+     and explicit scope of what this dashboard is + isn't. -->
+<footer class="trust-footer" role="contentinfo">
+  <div class="trust-footer-grid">
+    <div class="trust-footer-col">
+      <h4 data-zh="排放係數來源" data-en="Emission factors">排放係數來源</h4>
+      <ul>
+        <li><a href="https://www.moeaea.gov.tw/" target="_blank" rel="noopener" data-zh="經濟部能源署 · 電網 0.474 kg/kWh (113年度)" data-en="MOEA EA · Grid 0.474 kg/kWh (FY2024)">經濟部能源署 · 電網 0.474 kg/kWh (113年度)</a></li>
+        <li><a href="https://www.moenv.gov.tw/" target="_blank" rel="noopener" data-zh="環境部 · 燃料燃燒係數" data-en="MOENV · Fuel combustion factors">環境部 · 燃料燃燒係數</a></li>
+        <li><a href="https://www.ipcc-nggip.iges.or.jp/public/2019rf/" target="_blank" rel="noopener" data-zh="IPCC 2019 Refinement · Tier 1 預設值" data-en="IPCC 2019 Refinement · Tier 1 defaults">IPCC 2019 Refinement · Tier 1 預設值</a></li>
+        <li><a href="https://www.afa.gov.tw/" target="_blank" rel="noopener" data-zh="農業部 · 友善耕作 / 補助公告" data-en="MOA · Friendly farming + subsidies">農業部 · 友善耕作 / 補助</a></li>
+      </ul>
+    </div>
+    <div class="trust-footer-col">
+      <h4 data-zh="方法學依據" data-en="Methodology">方法學依據</h4>
+      <ul>
+        <li><a href="https://www.iso.org/standard/66453.html" target="_blank" rel="noopener" data-zh="ISO 14064-1 · 組織型盤查" data-en="ISO 14064-1 · Organisation inventory">ISO 14064-1</a></li>
+        <li><a href="https://verra.org/methodologies/vm0042-methodology-for-improved-agricultural-land-management-v2-1/" target="_blank" rel="noopener" data-zh="Verra VM0042 · 土壤碳匯方法學" data-en="Verra VM0042 · Soil carbon">Verra VM0042</a></li>
+        <li><a href="#sec-sources" data-zh="完整資料來源面板" data-en="Full data sources panel">完整資料來源面板 ↑</a></li>
+        <li><a href="#sec-method" data-zh="計算公式說明" data-en="Calculation formulas">計算公式說明 ↑</a></li>
+      </ul>
+    </div>
+    <div class="trust-footer-col">
+      <h4 data-zh="範疇" data-en="Scope">範疇</h4>
+      <ul>
+        <li data-zh="✓ 範疇一：機械燃料、肥料 N₂O、稻 CH₄、牲畜" data-en="✓ Scope 1: machinery, fertilizer N₂O, paddy CH₄, livestock">✓ 範疇一：機械燃料、肥料 N₂O、稻 CH₄、牲畜</li>
+        <li data-zh="✓ 範疇二：購買電力（灌溉、冷藏、設施）" data-en="✓ Scope 2: purchased electricity">✓ 範疇二：購買電力</li>
+        <li data-zh="✓ 範疇三：肥料/農藥/飼料製造、運輸" data-en="✓ Scope 3: fertilizer/chemical/feed manufacturing, transport">✓ 範疇三：上下游製造運輸</li>
+        <li data-zh="✓ 土壤碳匯：覆蓋作物、堆肥、殘體還田" data-en="✓ Soil sinks: cover crops, compost, residue">✓ 土壤碳匯</li>
+      </ul>
+    </div>
+    <div class="trust-footer-col">
+      <h4 data-zh="聯絡 · 顧問" data-en="Contact · Consulting">聯絡 · 顧問</h4>
+      <ul>
+        <li><a href="mailto:anren.carbon@gmail.com" data-zh="anren.carbon@gmail.com" data-en="anren.carbon@gmail.com">anren.carbon@gmail.com</a></li>
+        <li><a href="../index.html" data-zh="返回首頁 · 其他工具" data-en="Home · Other tools">返回首頁 · 其他工具</a></li>
+        <li><a href="../farms.html" data-zh="檢視農場展示頁" data-en="See farm gallery">農場展示頁</a></li>
+        <li><a href="https://github.com/anren1117-lang/taiwan-carbon-tools" target="_blank" rel="noopener" data-zh="GitHub · 開源儲存庫" data-en="GitHub · Open source repo">GitHub 儲存庫</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="trust-footer-meta">
+    <div class="trust-footer-version">
+      <span data-zh="儀表板版本" data-en="Dashboard version">儀表板版本</span>
+      <code id="trustFooterVersion">v2.3 · 2026-06-02</code>
+    </div>
+    <div data-zh="製作者 · An-Ren Ho (何安仁)" data-en="Built by An-Ren Ho">製作者 · An-Ren Ho (何安仁)</div>
+  </div>
+  <div class="trust-footer-disclaimer" data-zh="本儀表板提供教育與顧問估算用途，數據基於 IPCC 預設值與台灣官方係數，僅供決策參考；不可取代正式 ISO 14064-1 盤查、Verra VM0042 等碳權方法學申請、或法律 / 稅務建議。" data-en="This dashboard is for educational and consulting estimation purposes; figures are based on IPCC defaults and Taiwan official factors and are for decision support only. It does not substitute for formal ISO 14064-1 inventory, Verra VM0042 (or similar) credit issuance, or legal / tax advice.">本儀表板提供教育與顧問估算用途，數據基於 IPCC 預設值與台灣官方係數，僅供決策參考；不可取代正式 ISO 14064-1 盤查、Verra VM0042 等碳權方法學申請、或法律 / 稅務建議。</div>
+</footer>
 
 </body>
 </html>
