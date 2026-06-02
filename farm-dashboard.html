@@ -4601,11 +4601,12 @@ This application supports starting organic-transition certification for ≥1 ha.
 
   // ── Sustainable-ag agent ─────────────────────────────────────────
   // Chat thread state — multi-turn conversation, last 5 turns visible.
-  // Each turn: { q: question text, matchId: KB entry id or null, ts: Date.now() }
+  // Each turn: { q: question text, match: full match object (or null), ts: Date.now() }
+  // Match can be a KB entry or a conversational-intent synthetic object.
   let agentState = { priority: null, lastQuestion: null, lastAnswer: null, thread: [] };
   const AGENT_THREAD_MAX = 5;
   function pushThread(q, match) {
-    agentState.thread.push({ q, matchId: match ? match.id : null, ts: Date.now() });
+    agentState.thread.push({ q, match: match || null, matchId: match ? match.id : null, ts: Date.now() });
     if (agentState.thread.length > AGENT_THREAD_MAX) {
       agentState.thread.shift();
     }
@@ -6978,6 +6979,194 @@ This application supports starting organic-transition certification for ≥1 ha.
     return score;
   }
 
+  // ── Conversational intent layer ────────────────────────────────
+  // Recognize common discussion moves (thanks, follow-up, pushback,
+  // venting, greetings, yes/no) and respond conversationally instead
+  // of forcing a KB lookup. Falls through to lookup when no
+  // conversational pattern matches.
+  function detectConversationalIntent(q, thread) {
+    const lq = (q || '').toLowerCase().trim();
+    if (!lq) return { type: 'empty' };
+    const lastTurn = thread && thread.length > 0 ? thread[thread.length - 1] : null;
+
+    // Greeting
+    if (/^(嗨+|哈囉|你好+|嘿|hi+|hello+|hey+|早安|午安|晚安|good morning|good afternoon)[\s.!?,，。！？]*$/.test(lq)) {
+      return { type: 'greeting' };
+    }
+    // Pure thanks / acknowledgement
+    if (/^(thanks?|thank you|謝謝+|感謝|多謝|了解|懂了|知道了|ok+|okay|好+|好的|got it|understood|明白|清楚)[\s.!?,，。！？]*$/.test(lq)) {
+      return { type: 'acknowledgement' };
+    }
+    // Yes / agree
+    if (/^(是|是的|對|對的|沒錯|沒問題|yes|yeah|yep|yup|sure|當然|好啊|可以)[\s.!?,，。！？]*$/.test(lq)) {
+      return { type: 'affirmative' };
+    }
+    // No / disagree
+    if (/^(不是|不對|不|沒|沒有|no|nope|nah|不會|不行)[\s.!?,，。！？]*$/.test(lq)) {
+      return { type: 'negative' };
+    }
+    // Venting / emotional
+    if (/(好累|好難|好煩|累死|累慘|撐不下去|不知道怎麼辦|想放棄|想哭|崩潰|快瘋了|心好累|so tired|exhausted|hopeless|burned out|don.t know what to do|want to give up|going crazy)/.test(lq)) {
+      return { type: 'venting' };
+    }
+    // Expand / "tell me more" — only when there's previous context
+    if (lastTurn && /(再多說|多說|再說|多一點|詳細|具體一點|為什麼|怎麼說|解釋|展開|tell me more|more detail|why|explain|elaborate|expand|go deeper|details|具體|further)/.test(lq)) {
+      return { type: 'expand', refersTo: lastTurn.matchId };
+    }
+    // Personal application — "for my situation" / "in my case"
+    if (lastTurn && /(我的情況|我這邊|我這種|我這樣|對我來說|我的農場|套用到我|我可以嗎|適合我嗎|in my case|for me|my situation|my farm|apply to me|does this work for me)/.test(lq)) {
+      return { type: 'personal_apply', refersTo: lastTurn.matchId };
+    }
+    // Pushback / doubt
+    if (lastTurn && /^(可是|但是|不過|然而|可是|然後呢|but |however|i don.t think|i don.t agree|but what about|but |真的嗎)/.test(lq)) {
+      return { type: 'pushback', refersTo: lastTurn.matchId };
+    }
+    // Compliment / praise
+    if (/(好建議|很有用|有幫助|good advice|helpful|useful|great|nice|讚|不錯)[\s.!?,，。！？]*$/.test(lq)) {
+      return { type: 'praise' };
+    }
+    // Asking for the agent's opinion
+    if (/(你覺得|你建議|你會怎麼|你的意見|what do you think|what would you do|your opinion|your suggestion)/.test(lq)) {
+      return { type: 'opinion' };
+    }
+    return { type: 'lookup' };
+  }
+
+  // Build a synthetic KB-entry-like response for conversational moves.
+  // Returns { id, topic, answer(inp, r) } compatible with the existing
+  // bubble renderer so the chat thread renders consistently.
+  function buildConversationalResponse(intent, thread, inp, r) {
+    const isZh = currentLang !== 'en';
+    const refMatch = intent.refersTo ? AGENT_KB.find(e => e.id === intent.refersTo) : null;
+    const refTopic = refMatch ? (isZh ? refMatch.topic.zh : refMatch.topic.en) : '';
+
+    const responses = {
+      greeting: {
+        topic: { zh: '打招呼', en: 'Greeting' },
+        headline: { zh: '哈囉 👋 — 我是你的永續經營顧問', en: 'Hi 👋 — I\'m your sustainable-ops advisor' },
+        situation: { zh: '你可以問我任何關於農場經營、種植技術、農法選擇、農夫生活的問題。或點上方的「常見問題 / 種植知識 / 農法選擇 / 農夫生活」快速問問題。',
+                     en: 'Ask me anything about farm operations, agronomy, farming methods, or farmer life. Or tap the quick-chip rows above for common questions.' },
+        actions: [
+          { zh: '<strong>不知道從哪問起？</strong>試試：「我能拿什麼補助？」 / 「我這個價格夠嗎？」 / 「腰痛怎麼辦？」', en: '<strong>Not sure where to start?</strong> Try: "What subsidies can I claim?" / "Is my price right?" / "How do I protect my back?"' }
+        ]
+      },
+      acknowledgement: {
+        topic: { zh: '不客氣', en: 'You\'re welcome' },
+        headline: { zh: '不客氣 — 還有什麼問題嗎？', en: 'You\'re welcome — any other questions?' },
+        situation: { zh: '隨時都可以問。如果你想就剛剛的話題再深入，可以說「再多說一點」、「為什麼」、或「對我來說呢？」',
+                     en: 'Anytime. If you want to go deeper on what we just discussed, say "tell me more", "why", or "for my situation?"' },
+        actions: []
+      },
+      affirmative: {
+        topic: { zh: '好的', en: 'Got it' },
+        headline: { zh: '好 — 那下一步呢？', en: 'Good — what\'s next?' },
+        situation: refMatch
+          ? { zh: `既然你同意「${refTopic}」的方向，最容易落實的第一步是行動清單裡的第 1 項。也可以點下方相關題目延伸思考。`,
+              en: `Since you\'re aligned with "${refTopic}", the easiest first step is action #1 in the list. Or tap a related topic below to explore further.` }
+          : { zh: '想繼續討論這個方向？告訴我你目前最卡的點，我可以給你更具體的建議。',
+              en: 'Want to continue this direction? Tell me where you\'re currently stuck and I can give you more specific guidance.' },
+        actions: []
+      },
+      negative: {
+        topic: { zh: '了解', en: 'Understood' },
+        headline: { zh: '了解 — 那情況不一樣？', en: 'Understood — different situation?' },
+        situation: { zh: '我不會強迫一個答案。每個農場的條件都不同。可以告訴我：你的情況跟我說的哪裡不一樣？或我可以從別的角度回答這個問題。',
+                     en: 'I won\'t force one answer. Every farm is different. Can you tell me: what about your situation differs from what I described? Or I can come at the question from another angle.' },
+        actions: []
+      },
+      venting: {
+        topic: { zh: '我聽見你了', en: 'I hear you' },
+        headline: { zh: '農夫真的不容易 — 你不孤單', en: 'Farming is genuinely hard — you\'re not alone' },
+        situation: { zh: '你現在感受到的疲憊和挫折是真實的，不是「你不夠堅強」。台灣 80% 以上的永續農夫至少經歷過 1-2 次「想放棄」的時候。重要的不是「撐過去」，而是「在崩潰前找到支援」。',
+                     en: 'The exhaustion + frustration you\'re feeling is real — not "you aren\'t strong enough". 80%+ of Taiwan\'s sustainable farmers go through 1-2 "I want to quit" moments. The key isn\'t "tough it out" — it\'s "find support before collapse".' },
+        actions: [
+          { zh: '1. <strong>立刻：強制休息 1 天</strong>。完全不下田、不回客戶訊息。不會死，農場也不會倒。', en: '1. <strong>Right now: enforced 1-day off</strong>. No field, no customer messages. Nothing collapses.' },
+          { zh: '2. <strong>找人說話</strong>。配偶、朋友、產銷班同伴、衛福部安心專線 1925（24h 免費）。', en: '2. <strong>Talk to someone</strong>. Spouse, friend, production-group peer, MOHW mental health hotline 1925 (24h free).' },
+          { zh: '3. <strong>看「撐不下去」深入答案</strong> — 我整理了 4 步驟具體做法。', en: '3. <strong>See the deeper "burnout" answer</strong> — I\'ve laid out 4 concrete steps.' }
+        ],
+        resources: {
+          title: { zh: '緊急支援資源', en: 'Emergency support' },
+          items: [
+            { zh: '<strong>衛福部安心專線 1925</strong>（24h 免費）', en: '<strong>MOHW Mental Health Hotline 1925</strong> (24h free)' },
+            { zh: '<strong>張老師專線 1980</strong>（情緒支持）', en: '<strong>Teacher Chang Hotline 1980</strong> (emotional support)' },
+            { zh: '<strong>生命線 1995</strong>（嚴重時撥打）', en: '<strong>Lifeline 1995</strong> (for severe crisis)' }
+          ]
+        }
+      },
+      expand: refMatch ? {
+        topic: { zh: '更深入', en: 'Deeper dive' },
+        headline: { zh: `關於「${refTopic}」 — 還有這些角度`, en: `On "${refTopic}" — here are more angles` },
+        situation: { zh: '我把剛剛的話題分幾個面向再展開。如果還是不夠具體，告訴我你最想知道哪一塊（例如：「給我數字」、「給我例子」、「給我聯絡管道」）。',
+                     en: 'Let me expand the previous topic in a few directions. If still not specific enough, tell me which piece you want most ("give me numbers", "give me examples", "give me contact info").' },
+        actions: [
+          { zh: `1. <strong>數字面</strong>：看「${refTopic}」答案的「具體行動」段落，每一步都有量化的成本 / 時間 / 效果。`, en: `1. <strong>Numbers angle</strong>: in the "${refTopic}" answer, the "Concrete action" section has quantified cost / time / impact per step.` },
+          { zh: `2. <strong>時程面</strong>：如果答案有 📅 時程表，那是執行順序的關鍵。`, en: `2. <strong>Timing angle</strong>: if the answer has a 📅 timeline section, that\'s the execution sequence.` },
+          { zh: `3. <strong>地雷面</strong>：⚠️ 段落列出別人踩過的雷 — 比聽「該做什麼」更省學費。`, en: `3. <strong>Pitfalls angle</strong>: ⚠️ section lists what others have stepped on — saves more than "what to do" tips.` },
+          { zh: `4. <strong>資源面</strong>：🔗 段落有具體的單位 / URL / 聯絡管道。`, en: `4. <strong>Resources angle</strong>: 🔗 section has specific agencies / URLs / contact paths.` },
+          { zh: '想就特定點展開？把那一點打出來問我，例如「補助申請最常見的駁回理由是什麼？」', en: 'Want to drill into a specific point? Type it — e.g. "what\'s the most common reason subsidy applications get rejected?"' }
+        ]
+      } : null,
+      personal_apply: refMatch ? (() => {
+        const yieldKg = inp.annualYieldKg || 0;
+        const revenue = inp.annualRevenueNT || 0;
+        const cost = computeAnnualCost().total;
+        const farmSize = inp.farmSize || 0;
+        const crop = inp.cropType || 'mixed';
+        const region = (CLIENT_CONFIG.region || '').toLowerCase();
+        const adopted = Object.values(inp.practices || {}).filter(Boolean).length;
+        const certs = (CLIENT_CONFIG.certifications || []).length;
+        return {
+          topic: { zh: '套用到你的農場', en: 'Apply to your farm' },
+          headline: { zh: `就你目前的狀況看「${refTopic}」`, en: `Looking at "${refTopic}" given your current state` },
+          situation: { zh: `我從你的儀表板資料看到：農場 ${farmSize} 公頃 / ${({rice:'水稻',vegetables:'蔬菜',fruit:'果樹',livestock:'畜牧',mixed:'混合'})[crop]||crop} / 已採用 ${adopted} 項做法 / ${certs} 項認證。下面是針對這個情況的調整建議。`,
+                       en: `From your dashboard: ${farmSize} ha / ${crop} farm / ${adopted} practices adopted / ${certs} cert(s). Here\'s how to adapt the previous topic to this specifically.` },
+          actions: [
+            { zh: `1. <strong>規模面</strong>：你的農場是「${farmSize < 1 ? '小型' : farmSize < 3 ? '中型' : '大型'}」— 行動清單裡規模相關的數字要用比例算（每公頃 NT$ X × ${farmSize.toFixed(1)} ha）`, en: `1. <strong>Scale</strong>: your farm is "${farmSize < 1 ? 'small' : farmSize < 3 ? 'medium' : 'large'}" — scale the per-ha figures by ${farmSize.toFixed(1)} ha` },
+            { zh: `2. <strong>進度面</strong>：${adopted === 0 ? '從零開始做的話，先挑「殘株還田」這個 0 成本的入門' : `已有 ${adopted} 項做法，看儀表板「投資回收計算機」找下一個最划算的`}`, en: `2. <strong>Progress</strong>: ${adopted === 0 ? 'starting from zero — pick "residue retention" as the 0-cost entry point' : `you\'ve adopted ${adopted}; check Practice ROI for the next-cheapest`}` },
+            { zh: `3. <strong>區域面</strong>：${region.includes('north')?'北部':region.includes('central')?'中部':region.includes('south')?'南部':region.includes('east')?'東部':'你所在區域'}的氣候 / 通路 / 補助批次可能跟一般建議有差，找在地產銷班 / 改良場確認。`, en: `3. <strong>Region</strong>: your area\'s climate / channels / subsidy batches may differ from generic advice — check with local production group / improvement station.` },
+            { zh: `4. <strong>下一步</strong>：把「${refTopic}」答案裡「具體行動」第 1 步做一週試試，做完再來問我「我做了 X，結果 Y」— 我可以根據結果調整建議。`, en: `4. <strong>Next step</strong>: try action #1 of the "${refTopic}" answer for one week, then come back and say "I did X, got Y" — I\'ll adjust the advice based on your result.` }
+          ]
+        };
+      })() : null,
+      pushback: refMatch ? {
+        topic: { zh: '你有道理', en: 'Fair point' },
+        headline: { zh: '你的質疑很合理 — 我來換個角度', en: 'Your pushback is reasonable — let me reframe' },
+        situation: { zh: `我給的「${refTopic}」建議是適用「多數情況」的版本。每個農場條件不一樣，可能不適合你。最常見的例外情況：(a) 規模太小 (b) 區域氣候差異 (c) 已嘗試過 (d) 現金壓力過大不能等。你的疑慮屬於哪一種？`,
+                     en: `My "${refTopic}" advice was the "most cases" version. Every farm differs — it might not fit yours. Common exceptions: (a) scale too small (b) regional climate difference (c) already tried (d) cash pressure too high to wait. Which describes your concern?` },
+        actions: [
+          { zh: '<strong>告訴我你的具體疑慮</strong>，例如「我已經試過 X 但 Y」、「我這邊 Z 條件不一樣」— 我可以給你修正版建議。', en: '<strong>Tell me your specific concern</strong>, e.g. "I tried X but Y" / "my Z condition is different" — I\'ll give you a revised recommendation.' }
+        ]
+      } : null,
+      praise: {
+        topic: { zh: '謝謝', en: 'Thanks' },
+        headline: { zh: '謝謝你 — 還有什麼想討論的？', en: 'Thanks — what else would you like to discuss?' },
+        situation: { zh: '希望這個有幫到你。如果你執行了任何建議，回來告訴我結果，我可以據此調整下次的回答。',
+                     en: 'Glad it helped. If you act on any advice, come back and tell me the result — I can refine future answers accordingly.' },
+        actions: []
+      },
+      opinion: {
+        topic: { zh: '我的看法', en: 'My take' },
+        headline: { zh: '我會這樣看：先穩，再強，再大', en: 'My take: stabilize first, then strengthen, then scale' },
+        situation: { zh: '一般原則：(1) 先「穩」— 把現金流 + 健康 + 家庭關係穩定，農場才有底子。(2) 再「強」— 累積 2-3 項做法、1-2 張認證、固定客群。(3) 最後「大」— 擴張面積 / 通路 / 副業。順序錯過 = 撐不久。',
+                     en: 'General principle: (1) "Stabilize" first — cash flow + health + family stable so the farm has foundation. (2) "Strengthen" — accumulate 2-3 practices + 1-2 certs + stable customers. (3) "Scale" — expand acreage / channels / side businesses. Wrong order = burnout.' },
+        actions: [
+          { zh: '想要針對你的情況更具體的看法？告訴我：(a) 你經營幾年了 (b) 主要做什麼 (c) 最大的卡點是什麼。',
+            en: 'Want more specific opinion for your situation? Tell me: (a) how many years in (b) main crop/operation (c) biggest sticking point.' }
+        ]
+      }
+    };
+
+    const r2 = responses[intent.type];
+    if (!r2) return null;
+
+    // Wrap into a fake KB-entry shape for the bubble renderer
+    return {
+      id: '_conv_' + intent.type,
+      topic: r2.topic,
+      answer: () => r2
+    };
+  }
+
   function findBestAnswer(question) {
     if (!question || !question.trim()) return null;
     let best = null, bestScore = 0;
@@ -7217,14 +7406,26 @@ This application supports starting organic-transition certification for ≥1 ha.
     if (!q) return false;
     const inp = readInputs();
     const r = calcFromInputs(inp);
-    const match = findBestAnswer(q);
+
+    // FIRST: check conversational intent (thanks / follow-up /
+    // pushback / venting / yes / no / greeting). If matched, build
+    // a conversational response and skip the KB lookup. Only fall
+    // through to keyword lookup for genuine new questions.
+    const intent = detectConversationalIntent(q, agentState.thread);
+    let match;
+    if (intent.type !== 'lookup' && intent.type !== 'empty') {
+      match = buildConversationalResponse(intent, agentState.thread, inp, r);
+    }
+    if (!match) {
+      match = findBestAnswer(q);
+    }
+
     agentState.lastQuestion = q;
     agentState.lastAnswer = match;
     pushRecentQuestion(q);
     pushThread(q, match);
     renderAgentChat();
     inputEl.value = '';
-    // Scroll to the latest message bubble, not the section top
     setTimeout(() => {
       const latest = document.querySelector('.chat-latest');
       if (latest) latest.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -7329,7 +7530,9 @@ This application supports starting organic-transition certification for ≥1 ha.
 
     const turnsHtml = agentState.thread.map((turn, i) => {
       const isLast = i === agentState.thread.length - 1;
-      const match = turn.matchId ? AGENT_KB.find(e => e.id === turn.matchId) : null;
+      // Use the stored full match (preserves closure-bound conversational
+      // responses); fall back to KB lookup if only id was stored.
+      const match = turn.match || (turn.matchId ? AGENT_KB.find(e => e.id === turn.matchId) : null);
       return buildAnswerBubbleHtml(turn.q, match, inp, r, isLast);
     }).join('');
 
