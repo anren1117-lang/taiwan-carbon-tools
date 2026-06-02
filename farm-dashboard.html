@@ -2221,6 +2221,109 @@
     background: var(--accent-tint);
     transform: translateY(-1px);
   }
+  /* ── Chat-thread UI (multi-turn agent) ─────────────────────── */
+  .chat-thread {
+    display: flex; flex-direction: column;
+    gap: 14px;
+    padding: 6px 2px;
+  }
+  .chat-turn {
+    display: flex;
+    gap: 10px;
+    animation: chat-fade-in 0.35s ease-out;
+  }
+  @keyframes chat-fade-in {
+    0% { opacity: 0; transform: translateY(8px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .chat-turn { animation: none; }
+  }
+  .chat-turn.user { justify-content: flex-end; }
+  .chat-turn.agent { justify-content: flex-start; }
+  .chat-avatar {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    box-shadow: 0 2px 8px rgba(29,158,117,0.30);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .chat-bubble-user {
+    max-width: 80%;
+    background: var(--accent);
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 18px 18px 4px 18px;
+    font-size: 14px;
+    line-height: 1.5;
+    box-shadow: 0 2px 6px rgba(29,158,117,0.25);
+    word-wrap: break-word;
+  }
+  .chat-bubble-agent {
+    max-width: 88%;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 18px 18px 18px 4px;
+    padding: 14px 16px;
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--text);
+    box-shadow: var(--shadow);
+  }
+  /* Latest message gets a subtle pulse animation to draw attention */
+  .chat-turn.chat-latest .chat-bubble-agent {
+    animation: chat-highlight 1s ease-out;
+  }
+  @keyframes chat-highlight {
+    0%   { box-shadow: 0 0 0 0 rgba(29, 158, 117, 0.35), var(--shadow); }
+    100% { box-shadow: 0 0 0 8px rgba(29, 158, 117, 0), var(--shadow); }
+  }
+  /* Older turns slightly faded so the latest stands out */
+  .chat-thread .chat-turn:not(.chat-latest) {
+    opacity: 0.82;
+  }
+  .chat-thread .chat-turn:not(.chat-latest):hover { opacity: 1; }
+  /* Follow-up prompt below the latest turn */
+  .chat-followup {
+    margin-top: 6px;
+    padding: 12px 16px;
+    background: var(--accent-tint);
+    border: 1px dashed var(--accent);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    flex-wrap: wrap;
+    font-size: 13px;
+  }
+  .chat-followup-text {
+    color: var(--text);
+    font-weight: 500;
+  }
+  .chat-clear {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 6px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 12px;
+    font-family: inherit;
+    transition: color 0.12s ease, border-color 0.12s ease;
+  }
+  .chat-clear:hover {
+    color: var(--pri-1);
+    border-color: var(--pri-1);
+  }
+  @media (max-width: 600px) {
+    .chat-bubble-user, .chat-bubble-agent { max-width: 92%; }
+    .chat-avatar { width: 28px; height: 28px; font-size: 14px; }
+  }
   /* Recent question history — shown above the answer */
   .ag-history-q {
     background: var(--bg-subtle); border: 1px solid var(--border);
@@ -4497,7 +4600,22 @@ This application supports starting organic-transition certification for ≥1 ha.
   }
 
   // ── Sustainable-ag agent ─────────────────────────────────────────
-  let agentState = { priority: null, lastQuestion: null, lastAnswer: null };
+  // Chat thread state — multi-turn conversation, last 5 turns visible.
+  // Each turn: { q: question text, matchId: KB entry id or null, ts: Date.now() }
+  let agentState = { priority: null, lastQuestion: null, lastAnswer: null, thread: [] };
+  const AGENT_THREAD_MAX = 5;
+  function pushThread(q, match) {
+    agentState.thread.push({ q, matchId: match ? match.id : null, ts: Date.now() });
+    if (agentState.thread.length > AGENT_THREAD_MAX) {
+      agentState.thread.shift();
+    }
+  }
+  window.clearAgentThread = function() {
+    agentState.thread = [];
+    agentState.lastQuestion = null;
+    agentState.lastAnswer = null;
+    renderAgentChat();
+  };
 
   // ── Agent knowledge base ─────────────────────────────────────────
   // Keyword-routed Q&A. Each entry has: keywords (zh + en lowercase
@@ -7031,7 +7149,8 @@ This application supports starting organic-transition certification for ≥1 ha.
     agentState.lastQuestion = q;
     agentState.lastAnswer = match;
     pushRecentQuestion(q);
-    renderAgentAnswer(q, match, inp, r);
+    pushThread(q, match);
+    renderAgentChat();
     document.getElementById('sec-agent').scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
@@ -7085,7 +7204,8 @@ This application supports starting organic-transition certification for ≥1 ha.
     agentState.lastQuestion = question;
     agentState.lastAnswer = match;
     pushRecentQuestion(question);
-    renderAgentAnswer(question, match, inp, r);
+    pushThread(question, match);
+    renderAgentChat();
     document.getElementById('sec-agent').scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
@@ -7101,22 +7221,22 @@ This application supports starting organic-transition certification for ≥1 ha.
     agentState.lastQuestion = q;
     agentState.lastAnswer = match;
     pushRecentQuestion(q);
-    renderAgentAnswer(q, match, inp, r);
+    pushThread(q, match);
+    renderAgentChat();
     inputEl.value = '';
-    document.getElementById('sec-agent').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // Scroll to the latest message bubble, not the section top
+    setTimeout(() => {
+      const latest = document.querySelector('.chat-latest');
+      if (latest) latest.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 50);
     return false;
   };
 
-  function renderAgentAnswer(q, match, inp, r) {
-    const body = document.getElementById('agentBody');
+  // Build the HTML for one Q&A turn (user bubble + agent bubble).
+  // Returns string. Called once per turn by renderAgentChat().
+  function buildAnswerBubbleHtml(q, match, inp, r, isLast) {
     const isZh = currentLang !== 'en';
-    const resetBtn = document.getElementById('agentReset');
-    if (resetBtn) resetBtn.style.display = '';
 
-    // Build a "related questions" chip row for any answer. Uses the
-    // RELATED_TOPICS graph if we have a match id, or the top-3 by
-    // keyword score if we're in fallback. Each chip re-fires askQuick
-    // by asking the related entry's first keyword phrase.
     function relatedChips(matchId, fallbackQuestion) {
       let related = [];
       if (matchId && RELATED_TOPICS[matchId]) {
@@ -7127,38 +7247,37 @@ This application supports starting organic-transition certification for ≥1 ha.
       if (related.length === 0) return '';
       const chips = related.map(e => {
         const topicLabel = isZh ? e.topic.zh : e.topic.en;
-        // Each chip dispatches a synthetic question using the entry's
-        // first keyword as a query (guaranteed to match itself).
-        const q = (e.keywords && e.keywords[0]) || topicLabel;
         return `<button class="agent-related-chip" onclick="askAgentTopic('${e.id}')">${topicLabel}</button>`;
       }).join('');
-      return `
-        <div class="ag-related">
-          <span class="ag-related-label">${isZh ? '繼續探索' : 'Explore next'}</span>
-          ${chips}
-        </div>`;
+      return `<div class="ag-related"><span class="ag-related-label">${isZh ? '繼續探索' : 'Explore next'}</span>${chips}</div>`;
     }
 
-    // No match: graceful fallback — show the 3 closest topics by
-    // keyword score as related chips, not just generic links.
+    function extraSection(spec, icon) {
+      if (!spec || !spec.items || spec.items.length === 0) return '';
+      const items = spec.items.map(it => `<li>${isZh ? it.zh : it.en}</li>`).join('');
+      return `<div class="ag-answer-section"><h4>${icon} ${isZh ? spec.title.zh : spec.title.en}</h4><ul>${items}</ul></div>`;
+    }
+
+    const userBubble = `<div class="chat-turn user"><div class="chat-bubble-user">${escapeHtml(q)}</div></div>`;
+
     if (!match) {
-      const closest = findClosestTopics(q, []);
-      body.innerHTML = `
-        <div class="ag-history-q">${escapeHtml(q)}</div>
-        <div class="agent-bubble">
-          <div class="ag-answer-topic">${isZh ? '沒有完全對應的答案' : 'No exact match'}</div>
-          <div style="font-size: 15px; font-weight: 700; margin-bottom: 8px; line-height: 1.4;">${isZh ? '但這 3 個話題可能跟你的問題最相關 ↓' : 'But these 3 topics may be closest to what you\'re asking ↓'}</div>
-          <div style="font-size: 13px; line-height: 1.65; color: var(--text-muted);">${isZh
-            ? '點任何一個直接看答案，或用更具體的詞彙再問一次（例：「補助」、「定價」、「現金」、「議價」、「投資」）。'
-            : 'Click any to see the answer, or rephrase with more specific words (e.g. "subsidies", "pricing", "cash", "negotiation", "investment").'}</div>
-          ${relatedChips(null, q)}
-          <div class="ag-answer-links" style="margin-top: 14px;">
-            <a href="#sec-top3">${isZh ? '🎯 本月 3 件事' : '🎯 Top 3'}</a>
-            <a href="#sec-pricing">${isZh ? '💰 定價工作室' : '💰 Pricing Studio'}</a>
-            <a href="#sec-income">${isZh ? '📋 補助清單' : '📋 Subsidies'}</a>
+      return userBubble + `
+        <div class="chat-turn agent${isLast ? ' chat-latest' : ''}">
+          <div class="chat-avatar">🌱</div>
+          <div class="chat-bubble-agent">
+            <div class="ag-answer-topic">${isZh ? '沒有完全對應的答案' : 'No exact match'}</div>
+            <div style="font-size: 15px; font-weight: 700; margin-bottom: 8px; line-height: 1.4;">${isZh ? '但這 3 個話題可能跟你的問題最相關 ↓' : 'But these 3 topics may be closest to what you are asking ↓'}</div>
+            <div style="font-size: 13px; line-height: 1.65; color: var(--text-muted);">${isZh
+              ? '點任何一個直接看答案，或用更具體的詞彙再問一次。'
+              : 'Click any to see the answer, or rephrase with more specific words.'}</div>
+            ${relatedChips(null, q)}
+            <div class="ag-answer-links" style="margin-top: 14px;">
+              <a href="#sec-top3">${isZh ? '🎯 本月 3 件事' : '🎯 Top 3'}</a>
+              <a href="#sec-pricing">${isZh ? '💰 定價工作室' : '💰 Pricing Studio'}</a>
+              <a href="#sec-income">${isZh ? '📋 補助清單' : '📋 Subsidies'}</a>
+            </div>
           </div>
         </div>`;
-      return;
     }
 
     const ans = match.answer(inp, r);
@@ -7168,39 +7287,65 @@ This application supports starting organic-transition certification for ≥1 ha.
       return `<a href="${l.href}"${target}>${isZh ? l.label.zh : l.label.en}</a>`;
     }).join('');
 
-    // Render an optional "extra section" (checklist / timeline /
-    // pitfalls / resources) — each has { title: {zh,en}, items: [{zh,en}] }.
-    // Used for deepened KB entries that provide more detail beyond the
-    // 3-step action list. Items render as a bullet list with inline HTML
-    // allowed (for <strong>, <a href>, etc.) since the content is
-    // author-controlled, not user-provided.
-    function extraSection(spec, icon) {
-      if (!spec || !spec.items || spec.items.length === 0) return '';
-      const items = spec.items.map(it => `<li>${isZh ? it.zh : it.en}</li>`).join('');
-      return `
-        <div class="ag-answer-section">
-          <h4>${icon} ${isZh ? spec.title.zh : spec.title.en}</h4>
-          <ul>${items}</ul>
-        </div>`;
+    return userBubble + `
+      <div class="chat-turn agent${isLast ? ' chat-latest' : ''}">
+        <div class="chat-avatar">🌱</div>
+        <div class="chat-bubble-agent">
+          <div class="ag-answer-topic">${isZh ? match.topic.zh : match.topic.en}</div>
+          <div style="font-size: 15px; font-weight: 700; margin-bottom: 8px; line-height: 1.4;">${isZh ? ans.headline.zh : ans.headline.en}</div>
+          <div style="font-size: 13px; line-height: 1.65; color: var(--text-muted);">${isZh ? ans.situation.zh : ans.situation.en}</div>
+          <div class="ag-answer-section">
+            <h4>${isZh ? '🎯 具體行動' : '🎯 Concrete action'}</h4>
+            <ol>${actionsHtml}</ol>
+          </div>
+          ${extraSection(ans.checklist, '✅')}
+          ${extraSection(ans.timeline,  '📅')}
+          ${extraSection(ans.pitfalls,  '⚠️')}
+          ${extraSection(ans.resources, '🔗')}
+          ${linksHtml ? `<div class="ag-answer-links">${linksHtml}</div>` : ''}
+          ${relatedChips(match.id, null)}
+        </div>
+      </div>`;
+  }
+
+  // Multi-turn chat thread renderer — replaces the single-answer view.
+  // Shows the last AGENT_THREAD_MAX (5) turns as a scrollable chat.
+  // After the latest answer, adds a "follow-up prompt" with quick
+  // follow-up buttons + a "clear thread" link.
+  function renderAgentChat() {
+    const body = document.getElementById('agentBody');
+    if (!body) return;
+    const isZh = currentLang !== 'en';
+    const resetBtn = document.getElementById('agentReset');
+    if (resetBtn) resetBtn.style.display = agentState.thread.length > 0 ? '' : 'none';
+
+    if (agentState.thread.length === 0) {
+      body.innerHTML = '';
+      return;
     }
 
-    body.innerHTML = `
-      <div class="ag-history-q">${escapeHtml(q)}</div>
-      <div class="agent-bubble">
-        <div class="ag-answer-topic">${isZh ? match.topic.zh : match.topic.en}</div>
-        <div style="font-size: 15px; font-weight: 700; margin-bottom: 8px; line-height: 1.4;">${isZh ? ans.headline.zh : ans.headline.en}</div>
-        <div style="font-size: 13px; line-height: 1.65; color: var(--text-muted);">${isZh ? ans.situation.zh : ans.situation.en}</div>
-        <div class="ag-answer-section">
-          <h4>${isZh ? '🎯 具體行動' : '🎯 Concrete action'}</h4>
-          <ol>${actionsHtml}</ol>
-        </div>
-        ${extraSection(ans.checklist, '✅')}
-        ${extraSection(ans.timeline,  '📅')}
-        ${extraSection(ans.pitfalls,  '⚠️')}
-        ${extraSection(ans.resources, '🔗')}
-        ${linksHtml ? `<div class="ag-answer-links">${linksHtml}</div>` : ''}
-        ${relatedChips(match.id, null)}
+    const inp = readInputs();
+    const r = calcFromInputs(inp);
+
+    const turnsHtml = agentState.thread.map((turn, i) => {
+      const isLast = i === agentState.thread.length - 1;
+      const match = turn.matchId ? AGENT_KB.find(e => e.id === turn.matchId) : null;
+      return buildAnswerBubbleHtml(turn.q, match, inp, r, isLast);
+    }).join('');
+
+    const followupPrompt = `
+      <div class="chat-followup">
+        <div class="chat-followup-text">${isZh ? '💬 繼續問下一個問題 — 或選任何上面的「繼續探索」標籤' : '💬 Ask a follow-up — or tap any "Explore next" chip above'}</div>
+        <button class="chat-clear" onclick="clearAgentThread()">${isZh ? '🗑 清除對話' : '🗑 Clear chat'}</button>
       </div>`;
+
+    body.innerHTML = `<div class="chat-thread">${turnsHtml}${followupPrompt}</div>`;
+  }
+
+  // Backwards-compat wrapper — kept for any external callers, but
+  // delegates to renderAgentChat which renders the full thread.
+  function renderAgentAnswer(q, match, inp, r) {
+    renderAgentChat();
   }
 
   // Jump directly to a KB topic answer (used by related-chip clicks)
@@ -7214,8 +7359,12 @@ This application supports starting organic-transition certification for ≥1 ha.
     agentState.lastQuestion = synthQ;
     agentState.lastAnswer = entry;
     pushRecentQuestion(synthQ);
-    renderAgentAnswer(synthQ, entry, inp, r);
-    document.getElementById('sec-agent').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    pushThread(synthQ, entry);
+    renderAgentChat();
+    setTimeout(() => {
+      const latest = document.querySelector('.chat-latest');
+      if (latest) latest.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 50);
   };
 
   // Simple HTML escape for user-provided question text
@@ -7466,10 +7615,10 @@ This application supports starting organic-transition certification for ≥1 ha.
   function renderAgent(inp, r) {
     const body = document.getElementById('agentBody');
     const resetBtn = document.getElementById('agentReset');
-    // If there's a recent Q&A answer, keep it visible — don't overwrite
-    // with the chip-selector. The "Start over" button clears it.
-    if (agentState.lastQuestion) {
-      renderAgentAnswer(agentState.lastQuestion, agentState.lastAnswer, inp, r);
+    // If there's an active chat thread, render it instead of the
+    // chip-selector. Clear thread via "Clear chat" button in chat UI.
+    if (agentState.thread && agentState.thread.length > 0) {
+      renderAgentChat();
       return;
     }
     if (!agentState.priority) {
@@ -11476,11 +11625,12 @@ Applicant: ${ownerName} (signature)
       applyLang(currentLang === 'zh' ? 'en' : 'zh');
     });
 
-    // Agent reset — clear both priority and Q&A state
+    // Agent reset — clear priority + Q&A + chat thread
     document.getElementById('agentReset').addEventListener('click', () => {
       agentState.priority = null;
       agentState.lastQuestion = null;
       agentState.lastAnswer = null;
+      agentState.thread = [];
       render();
     });
 
