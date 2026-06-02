@@ -2711,6 +2711,19 @@
       <button class="agent-quick" onclick="askQuick('再生農業是什麼？')" data-zh="♻️ 再生農業" data-en="♻️ Regenerative">♻️ 再生農業</button>
       <button class="agent-quick" onclick="askQuick('厚土栽培怎麼做？')" data-zh="🥞 厚土栽培（不挖土）" data-en="🥞 Sheet mulching">🥞 厚土栽培（不挖土）</button>
     </div>
+    <!-- Farmer-life quick chips — personal aspects (health, family, identity) -->
+    <div class="agent-quick-chips" id="agentLifeChips" aria-label="Farmer life">
+      <span class="agent-quick-label" data-zh="🧘 農夫生活" data-en="🧘 Farmer life">🧘 農夫生活</span>
+      <button class="agent-quick" onclick="askQuick('農夫一天怎麼安排時間？')" data-zh="⏰ 時間管理" data-en="⏰ Time mgmt">⏰ 時間管理</button>
+      <button class="agent-quick" onclick="askQuick('腰痛怎麼辦？防曬怎麼做？')" data-zh="💪 身體健康" data-en="💪 Body health">💪 身體健康</button>
+      <button class="agent-quick" onclick="askQuick('怎麼跟家人平衡？')" data-zh="👨‍👩‍👧 家庭平衡" data-en="👨‍👩‍👧 Family balance">👨‍👩‍👧 家庭平衡</button>
+      <button class="agent-quick" onclick="askQuick('當農夫好孤單怎麼辦？')" data-zh="🫂 孤單 / 連結" data-en="🫂 Loneliness">🫂 孤單 / 連結</button>
+      <button class="agent-quick" onclick="askQuick('怎麼建立個人品牌？')" data-zh="🎨 個人品牌" data-en="🎨 Personal brand">🎨 個人品牌</button>
+      <button class="agent-quick" onclick="askQuick('農夫應該保哪些保險？')" data-zh="🛡️ 保險規劃" data-en="🛡️ Insurance">🛡️ 保險規劃</button>
+      <button class="agent-quick" onclick="askQuick('農夫退休怎麼規劃？')" data-zh="🏖️ 退休規劃" data-en="🏖️ Retirement">🏖️ 退休規劃</button>
+      <button class="agent-quick" onclick="askQuick('怎麼做農場創新實驗？')" data-zh="🧪 創新實驗" data-en="🧪 Innovation">🧪 創新實驗</button>
+      <button class="agent-quick" onclick="askQuick('壞年怎麼復原？')" data-zh="🌧️ 壞年復原" data-en="🌧️ Bad year recovery">🌧️ 壞年復原</button>
+    </div>
     <div id="agentBody"></div>
   </section>
 
@@ -6537,6 +6550,300 @@ This application supports starting organic-transition certification for ≥1 ha.
           ]
         };
       }
+    },
+    {
+      id: 'daily_routine',
+      keywords: ['作息', '時間', '一天', '安排', '怎麼分配', '幾點起床', '行程', 'daily routine', 'schedule', 'time mgmt', 'how to plan day', 'farm day'],
+      topic: { zh: '農場日常 / 時間管理', en: 'Farm daily routine / time mgmt' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '農場時間管理 = 順著季節 + 順著天氣 + 留 20% 給意外', en: 'Farm time mgmt = follow the season + follow weather + leave 20% buffer for surprises' },
+          situation: { zh: '農場時間跟辦公室不同 — 不是「9 點開始 5 點下班」，是「天氣讓你做什麼你就做什麼」。多數新農夫累垮的原因不是工作量，是「想用城市時間表管農場」。學會讀天氣 + 季節節奏 + 保留緩衝，才能撐 10 年以上。',
+                       en: 'Farm time isn\'t office time — not "start 9, end 5" but "do what the weather lets you do". Most new farmers burn out not from workload but from "trying to run a farm on city schedules". Reading weather + seasonal rhythm + buffer = how to last 10+ years.' },
+          actions: [
+            { zh: '1. <strong>清晨 5-9 點：田間工作主時段</strong>。涼爽、體力佳、植物生機強。最艱苦的工作（鋤草、收成、噴施）擺這個時段。9 點後體感開始辛苦。',
+              en: '1. <strong>5-9am: prime fieldwork window</strong>. Cool, energy high, plants active. Hardest work (weeding, harvest, spraying) goes here. After 9am body starts struggling.' },
+            { zh: '2. <strong>10:00-15:00：行政 / 加工 / 進修</strong>。陽光最強這幾小時別下田。改在涼快的工作室處理：包裝、出貨、記帳、研究市場、回客戶訊息。',
+              en: '2. <strong>10am-3pm: admin / processing / learning</strong>. Sun strongest these hours — don\'t be in the field. Work indoors: packaging, dispatch, bookkeeping, market research, customer replies.' },
+            { zh: '3. <strong>15:30-18:00：第二輪田間工作</strong>。陽光開始柔，植物還活躍。澆水、巡田、輕度修剪、收成繼續。',
+              en: '3. <strong>3:30-6pm: second fieldwork round</strong>. Sun softens, plants still active. Watering, scouting, light pruning, continued harvest.' },
+            { zh: '4. <strong>每週留 1 整天「不工作」</strong>— 完全不下田、不回客戶訊息。可以做家事、休息、學習，但不能「工作」。撐長期的關鍵。',
+              en: '4. <strong>1 full day off per week — no farmwork</strong>. No field, no customer messages. Housework / rest / learning OK but no "work". Long-term sustainability key.' },
+            { zh: '5. <strong>20% 緩衝原則</strong>— 每週計畫只填 80%。颱風、急客戶、家人生病、機具故障一定會吃掉那 20%。沒留緩衝 = 一個意外就跨好幾週。',
+              en: '5. <strong>20% buffer rule</strong> — fill weekly plan only to 80%. Typhoons, urgent buyers, sick family, equipment breakdown WILL eat that 20%. No buffer = one surprise blows out weeks.' },
+            { zh: '6. <strong>季節節奏 — 旺季 vs 淡季</strong>。旺季（盛產 / 採收期）每天 12-14 小時是可接受的；淡季就要刻意休息、進修、計畫，不能也 12 小時否則身體垮。',
+              en: '6. <strong>Seasonal rhythm — peak vs off-season</strong>. Peak (harvest / planting) 12-14hr days are OK; off-season MUST scale down to rest / learn / plan, or body breaks down.' }
+          ],
+          pitfalls: {
+            title: { zh: '常見時間管理錯誤', en: 'Common time-mgmt mistakes' },
+            items: [
+              { zh: '<strong>「閒不下來」</strong>— 看到雜草就想拔、看到草長就想割。其實大部分都可以「明天再做」', en: '<strong>"Can\'t stop"</strong> — see a weed, want to pull; see grass, want to mow. Most of it really CAN wait until tomorrow' },
+              { zh: '<strong>把生活擠到工作後面</strong>— 「忙完這季就休假」 → 永遠忙不完。優先排「不工作」時段，工作排在後面才能撐', en: '<strong>Pushing life behind work</strong> — "I\'ll rest after this season" → never rest. Schedule OFF-TIME first, work fills in around it' },
+              { zh: '<strong>農場 + 通勤 + 副業 三重</strong>— 想兼差 + 兼通勤 + 顧農場很難長期。要嘛專心農場，要嘛調整其他兩項', en: '<strong>Triple-juggling farm + commute + side job</strong> — long-term unsustainable. Either commit to farm OR adjust the other two' },
+              { zh: '<strong>不切割「家人時間」</strong>— 跟家人吃飯也手機講電話、思考農場。家人感覺被排擠 → 關係出問題 = 農場也撐不下去', en: '<strong>Not protecting family time</strong> — phone calls + farm thoughts during family dinner. Family feels sidelined → relationship breaks down → farm also fails' }
+            ]
+          },
+          links: []
+        };
+      }
+    },
+    {
+      id: 'farmer_health',
+      keywords: ['腰痛', '背痛', '中暑', '曬傷', '農夫身體', '身體', '健康', '受傷', '防曬', 'back pain', 'heat stroke', 'sunburn', 'farmer body', 'health', 'injury', 'sun protection'],
+      topic: { zh: '農夫身體健康', en: 'Farmer body health' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '身體是農場最重要的設備 — 5 個保護原則', en: 'Your body is the farm\'s most important equipment — 5 protection principles' },
+          situation: { zh: '農夫平均退休年齡 65+ 歲，意味要用同一個身體工作 40-50 年。腰背、膝蓋、手腕、皮膚、視力是最常受損的部位。台灣農夫慢性病比一般人高：腰椎退化 60%、皮膚癌 3 倍、慢性脫水 50%。投資身體保護 = 投資農場壽命。',
+                       en: 'Farmer average retirement age is 65+, meaning the same body must work 40-50 years. Lower back, knees, wrists, skin, vision get damaged most. Taiwan farmers have higher chronic disease rates than general population: lumbar degeneration 60%, skin cancer 3×, chronic dehydration 50%. Investing in body protection = investing in farm lifespan.' },
+          actions: [
+            { zh: '1. <strong>防曬 — 不是怕黑，是怕皮膚癌</strong>。寬邊草帽（NT$ 200-500）+ 長袖薄透氣衫 + 涼感袖套 + SPF 50+ 防曬乳。中午 11-15 點戶外戴口罩 / 圍巾遮臉。',
+              en: '1. <strong>Sun protection — not vanity, skin cancer prevention</strong>. Wide-brim hat (NT$ 200-500) + long-sleeve light-weave shirt + cooling arm sleeves + SPF 50+ sunscreen. 11am-3pm cover face with mask / scarf.' },
+            { zh: '2. <strong>蹲下時用大腿不用腰</strong>— 蹲收成、種苗、除草時，膝蓋彎、腰背直、用大腿撐起身。每 30 分鐘站起來走 30 秒。腰椎活到 70 歲的關鍵。',
+              en: '2. <strong>Squat with thighs, not back</strong> — when harvesting / planting / weeding, bend knees, keep spine straight, push up with thighs. Stand up + walk 30 sec every 30 min. Key to a lumbar that lasts past 70.' },
+            { zh: '3. <strong>水分 + 鹽分主動補</strong>— 田裡口渴時其實已脫水。每小時 200-300ml 水 + 偶爾運動飲料補電解質。中暑徵兆：頭暈、噁心、停止流汗 → 立刻停工 + 找陰涼處 + 噴水擦身。',
+              en: '3. <strong>Drink water + salt proactively</strong> — by the time you feel thirsty you\'re already dehydrated. 200-300ml/hr + occasional sports drink for electrolytes. Heat-stroke signs: dizzy, nausea, stopped sweating → STOP, find shade, water-spray + cool body.' },
+            { zh: '4. <strong>工具配適你的身體</strong>— 鋤頭桿長度 = 你身高 - 20cm；噴霧器肩帶調到不壓肩；篩果籃輕一點 = 整天累積差很多。每年花 NT$ 1-3k 升級小工具，10 年回本。',
+              en: '4. <strong>Tools fitted to your body</strong> — hoe handle length = your height - 20cm; sprayer strap not pressing shoulder; lighter harvest basket = huge cumulative difference. Invest NT$ 1-3k/yr in tool upgrades; 10-yr payback in body health.' },
+            { zh: '5. <strong>定期健檢 — 別忽略警訊</strong>。每年免費勞工健檢（45 歲以上）+ 自費皮膚科檢查痣（NT$ 500-1,500）+ 視力檢查。發現問題早 = 治療便宜 + 不影響工作。',
+              en: '5. <strong>Annual checkups — don\'t ignore signals</strong>. Free labor health check (45+) + self-paid skin check for moles (NT$ 500-1,500) + vision exam. Early detection = cheap treatment + no work disruption.' }
+          ],
+          checklist: {
+            title: { zh: '農夫防護裝備清單', en: 'Farmer protection equipment checklist' },
+            items: [
+              { zh: '<strong>頭部</strong>：寬邊草帽 + 涼感頭巾 + 太陽眼鏡（防 UV）', en: '<strong>Head</strong>: wide-brim hat + cooling bandana + UV-blocking sunglasses' },
+              { zh: '<strong>身體</strong>：3 套薄透氣長袖長褲輪替 + 涼感袖套 + 工作圍裙', en: '<strong>Body</strong>: 3 sets of light-weave long-sleeve / long-pants rotation + cooling arm sleeves + work apron' },
+              { zh: '<strong>手</strong>：兩種手套（粗活厚手套 + 精細工作薄手套）', en: '<strong>Hands</strong>: two glove types (heavy for rough work + thin for fine work)' },
+              { zh: '<strong>腳</strong>：田間防滑長靴 + 一雙好穿的工作鞋給平地用', en: '<strong>Feet</strong>: non-slip field boots + comfortable work shoes for level ground' },
+              { zh: '<strong>急救包</strong>：田邊放急救箱含繃帶、消毒、防蜂蟄藥（蜜蜂 / 虎頭蜂咬到要立刻處理）', en: '<strong>First aid kit</strong>: field-side box with bandages, disinfectant, wasp-sting medication (bee / hornet stings need immediate treatment)' },
+              { zh: '<strong>手機</strong>：田裡常帶 + 緊急聯絡人快撥設定', en: '<strong>Mobile phone</strong>: keep in field + emergency contact speed-dial set' }
+            ]
+          },
+          links: []
+        };
+      }
+    },
+    {
+      id: 'family_balance',
+      keywords: ['家人', '太太', '先生', '小孩', '配偶', '伴侶', '家庭時間', 'family', 'spouse', 'partner', 'kids', 'children', 'work-life'],
+      topic: { zh: '家庭與農場的平衡', en: 'Family + farm balance' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '農場死掉的真正原因，多半是家庭關係先死', en: 'The real reason farms die — usually the family relationship dies first' },
+          situation: { zh: '農場 = 「家庭事業」+「家庭生活」混合在一起。優點：全家一起做，意義深。缺點：永遠下不了班 + 工作 / 私人界線模糊 + 配偶意見影響整個事業。多數倒下的小農場不是技術或經濟問題，是「家人受不了了」。',
+                       en: 'Farm = "family business" + "family life" mixed together. Pro: doing it together is deeply meaningful. Con: never clocking out + work/life blurred + spouse opinions affect the whole operation. Most failed small farms didn\'t fail technically or financially — the family couldn\'t take it anymore.' },
+          actions: [
+            { zh: '1. <strong>「不工作時段」家人優先</strong>— 每天至少 1 餐全家一起吃 + 手機收起來 + 不講農場。週日 1 整天「不工作不農場」。',
+              en: '1. <strong>"Off-time" = family first</strong> — at least 1 meal/day all-family + phones away + no farm talk. Sundays = 1 full day "no work, no farm".' },
+            { zh: '2. <strong>配偶不是員工，是合夥人</strong>— 重大決定（買地、轉作、簽合約、投入大筆錢）必須兩人 100% 同意。一個人「就做了」是裂痕的開始。',
+              en: '2. <strong>Spouse isn\'t an employee, they\'re a partner</strong> — major decisions (buy land, switch crops, sign contracts, big spend) require 100% mutual agreement. One person "just doing it" is the start of the rift.' },
+            { zh: '3. <strong>「我們」vs「我的農場」</strong>— 對外講話時用「我們」（即使你做了 80% 的勞動）。配偶在背後付出（家事、小孩、情緒支持）也是農場的一部分。',
+              en: '3. <strong>"Our" vs "my farm"</strong> — speak as "we" externally (even if you do 80% of the labor). Spouse\'s backstage work (housework, kids, emotional support) IS part of the farm.' },
+            { zh: '4. <strong>小孩 — 不要強迫但讓他們參與</strong>。給孩子小區塊讓他種他想種的，學費可從那塊地賣的錢出。最有可能讓孩子未來想接班的方式 = 從小參與決策不是命令做活。',
+                en: '4. <strong>Kids — don\'t force, but include them</strong>. Give them their own plot to grow what they want; tuition can come from that plot\'s sales. The way to maximize chance of succession = letting them participate in decisions from young, not commanding labor.' },
+            { zh: '5. <strong>定期「夫妻會議」討論農場 + 家庭</strong>— 每月一次 1 小時，正式坐下談 (a) 上月農場狀況 (b) 下月計畫 (c) 家庭時間夠不夠 (d) 對方有沒有累 / 不開心。沒這個會 = 不滿累積爆發。',
+              en: '5. <strong>Regular "couple meeting" — farm + family</strong> — monthly 1hr formal sit-down covering (a) last month\'s farm status (b) next month\'s plan (c) is family time enough (d) anyone tired / unhappy. Without this = resentment accumulates + explodes.' },
+            { zh: '6. <strong>家庭治療 = 投資不是恥辱</strong>— 衝突嚴重時找婚姻諮商師（NT$ 1,500-3,500/小時，部分縣有補助）。比硬撐然後離婚便宜 100 倍。台灣許多縣有免費家庭協談中心。',
+              en: '6. <strong>Family therapy = investment, not shame</strong> — when conflict gets serious, see a marriage counselor (NT$ 1,500-3,500/hr, some counties subsidize). 100× cheaper than struggling then divorcing. Many Taiwan counties have free family counseling centers.' }
+          ],
+          links: []
+        };
+      }
+    },
+    {
+      id: 'isolation_loneliness',
+      keywords: ['孤單', '寂寞', '孤獨', '沒人', '一個人', '沒朋友', '社交', '溝通對象', 'lonely', 'isolated', 'alone', 'no friends', 'social', 'community'],
+      topic: { zh: '農夫的孤單 / 連結需求', en: 'Farmer isolation / connection needs' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '農夫的孤單是真實的職業病 — 不是「你不夠堅強」', en: 'Farmer loneliness is a real occupational hazard — not "you aren\'t tough enough"' },
+          situation: { zh: '農業跟上班族生活方式不同：你每天主要互動對象是植物 + 動物 + 偶爾的買家。同行農夫住得分散、城市朋友不懂農場、配偶在同一個泡泡裡。長期下來 80% 農夫會出現「職業性孤獨」 — 不是憂鬱，是「沒有人能完全聽懂我的世界」。這需要刻意建立連結。',
+                       en: 'Farming life differs from office life: daily interactions are mostly plants + animals + occasional buyers. Other farmers live scattered, city friends don\'t get farm life, spouse is in the same bubble. Long-term 80% of farmers develop "occupational loneliness" — not depression, but "no one fully gets my world". Requires intentional connection-building.' },
+          actions: [
+            { zh: '1. <strong>每月參加 1 場農夫聚會</strong>— 產銷班月會、青農協會、有機聯盟、樸門社團、FB 線下聚。即使路途遠，去 1 次值得 4 小時車程。',
+              en: '1. <strong>1 farmer gathering per month</strong> — production group meeting, Young Farmer Association, organic alliance, permaculture group, FB meet-up. Worth a 4hr drive even occasionally.' },
+            { zh: '2. <strong>找 1-2 個「同類」朋友每週講電話 / LINE</strong>— 不是聊天，是「我這週遇到什麼，你怎麼看」。同作物 / 同階段 / 同價值觀的農夫最有用。',
+              en: '2. <strong>Find 1-2 "kindred spirit" farmers, weekly call / LINE</strong> — not chatter, but "here\'s what I hit this week, your take?" Most useful: same crop / same stage / same values.' },
+            { zh: '3. <strong>線上社群 — Facebook 群組 / LINE 群</strong>— 友善農業聯盟、有機農業推廣協會、各作物社團。被動瀏覽 + 偶爾發問 = 不出門就有連結感。',
+              en: '3. <strong>Online communities — FB groups / LINE groups</strong> — Friendly Farming Alliance, Organic Promotion, crop-specific groups. Passive browsing + occasional posts = connection without leaving the farm.' },
+            { zh: '4. <strong>「混工」(work swap) 互助</strong>— 你幫鄰居採收 1 天，他幫你整地 1 天。除了減輕勞動，重點是「有人共同流汗 = 不孤單」。',
+              en: '4. <strong>"Work swap" mutual aid</strong> — help neighbor harvest 1 day, they help you till 1 day. Beyond labor relief, the point is "sweating together = not alone".' },
+            { zh: '5. <strong>城市朋友也很重要 — 但要選會「聽你聊農場」的</strong>。多數朋友會說「好田園好棒」然後話題就斷了。挑能問「你那個堆肥配方後來如何？」的朋友維持 2-3 個就夠。',
+              en: '5. <strong>City friends matter too — pick those who can "listen to farm talk"</strong>. Most friends say "what a nice country life" and the topic dies. Pick 2-3 who ask "how did that compost recipe turn out?" — that\'s enough.' },
+            { zh: '6. <strong>承認孤單 = 力量不是弱點</strong>。跟配偶 / 朋友 / 諮商師講「我最近覺得孤單」。被認可的孤單比偽裝堅強的孤單健康 10 倍。',
+              en: '6. <strong>Naming loneliness = strength, not weakness</strong>. Tell spouse / friend / counselor "I\'ve been feeling lonely". Acknowledged loneliness is 10× healthier than performed toughness.' }
+          ],
+          resources: {
+            title: { zh: '社群資源', en: 'Community resources' },
+            items: [
+              { zh: '<strong>FB 群組</strong>：「友善農業聯盟」、「青年回流農村」、「台灣有機農業聯盟」、「樸門設計交流」、各作物社團', en: '<strong>FB groups</strong>: "Friendly Farming Alliance", "Young Farmer Return", "Taiwan Organic Alliance", "Permaculture Design Exchange", crop-specific groups' },
+              { zh: '<strong>年度大會</strong>：「世界食物峰會台灣場」、「友善農夫年會」、「青農論壇」— 每年遇到 200-500 個同類', en: '<strong>Annual conferences</strong>: "World Food Summit Taiwan", "Friendly Farmer Annual", "Young Farmer Forum" — see 200-500 kindred spirits yearly' },
+              { zh: '<strong>地方場域</strong>：許多縣有「青農聚會所」、「有機農夫市集」可定期去走走', en: '<strong>Local venues</strong>: many counties have "Young Farmer hubs" or organic markets to visit regularly' },
+              { zh: '<strong>正式諮商</strong>：張老師 1980（24h）、衛福部安心專線 1925 — 嚴重時找專業協助', en: '<strong>Formal counseling</strong>: Teacher Chang 1980 (24hr), MOHW mental health 1925 — for serious times' }
+            ]
+          },
+          links: []
+        };
+      }
+    },
+    {
+      id: 'farmer_identity',
+      keywords: ['身份', '認同', '驕傲', '名聲', '形象', '個人品牌', '農夫的意義', 'identity', 'pride', 'brand', 'reputation', 'meaning'],
+      topic: { zh: '農夫身份與個人品牌', en: 'Farmer identity + personal brand' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '你的「身份」 = 客戶記得你的方式 — 不是名片寫什麼', en: 'Your "identity" = how customers remember you — NOT what your business card says' },
+          situation: { zh: '台灣傳統價值觀中農夫地位不高 — 「沒讀書才種田」「土包子」。但近 10 年「年輕回鄉農夫」、「友善小農」、「有機達人」這些身份正在重新定義。要主動建立你的「個人品牌」— 不是炫耀，是讓「對的客戶找得到你」。',
+                       en: 'Traditional Taiwan values don\'t rank farmers highly — "those who couldn\'t study, farm" / "country bumpkin". But in the past 10 yrs, "returning young farmer", "friendly small farmer", "organic master" identities are being redefined. Actively build your "personal brand" — not boasting, but letting "the right customers find you".' },
+          actions: [
+            { zh: '1. <strong>定位 1 句話 — 「我是 [何處] 種 [什麼] 的 [風格] 農夫」</strong>。例：「我是宜蘭三星種 AWD 節水稻米的第三代農夫」「我是屏東枋寮做友善芒果 + 食物森林的 returner」。誰聽到都能記得 + 對到正確客群。',
+              en: '1. <strong>One-line positioning — "I\'m the [style] farmer growing [crop] in [place]"</strong>. E.g. "I\'m the 3rd-gen rice farmer in Sanxing Yilan doing AWD water-mgmt"; "I\'m the returning farmer doing friendly mango + food forest in Fangliao Pingtung". Memorable + targets right customers.' },
+            { zh: '2. <strong>1 個招牌故事</strong>— 為什麼你回來種田？2 分鐘版本 + 5 分鐘版本各練熟。客戶買的是故事，不是「品質好」。每個成功小農都有一個能講的「為什麼」。',
+              en: '2. <strong>1 signature story</strong> — why did you come back to farm? Rehearse a 2-min + 5-min version. Customers buy the story, not "quality". Every successful small farmer has a "why" they can tell.' },
+            { zh: '3. <strong>視覺一致 — 你的「色」+「字體」+「象徵」</strong>。永遠用同樣的綠 / 同樣的字體 / 同樣的農場 logo。打開包裝 / 看到傳單 / 收到貨都能立刻認出。連續 3 年累積 = 真品牌。',
+              en: '3. <strong>Visual consistency — your "color" + "font" + "icon"</strong>. Always the same green / same font / same farm logo. Customer opens packaging / sees flyer / receives shipment → instantly recognizes. 3 yrs accumulated = real brand.' },
+            { zh: '4. <strong>1 個內容平台主攻</strong>— 不要每個平台都做。挑 Facebook 或 Instagram 或 LINE 群之一主攻，其他平台 cross-post。每週 1 篇真實田間貼文，3 年累積 = 個人權威。',
+              en: '4. <strong>Pick 1 content platform</strong> — don\'t do all. Choose Facebook OR Instagram OR LINE group as primary, cross-post elsewhere. 1 authentic farm-floor post/week, 3 yrs = personal authority.' },
+            { zh: '5. <strong>名片 + 提案單一致</strong>— 你的儀表板「買家提案單」就是個人品牌的延伸。資訊正確、視覺有 logo、可分享 URL 三點齊全。',
+              en: '5. <strong>Card + pitch sheet aligned</strong> — your dashboard Buyer Pitch Sheet IS your personal brand extension. Info correct + visual logo + shareable URL all three required.' },
+            { zh: '6. <strong>不要自卑也不要過度行銷</strong>— 真誠就是品牌力。過度包裝會被識破。讓你的「過程證據」+「真實人格」+「持續實踐」自己變成品牌。',
+              en: '6. <strong>Neither inferiority nor over-marketing</strong> — authenticity IS the brand. Over-packaging gets detected. Let "process evidence" + "real personality" + "consistent practice" become the brand on their own.' }
+          ],
+          links: [
+            { label: { zh: '看買家提案單', en: 'Buyer pitch sheet' }, href: 'farm-pitch.html', external: true }
+          ]
+        };
+      }
+    },
+    {
+      id: 'farmer_insurance',
+      keywords: ['保險', '農保', '勞保', '健保', '農民保險', '醫療', '意外', 'insurance', 'farmer insurance', 'health', 'accident', 'disability'],
+      topic: { zh: '農夫保險與保障', en: 'Farmer insurance + coverage' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '5 種保險都要懂 — 沒保 = 一個意外滅掉農場 10 年累積', en: 'Know all 5 insurance types — one accident without coverage can wipe out 10 yrs of farm equity' },
+          situation: { zh: '台灣多數小農「沒保險」或「只保最便宜的」— 一場大病、一次重傷、一次大災害都可能讓 10 年累積的農場資產蒸發。完整保障 = 「農保 + 健保 + 災害 + 意外 + 商業壽險」5 層架構。年費總計 NT$ 30-80k，比一場意外的後果便宜 100 倍。',
+                       en: 'Most Taiwan small farmers either don\'t have insurance or only have the cheapest tier — one major illness, one serious injury, one big disaster can vaporize 10 yrs of farm equity. Full coverage = "farmer insurance + national health + disaster + accident + commercial life" 5-layer stack. Annual total NT$ 30-80k, 100× cheaper than one uninsured catastrophe.' },
+          actions: [
+            { zh: '1. <strong>農民健康保險（農保）— 必保</strong>。年費 NT$ 2-4k，涵蓋醫療 + 老農津貼（每月 NT$ 7,550 退休後可領）+ 喪葬。資格：實際從農 + 沒勞保。到鄉公所申請。',
+              en: '1. <strong>Farmer Health Insurance — must have</strong>. NT$ 2-4k/yr, covers medical + Senior Farmer Allowance (NT$ 7,550/mo at retirement) + funeral. Eligibility: actively farming + no labor insurance. Apply at township office.' },
+            { zh: '2. <strong>農民職業災害保險 — 強烈建議</strong>。年費 NT$ 1,200，涵蓋農場意外導致的傷殘 / 死亡。最高給付 NT$ 240 萬。每位農夫都該保 — 跟農保不衝突可疊加。',
+              en: '2. <strong>Farmer Occupational Accident Insurance — strongly recommend</strong>. NT$ 1,200/yr, covers farm-accident disability / death up to NT$ 2.4M. Every farmer should have it — stacks with farmer health insurance.' },
+            { zh: '3. <strong>農作物天然災害保險 — 視作物而定</strong>。台灣有 20+ 種作物（水稻、芒果、棗子等）的「天然災害保險」，保費政府補貼 50-80%。颱風 / 寒害 / 旱災都涵蓋。到當地農會問。',
+              en: '3. <strong>Crop natural-disaster insurance — varies by crop</strong>. Taiwan has 20+ crops with disaster insurance (rice, mango, jujube etc), premium 50-80% government-subsidized. Covers typhoon / cold / drought. Ask farmers association.' },
+            { zh: '4. <strong>商業意外險 — 補農保不夠的部分</strong>。1 年 NT$ 3-8k，保額可到 NT$ 500-1000 萬。專門應對大型意外（車禍、設備傷害、墜落）。',
+              en: '4. <strong>Commercial accident insurance — supplement what farmer ins doesn\'t cover</strong>. NT$ 3-8k/yr, coverage up to NT$ 5-10M. For major accidents (vehicle, equipment, falls).' },
+            { zh: '5. <strong>商業壽險 + 醫療險 — 給家庭的保障</strong>。如果你是家庭主要收入，這個必須有。年費 NT$ 15-40k（依年齡 + 保額），終身保障。35 歲前買最划算。',
+              en: '5. <strong>Commercial life + medical insurance — family protection</strong>. If you\'re the family\'s main income, this is required. NT$ 15-40k/yr (by age + coverage), lifetime. Cheapest before age 35.' },
+            { zh: '6. <strong>每年 12 月做一次「保險體檢」</strong>— 重新檢視各項保障是否齊全、保額是否跟得上現在的資產規模、是否有新的補貼可用。',
+              en: '6. <strong>Annual "insurance audit" each December</strong> — review all coverage, ensure coverage matches current asset size, check for new available subsidies.' }
+          ],
+          resources: {
+            title: { zh: '保險諮詢資源', en: 'Insurance resources' },
+            items: [
+              { zh: '<strong>所屬鄉公所</strong> — 農保 + 老農津貼申請', en: '<strong>Your township office</strong> — farmer insurance + senior farmer allowance applications' },
+              { zh: '<strong>鄉鎮農會</strong> — 農職保 + 農作物保險 + 詢問補貼', en: '<strong>Township farmers association</strong> — farmer occupational + crop insurance + subsidy inquiry' },
+              { zh: '<strong>農業部「天然災害現金救助」</strong>— 災害後也要走這個流程', en: '<strong>MOA "Natural Disaster Cash Aid"</strong> — also pursue this after a disaster' },
+              { zh: '<strong>獨立保險經紀人</strong>— 商業險可請農業專長的經紀人比較，不要直接買通路推銷的', en: '<strong>Independent insurance brokers</strong> — for commercial insurance, use brokers with farm expertise instead of channel-pushed sales' }
+            ]
+          },
+          links: []
+        };
+      }
+    },
+    {
+      id: 'farmer_retirement',
+      keywords: ['退休', '退休金', '老農津貼', '退休規劃', '老後', '養老', 'retirement', 'pension', 'senior farmer', 'old age', 'plan for retirement'],
+      topic: { zh: '農夫退休規劃', en: 'Farmer retirement planning' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '農夫退休 = 「老農津貼 + 自儲 + 農地價值」三輪驅動', en: 'Farmer retirement = "Senior Farmer Allowance + savings + land value" — 3 wheels' },
+          situation: { zh: '台灣農夫退休保障跟上班族不同：沒有勞保退休金 + 沒有公司提撥 + 沒有 18% 優存。但有 3 個替代來源：(a) 老農津貼（每月 NT$ 7,550）(b) 自儲 / 投資 (c) 農地長期增值。多數小農「沒規劃」 → 60 歲後才發現錢不夠用。30 歲開始規劃才來得及。',
+                       en: 'Taiwan farmer retirement differs from office workers: no labor-pension + no employer match + no 18% guaranteed. But 3 alternative sources: (a) Senior Farmer Allowance (NT$ 7,550/mo) (b) personal savings/investment (c) long-term farmland appreciation. Most small farmers "don\'t plan" → discover money shortage at 60. Start at 30 to have time.' },
+          actions: [
+            { zh: '1. <strong>老農津貼 — 從 65 歲起每月 NT$ 7,550</strong>。資格：65+ 歲 + 投保農保 15 年以上 + 不領其他社會保險年金。換算「等價於累積 200 萬退休金」。投保越久越穩。',
+              en: '1. <strong>Senior Farmer Allowance — NT$ 7,550/mo from age 65</strong>. Eligibility: 65+ + farmer insurance ≥ 15 yrs + no other social pension. Equivalent to "NT$ 2M retirement savings". Longer insurance tenure = more secure.' },
+            { zh: '2. <strong>建立自儲機制 — 每年至少 10% 收入</strong>。農夫沒有強迫提撥，要自己強迫。最簡單：開個獨立帳戶，每次收入自動轉 10%。30 年累積（含複利）可以是 NT$ 500-1000 萬。',
+              en: '2. <strong>Forced personal savings — minimum 10% of revenue annually</strong>. Farmers have no auto-pension; force yourself. Easiest: open a separate account, auto-transfer 10% every income. 30 years compounded = NT$ 5-10M.' },
+            { zh: '3. <strong>投資工具 — 不要冒險</strong>。台灣老農常被詐騙是因為缺乏投資知識。安全選擇：(a) 定存（年利率 1.5-2%）(b) 國民年金（自願加保）(c) 低費 ETF（如 0050 / 0056 長期持有）。',
+              en: '3. <strong>Investment tools — don\'t chase risk</strong>. Senior farmers often get scammed due to lack of investment knowledge. Safe options: (a) time deposits (1.5-2% annually) (b) National Pension (voluntary opt-in) (c) low-fee ETFs (0050 / 0056 long-term hold).' },
+            { zh: '4. <strong>農地長期增值 — 但別把它當「下個月領的錢」</strong>。台灣農地過去 20 年漲 2-4 倍，但「賣地 = 失去事業基地」。可考慮「以地養老」(逆向房貸) 但稀少；多數情況留給下一代繼承。',
+              en: '4. <strong>Farmland long-term appreciation — but don\'t treat it as "next month\'s cash"</strong>. Taiwan farmland appreciated 2-4× over 20 yrs, but "selling land = losing your business base". "Reverse mortgage on land" exists but rare; most pass to next generation.' },
+            { zh: '5. <strong>「接班規劃」是退休規劃</strong>— 如果有孩子要接，提前 5-10 年共同決策、共同經營。70 歲還在獨自種田 = 沒退休規劃。',
+              en: '5. <strong>"Succession planning" IS retirement planning</strong> — if kids will inherit, co-decide + co-operate 5-10 yrs ahead. Still farming alone at 70 = no retirement plan.' },
+            { zh: '6. <strong>無接班人路徑：售地 + 退休 vs 出租 + 半退休</strong>。無接班可考慮「賣地一次性退休」或「出租收租 + 簡化操作半退休」。各有 trade-off。早點想清楚。',
+              en: '6. <strong>No-successor paths: sell + retire vs lease + semi-retire</strong>. Without a successor, choose between "sell + full retirement" or "lease + simplified operation". Each has trade-offs. Think it through early.' }
+          ],
+          links: []
+        };
+      }
+    },
+    {
+      id: 'innovation_mindset',
+      keywords: ['創新', '實驗', '試試看', '新方法', '改進', '嘗試', '改變', 'innovation', 'experiment', 'try new', 'improve', 'iterate'],
+      topic: { zh: '創新與實驗精神', en: 'Innovation + experiment mindset' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '農場是實驗室 — 但「便宜實驗、快速失敗」才能持續創新', en: 'Your farm is a lab — but "cheap experiments, fast failures" enables continuous innovation' },
+          situation: { zh: '永續農場 vs 慣行農場最大差別不是「方法」，是「思考方式」。慣行 = 「跟著大家做」、永續 = 「持續實驗找到適合這塊地的方法」。但實驗有風險，要學會「便宜失敗」— 一次不能輸太多。',
+                       en: 'Biggest difference between sustainable + conventional farms isn\'t "method" but "mindset". Conventional = "follow what everyone does"; sustainable = "continuous experimentation to find what works on THIS land". But experiments carry risk — learn to "fail cheap" so a single loss isn\'t catastrophic.' },
+          actions: [
+            { zh: '1. <strong>「10% 規則」</strong>— 每年只實驗整個農場 10% 面積的新方法。失敗也只損失 10%，可承受。3 年成功實驗會逐步轉變整個農場。',
+              en: '1. <strong>"10% rule"</strong> — only experiment on 10% of farm area per year with new methods. Even failure = only 10% loss, sustainable. Successful experiments over 3 yrs gradually transform the whole farm.' },
+            { zh: '2. <strong>單變數實驗</strong>— 一次只改一個變數（如：A 區塊用新堆肥配方，其他維持原狀）。同時改多個 = 失敗了不知道哪個錯。',
+              en: '2. <strong>Single-variable experiments</strong> — change ONE thing at a time (e.g., zone A uses new compost recipe, others stay same). Multiple changes = can\'t identify which failed.' },
+            { zh: '3. <strong>有紀錄才算實驗</strong>— 不紀錄 = 「我感覺好像有效」，紀錄 = 「實際數字證明有效」。在「農事日誌」標 [實驗] tag 追蹤。',
+              en: '3. <strong>No record = not an experiment</strong>. Unlogged = "I feel like it worked"; logged = "numbers prove it worked". Tag entries [Experiment] in Activity Log to track.' },
+            { zh: '4. <strong>「失敗 = 學習」要真的相信</strong>— 嘴上講容易，做到難。每次失敗實驗完成後，花 30 分鐘寫「我學到了什麼」。這個習慣 = 10 年後你比同行多 100 個「不要這樣做」的知識。',
+              en: '4. <strong>"Failure = learning" — actually believe it</strong>. Easy to say, hard to live. After each failed experiment, spend 30 min writing "what I learned". This habit = 100 more "don\'t do this" data points than peers after 10 yrs.' },
+            { zh: '5. <strong>跟同類農夫分享實驗</strong>— 你失敗的實驗對他可能是禮物。在 LINE 群 / FB 社團分享「我試了 X，結果 Y」 = 你被認可的同時也建立同行網絡。',
+              en: '5. <strong>Share experiments with peers</strong> — your failed experiment may be a gift for them. Post "I tried X, result Y" in LINE groups / FB communities = recognition + network at once.' },
+            { zh: '6. <strong>每年 12 月做「年度實驗回顧」</strong>— 今年試了幾個？哪些值得擴大？哪些放棄？明年要試什麼？1 小時 = 你的「研發部門」報告。',
+              en: '6. <strong>December annual "experiment review"</strong> — how many tried? Which to scale? Which to drop? What to try next year? 1 hr = your "R&D dept" report.' }
+          ],
+          links: []
+        };
+      }
+    },
+    {
+      id: 'bad_year_recovery',
+      keywords: ['壞年', '一年失敗', '收成差', '颱風後', '災害後', '重新站起', 'bad year', 'crop failure', 'disaster', 'recover', 'start over'],
+      topic: { zh: '一年失敗後的復原', en: 'Recovery from a bad year' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '農場一年失敗不代表「人」失敗 — 用 3 階段復原', en: 'A bad farming year doesn\'t mean YOU failed — use the 3-phase recovery' },
+          situation: { zh: '颱風毀掉整年收成、病害讓整片田報廢、價格崩盤、家人生病停工 — 每個 5+ 年資的台灣農夫都遇過至少一次「災難年」。差別在於有些人挺過繼續，有些人放棄。挺過的關鍵不是「夠堅強」，是「有 3 階段復原架構」。',
+                       en: 'Typhoon wipes annual yield, disease destroys an entire field, prices crash, family illness pauses operations — every 5+ yr Taiwan farmer has hit at least one "disaster year". Difference between those who recover vs quit isn\'t "toughness" — it\'s having a "3-phase recovery framework".' },
+          actions: [
+            { zh: '<strong>階段一：止血（事發 1-7 天）</strong>',
+              en: '<strong>Phase 1: Stop the bleeding (days 1-7)</strong>' },
+            { zh: '1. 拍照存證 + 災害通報所在縣農業處（必要 48 小時內），保留申請災害救助的權利',
+              en: '1. Photo evidence + report to county Ag Bureau (within 48hr) to preserve disaster aid eligibility' },
+            { zh: '2. 列出本月帳單 + 本月已承諾出貨。優先處理「絕對不能跳票」的（人員薪水、供應商貨款）',
+              en: '2. List this month\'s bills + committed deliveries. Prioritize "absolutely cannot default" (salaries, supplier payments)' },
+            { zh: '3. 告知主要買家現況（不是道歉，是更新）。多數買家會接受「我這次出不了貨，下批會補」',
+              en: '3. Update major buyers (not apology, an update). Most accept "I can\'t deliver this batch, will make up next time"' },
+            { zh: '<strong>階段二：穩住（第 2-8 週）</strong>',
+              en: '<strong>Phase 2: Stabilize (weeks 2-8)</strong>' },
+            { zh: '4. 申請：天然災害現金救助、農作物保險理賠、農會周轉貸款。3 個都同時做、不要只試一個',
+              en: '4. Apply for: natural disaster cash aid + crop insurance + farmers association bridge loan. Pursue all 3 simultaneously, don\'t try just one' },
+            { zh: '5. 重新評估明年種植計畫 — 可能要轉作 / 縮減面積 / 改變通路策略。不要硬撐原計畫',
+              en: '5. Reassess next year\'s plan — may need to switch crops / reduce area / change channel strategy. Don\'t stubbornly stick to original plan' },
+            { zh: '<strong>階段三：學習 + 重建（第 2-6 個月）</strong>',
+              en: '<strong>Phase 3: Learn + rebuild (months 2-6)</strong>' },
+            { zh: '6. 寫「事後檢討」— 災害發生時我做對了什麼？做錯了什麼？下次怎麼準備？這是讓「壞年」變「免費 MBA」的關鍵',
+              en: '6. Write "post-mortem" — what went right during the disaster? What went wrong? How to prepare next time? Key to converting "bad year" into "free MBA"' },
+            { zh: '7. 補強保險 + 多元化（如果本次是單一作物受災 = 集中度風險警告）',
+              en: '7. Strengthen insurance + diversify (if hit was single-crop = concentration risk warning)' },
+            { zh: '8. <strong>承認你需要時間恢復</strong> — 心理上 / 體力上。不要 6 個月內就強迫自己「比之前更努力」。穩住步調慢慢來才是復原。',
+              en: '8. <strong>Acknowledge you need time to recover</strong> — emotionally + physically. Don\'t force "even harder than before" within 6 months. Steady pace = real recovery.' }
+          ],
+          links: [
+            { label: { zh: '看補助清單', en: 'Subsidies + disaster aid' }, href: '#sec-income' },
+            { label: { zh: '看保險答案', en: 'Insurance answer' }, href: '#sec-agent' }
+          ]
+        };
+      }
     }
   ];
 
@@ -6661,7 +6968,16 @@ This application supports starting organic-transition certification for ≥1 ha.
     shumei:                 ['natural_farming', 'seed_saving', 'farming_methods_compare'],
     regenerative_ag:        ['practice_invest', 'subsidies_available', 'soil_test'],
     farming_methods_compare:['cert_question', 'organic_transition', 'practice_invest'],
-    sheet_mulching:         ['composting', 'weed_mgmt', 'permaculture']
+    sheet_mulching:         ['composting', 'weed_mgmt', 'permaculture'],
+    daily_routine:          ['farmer_health', 'family_balance', 'burnout'],
+    farmer_health:          ['burnout', 'daily_routine', 'farmer_insurance'],
+    family_balance:         ['burnout', 'succession', 'isolation_loneliness'],
+    isolation_loneliness:   ['burnout', 'find_mentor', 'family_balance'],
+    farmer_identity:        ['marketing_social', 'pitch_buyer', 'find_buyers'],
+    farmer_insurance:       ['climate_risk', 'farmer_retirement', 'bad_year_recovery'],
+    farmer_retirement:      ['succession', 'farmer_insurance', 'goal_setting'],
+    innovation_mindset:     ['record_keeping', 'compare_peers', 'practice_invest'],
+    bad_year_recovery:      ['climate_risk', 'farmer_insurance', 'cash_short']
   };
 
   // ── Recent questions history (per-farm, localStorage) ───────────
@@ -6746,6 +7062,15 @@ This application supports starting organic-transition certification for ≥1 ha.
     '秀明自然農法怎麼做？':       { zh: '秀明自然農法怎麼做？',       en: 'How does Shumei natural farming work?' },
     '再生農業是什麼？':           { zh: '再生農業是什麼？',           en: 'What is regenerative agriculture?' },
     '厚土栽培怎麼做？':           { zh: '厚土栽培怎麼做？',           en: 'How do I sheet-mulch to build a no-dig garden?' },
+    '農夫一天怎麼安排時間？':      { zh: '農夫一天怎麼安排時間？',      en: 'How should I structure my daily farm time?' },
+    '腰痛怎麼辦？防曬怎麼做？':    { zh: '腰痛怎麼辦？防曬怎麼做？',    en: 'How do I protect my body — back pain, sun, hydration?' },
+    '怎麼跟家人平衡？':            { zh: '怎麼跟家人平衡？',            en: 'How do I balance family life with farm work?' },
+    '當農夫好孤單怎麼辦？':        { zh: '當農夫好孤單怎麼辦？',        en: 'Farming feels lonely — how do I build connections?' },
+    '怎麼建立個人品牌？':          { zh: '怎麼建立個人品牌？',          en: 'How do I build my farmer identity + personal brand?' },
+    '農夫應該保哪些保險？':        { zh: '農夫應該保哪些保險？',        en: 'What insurance should a farmer have?' },
+    '農夫退休怎麼規劃？':          { zh: '農夫退休怎麼規劃？',          en: 'How do I plan for retirement as a farmer?' },
+    '怎麼做農場創新實驗？':        { zh: '怎麼做農場創新實驗？',        en: 'How do I run innovation experiments on my farm?' },
+    '壞年怎麼復原？':              { zh: '壞年怎麼復原？',              en: 'How do I recover from a disaster / bad year?' },
     '我覺得太累、撐不下去': { zh: '我覺得太累、撐不下去', en: 'I\'m exhausted and want to give up' }
   };
   // One-tap quick-chip → submit through the same pipeline as a typed
