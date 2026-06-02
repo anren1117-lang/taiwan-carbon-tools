@@ -346,6 +346,81 @@
   .est-apply { margin-top: 12px; width: 100%; }
   .est-help { font-size: 11.5px; color: var(--ink-soft); line-height: 1.55; margin-bottom: 10px; font-family: var(--serif); font-style: italic; }
 
+  /* REALISTIC AI preview */
+  .preview-intro {
+    padding: 12px 14px;
+    background: rgba(110,126,96,0.10);
+    border-radius: 12px;
+    border-left: 3px solid var(--sage);
+    font-size: 13px; color: var(--ink-soft); line-height: 1.6;
+    margin-bottom: 16px;
+  }
+  .preview-grid {
+    display: grid; grid-template-columns: 1fr; gap: 14px;
+    margin-bottom: 18px;
+  }
+  @media (min-width: 700px) {
+    .preview-grid { grid-template-columns: 1fr 1fr; }
+    .preview-grid > :first-child { grid-column: 1 / -1; }
+  }
+  .preview-frame {
+    position: relative;
+    background: rgba(255,255,255,0.4);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    overflow: hidden;
+    aspect-ratio: 8 / 5;
+  }
+  .preview-frame .skel {
+    position: absolute; inset: 0;
+    background: linear-gradient(110deg, rgba(196,184,144,0.18) 30%, rgba(196,184,144,0.32) 50%, rgba(196,184,144,0.18) 70%);
+    background-size: 200% 100%;
+    animation: shimmer 1.8s linear infinite;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--ink-soft); font-size: 12.5px; font-family: var(--serif); font-style: italic;
+  }
+  @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+  .preview-img { display: block; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .6s ease; }
+  .preview-img.loaded { opacity: 1; }
+  .preview-caption {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 12px 14px;
+    background: linear-gradient(transparent, rgba(44,53,38,0.7));
+    color: #fff; font-size: 12px; letter-spacing: 0.05em;
+    pointer-events: none;
+  }
+  .preview-actions {
+    display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin: 8px 0 18px;
+  }
+  .preview-prompt {
+    background: rgba(255,255,255,0.45); border: 1px solid var(--line);
+    border-radius: 12px; padding: 14px; margin-top: 12px;
+    font-size: 13px;
+  }
+  .preview-prompt summary {
+    cursor: pointer; font-weight: 600; color: var(--forest); padding: 4px 0;
+    list-style: none;
+  }
+  .preview-prompt summary::-webkit-details-marker { display: none; }
+  .preview-prompt summary::before { content: "▸ "; color: var(--clay); margin-right: 4px; }
+  .preview-prompt[open] summary::before { content: "▾ "; }
+  .preview-prompt code {
+    display: block; margin-top: 10px; padding: 10px 12px;
+    background: rgba(0,0,0,0.04); border-radius: 8px;
+    font-family: 'Menlo', 'Monaco', monospace; font-size: 11.5px;
+    line-height: 1.55; color: var(--forest);
+    word-wrap: break-word; white-space: pre-wrap;
+  }
+  .preview-prompt-edit {
+    width: 100%; margin-top: 10px; padding: 10px 12px;
+    background: rgba(255,255,255,0.7); border: 1px solid var(--line);
+    border-radius: 8px;
+    font-family: 'Menlo', 'Monaco', monospace; font-size: 11.5px;
+    color: var(--forest); resize: vertical; min-height: 80px;
+    line-height: 1.55;
+  }
+  .preview-prompt-edit:focus { outline: none; border-color: var(--sage); }
+
   /* DICTIONARY view */
   .dict-toolbar { display: grid; grid-template-columns: 1fr auto; gap: 10px; margin-bottom: 14px; align-items: center; }
   .dict-search {
@@ -1737,6 +1812,9 @@ const state = {
   selectedPlantId: null,
   qty: {},
   nativeOnly: false,     // filter recommendations to native plants only
+  // realistic preview (Pollinations.ai)
+  previewSeeds: [11, 47, 88],
+  previewPromptOverride: null,
   // dictionary view filters
   dictQuery: "",
   dictTier: "all",      // all | T | S | G | W | C
@@ -2635,6 +2713,7 @@ function renderResult() {
 
       <div class="tabs" role="tablist">
         ${[
+          { k:"preview",   zh:"實景參考",     en:"Realistic" },
           { k:"plan",      zh:"俯瞰平面圖",   en:"Garden plan" },
           { k:"iso3d",     zh:"3D 視角",      en:"3D view" },
           { k:"layers",    zh:"復層配置",     en:"Layered design" },
@@ -2670,6 +2749,7 @@ function renderTabPanel(recs, layers) {
   const host = document.getElementById("tabPanel");
   if (!host) return;
   switch (state.resultTab) {
+    case "preview":  host.innerHTML = renderRealisticPreview(recs); wirePreview(recs); break;
     case "plan":     host.innerHTML = renderPlan(layers, recs); wirePlanInteractions(); break;
     case "iso3d":    host.innerHTML = render3D(layers, recs); wire3DInteractions(); break;
     case "layers":   host.innerHTML = renderLayers(layers, recs); wireLayerCards(); break;
@@ -2845,6 +2925,148 @@ function layoutPlan(plants, dims, space) {
 function wirePlanInteractions() {
   document.querySelectorAll(".plan-plant").forEach((g) => {
     g.addEventListener("click", () => openDrawer(g.dataset.id));
+  });
+}
+
+// ── TAB: REALISTIC PREVIEW (Pollinations.ai) ────────────────
+// We build a descriptive prompt from the user's space + top plants + dominant
+// bloom season, then embed three <img> tags pointing at pollinations.ai with
+// different seeds. The service generates images on first request — initial
+// load takes ~10-20s; subsequent loads of the same URL are usually cached.
+// No API key, no backend; the URL itself is the API.
+
+function dominantSeason(plants) {
+  // Find which month most of the recommended plants are in bloom — gives the
+  // generator a coherent visual mood (spring blossom, autumn berry, etc.).
+  const months = new Array(12).fill(0);
+  plants.forEach(p => (p.bloom || []).forEach(m => months[m - 1]++));
+  let topM = 4;
+  let topC = 0;
+  for (let i = 0; i < 12; i++) {
+    if (months[i] > topC) { topC = months[i]; topM = i + 1; }
+  }
+  if (topM <= 2 || topM === 12) return { zh: "冬", en: "winter, soft cool light" };
+  if (topM <= 5) return { zh: "春", en: "spring, fresh blossoms, vibrant green" };
+  if (topM <= 8) return { zh: "夏", en: "summer, lush canopy, warm golden light" };
+  return { zh: "秋", en: "autumn, warm amber tones" };
+}
+
+function buildPreviewPrompt(plants) {
+  const space = state.space;
+  const spaceText = {
+    balcony: "small urban balcony garden with container plants, modern Taiwan apartment, intimate scale",
+    rooftop: "open rooftop garden with city skyline behind, sunny day in Taiwan",
+    yard:    "lush home courtyard garden with mature plantings, Taiwan residential setting",
+    indoor:  "indoor plant arrangement next to a bright window, Taiwan apartment interior, natural daylight",
+  }[space] || "garden in Taiwan";
+
+  const det = state.detected;
+  const locText = det?.county
+    ? `, ${det.coastal ? "near coast" : (det.zone === "S" ? "southern Taiwan" : det.zone === "N" ? "northern Taiwan" : det.zone === "E" ? "eastern Taiwan" : "central Taiwan")}`
+    : "";
+
+  const season = dominantSeason(plants);
+  const plantList = plants.slice(0, 5).map(p => `${p.en} (${p.lt})`).join(", ");
+
+  return `Photorealistic landscape design photo of a ${spaceText}${locText}, featuring ${plantList}, in ${season.en}, natural daylight with soft golden hour glow, depth of field, professional landscape photography, magazine-quality, peaceful atmosphere, lush vibrant greenery, high resolution`;
+}
+
+function previewURL(prompt, seed) {
+  const encoded = encodeURIComponent(prompt);
+  // model=flux gives more photorealistic output than the default; nologo strips the watermark.
+  return `https://image.pollinations.ai/prompt/${encoded}?width=960&height=600&seed=${seed}&model=flux&nologo=true`;
+}
+
+function renderRealisticPreview(recs) {
+  if (!recs.length) {
+    return `<h2 class="subtitle">${t("實景參考 · Realistic Preview","Realistic Preview")}</h2>
+            <p class="lead-small">${t("沒有推薦植物可以渲染。試試調整篩選器。","No recommended plants to render — try loosening the filters.")}</p>`;
+  }
+  const prompt = state.previewPromptOverride || buildPreviewPrompt(recs);
+  const plantNames = recs.slice(0, 5).map(p => state.lang === "zh" ? p.zh : p.en).join("、");
+
+  return `
+    <h2 class="subtitle" data-zh="實景參考 · Realistic Preview" data-en="Realistic Preview · AI-generated">實景參考 · Realistic Preview</h2>
+    <p class="lead-small"
+       data-zh="AI 根據你的推薦植物即時生成的實景照片，幫你想像種完之後的樣子。圖片由 pollinations.ai 生成（免費、無註冊），初次載入需 10-30 秒。"
+       data-en="AI-generated realistic photos of how the planting might look, based on your recommended species. Powered by pollinations.ai (free, no signup). First load takes 10-30 seconds.">
+       AI 根據你的推薦植物即時生成的實景照片，幫你想像種完之後的樣子。圖片由 pollinations.ai 生成（免費、無註冊），初次載入需 10-30 秒。</p>
+
+    <div class="preview-intro"
+         data-zh="這次參考的植物：${plantNames}"
+         data-en="Plants in this preview: ${plantNames}">
+         這次參考的植物：${plantNames}
+    </div>
+
+    <div class="preview-grid">
+      ${state.previewSeeds.map((seed, i) => `
+        <div class="preview-frame">
+          <div class="skel" data-zh="生成中… 約 10-30 秒" data-en="Generating… 10-30s">生成中… 約 10-30 秒</div>
+          <img class="preview-img" data-seed="${seed}" src="${previewURL(prompt, seed)}" alt="${t('AI 生成的景觀實景', 'AI-generated landscape')}" loading="lazy" />
+          <div class="preview-caption" data-zh="變化 ${i + 1} · 種子 ${seed}" data-en="Variation ${i + 1} · seed ${seed}">變化 ${i + 1} · 種子 ${seed}</div>
+        </div>
+      `).join("")}
+    </div>
+
+    <div class="preview-actions">
+      <button class="btn ghost" id="previewRegen">🔄 <span data-zh="重新生成（新種子）" data-en="Regenerate (new seeds)">重新生成（新種子）</span></button>
+      <span class="foot-note" style="position:static;"
+            data-zh="* 每次重新生成會產生不同的視覺風格，可能需要等待"
+            data-en="* Each regeneration produces a new style; please wait for results">
+            * 每次重新生成會產生不同的視覺風格，可能需要等待</span>
+    </div>
+
+    <details class="preview-prompt">
+      <summary data-zh="顯示／編輯 AI 提示詞" data-en="Show / edit AI prompt">顯示／編輯 AI 提示詞</summary>
+      <p style="margin: 8px 0; font-size: 12px; color: var(--ink-soft); line-height: 1.55;"
+         data-zh="可以調整下方提示詞，加入想要的氛圍（如 "Japanese-style stones"、"morning mist"）。修改後按下方按鈕重新生成。"
+         data-en='You can edit the prompt below to add your own vibe (e.g. "Japanese-style stones", "morning mist"). Hit the button to regenerate with the new prompt.'>
+         可以調整下方提示詞，加入想要的氛圍（如 "Japanese-style stones"、"morning mist"）。修改後按下方按鈕重新生成。
+      </p>
+      <textarea class="preview-prompt-edit" id="previewPromptEdit">${escapeHtml(prompt)}</textarea>
+      <button class="btn" id="previewApplyPrompt" style="margin-top: 10px;">
+        ✓ <span data-zh="套用新提示詞並重新生成" data-en="Apply prompt and regenerate">套用新提示詞並重新生成</span>
+      </button>
+    </details>`;
+}
+
+function wirePreview(recs) {
+  // Fade images in once they finish loading
+  document.querySelectorAll(".preview-img").forEach((img) => {
+    img.addEventListener("load", () => img.classList.add("loaded"));
+    img.addEventListener("error", () => {
+      const skel = img.parentElement.querySelector(".skel");
+      if (skel) skel.textContent = t("生成失敗，請稍後重試", "Generation failed — try again");
+    });
+  });
+
+  // Regenerate with fresh seeds
+  document.getElementById("previewRegen")?.addEventListener("click", () => {
+    state.previewSeeds = [
+      Math.floor(Math.random() * 9000 + 100),
+      Math.floor(Math.random() * 9000 + 100),
+      Math.floor(Math.random() * 9000 + 100),
+    ];
+    const host = document.getElementById("tabPanel");
+    if (host) host.innerHTML = renderRealisticPreview(recs);
+    wirePreview(recs);
+    applyLanguage();
+  });
+
+  // Apply edited prompt
+  document.getElementById("previewApplyPrompt")?.addEventListener("click", () => {
+    const ta = document.getElementById("previewPromptEdit");
+    if (!ta) return;
+    state.previewPromptOverride = ta.value.trim() || null;
+    state.previewSeeds = [
+      Math.floor(Math.random() * 9000 + 100),
+      Math.floor(Math.random() * 9000 + 100),
+      Math.floor(Math.random() * 9000 + 100),
+    ];
+    const host = document.getElementById("tabPanel");
+    if (host) host.innerHTML = renderRealisticPreview(recs);
+    wirePreview(recs);
+    applyLanguage();
   });
 }
 
