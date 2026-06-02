@@ -4574,19 +4574,66 @@ This application supports starting organic-transition certification for ≥1 ha.
       topic: { zh: '議價', en: 'Negotiation' },
       answer(inp, r) {
         return {
-          headline: { zh: '「貴」是錨點戰術 — 你不是同類產品', en: '"Expensive" is anchoring — you\'re not the same product' },
-          situation: { zh: '當買家拿你跟最便宜的供應商比，他在「設定價格錨點」。回應的關鍵不是降價，是「重新分類」 — 你賣的不是同一個東西。',
-                       en: 'When a buyer compares you to the cheapest, they\'re setting a price anchor. The reply isn\'t a discount — it\'s a reclassification. You sell something different.' },
+          headline: { zh: '「貴」是錨點戰術 — 不是降價，是「重新分類」', en: '"Expensive" is anchoring — answer with re-categorization, not discount' },
+          situation: { zh: '當買家說「你貴」，90% 的小農的反應是 (a) 道歉 (b) 解釋成本 (c) 降價。三種都錯。正確的反應是「我們不是同一個東西」+ 拿出證據 + 反客為主。「貴」不是事實判斷，是談判戰術 — 不要把戰術回答成事實。',
+                       en: 'When a buyer says "you\'re expensive", 90% of small farmers respond by (a) apologizing (b) explaining costs (c) discounting. All three are wrong. Correct response: "we\'re not the same thing" + show evidence + turn the table. "Expensive" isn\'t a factual judgment — it\'s a negotiation tactic. Don\'t answer a tactic as if it\'s a fact.' },
           actions: [
-            { zh: '1. 拿出證據包 — 認證、土壤碳趨勢、年資、實踐紀錄。差異化是「過程證據」不是「形容詞」。',
-              en: '1. Pull out the evidence pack — cert, soil C trend, years operating, practice log. Differentiation is "process evidence", not adjectives.' },
-            { zh: '2. 反問：「您要比的是同價格區段的供應商，還是同類產品的供應商？」 把對話從價格軸轉到價值軸。',
-              en: '2. Reverse question: "Are you comparing to suppliers in the same price band, or the same product class?" Shift the axis from price to value.' },
-            { zh: '3. 給退路 — 「如果價格是唯一考量，我推薦您找拍賣市場。我們可能不是合適供應商，但這是好的釐清。」 篩買家不是請求買家。',
-              en: '3. Offer the exit — "If price is your only criterion, I\'d point you to wholesale. We may not be the right fit — but this is a useful clarifying question." You\'re screening buyers, not begging.' }
+            { zh: '1. <strong>不立刻回應「對不起」或「我可以給你折扣」</strong>。停 3 秒。第一句話應該是中性的：「謝謝您的反饋。可以告訴我您主要比較的對象是誰嗎？」 — 把問題丟回給對方，獲得資訊優勢。',
+              en: '1. <strong>Don\'t immediately say "sorry" or "I can offer a discount"</strong>. Pause 3 seconds. First sentence should be neutral: "Thank you for the feedback. Can you tell me who you\'re mainly comparing me to?" — return the ball, gain info advantage.' },
+            { zh: '2. <strong>拿出證據包</strong> — 認證、土壤碳趨勢、實踐年資、第三方驗證、儀表板 URL。差異化要靠「過程證據」不是「形容詞」。「我們很用心」沒用，「我們連續 6 年 SOC 從 1.5% 升到 2.4%」有用。',
+              en: '2. <strong>Show the evidence pack</strong> — cert, soil C trend, practice years, third-party verification, dashboard URL. Differentiation needs "process evidence", not adjectives. "We try hard" doesn\'t work; "we\'ve raised SOC from 1.5% to 2.4% over 6 yrs" does.' },
+            { zh: '3. <strong>反問：「您要比的是同價格區段的供應商，還是同類產品的供應商？」</strong>把對話從「價格軸」轉到「價值軸」。多數買家其實沒想過這個 — 問出來就贏了一半。',
+              en: '3. <strong>Reverse question: "Are you comparing same-price-band suppliers, or same-product-class suppliers?"</strong> Shifts the axis from price to value. Most buyers haven\'t actually thought about this — asking wins half the negotiation.' },
+            { zh: '4. <strong>三種讓步結構，依場合選</strong>：(a) <em>條件性降價</em>「年合約 + 預付 30% 我可以降 5%」 (b) <em>價格不動，加贈附加值</em>「不打折但加贈試吃樣品 / 故事卡」 (c) <em>分階段定價</em>「前 3 個月用試銷價 NT$ X，達到合約量後升至 NT$ Y」。',
+              en: '4. <strong>3 concession structures, by context</strong>: (a) <em>conditional discount</em>: "Annual contract + 30% prepay → I can drop 5%" (b) <em>hold price, add value</em>: "no discount but I\'ll include samples + story card" (c) <em>phased pricing</em>: "trial price NT$ X for first 3 months, rises to NT$ Y once volume confirmed".' },
+            { zh: '5. <strong>給退路 — 「如果價格是唯一考量，我們可能不是合適供應商，但我可以推薦其他選擇給您。」</strong>篩買家不是請求買家。這句話 90% 會讓對方回到「不是只看價格啦…」的位置。',
+              en: '5. <strong>Offer the exit — "If price is your only criterion, we may not be the right fit, but I can refer you elsewhere."</strong> You\'re screening buyers, not begging. This line 90% of the time pulls them back to "well, it\'s not only about price..."' },
+            { zh: '6. <strong>練 → 在「議價演練」面板用 5 個情境角色扮演</strong>。提前練過 3 次以上，真實買家面前才不會慌。',
+              en: '6. <strong>Practice → use the Buyer Role-Play panel with 5 scenarios</strong>. Run through them 3+ times so you don\'t freeze in front of a real buyer.' }
           ],
+          checklist: {
+            title: { zh: '議價前準備清單', en: 'Pre-negotiation checklist' },
+            items: [
+              { zh: '<strong>底價</strong>已算過 — 知道「絕對不能再低」的數字', en: '<strong>Floor price</strong> calculated — you know the "absolutely-no-lower" number' },
+              { zh: '<strong>證據包</strong>準備好 — 認證影本、土壤檢驗、實踐時間軸、儀表板 URL', en: '<strong>Evidence pack</strong> ready — cert copy, soil test, practice timeline, dashboard URL' },
+              { zh: '<strong>替代方案 3 個</strong> — 條件性折扣、加值不降價、分階段定價 — 想好哪一個適合本次談判', en: '<strong>3 fallback options</strong> — conditional discount / value-add / phased pricing — pre-decide which fits THIS negotiation' },
+              { zh: '<strong>退場句子</strong>練熟 — 「如果價格是唯一考量…」整句講得自然，不結巴', en: '<strong>Exit line</strong> rehearsed — "If price is your only criterion..." said naturally, no stutter' },
+              { zh: '<strong>市場行情</strong>查過 — 知道對方拿來比的「便宜對手」實際情況', en: '<strong>Market rate</strong> checked — know the actual situation of the "cheap competitor" they\'re comparing you to' }
+            ]
+          },
+          timeline: {
+            title: { zh: '議價對話時間軸', en: 'Negotiation timeline' },
+            items: [
+              { zh: '<strong>0:00 開場</strong>— 對方說「你太貴」 → 你停 3 秒，反問「您主要比較對象是誰？」', en: '<strong>0:00 Opening</strong> — they say "you\'re expensive" → you pause 3sec, ask "who are you mainly comparing to?"' },
+              { zh: '<strong>0:30 取得情報</strong>— 對方說出比較對象 → 你判斷是否同類產品。如果是低價競爭品 → 拉出價值軸；如果是同類高品質 → 真正比拼證據', en: '<strong>0:30 Info gathering</strong> — they name the comparison → assess if it\'s same product class. If cheap competitor → shift to value axis; if true peer → compete on evidence' },
+              { zh: '<strong>1:30 證據呈現</strong>— 拿出 2-3 件硬證據（不要全部）。最強的留到後面。', en: '<strong>1:30 Evidence reveal</strong> — present 2-3 hard pieces (not everything). Save strongest for later.' },
+              { zh: '<strong>3:00 提出方案</strong>— 不降價但給條件 — 「年約 + 預付」或「試銷期 + 升價」', en: '<strong>3:00 Propose structure</strong> — no discount but with conditions — "annual + prepay" or "trial + step-up"' },
+              { zh: '<strong>5:00 給退路</strong>— 如果對方還執著價格 → 「我們可能不是合適供應商…」整段口語化。', en: '<strong>5:00 Exit offer</strong> — if they\'re still stuck on price → "we may not be the right supplier..." said conversationally.' },
+              { zh: '<strong>結束</strong>— 不論成交還是沒成交，寫下對方訊息存到 ERP 聯絡簿 + 自我覆盤 5 分鐘', en: '<strong>End</strong> — deal or no deal, log buyer info to ERP Contacts + 5min self-debrief' }
+            ]
+          },
+          pitfalls: {
+            title: { zh: '議價時常踩的雷', en: 'Common negotiation landmines' },
+            items: [
+              { zh: '<strong>當場降價超過 10%</strong>— 透露你「本來就有水分」，永遠在這個價位被壓', en: '<strong>Discounting > 10% on the spot</strong> — reveals you had "padding"; locks you at this lower price forever' },
+              { zh: '<strong>解釋你的成本太細</strong>— 對方不在乎你成本。重點是「你提供的價值」不是「你的辛苦」', en: '<strong>Over-explaining your costs</strong> — buyers don\'t care about your cost. Focus on "value to them", not "your hardship"' },
+              { zh: '<strong>當場決定大合約</strong>— 5 分鐘內簽 100 萬合約 = 後悔機率 80%。給自己「我回去想 24 小時」的權利', en: '<strong>Closing a big contract on the spot</strong> — sign NT$ 1M within 5 min = 80% regret. Reserve "I\'ll think about it 24hrs" right' },
+              { zh: '<strong>道歉 + 解釋為什麼貴</strong>— 一道歉就掉入「乞求」位置。從頭到尾不要說「對不起，因為我們成本…」', en: '<strong>Apologizing + explaining "why"</strong> — apologizing puts you in "begging" stance. Never say "sorry, our cost is..."' },
+              { zh: '<strong>單一買家依賴 ≥ 40%</strong> 然後讓他殺價 — 對方知道你不敢失去他。先分散買家再談價', en: '<strong>Single buyer ≥ 40% of revenue</strong> + letting them haggle — they know you can\'t afford to lose them. Diversify buyers FIRST before negotiating' }
+            ]
+          },
+          resources: {
+            title: { zh: '推薦資源 + 練習工具', en: 'Recommended resources + practice tools' },
+            items: [
+              { zh: '<strong>儀表板「議價演練」面板</strong>— 5 個情境，每個有「對方說 → 你回應 → 後續」完整劇本', en: '<strong>Dashboard Buyer Role-Play panel</strong> — 5 scenarios with full "they say → you respond → follow-up" scripts' },
+              { zh: '<strong>《談判力》(Getting to Yes, by Roger Fisher)</strong>— 經典之作，台灣多家書店有中譯本', en: '<strong>"Getting to Yes" by Roger Fisher</strong> — the classic; Chinese translation available' },
+              { zh: '<strong>《關鍵對話》(Crucial Conversations)</strong>— 高壓對話的具體技巧', en: '<strong>"Crucial Conversations"</strong> — specific techniques for high-stakes dialogue' },
+              { zh: '<strong>產銷班同行交流</strong>— 跟同作物 5-10 戶農夫交換議價經驗，比讀書有用', en: '<strong>Production group peers</strong> — exchange negotiation stories with 5-10 same-crop farmers; beats reading books' }
+            ]
+          },
           links: [
-            { label: { zh: '完整對話演練', en: 'Full negotiation rehearsal' }, href: '#sec-agent' }
+            { label: { zh: '完整議價演練', en: 'Full negotiation rehearsal' }, href: '#sec-agent' },
+            { label: { zh: '看定價工作室', en: 'Pricing Studio' }, href: '#sec-pricing' }
           ]
         };
       }
