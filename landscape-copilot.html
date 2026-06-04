@@ -2095,6 +2095,55 @@ function expert(p) {
 }
 
 // ─────────────────────────────────────────────────────────────
+// WILDLIFE_META — what specific Taiwan wildlife each plant brings.
+// Helps users see the concrete ecological pay-off: "if I plant 茄苳,
+// 台灣藍鵲 will visit". Researched per plant; missing entries fall back
+// to nothing (only the generic supports tags get shown).
+// ─────────────────────────────────────────────────────────────
+const WILDLIFE_META = {
+  pittosporum:    [{ i:"🐝", zh:"原生小型蜂", en:"Native small bees" }, { i:"🦋", zh:"小型蝶類", en:"Small butterflies" }],
+  cherry:         [{ i:"🐦", zh:"綠繡眼", en:"Japanese white-eye" }, { i:"🐦", zh:"五色鳥", en:"Taiwan barbet" }, { i:"🐦", zh:"紅胸啄花鳥", en:"Fire-breasted flowerpecker" }, { i:"🐝", zh:"原生蜂", en:"Native bees" }],
+  bischofia:      [{ i:"🦅", zh:"台灣藍鵲", en:"Taiwan blue magpie" }, { i:"🐦", zh:"五色鳥", en:"Taiwan barbet" }, { i:"🐦", zh:"白頭翁", en:"Chinese bulbul" }, { i:"🐿", zh:"赤腹松鼠", en:"Red-bellied squirrel" }, { i:"🦋", zh:"端紫斑蝶（食草）", en:"Magpie crow (host plant)" }],
+  cinnamomum:     [{ i:"🦅", zh:"台灣藍鵲", en:"Taiwan blue magpie" }, { i:"🐦", zh:"白頭翁", en:"Chinese bulbul" }, { i:"🦋", zh:"青斑鳳蝶（食草）", en:"Common bluebottle (host plant)" }],
+  broussonetia:   [{ i:"🦅", zh:"台灣藍鵲", en:"Taiwan blue magpie" }, { i:"🐦", zh:"白頭翁", en:"Chinese bulbul" }, { i:"🐦", zh:"紅嘴黑鵯", en:"Black bulbul" }, { i:"🦋", zh:"大鳳蝶（食草）", en:"Great Mormon (host plant)" }],
+  melastoma:      [{ i:"🐝", zh:"台灣原生熊蜂", en:"Taiwan native bumblebee" }, { i:"🦋", zh:"樺斑蝶", en:"Plain tiger butterfly" }, { i:"🐦", zh:"綠繡眼（果實）", en:"White-eye (fruit)" }],
+  ardisia:        [{ i:"🐦", zh:"白頭翁", en:"Chinese bulbul" }, { i:"🐦", zh:"紅嘴黑鵯", en:"Black bulbul" }, { i:"🐦", zh:"灰喜鵲", en:"Azure-winged magpie" }],
+  alpinia:        [{ i:"🦋", zh:"樺斑蝶", en:"Plain tiger" }, { i:"🐝", zh:"木蜂", en:"Carpenter bees" }],
+  hibiscus_tw:    [{ i:"🐝", zh:"原生熊蜂", en:"Native bumblebees" }, { i:"🦋", zh:"鳳蝶類", en:"Swallowtail butterflies" }],
+  murraya:        [{ i:"🦋", zh:"大鳳蝶（食草）", en:"Great Mormon (host plant)" }, { i:"🦋", zh:"黑鳳蝶（食草）", en:"Spangle (host plant)" }, { i:"🦋", zh:"柑橘鳳蝶", en:"Citrus swallowtail" }, { i:"🦋", zh:"夜行性蛾", en:"Night moths" }],
+  cephalanthus:   [{ i:"🐝", zh:"多種原生蜂（聚集）", en:"Diverse native bees (a magnet)" }, { i:"🦋", zh:"鳳蝶、粉蝶", en:"Swallowtails, whites" }, { i:"🐉", zh:"蜻蜓（水域邊）", en:"Dragonflies (waterside)" }],
+  mulberry_sm:    [{ i:"🦅", zh:"台灣藍鵲", en:"Taiwan blue magpie" }, { i:"🐦", zh:"白頭翁", en:"Chinese bulbul" }, { i:"🐦", zh:"五色鳥", en:"Taiwan barbet" }, { i:"🦋", zh:"紋白蝶", en:"Cabbage white" }],
+  sida:           [{ i:"🐝", zh:"小型原生蜂", en:"Small native bees" }, { i:"🦋", zh:"棋斑蝶", en:"Plain tiger" }],
+  liriope:        [{ i:"🐝", zh:"原生蜂", en:"Native bees" }, { i:"🐦", zh:"小型鳥（果實）", en:"Small birds (fruit)" }],
+  dianella:       [{ i:"🐦", zh:"白頭翁（藍果）", en:"Chinese bulbul (blue berries)" }, { i:"🐝", zh:"原生蜂", en:"Native bees" }],
+  miscanthus:     [{ i:"🐦", zh:"麻雀、斑文鳥（種子）", en:"Sparrows, munias (seeds)" }, { i:"🦗", zh:"螳螂、蟋蟀棲地", en:"Mantis, cricket habitat" }],
+  nuphar:         [{ i:"🐉", zh:"金黃蜻蜓", en:"Golden dragonfly" }, { i:"🐉", zh:"紫紅蜻蜓", en:"Crimson dropwing" }, { i:"🐸", zh:"澤蛙、貢德氏赤蛙", en:"Pond frogs" }],
+  philydrum:      [{ i:"🐉", zh:"蜻蜓棲息", en:"Dragonfly perch" }, { i:"🐸", zh:"水生青蛙", en:"Aquatic frogs" }],
+  piper:          [{ i:"🦗", zh:"小型甲蟲", en:"Small beetles" }, { i:"🦋", zh:"夜行性蛾", en:"Night moths" }],
+  jasminum:       [{ i:"🦋", zh:"天蛾", en:"Hawk moths" }, { i:"🦋", zh:"夜行性蛾", en:"Night moths" }],
+  lily_tw:        [{ i:"🦋", zh:"天蛾（夜訪）", en:"Hawk moths (night)" }, { i:"🐝", zh:"日間蜂", en:"Day bees" }],
+  callicarpa:     [{ i:"🐦", zh:"白頭翁（紫果）", en:"Bulbul (purple berries)" }, { i:"🐦", zh:"綠繡眼", en:"White-eye" }],
+  hibiscus_til:   [{ i:"🐝", zh:"原生熊蜂", en:"Native bumblebees" }, { i:"🐦", zh:"綠繡眼（花蜜）", en:"White-eye (nectar)" }],
+  melia:          [{ i:"🐦", zh:"紅尾伯勞", en:"Brown shrike" }, { i:"🐦", zh:"灰喜鵲", en:"Azure-winged magpie" }, { i:"🐝", zh:"原生蜂（春花）", en:"Native bees (spring bloom)" }],
+  quercus_g:      [{ i:"🐿", zh:"赤腹松鼠", en:"Red-bellied squirrel" }, { i:"🐦", zh:"五色鳥", en:"Taiwan barbet" }, { i:"🦋", zh:"紫小灰蝶（食草）", en:"Hairstreak butterfly (host)" }],
+  pongamia:       [{ i:"🐝", zh:"原生蜂（花蜜）", en:"Native bees (nectar)" }, { i:"🦋", zh:"豆科蝶類食草", en:"Legume-feeding butterfly host" }],
+  scaevola:       [{ i:"🐝", zh:"原生蜂", en:"Native bees" }, { i:"🦋", zh:"白點花蝶", en:"Coastal butterflies" }],
+  portulaca:      [{ i:"🐝", zh:"小型原生蜂", en:"Small native bees" }],
+  pandanus:       [{ i:"🦋", zh:"夜行性蛾", en:"Night moths" }],
+  asplenium_n:    [{ i:"🦎", zh:"攀木蜥蜴棲地", en:"Tree skink habitat" }, { i:"🕷", zh:"蜘蛛棲地", en:"Spider habitat" }],
+  ipomoea_pc:     [{ i:"🐝", zh:"原生蜂", en:"Native bees" }, { i:"🦋", zh:"海岸蝶類", en:"Coastal butterflies" }],
+  bougainvillea:  [{ i:"🐝", zh:"蜜蜂", en:"Honey bees" }, { i:"🦋", zh:"白點花蝶", en:"Plain tiger" }],
+  plumeria:       [{ i:"🦋", zh:"天蛾（傳粉）", en:"Hawk moths (pollinators)" }],
+  cassia_fistula: [{ i:"🐝", zh:"原生蜂、木蜂", en:"Native bees, carpenter bees" }, { i:"🦋", zh:"粉蝶類食草", en:"White butterfly host" }],
+  delonix:        [{ i:"🐦", zh:"叉尾太陽鳥", en:"Fork-tailed sunbird" }, { i:"🐝", zh:"木蜂", en:"Carpenter bees" }],
+  bombax:         [{ i:"🐦", zh:"白頭翁、綠繡眼", en:"Bulbul, white-eye (nectar)" }, { i:"🐦", zh:"叉尾太陽鳥", en:"Fork-tailed sunbird" }],
+  spathodea:      [{ i:"🐦", zh:"叉尾太陽鳥", en:"Fork-tailed sunbird" }],
+  ceiba:          [{ i:"🐝", zh:"蜂類", en:"Bees" }, { i:"🐦", zh:"小型鳥訪花", en:"Small birds visit flowers" }],
+};
+
+function wildlife(p) { return WILDLIFE_META[p.id] || []; }
+
+// ─────────────────────────────────────────────────────────────
 // Wizard option sets
 // ─────────────────────────────────────────────────────────────
 const SPACE_OPTIONS = [
@@ -3907,6 +3956,247 @@ function renderBuildPlan(layers, recs) {
           <div class="phase-time">${p.time}</div>
           <div class="phase-text">${p.body}</div>
         </div>`).join("")}
+    </div>
+
+    ${renderSoilRecipe(top, realW, realD)}
+
+    ${renderHazardChecklist(top)}
+    `;
+}
+
+// ── Soil recipe calculator — turns the recommended plants + area into a
+//    specific volume + cost estimate. Most beginners over- or under-amend;
+//    this gives a starting point grounded in actual numbers.
+function renderSoilRecipe(top, w, d) {
+  const area = w * d;
+  // Depth: containers shallower than yards
+  const depthCm = (state.space === "balcony" || state.space === "indoor") ? 25 : 30;
+  // Existing soil reused 20% in yards, 0% in containers/rooftop (start fresh)
+  const reuseFraction = state.space === "yard" ? 0.2 : 0;
+  const totalL = Math.round(area * depthCm * (1 - reuseFraction));
+
+  // Dominant water tier across recs decides the mix
+  const waterCounts = { low: 0, med: 0, high: 0 };
+  top.forEach(p => { waterCounts[p.water] = (waterCounts[p.water] || 0) + (state.qty[p.id] || 1); });
+  let dominantWater = "med";
+  if (waterCounts.low > waterCounts.med && waterCounts.low > waterCounts.high) dominantWater = "low";
+  else if (waterCounts.high > waterCounts.med) dominantWater = "high";
+
+  // Mix recipes by dominant water
+  const recipes = {
+    low: {
+      label_zh: "耐旱混合 · 排水優先", label_en: "Drought mix · drainage-first",
+      parts: [
+        { name_zh: "現地土壤 / 一般培養土", name_en: "Local soil / standard mix", pct: 50, rate: 5.5 },
+        { name_zh: "有機堆肥", name_en: "Organic compost", pct: 25, rate: 8 },
+        { name_zh: "珍珠岩或粗砂", name_en: "Perlite or coarse sand", pct: 25, rate: 12 },
+      ],
+      note_zh: "適合 海桐 / 馬鞍藤 / 草海桐 / 五節芒 / 馬齒莧 等耐旱植物為主的設計。",
+      note_en: "Suits designs led by drought-tolerant species — 海桐, 馬鞍藤, 五節芒, etc.",
+    },
+    med: {
+      label_zh: "通用培養土 · 平衡版", label_en: "Balanced mix · universal",
+      parts: [
+        { name_zh: "現地土壤 / 一般培養土", name_en: "Local soil / standard mix", pct: 50, rate: 5.5 },
+        { name_zh: "有機堆肥", name_en: "Organic compost", pct: 30, rate: 8 },
+        { name_zh: "珍珠岩 / 椰殼纖維", name_en: "Perlite / coir", pct: 20, rate: 10 },
+      ],
+      note_zh: "適合 野牡丹 / 山黃梔 / 月桃 / 鳳凰木 等多數庭院灌木與小樹。",
+      note_en: "Suits most garden shrubs and small trees — 野牡丹, 山黃梔, 月桃, etc.",
+    },
+    high: {
+      label_zh: "保水混合 · 濕地導向", label_en: "Moisture mix · wetland-leaning",
+      parts: [
+        { name_zh: "現地土壤 / 一般培養土", name_en: "Local soil / standard mix", pct: 40, rate: 5.5 },
+        { name_zh: "有機堆肥（保水）", name_en: "Compost (water-holding)", pct: 40, rate: 8 },
+        { name_zh: "椰殼纖維或樹皮屑", name_en: "Coir or fine bark", pct: 20, rate: 9 },
+      ],
+      note_zh: "適合 田蔥 / 風箱樹 / 月桃 等濕地或半水生植物的設計。",
+      note_en: "Suits designs with wetland or semi-aquatic species — 田蔥, 風箱樹, 月桃.",
+    },
+  };
+  const r = recipes[dominantWater];
+  let totalCost = 0;
+  const rows = r.parts.map(part => {
+    const vol = Math.round(totalL * part.pct / 100);
+    const bags = Math.max(1, Math.ceil(vol / 50));
+    const cost = Math.round(vol * part.rate);
+    totalCost += cost;
+    return `
+      <tr>
+        <td><span data-zh="${part.name_zh}" data-en="${part.name_en}">${part.name_zh}</span></td>
+        <td class="right">${part.pct}%</td>
+        <td class="right">${vol} L</td>
+        <td class="right" style="color:var(--ink-soft); font-size:12px;"><span data-zh="${bags} 包 (50 L)" data-en="${bags} bags (50 L)">${bags} 包 (50 L)</span></td>
+        <td class="right">NT$ ${cost.toLocaleString()}</td>
+      </tr>`;
+  }).join("");
+
+  return `
+    <h2 class="subtitle" style="margin-top: 36px;"
+        data-zh="🪴 土壤配方計算" data-en="🪴 Soil Recipe Calculator">🪴 土壤配方計算</h2>
+    <p class="lead-small"
+       data-zh="依你的空間尺寸與推薦植物的水分偏好（以「${dominantWater === "low" ? "低" : dominantWater === "high" ? "高" : "中"}」水量為主），自動計算改土配方與估算成本。"
+       data-en='Auto-calculated soil mix and cost based on your area and the dominant water tier ("${dominantWater}") of your recommended plants.'>
+       依你的空間尺寸與推薦植物的水分偏好，自動計算改土配方。</p>
+
+    <div class="shop-frame">
+      <div style="margin-bottom: 14px;">
+        <div style="font-family: var(--serif); font-size: 18px; font-weight: 600; color: var(--forest);"
+             data-zh="${r.label_zh}" data-en="${r.label_en}">${r.label_zh}</div>
+        <div style="font-size: 13px; color: var(--ink-soft); margin-top: 4px;"
+             data-zh="總體積 ${totalL} L = ${area.toFixed(1)} m² × ${depthCm} cm 深${reuseFraction ? " × " + Math.round((1 - reuseFraction) * 100) + "% (其餘可重複使用現地土)" : ""}"
+             data-en="Total volume ${totalL} L = ${area.toFixed(1)} m² × ${depthCm} cm deep${reuseFraction ? " × " + Math.round((1 - reuseFraction) * 100) + "% (rest reuses existing soil)" : ""}">
+             總體積 ${totalL} L</div>
+      </div>
+      <table class="shop-table">
+        <thead>
+          <tr>
+            <th data-zh="成份" data-en="Component">成份</th>
+            <th class="right" data-zh="比例" data-en="Ratio">比例</th>
+            <th class="right" data-zh="體積" data-en="Volume">體積</th>
+            <th class="right" data-zh="袋數估算" data-en="Bags est.">袋數估算</th>
+            <th class="right" data-zh="估算 (NT$)" data-en="Est. cost">估算 (NT$)</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+      <div class="shop-total">
+        <span class="label" data-zh="土壤估算總額" data-en="Soil total">土壤估算總額</span>
+        <span class="amount">NT$ ${totalCost.toLocaleString()}</span>
+      </div>
+      <p class="shop-note" style="margin-top:14px;"
+         data-zh="${r.note_zh} 一般花市或建材行可買到所有成份；建議現場混合後再回填。"
+         data-en="${r.note_en} All materials available at flower markets or hardware stores; mix on-site before back-filling.">
+         ${r.note_zh}
+      </p>
+    </div>`;
+}
+
+// ── Hazard preparedness — Taiwan-specific. Identifies which of the user's
+//    plants are at risk for each common hazard and gives a concrete checklist.
+function renderHazardChecklist(top) {
+  // Typhoon-risk plants: canopy + large shrubs (height > 1.5m mature)
+  const typhoonRisk = top.filter(p => p.tier === "T" || (p.height && p.height[1] >= 1.5));
+  // Flood-risk plants: those that need low water (root rot)
+  const floodRisk = top.filter(p => p.water === "low");
+  // Drought-risk plants: those needing high water + thirsty containers
+  const droughtRisk = top.filter(p => p.water === "high" || expert(p).water_l_wk >= 10);
+  // Cold-snap risk: hardy_c >= 5 (anything that suffers below 5°C)
+  const coldRisk = top.filter(p => (expert(p).hardy_c ?? 0) >= 5);
+
+  const chips = (arr) => arr.length
+    ? `<div class="phase-plants">${arr.map(p => `<button class="m-pill" data-id="${p.id}"><span data-zh="${p.zh}" data-en="${p.en}">${p.zh}</span></button>`).join("")}</div>`
+    : `<span class="m-empty" data-zh="（你的設計中沒有此風險的植物）" data-en="(none of your plants are at risk)">（你的設計中沒有此風險的植物）</span>`;
+
+  return `
+    <h2 class="subtitle" style="margin-top: 36px;"
+        data-zh="🌪 災害準備清單 · Hazard Prep" data-en="🌪 Hazard Preparedness">🌪 災害準備清單 · Hazard Prep</h2>
+    <p class="lead-small"
+       data-zh="台灣景觀必備：颱風、淹水、乾旱、寒流四大威脅的應對。每項列出你設計中需要額外照顧的植物。"
+       data-en="Essential for Taiwan landscapes: response plans for the four big threats — typhoons, flooding, drought, cold snaps. Each section lists which of your plants need extra care.">
+       台灣景觀必備：颱風、淹水、乾旱、寒流四大威脅的應對。</p>
+
+    <div class="phase-list">
+      <div class="phase">
+        <div class="phase-num" style="background:#8C2A22;">🌪</div>
+        <div class="phase-title" data-zh="颱風 · 平均 6 月–10 月" data-en="Typhoon · avg Jun–Oct">颱風 · 平均 6 月–10 月</div>
+        <div class="phase-time" data-zh="預警 24-48 小時內完成" data-en="Complete within 24-48h of warning">預警 24-48 小時內完成</div>
+        <div class="phase-text">
+          <ul>
+            <li data-zh="高度 ≥ 1.5 m 的植物：以三腳支撐固定（離主幹 30-50 cm 釘樁，鬆綁帶綁主幹）。"
+                 data-en="Plants ≥ 1.5 m tall: stake with a 3-leg system (stakes 30-50 cm from trunk; loose tie to main stem).">
+                 高度 ≥ 1.5 m 的植物：以三腳支撐固定（離主幹 30-50 cm 釘樁，鬆綁帶綁主幹）。</li>
+            <li data-zh="盆器 < 30 kg：移入室內或集中靠牆。陽台盆器務必檢查護欄是否會被風吹倒。"
+                 data-en="Containers < 30 kg: bring indoors or huddle against a wall. Balcony pots — check the railing won't blow over.">
+                 盆器 < 30 kg：移入室內或集中靠牆。</li>
+            <li data-zh="預先修剪：移除枯枝、過長嫩枝，減少風阻；颱風後 1 週內補救修剪。"
+                 data-en="Pre-prune: remove dead/over-long shoots to reduce wind load; recovery prune within 1 week after the storm.">
+                 預先修剪：移除枯枝、過長嫩枝。</li>
+            <li data-zh="排水檢查：確認土面與排水孔暢通，避免根部浸泡 24h 以上。"
+                 data-en="Drainage check: ensure soil surface and drains are clear — roots shouldn't sit in water > 24h.">
+                 排水檢查。</li>
+          </ul>
+          <div style="margin-top:10px; font-size: 12.5px; color: var(--clay-deep); font-weight: 600;"
+               data-zh="你設計中需要支撐的植物：" data-en="Plants in your design needing staking:">你設計中需要支撐的植物：</div>
+          ${chips(typhoonRisk)}
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-num" style="background:#3D6086;">💧</div>
+        <div class="phase-title" data-zh="淹水 · 梅雨 (5-6 月) / 颱風後" data-en="Flooding · plum rains / post-typhoon">淹水 · 梅雨 / 颱風後</div>
+        <div class="phase-time" data-zh="進場前 + 雨後 48h" data-en="Pre-install + within 48h of rain">進場前 + 雨後 48h</div>
+        <div class="phase-text">
+          <ul>
+            <li data-zh="進場前必做：30 cm 深測試坑灌滿水 → 4 小時排不掉就要加排水層或抬高土床。"
+                 data-en="Before planting: dig a 30 cm test hole, fill with water — if not drained in 4h, add a drainage layer or raise the bed.">
+                 進場前必做：排水測試。</li>
+            <li data-zh="盆器：盆底放 5 cm 陶粒或石礫；盆器務必有排水孔。"
+                 data-en="Containers: 5 cm of expanded clay or gravel at the bottom; pots must have drainage holes.">
+                 盆器：盆底放排水材。</li>
+            <li data-zh="低水分植物淹水超過 48h 通常致命 — 雨後立即翻土通氣。"
+                 data-en="Low-water plants under flooding > 48h are usually fatal — turn soil immediately after rain.">
+                 低水分植物淹水超過 48h 通常致命。</li>
+            <li data-zh="檢查是否有蚊蟲孳生水體 — 倒掉所有積水容器。"
+                 data-en="Check for standing water → mosquito breeding — empty any container holding water.">
+                 注意積水蚊蟲孳生。</li>
+          </ul>
+          <div style="margin-top:10px; font-size: 12.5px; color: var(--clay-deep); font-weight: 600;"
+               data-zh="淹水時最先受害的植物（耐旱型，怕根腐）：" data-en="Plants most vulnerable to flooding (drought-loving, root-rot prone):">淹水時最先受害的植物（耐旱型，怕根腐）：</div>
+          ${chips(floodRisk)}
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-num" style="background:#C9A84C;">☀</div>
+        <div class="phase-title" data-zh="乾旱 / 高溫 · 7-9 月" data-en="Drought / heatwave · Jul-Sep">乾旱 / 高溫 · 7-9 月</div>
+        <div class="phase-time" data-zh="持續 1 週以上高溫即啟動" data-en="Activate after 1+ weeks of extreme heat">持續 1 週以上高溫即啟動</div>
+        <div class="phase-text">
+          <ul>
+            <li data-zh="盆器植物在 35°C 以上可能每日需澆水 2 次（清晨 + 黃昏）。絕不可中午澆水。"
+                 data-en="Container plants above 35°C may need water 2× daily (dawn + dusk). Never water at midday.">
+                 盆器植物 35°C 以上每日澆 2 次（清晨 + 黃昏）。</li>
+            <li data-zh="覆蓋層加厚到 5-7 cm 以鎖住水分並降低土溫。"
+                 data-en="Thicken mulch to 5-7 cm to retain moisture and cool soil.">
+                 覆蓋層加厚 5-7 cm。</li>
+            <li data-zh="優先保水：用淺盤盛水放在盆下，慢慢從根部吸收。"
+                 data-en="Prioritize: place a shallow tray under containers, slow root-uptake.">
+                 用淺盤輔助吸水。</li>
+            <li data-zh="葉面噴霧降溫 — 但只在清晨或黃昏，避免日曬下噴水造成葉片燒灼。"
+                 data-en="Leaf misting for cooling — only at dawn or dusk; midday misting under sun burns leaves.">
+                 葉面噴霧降溫（早晚）。</li>
+          </ul>
+          <div style="margin-top:10px; font-size: 12.5px; color: var(--clay-deep); font-weight: 600;"
+               data-zh="乾旱時最需要關注的植物（高水需求）：" data-en="Plants needing the most water during drought:">乾旱時最需要關注的植物：</div>
+          ${chips(droughtRisk)}
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-num" style="background:#5078A0;">❄</div>
+        <div class="phase-title" data-zh="寒流 · 1-2 月低溫" data-en="Cold snap · low temperatures in Jan-Feb">寒流 · 1-2 月低溫</div>
+        <div class="phase-time" data-zh="氣象預報 < 10°C 提前 24h" data-en="When forecast shows < 10°C, prep 24h ahead">氣象預報 < 10°C 提前 24h</div>
+        <div class="phase-text">
+          <ul>
+            <li data-zh="移入：可移動的盆器搬入屋內或遮蔽處。"
+                 data-en="Relocate: move portable containers indoors or under shelter.">
+                 可移動盆器移入屋內。</li>
+            <li data-zh="包覆：地植植物用不織布、舊棉被或農用保溫膜包覆主幹與枝條 1-3 晚。"
+                 data-en="Wrap: cover in-ground plants with nonwoven fabric, old blankets, or agricultural film for 1-3 nights.">
+                 地植植物包覆。</li>
+            <li data-zh="覆蓋：增厚根部覆蓋層 (5-7 cm 樹皮或稻草) 保溫保濕。"
+                 data-en="Mulch heavily (5-7 cm of bark or straw) to insulate roots.">
+                 加厚根部覆蓋。</li>
+            <li data-zh="避免：寒流前 24h 不澆水（凍結傷根）；不要施肥（刺激生長易受寒害）。"
+                 data-en="Avoid: no watering 24h before (freezing damages roots); no fertilizing (forced growth is cold-sensitive).">
+                 寒流前 24h 不澆水、不施肥。</li>
+          </ul>
+          <div style="margin-top:10px; font-size: 12.5px; color: var(--clay-deep); font-weight: 600;"
+               data-zh="寒流時最需要保護的植物（不耐寒）：" data-en="Plants most vulnerable to cold:">寒流時最需要保護的植物（不耐寒）：</div>
+          ${chips(coldRisk)}
+        </div>
+      </div>
     </div>`;
 }
 
@@ -4011,7 +4301,7 @@ function renderShopping(recs) {
         <tbody>${rows}</tbody>
       </table>
       <div class="shop-total">
-        <span class="label" data-zh="預估總成本" data-en="Estimated total">預估總成本</span>
+        <span class="label" data-zh="植物採購小計" data-en="Plants subtotal">植物採購小計</span>
         <span class="amount" id="shopTotal">NT$ ${total.toLocaleString()}</span>
       </div>
       <p class="shop-note"
@@ -4023,6 +4313,167 @@ function renderShopping(recs) {
         <button class="btn ghost" onclick="exportShoppingCSV()">⬇ <span data-zh="下載 CSV" data-en="Download CSV">下載 CSV</span></button>
         <button class="btn ghost" onclick="window.print()">📄 <span data-zh="列印清單" data-en="Print list">列印清單</span></button>
       </div>
+    </div>
+
+    ${renderTCOTable(top, total)}
+    `;
+}
+
+// ── 5-year cost-of-ownership projection — exposes the true cost
+//    beyond the nursery receipt. Most planting projects fail at year 2-3
+//    because owners didn't budget for the recurring expenses.
+function renderTCOTable(plantsTop, plantsSubtotal) {
+  const realW = state.widthM || SPACE_DEFAULTS[state.space].w;
+  const realD = state.depthM || SPACE_DEFAULTS[state.space].d;
+  const area  = realW * realD;
+
+  // One-time setup costs (rough Taiwan retail rates)
+  //   container/edging: balcony/indoor needs pots; rooftop+yard mostly use ground
+  //   soil & amendments: ~NT$ 50 per 10 L bag; we estimate 80% of bed volume = soil to bring in
+  //   mulch: NT$ 80 per 50 L bag; cover area at 4 cm depth
+  //   tools: trowel, gloves, watering can, light pruner — basic kit
+  const containerCost = (state.space === "balcony" || state.space === "indoor")
+    ? Math.max(2, Math.round(plantsTop.length * 0.8)) * 250    // ~NT$ 250 per pot
+    : Math.round(area * 30);                                   // rougher edging cost for yards
+  const soilVolL = Math.round(area * 30 * 0.8);                // 30 cm depth × 80% needs added
+  const soilCost = Math.round(soilVolL * 5.5);                 // ~NT$ 55 / 10 L
+  const mulchVolL = Math.round(area * 4);                      // 4 cm cover
+  const mulchCost = Math.round(mulchVolL * 1.6);               // ~NT$ 80 / 50 L
+  const toolsCost = 1200;                                      // basic kit
+
+  // Annual recurring costs
+  //   water: total L/week × 52 weeks × NT$ 0.012 / L (typical TPC residential)
+  //   fertilizer: ~NT$ 600/yr per 5 m² (slow-release blend)
+  //   replacement: 10% of plant subtotal per year as failure & growth replacement
+  //   misc: pruning shears sharpening, replacement gloves, soil top-up — rough NT$ 800
+  let weeklyWater = 0;
+  plantsTop.forEach(p => {
+    const qty = state.qty[p.id] ?? 1;
+    weeklyWater += (expert(p).water_l_wk || 0) * qty;
+  });
+  const annualWaterCost = Math.round(weeklyWater * 52 * 0.012);
+  const annualFertCost  = Math.round(Math.max(1, area / 5) * 600);
+  const annualReplaceCost = Math.round(plantsSubtotal * 0.10);
+  const annualMisc = 800;
+  const annualTotal = annualWaterCost + annualFertCost + annualReplaceCost + annualMisc;
+
+  const setupTotal = containerCost + soilCost + mulchCost + toolsCost;
+  const fiveYearTotal = plantsSubtotal + setupTotal + annualTotal * 5;
+
+  return `
+    <h2 class="subtitle" style="margin-top: 36px;"
+        data-zh="5 年總持有成本 · TCO Projection"
+        data-en="5-year Total Cost of Ownership">5 年總持有成本 · TCO Projection</h2>
+    <p class="lead-small"
+       data-zh="多數景觀工程在第 2-3 年失敗，是因為主人沒有預算到「持續開銷」。這份估算讓你看清楚真實成本。"
+       data-en="Most landscape projects fail in year 2-3 because owners didn't budget recurring costs. This breakdown shows the real picture.">
+       多數景觀工程在第 2-3 年失敗，是因為主人沒有預算到「持續開銷」。這份估算讓你看清楚真實成本。</p>
+
+    <div class="shop-frame">
+      <table class="shop-table">
+        <thead>
+          <tr>
+            <th data-zh="項目" data-en="Item">項目</th>
+            <th class="right" data-zh="說明" data-en="Notes">說明</th>
+            <th class="right" data-zh="估算 (NT$)" data-en="Estimate (NT$)">估算 (NT$)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="background: rgba(110,126,96,0.08);">
+            <td colspan="3" style="font-family:var(--serif); font-weight:600; color:var(--forest); font-size:13.5px; letter-spacing:0.05em;"
+                data-zh="一次性開支 · ONE-TIME" data-en="One-time setup">一次性開支 · ONE-TIME</td>
+          </tr>
+          <tr>
+            <td data-zh="植物採購" data-en="Plants">植物採購</td>
+            <td class="right" style="color:var(--ink-soft);font-size:12px;"
+                data-zh="${plantsTop.length} 種推薦植物 · 上方清單合計"
+                data-en="${plantsTop.length} species · per shopping list above">${plantsTop.length} 種推薦植物 · 上方清單合計</td>
+            <td class="right">NT$ ${plantsSubtotal.toLocaleString()}</td>
+          </tr>
+          <tr>
+            <td data-zh="盆器 / 邊界" data-en="Containers / edging">盆器 / 邊界</td>
+            <td class="right" style="color:var(--ink-soft);font-size:12px;"
+                data-zh="${state.space === "balcony" || state.space === "indoor" ? "陶盆或塑膠盆 × " + Math.max(2, Math.round(plantsTop.length * 0.8)) : "庭院邊界石材或木材"}"
+                data-en="${state.space === "balcony" || state.space === "indoor" ? "Pots × " + Math.max(2, Math.round(plantsTop.length * 0.8)) : "Yard edging stone or timber"}">
+                ${state.space === "balcony" || state.space === "indoor" ? "陶盆或塑膠盆 × " + Math.max(2, Math.round(plantsTop.length * 0.8)) : "庭院邊界石材或木材"}</td>
+            <td class="right">NT$ ${containerCost.toLocaleString()}</td>
+          </tr>
+          <tr>
+            <td data-zh="種植土 / 改良土" data-en="Soil + amendments">種植土 / 改良土</td>
+            <td class="right" style="color:var(--ink-soft);font-size:12px;"
+                data-zh="約 ${soilVolL} L (覆蓋面積 30 cm 深 × 80%)"
+                data-en="≈ ${soilVolL} L (30 cm depth × 80% top-up)">約 ${soilVolL} L (覆蓋面積 30 cm 深 × 80%)</td>
+            <td class="right">NT$ ${soilCost.toLocaleString()}</td>
+          </tr>
+          <tr>
+            <td data-zh="覆蓋層 (Mulch)" data-en="Mulch">覆蓋層 (Mulch)</td>
+            <td class="right" style="color:var(--ink-soft);font-size:12px;"
+                data-zh="約 ${mulchVolL} L 樹皮或椰殼纖維 (4 cm 厚)"
+                data-en="≈ ${mulchVolL} L of bark or coir (4 cm cover)">約 ${mulchVolL} L 樹皮或椰殼纖維 (4 cm 厚)</td>
+            <td class="right">NT$ ${mulchCost.toLocaleString()}</td>
+          </tr>
+          <tr>
+            <td data-zh="基本工具組" data-en="Basic tool kit">基本工具組</td>
+            <td class="right" style="color:var(--ink-soft);font-size:12px;"
+                data-zh="鏟子 + 手套 + 灑水壺 + 修枝剪"
+                data-en="Trowel, gloves, watering can, hand pruner">鏟子 + 手套 + 灑水壺 + 修枝剪</td>
+            <td class="right">NT$ ${toolsCost.toLocaleString()}</td>
+          </tr>
+          <tr style="background: rgba(168,138,106,0.10);">
+            <td style="font-weight:600;" data-zh="一次性小計" data-en="Setup subtotal">一次性小計</td>
+            <td class="right"></td>
+            <td class="right" style="font-weight:700; color: var(--forest);">NT$ ${(plantsSubtotal + setupTotal).toLocaleString()}</td>
+          </tr>
+
+          <tr style="background: rgba(110,126,96,0.08);">
+            <td colspan="3" style="font-family:var(--serif); font-weight:600; color:var(--forest); font-size:13.5px; letter-spacing:0.05em;"
+                data-zh="年度開支 · ANNUAL" data-en="Annual recurring">年度開支 · ANNUAL</td>
+          </tr>
+          <tr>
+            <td data-zh="水費 · Water" data-en="Water">水費 · Water</td>
+            <td class="right" style="color:var(--ink-soft);font-size:12px;"
+                data-zh="${weeklyWater.toFixed(0)} L / 週 × 52 × NT$ 0.012"
+                data-en="${weeklyWater.toFixed(0)} L/wk × 52 × NT$ 0.012">${weeklyWater.toFixed(0)} L / 週 × 52 × NT$ 0.012</td>
+            <td class="right">NT$ ${annualWaterCost.toLocaleString()}</td>
+          </tr>
+          <tr>
+            <td data-zh="肥料" data-en="Fertilizer">肥料</td>
+            <td class="right" style="color:var(--ink-soft);font-size:12px;"
+                data-zh="緩釋有機肥 · 約 NT$ 600 / 5 m² / 年"
+                data-en="Slow-release organic · ~NT$ 600 / 5 m² / yr">緩釋有機肥 · 約 NT$ 600 / 5 m² / 年</td>
+            <td class="right">NT$ ${annualFertCost.toLocaleString()}</td>
+          </tr>
+          <tr>
+            <td data-zh="補種 · Replacement" data-en="Replacement">補種 · Replacement</td>
+            <td class="right" style="color:var(--ink-soft);font-size:12px;"
+                data-zh="假設每年 10% 損失或成長更換"
+                data-en="Assuming 10%/yr loss or growth turnover">假設每年 10% 損失或成長更換</td>
+            <td class="right">NT$ ${annualReplaceCost.toLocaleString()}</td>
+          </tr>
+          <tr>
+            <td data-zh="其他耗材" data-en="Misc consumables">其他耗材</td>
+            <td class="right" style="color:var(--ink-soft);font-size:12px;"
+                data-zh="磨剪刀、補手套、補土等"
+                data-en="Tool maintenance, replacement gloves, soil top-up">磨剪刀、補手套、補土等</td>
+            <td class="right">NT$ ${annualMisc.toLocaleString()}</td>
+          </tr>
+          <tr style="background: rgba(168,138,106,0.10);">
+            <td style="font-weight:600;" data-zh="年度小計" data-en="Annual subtotal">年度小計</td>
+            <td class="right"></td>
+            <td class="right" style="font-weight:700; color: var(--forest);">NT$ ${annualTotal.toLocaleString()} <span style="font-size:11px; opacity:0.6;" data-zh="/年" data-en="/yr">/年</span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="shop-total" style="background: linear-gradient(135deg, #2C3526, #3F4A37);">
+        <span class="label" data-zh="5 年總持有成本" data-en="5-year total">5 年總持有成本</span>
+        <span class="amount">NT$ ${fiveYearTotal.toLocaleString()}</span>
+      </div>
+      <p class="shop-note"
+         data-zh="* 一次性 (NT$ ${(plantsSubtotal + setupTotal).toLocaleString()}) + 年費 × 5 (NT$ ${(annualTotal * 5).toLocaleString()})。實際因氣候、養護程度、是否雇用園丁而異 ±30%。比較參考：1 坪庭院維護的市場行情約 NT$ 8,000–15,000 / 年。"
+         data-en="* Setup (NT$ ${(plantsSubtotal + setupTotal).toLocaleString()}) + annual × 5 (NT$ ${(annualTotal * 5).toLocaleString()}). Actual varies ±30% by climate and care intensity. Reference: hiring a gardener for 1 坪 of yard maintenance is typically NT$ 8,000–15,000/yr.">
+         * 一次性 (NT$ ${(plantsSubtotal + setupTotal).toLocaleString()}) + 年費 × 5 (NT$ ${(annualTotal * 5).toLocaleString()})。實際因氣候、養護程度、是否雇用園丁而異 ±30%。比較參考：1 坪庭院維護的市場行情約 NT$ 8,000–15,000 / 年。
+      </p>
     </div>`;
 }
 
@@ -4287,6 +4738,12 @@ function openDrawer(id) {
           <div class="drawer-supports">
             ${(state.lang === "zh" ? plant.supports_zh : plant.supports_en).map(s => `<span class="chip">${s}</span>`).join("")}
           </div>
+          ${wildlife(plant).length ? `
+            <div style="font-size: 11.5px; letter-spacing: 0.08em; color: var(--clay-deep); font-weight: 600; margin-top: 14px; margin-bottom: 8px;"
+                 data-zh="會吸引這些訪客 · WILDLIFE GUESTS" data-en="Wildlife visitors">會吸引這些訪客 · WILDLIFE GUESTS</div>
+            <div class="drawer-supports">
+              ${wildlife(plant).map(w => `<span class="chip" style="background: rgba(196,160,76,0.13); color: #8C6F1E; border-color: rgba(196,160,76,0.32);">${w.i} <span data-zh="${w.zh}" data-en="${w.en}">${w.zh}</span></span>`).join("")}
+            </div>` : ""}
         </div>
 
         ${plant.companions && plant.companions.length ? `
