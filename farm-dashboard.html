@@ -2325,6 +2325,34 @@
     font-size: 12.5px;
     line-height: 1.55;
   }
+  .ag-approach-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 5px;
+  }
+  .ag-approach-fit {
+    background: linear-gradient(90deg, #fbbf24 0%, #f59e0b 100%);
+    color: #1a1a1a;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    padding: 2px 8px;
+    border-radius: 999px;
+    white-space: nowrap;
+    box-shadow: 0 1px 4px rgba(245, 158, 11, 0.35);
+  }
+  .ag-approach-card.is-best-fit {
+    box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.35), 0 4px 14px rgba(245, 158, 11, 0.18);
+    transform: translateY(-1px);
+  }
+  @media (prefers-color-scheme: dark) {
+    .ag-approach-card.is-best-fit { box-shadow: 0 0 0 2px rgba(251, 191, 36, 0.45), 0 4px 16px rgba(251, 191, 36, 0.22); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ag-approach-card.is-best-fit { transform: none; }
+  }
   .ag-approach-card.tone-easy        { border-left: 3px solid #16a34a; background: linear-gradient(180deg, rgba(22, 163, 74, 0.04) 0%, var(--bg-card) 60%); }
   .ag-approach-card.tone-balanced    { border-left: 3px solid #2563eb; background: linear-gradient(180deg, rgba(37, 99, 235, 0.04) 0%, var(--bg-card) 60%); }
   .ag-approach-card.tone-bold        { border-left: 3px solid #d97706; background: linear-gradient(180deg, rgba(217, 119, 6, 0.04) 0%, var(--bg-card) 60%); }
@@ -5198,6 +5226,7 @@ This application supports starting organic-transition certification for ≥1 ha.
             items: [
               { tone: 'easy',
                 tag: { zh: 'A · 馬上有現金', en: 'A · Cash this week' },
+                fit: (i) => (i.annualRevenueNT > 0 && i.annualRevenueNT < 800000) ? 3 : 1,
                 summary: { zh: '與買家談「提前出貨換預付」', en: 'Pre-paid early shipment with existing buyer' },
                 bullets: [
                   { zh: '挑 1 個熟悉買家，提議下次出貨提早 2 週、預付 30%', en: 'Pick 1 buyer; propose ship 2wk early, 30% prepay' },
@@ -5207,6 +5236,11 @@ This application supports starting organic-transition certification for ≥1 ha.
                 who: { zh: '適合：缺口 < NT$50k 且關係穩定', en: 'For: gap < NT$50k, stable relationships' } },
               { tone: 'balanced',
                 tag: { zh: 'B · 結構性 — 預售模式', en: 'B · Structural — pre-sell' },
+                fit: (i) => {
+                  const diverse = i.cropType === 'mixed' || i.cropType === 'vegetables' || i.cropType === 'fruit';
+                  const mid = i.annualRevenueNT >= 800000 && i.annualRevenueNT < 2500000;
+                  return (diverse ? 2 : 0) + (mid ? 2 : 0);
+                },
                 summary: { zh: 'CSA / 訂閱箱建立預收貨款的常態現金流', en: 'CSA / subscription as permanent pre-paid cash channel' },
                 bullets: [
                   { zh: '從 25 戶起跑，8-12 週預收 = 提前 2-3 個月入帳', en: 'Start 25 households; 8-12wk prepay = cash 2-3mo ahead' },
@@ -5216,6 +5250,7 @@ This application supports starting organic-transition certification for ≥1 ha.
                 who: { zh: '適合：缺口 = 時序問題、年度有獲利', en: 'For: timing problem, profitable annually' } },
               { tone: 'bold',
                 tag: { zh: 'C · 周轉貸款', en: 'C · Bridge loan' },
+                fit: (i) => i.annualRevenueNT >= 2500000 ? 3 : 0,
                 summary: { zh: '農會 / 信合社青農貸款補足缺口', en: 'Farmers assoc / credit union youth-farmer loan' },
                 bullets: [
                   { zh: '額度 = 缺口 × 1.3（含緩衝），年利率 1.5-3%', en: 'Line = gap × 1.3 (buffer), 1.5-3% APR' },
@@ -5225,6 +5260,7 @@ This application supports starting organic-transition certification for ≥1 ha.
                 who: { zh: '適合：缺口大但是一次性、年度有獲利', en: 'For: large but one-off gap, annually profitable' } },
               { tone: 'collab',
                 tag: { zh: 'D · 集體採購延付', en: 'D · Collective net-60' },
+                fit: (i) => i.cropType === 'rice' ? 2 : (i.farmSize >= 4 ? 1 : 0),
                 summary: { zh: '與其他農友共同向供應商談延後付款', en: 'Negotiate net-60 with suppliers as a group' },
                 bullets: [
                   { zh: '集體議價力大 — 5-10 戶聯合即可成案', en: '5-10 farms jointly = strong bargaining leverage' },
@@ -5285,6 +5321,12 @@ This application supports starting organic-transition certification for ≥1 ha.
             items: [
               { tone: 'easy',
                 tag: { zh: 'A · 零投資', en: 'A · Zero capital' },
+                fit: (i) => {
+                  const pr = i.practices || {};
+                  const missing = !pr.coverCrop || !pr.residue || !pr.compost;
+                  const cashTight = i.annualRevenueNT > 0 && i.annualRevenueNT < 1000000;
+                  return (missing ? 2 : 0) + (cashTight ? 2 : 0);
+                },
                 summary: { zh: '改流程不花錢 — 殘株還田 + 覆蓋作物', en: 'Process changes only — residue retention + cover crops' },
                 bullets: [
                   { zh: '0-1 年回本，當年化肥可少 10-20%', en: '0-1yr payback; 10-20% fertilizer savings year 1' },
@@ -5294,6 +5336,12 @@ This application supports starting organic-transition certification for ≥1 ha.
                 who: { zh: '適合：現金緊、想先驗證效果', en: 'For: cash-tight, want to validate first' } },
               { tone: 'balanced',
                 tag: { zh: 'B · 中投資', en: 'B · Mid-tier' },
+                fit: (i) => {
+                  const pr = i.practices || {};
+                  const fundamentals = pr.coverCrop && pr.residue;
+                  const mid = i.annualRevenueNT >= 1000000 && i.annualRevenueNT < 3000000;
+                  return (fundamentals && mid) ? 3 : (mid ? 2 : 0);
+                },
                 summary: { zh: 'NT$ 30-100k — 堆肥廠 / 滴灌 / 中小型機具', en: 'NT$ 30-100k — composting + drip + small equipment' },
                 bullets: [
                   { zh: '1-3 年回本，多數有 30-50% 政府補助', en: '1-3yr payback; 30-50% government subsidy on most' },
@@ -5303,6 +5351,7 @@ This application supports starting organic-transition certification for ≥1 ha.
                 who: { zh: '適合：有 6-12 個月緩衝、願意走流程', en: 'For: 6-12mo buffer, willing to file paperwork' } },
               { tone: 'bold',
                 tag: { zh: 'C · 大投資', en: 'C · Large capital' },
+                fit: (i) => i.annualRevenueNT >= 3000000 ? 3 : (i.farmSize >= 5 ? 1 : 0),
                 summary: { zh: 'NT$ 200k+ — 太陽能 / 設備電動化 / 冷藏倉', en: 'NT$ 200k+ — solar + electrification + cold storage' },
                 bullets: [
                   { zh: '5-10 年回本但 20+ 年資產，省下長期電費', en: '5-10yr payback, 20+yr asset; massive long-run savings' },
@@ -5312,6 +5361,7 @@ This application supports starting organic-transition certification for ≥1 ha.
                 who: { zh: '適合：有穩定收入、長期經營意向', en: 'For: stable income, long-term commitment' } },
               { tone: 'collab',
                 tag: { zh: 'D · 共同投資', en: 'D · Co-invest' },
+                fit: (i) => (i.cropType === 'rice' || i.cropType === 'fruit') && i.farmSize >= 1 ? 2 : 0,
                 summary: { zh: '與鄰近農場合資冷藏倉 / 機具', en: 'Co-invest in shared cold storage / equipment with neighbors' },
                 bullets: [
                   { zh: '單戶買不起的設備，3-5 戶分擔變可負擔', en: 'Equipment unaffordable solo becomes affordable with 3-5 farms' },
@@ -5372,6 +5422,11 @@ This application supports starting organic-transition certification for ≥1 ha.
             items: [
               { tone: 'easy',
                 tag: { zh: 'A · 穩定底盤', en: 'A · Stable floor' },
+                // Newer or scale-aspirational farms with few certs → start here
+                fit: (i) => {
+                  const certs = (CLIENT_CONFIG.certifications || []).length;
+                  return (certs === 0 ? 3 : 1) + (i.farmSize >= 3 ? 1 : 0);
+                },
                 summary: { zh: '農會 + 學校午餐 + 區域物流（毛利 15-25%）', en: 'Farmers assoc + school lunch + regional distributor (15-25% margin)' },
                 bullets: [
                   { zh: '每月固定出貨量，現金可預測', en: 'Predictable monthly volume + cash' },
@@ -5381,6 +5436,13 @@ This application supports starting organic-transition certification for ≥1 ha.
                 who: { zh: '適合：才剛起步、想先有穩定收入', en: 'For: just starting, need predictable cash first' } },
               { tone: 'bold',
                 tag: { zh: 'B · 故事溢價', en: 'B · Story premium' },
+                // Small + high-cert fruit/veg farms = strongest story
+                fit: (i) => {
+                  const certs = (CLIENT_CONFIG.certifications || []).length;
+                  const small = i.farmSize > 0 && i.farmSize <= 2;
+                  const goodCrop = ['fruit', 'vegetables'].includes(i.cropType);
+                  return (certs >= 2 ? 2 : 0) + (small ? 2 : 0) + (goodCrop ? 1 : 0);
+                },
                 summary: { zh: '餐廳直供 + 精品超市（毛利 40-60%）', en: 'Chef-direct + premium grocers (40-60% margin)' },
                 bullets: [
                   { zh: '每週 5-10 公斤起，量小但價高', en: '5-10kg/week starter; small volume, high price' },
@@ -5390,6 +5452,12 @@ This application supports starting organic-transition certification for ≥1 ha.
                 who: { zh: '適合：有時間講故事、會做產品差異化', en: 'For: time to tell story, can differentiate' } },
               { tone: 'balanced',
                 tag: { zh: 'C · 訂閱關係', en: 'C · Subscription' },
+                // Mixed/veg farms with diversity to fill a weekly box
+                fit: (i) => {
+                  const diverse = i.cropType === 'mixed' || i.cropType === 'vegetables';
+                  const midSize = i.farmSize >= 0.5 && i.farmSize <= 4;
+                  return (diverse ? 2 : 0) + (midSize ? 1 : 0);
+                },
                 summary: { zh: 'CSA / 訂閱箱 — 預收 8-12 週貨款（毛利 35-50%）', en: 'CSA / subscription box — pre-paid 8-12 weeks (35-50% margin)' },
                 bullets: [
                   { zh: '解決現金流時序問題（核心優勢）', en: 'Solves the cash-timing gap (key advantage)' },
@@ -5399,6 +5467,12 @@ This application supports starting organic-transition certification for ≥1 ha.
                 who: { zh: '適合：怕單一買家斷單、要穩現金流', en: 'For: avoid single-buyer risk, stabilize cash flow' } },
               { tone: 'collab',
                 tag: { zh: 'D · 共同品牌', en: 'D · Collective brand' },
+                // Rice + larger acreage = best collective economics
+                fit: (i) => {
+                  const rice = i.cropType === 'rice';
+                  const large = i.farmSize >= 3;
+                  return (rice ? 2 : 0) + (large ? 1 : 0);
+                },
                 summary: { zh: '加入產銷班 / 合作社 / 區域品牌（毛利 25-40%）', en: 'Join producer co-op / regional brand (25-40% margin)' },
                 bullets: [
                   { zh: '共享品牌、共享通路、共享行銷成本', en: 'Shared brand + channels + marketing cost' },
@@ -5608,6 +5682,7 @@ This application supports starting organic-transition certification for ≥1 ha.
             items: [
               { tone: 'easy',
                 tag: { zh: 'A · 風險地圖', en: 'A · Risk map' },
+                fit: (i) => i.annualRevenueNT > 0 && i.annualRevenueNT < 800000 ? 3 : 1,
                 summary: { zh: '先知道你最容易被哪種災害打到', en: 'Know which disaster hits you hardest first' },
                 bullets: [
                   { zh: '查中央氣象局過去 10 年區域災情', en: 'Check CWB past 10yr regional disaster data' },
@@ -5617,6 +5692,7 @@ This application supports starting organic-transition certification for ≥1 ha.
                 who: { zh: '適合：剛入行、不確定主要風險', en: 'For: newer farmer, unclear on main risk' } },
               { tone: 'balanced',
                 tag: { zh: 'B · 農作物保險', en: 'B · Crop insurance' },
+                fit: (i) => i.annualRevenueNT >= 800000 ? 2 : 0,
                 summary: { zh: '20+ 品項保單，保費補貼 50-80%', en: '20+ products, premium 50-80% subsidized' },
                 bullets: [
                   { zh: '到農會詢問你作物的保單', en: 'Ask farmers association about your crop' },
@@ -5626,6 +5702,11 @@ This application supports starting organic-transition certification for ≥1 ha.
                 who: { zh: '適合：任何規模 — 一次風災就回本', en: 'For: any size — one disaster recovers cost' } },
               { tone: 'bold',
                 tag: { zh: 'C · 韌性做法', en: 'C · Resilient practices' },
+                fit: (i) => {
+                  const pr = i.practices || {};
+                  const missing = (!pr.coverCrop ? 1 : 0) + (!pr.residue ? 1 : 0) + (!pr.compost ? 1 : 0);
+                  return missing;
+                },
                 summary: { zh: '事前減損 — 比保險更省長期', en: 'Pre-event damage reduction — long-run cheaper than insurance' },
                 bullets: [
                   { zh: '防風林（颱風）/ 覆蓋作物（土壤）/ AWD（旱）', en: 'Windbreaks (typhoon) / cover (soil) / AWD (drought)' },
@@ -5635,6 +5716,7 @@ This application supports starting organic-transition certification for ≥1 ha.
                 who: { zh: '適合：長期經營、有 1-3 年投資視野', en: 'For: long-term, 1-3yr investment horizon' } },
               { tone: 'collab',
                 tag: { zh: 'D · 災後互助', en: 'D · Mutual-aid network' },
+                fit: (i) => i.cropType === 'rice' || i.farmSize >= 4 ? 2 : 0,
                 summary: { zh: '產銷班 / 合作社災後互相支援', en: 'Production group / co-op mutual support post-disaster' },
                 bullets: [
                   { zh: '災後勞力支援、設備借用、聯合採購修復', en: 'Post-disaster labor + equipment loan + joint repair' },
@@ -5695,6 +5777,7 @@ This application supports starting organic-transition certification for ≥1 ha.
             items: [
               { tone: 'easy',
                 tag: { zh: 'A · 計件 / 工讀', en: 'A · Hourly / piece-rate' },
+                fit: (i) => i.annualRevenueNT < 2000000 ? 3 : 1,
                 summary: { zh: '季節性招工，按時計薪', en: 'Seasonal hire, paid by hour' },
                 bullets: [
                   { zh: 'NT$ 200-280/hr + 包午餐 = 留人關鍵', en: 'NT$ 200-280/hr + lunch = retention key' },
@@ -5704,6 +5787,7 @@ This application supports starting organic-transition certification for ≥1 ha.
                 who: { zh: '適合：忙季 2-3 個月、需要爆發人力', en: 'For: 2-3 peak months, need burst capacity' } },
               { tone: 'balanced',
                 tag: { zh: 'B · 全職 + 勞健保', en: 'B · Full-time + benefits' },
+                fit: (i) => i.annualRevenueNT >= 2000000 ? 3 : 0,
                 summary: { zh: '一個專職核心員工 — 培養信任度與技術', en: 'One core full-time — invest in trust + skill' },
                 bullets: [
                   { zh: '月薪 NT$ 32-42k + 勞健保 + 年終', en: 'NT$ 32-42k/mo + insurance + 13th-mo bonus' },
@@ -5722,6 +5806,7 @@ This application supports starting organic-transition certification for ≥1 ha.
                 who: { zh: '適合：英文 OK、有空房、樂於分享', en: 'For: comfortable in English, has spare room, likes sharing' } },
               { tone: 'collab',
                 tag: { zh: 'D · 共聘 / 產銷班', en: 'D · Co-hire / producer group' },
+                fit: (i) => i.cropType === 'rice' || i.farmSize >= 4 ? 2 : 0,
                 summary: { zh: '2-3 戶聯合聘僱 — 分攤成本', en: '2-3 farms jointly hire — split cost' },
                 bullets: [
                   { zh: '單戶月成本可降到 NT$ 12-18k', en: 'Per-farm cost drops to NT$ 12-18k/mo' },
@@ -5988,6 +6073,10 @@ This application supports starting organic-transition certification for ≥1 ha.
             items: [
               { tone: 'easy',
                 tag: { zh: 'A · 深耕現有', en: 'A · Intensify' },
+                fit: (i) => {
+                  const certs = (CLIENT_CONFIG.certifications || []).length;
+                  return (certs < 2 ? 2 : 0) + (i.farmSize < 3 ? 1 : 0);
+                },
                 summary: { zh: '同面積 → 提高每公頃毛利', en: 'Same area → raise per-ha margin' },
                 bullets: [
                   { zh: '升級認證 → 溢價 +20-40%', en: 'Cert upgrade → +20-40% premium' },
@@ -5997,6 +6086,7 @@ This application supports starting organic-transition certification for ≥1 ha.
                 who: { zh: '適合：現有面積還沒做滿、沒人手擴張', en: 'For: existing area not maxed, no labor for expansion' } },
               { tone: 'balanced',
                 tag: { zh: 'B · 縱向加工', en: 'B · Vertical processing' },
+                fit: (i) => (i.cropType === 'fruit' || i.cropType === 'vegetables') ? 2 : 0,
                 summary: { zh: '同產量 → 加工副產品提高附加價值', en: 'Same yield → process side-products to add value' },
                 bullets: [
                   { zh: '醃漬 / 果醬 / 乾燥品 — 一次採收多次銷售', en: 'Pickle / jam / dried — one harvest, multi-sale' },
@@ -6006,6 +6096,7 @@ This application supports starting organic-transition certification for ≥1 ha.
                 who: { zh: '適合：有採收高峰、產量已穩定', en: 'For: predictable harvest peaks, stable yield' } },
               { tone: 'bold',
                 tag: { zh: 'C · 擴大面積', en: 'C · Expand acreage' },
+                fit: (i) => (i.annualRevenueNT >= 3000000 && i.farmSize >= 3) ? 2 : 0,
                 summary: { zh: '經典擴張 — 但訊號必須齊全', en: 'Classic expansion — but only if all 3 signals fire' },
                 bullets: [
                   { zh: '需要：3 年穩定毛利 30%+ + 訂單超供應 6+ 月 + 人手到位', en: 'Need: 3yr margin 30%+ AND 6mo demand>supply AND labor ready' },
@@ -6015,6 +6106,7 @@ This application supports starting organic-transition certification for ≥1 ha.
                 who: { zh: '適合：3 個訊號齊全、有 12mo 現金緩衝', en: 'For: all 3 signals + 12mo cash buffer' } },
               { tone: 'collab',
                 tag: { zh: 'D · 橫向合作', en: 'D · Lateral partnership' },
+                fit: (i) => i.cropType === 'rice' || i.farmSize >= 4 ? 2 : 0,
                 summary: { zh: '透過聯合品牌或合作社擴量、不擴自家', en: 'Scale volume via shared brand / co-op without expanding self' },
                 bullets: [
                   { zh: '個人保持小規模，集體品牌負責通路 + 行銷', en: 'Stay small individually; collective handles channels + marketing' },
@@ -6100,6 +6192,7 @@ This application supports starting organic-transition certification for ≥1 ha.
             items: [
               { tone: 'easy',
                 tag: { zh: 'A · 行為調整', en: 'A · Behavior shift' },
+                fit: (i) => i.annualRevenueNT < 1000000 ? 2 : 1,
                 summary: { zh: '不買設備也能省 — 排程 + 監測', en: 'Save without equipment — schedule + monitor' },
                 bullets: [
                   { zh: '清晨澆水（蒸發少 40%）', en: 'Dawn watering (40% less evaporation)' },
@@ -6109,6 +6202,11 @@ This application supports starting organic-transition certification for ≥1 ha.
                 who: { zh: '適合：今天就能做、零成本', en: 'For: do today, zero cost' } },
               { tone: 'balanced',
                 tag: { zh: 'B · 滴灌 / AWD', en: 'B · Drip / AWD' },
+                fit: (i) => {
+                  const cropFit = ['rice', 'vegetables', 'fruit'].includes(i.cropType);
+                  const mid = i.annualRevenueNT >= 1000000;
+                  return (cropFit && mid) ? 3 : (cropFit ? 1 : 0);
+                },
                 summary: { zh: '中投資設備 — 40-50% 節水', en: 'Mid-tier equipment — 40-50% water saved' },
                 bullets: [
                   { zh: '滴灌 NT$ 30-100k/公頃 (蔬菜 / 果樹)', en: 'Drip NT$ 30-100k/ha (veg / orchard)' },
@@ -6118,6 +6216,7 @@ This application supports starting organic-transition certification for ≥1 ha.
                 who: { zh: '適合：有 6-12mo 緩衝、想長期省水', en: 'For: 6-12mo buffer, long-term saving' } },
               { tone: 'bold',
                 tag: { zh: 'C · 雨水收集', en: 'C · Rainwater harvest' },
+                fit: (i) => (i.cropType === 'fruit' || i.cropType === 'vegetables') && i.farmSize >= 1 ? 2 : 0,
                 summary: { zh: '大型蓄水池 — 旱災保險', en: 'Large cistern — drought insurance' },
                 bullets: [
                   { zh: '屋頂 100 m² = 年集 70-90 噸雨水', en: '100m² roof = 70-90 tons/yr' },
@@ -6127,6 +6226,7 @@ This application supports starting organic-transition certification for ≥1 ha.
                 who: { zh: '適合：山坡 / 缺灌溉水源、想抗旱', en: 'For: hillside / unreliable irrigation, drought-prone' } },
               { tone: 'collab',
                 tag: { zh: 'D · 灌溉組共用', en: 'D · Shared irrigation' },
+                fit: (i) => i.cropType === 'rice' ? 3 : 0,
                 summary: { zh: '加入灌溉組合 — 用集體水權', en: 'Join irrigation association — collective water rights' },
                 bullets: [
                   { zh: '台灣每區都有灌溉組合，年費低', en: 'Every region has one, low annual fee' },
@@ -6644,6 +6744,7 @@ This application supports starting organic-transition certification for ≥1 ha.
             items: [
               { tone: 'easy',
                 tag: { zh: 'A · 靜置堆肥', en: 'A · Cold pile' },
+                fit: (i) => i.farmSize > 0 && i.farmSize < 0.8 ? 3 : 1,
                 summary: { zh: '懶人法 — 堆好不翻，等 6-12 個月', en: 'Lazy method — pile and wait 6-12 months' },
                 bullets: [
                   { zh: '不翻不管，自然腐熟', en: 'No turning, decomposes naturally' },
@@ -6653,6 +6754,7 @@ This application supports starting organic-transition certification for ≥1 ha.
                 who: { zh: '適合：場地有限、時間多、量不大', en: 'For: limited space, abundant time, low volume' } },
               { tone: 'balanced',
                 tag: { zh: 'B · 高溫翻堆', en: 'B · Hot turned' },
+                fit: (i) => i.farmSize >= 1 && i.farmSize < 5 ? 3 : 1,
                 summary: { zh: '標準法 — 60-90 天 + 翻 3 次 = 高品質', en: 'Standard — 60-90 days + 3 turns = high quality' },
                 bullets: [
                   { zh: '50-65°C 高溫殺病原 + 雜草種子', en: '50-65°C kills pathogens + weed seeds' },
@@ -6662,6 +6764,7 @@ This application supports starting organic-transition certification for ≥1 ha.
                 who: { zh: '適合：1 公頃以上、產量穩定、有耙堆工具', en: 'For: 1+ ha, stable output, has turning tools' } },
               { tone: 'bold',
                 tag: { zh: 'C · 蚯蚓堆肥', en: 'C · Vermicompost' },
+                fit: (i) => (i.cropType === 'vegetables' || i.cropType === 'fruit') && i.farmSize < 1.5 ? 3 : 0,
                 summary: { zh: '蚯蚓加速 — 4-8 週、室內可做、無臭', en: 'Worms accelerate — 4-8 weeks, indoor, no smell' },
                 bullets: [
                   { zh: '紅蚯蚓 (Eisenia fetida)，1 公斤起跑', en: 'Red wigglers (Eisenia fetida), 1kg starter' },
@@ -6671,6 +6774,7 @@ This application supports starting organic-transition certification for ≥1 ha.
                 who: { zh: '適合：精緻蔬果、面積小、想做副產品', en: 'For: high-value veg/fruit, small area, side-revenue' } },
               { tone: 'collab',
                 tag: { zh: 'D · 共用堆肥場', en: 'D · Shared compost yard' },
+                fit: (i) => i.farmSize >= 5 ? 2 : 0,
                 summary: { zh: '社區型 — 多戶共用大型設施', en: 'Community-scale — shared facility, multi-farm' },
                 bullets: [
                   { zh: '可申請農業部廢棄資源利用補助 30-50%', en: 'Eligible for MOA waste-resource subsidy 30-50%' },
@@ -8244,18 +8348,35 @@ This application supports starting organic-transition certification for ≥1 ha.
       return `<div class="ag-ctx-strip"><span class="ag-ctx-label">${label}</span>${pillsHtml}</div>`;
     }
 
+    // If any item defines fit(inp, r), pick the single highest-
+    // scoring approach and badge it "✨ 最適合你" — turns the
+    // 4-path menu into a personalized recommendation.
     function approachesBlock(spec) {
       if (!spec || !spec.items || spec.items.length === 0) return '';
       const title = isZh ? (spec.title && spec.title.zh) || '不同切入方式' : (spec.title && spec.title.en) || 'Different approaches';
-      const cards = spec.items.map(a => {
+      let bestIdx = -1, bestScore = 0;
+      spec.items.forEach((a, i) => {
+        if (typeof a.fit === 'function') {
+          let score = 0;
+          try { score = +a.fit(inp, r) || 0; } catch (e) {}
+          if (score > bestScore) { bestScore = score; bestIdx = i; }
+        }
+      });
+      const cards = spec.items.map((a, i) => {
         const tone = a.tone || 'balanced';
         const tag = isZh ? a.tag.zh : a.tag.en;
         const summary = isZh ? a.summary.zh : a.summary.en;
         const bullets = (a.bullets || []).map(b => `<li>${isZh ? b.zh : b.en}</li>`).join('');
         const who = a.who ? `<div class="ag-approach-who">${isZh ? a.who.zh : a.who.en}</div>` : '';
+        const fitBadge = i === bestIdx
+          ? `<span class="ag-approach-fit" title="${isZh ? '根據你的農場資料推薦' : 'Recommended based on your farm data'}">✨ ${isZh ? '最適合你' : 'Best fit'}</span>`
+          : '';
         return `
-          <div class="ag-approach-card tone-${tone}">
-            <span class="ag-approach-tag">${tag}</span>
+          <div class="ag-approach-card tone-${tone}${i === bestIdx ? ' is-best-fit' : ''}">
+            <div class="ag-approach-head">
+              <span class="ag-approach-tag">${tag}</span>
+              ${fitBadge}
+            </div>
             <div class="ag-approach-summary">${summary}</div>
             ${bullets ? `<ul class="ag-approach-bullets">${bullets}</ul>` : ''}
             ${who}
