@@ -2297,6 +2297,45 @@
   }
   .ag-answer-links a:hover { background: var(--accent); color: #fff; }
 
+  /* Action toolbar — "Another angle" + "Save" buttons that turn
+     each answer from a one-shot into iterative exploration.
+     Sits below the answer body, above the related-topic chips. */
+  .ag-act-toolbar {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--border);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .ag-act-btn {
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 6px 12px;
+    border-radius: 7px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+  }
+  .ag-act-btn:hover {
+    background: var(--accent-tint);
+    border-color: var(--accent);
+    color: var(--accent-dark, var(--accent));
+  }
+  .ag-act-save.is-saved {
+    background: linear-gradient(90deg, #fbbf24 0%, #f59e0b 100%);
+    border-color: #f59e0b;
+    color: #1a1a1a;
+  }
+  .ag-act-save.is-saved:hover {
+    background: linear-gradient(90deg, #f59e0b 0%, #d97706 100%);
+    color: #1a1a1a;
+  }
+
+
   /* Multi-approach cards — when one question has multiple strategic
      paths (e.g. low-effort vs high-payoff vs collaborative), show
      them side-by-side so the farmer picks based on their situation
@@ -8419,6 +8458,20 @@ This application supports starting organic-transition certification for ≥1 ha.
     const isConv = match.id && /^_conv_/.test(match.id);
     const ctxStrip = isConv ? '' : farmContextStrip(inp);
 
+    // Chat affordances: "different angle" → re-roll via next related
+    // topic; "save" → bookmark this turn to localStorage per farm.
+    // Hidden for conversational (_conv_*) responses since those don't
+    // map to a single KB id worth bookmarking.
+    let actionToolbar = '';
+    if (!isConv && match.id) {
+      const saved = isAnswerSaved(match.id);
+      const angleBtn = hasAnotherAngle(match.id)
+        ? `<button class="ag-act-btn" onclick="askDifferentAngle('${match.id}')" title="${isZh ? '看相關主題的另一個切入點' : 'Pull a related topic for another angle'}">🔄 ${isZh ? '換個角度' : 'Another angle'}</button>`
+        : '';
+      const saveBtn = `<button class="ag-act-btn ag-act-save${saved ? ' is-saved' : ''}" onclick="toggleSaveAnswer('${match.id}')" title="${isZh ? '保存這個回答' : 'Save this answer'}">${saved ? '★' : '☆'} ${isZh ? (saved ? '已保存' : '保存') : (saved ? 'Saved' : 'Save')}</button>`;
+      actionToolbar = `<div class="ag-act-toolbar">${angleBtn}${saveBtn}</div>`;
+    }
+
     return userBubble + `
       <div class="chat-turn agent${isLast ? ' chat-latest' : ''}">
         <div class="chat-avatar">🌱</div>
@@ -8437,6 +8490,7 @@ This application supports starting organic-transition certification for ≥1 ha.
           ${extraSection(ans.pitfalls,  '⚠️')}
           ${extraSection(ans.resources, '🔗')}
           ${linksHtml ? `<div class="ag-answer-links">${linksHtml}</div>` : ''}
+          ${actionToolbar}
           ${relatedChips(match.id, null)}
         </div>
       </div>`;
@@ -8577,6 +8631,65 @@ This application supports starting organic-transition certification for ≥1 ha.
     pushRecentQuestion(synthQ);
     pushThreadWithTyping(synthQ, entry);
     document.getElementById('sec-agent').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  // Re-roll the current answer via a related topic — pulls the first
+  // RELATED_TOPICS[fromId] entry that isn\'t already in the thread.
+  // Net: lets the farmer ask "show me another angle on this" without
+  // typing, turning one-shot answers into iterative exploration.
+  function relatedAngleCandidates(fromId) {
+    const rels = RELATED_TOPICS[fromId] || [];
+    const seen = new Set(agentState.thread.map(t => t.matchId).filter(Boolean));
+    return rels.filter(rid => rid !== fromId && !seen.has(rid));
+  }
+  function hasAnotherAngle(fromId) {
+    return relatedAngleCandidates(fromId).length > 0;
+  }
+  window.askDifferentAngle = function(fromId) {
+    const candidates = relatedAngleCandidates(fromId);
+    if (candidates.length === 0) return;
+    const nextId = candidates[0];
+    const entry = AGENT_KB.find(e => e.id === nextId);
+    if (!entry) return;
+    const isZh = currentLang !== 'en';
+    const fromEntry = AGENT_KB.find(e => e.id === fromId);
+    const fromTopic = fromEntry ? (isZh ? fromEntry.topic.zh : fromEntry.topic.en) : '';
+    const synthQ = isZh
+      ? `換個角度看「${fromTopic}」→ ${entry.topic.zh}`
+      : `Another angle on "${fromTopic}" → ${entry.topic.en}`;
+    agentState.lastQuestion = synthQ;
+    agentState.lastAnswer = entry;
+    pushRecentQuestion(synthQ);
+    pushThreadWithTyping(synthQ, entry);
+  };
+
+  // Save / bookmark answers per farm. Stored in localStorage keyed
+  // by farm id so different farms (e.g. consulting clients) keep
+  // independent libraries of answers they\'ve found useful.
+  function farmScopedKey(key) {
+    const id = (farmStatus && farmStatus.id) || 'demo';
+    return `tct_${id}_${key}`;
+  }
+  function readSavedAnswers() {
+    try {
+      return JSON.parse(localStorage.getItem(farmScopedKey('saved_answers')) || '[]');
+    } catch (e) { return []; }
+  }
+  function writeSavedAnswers(list) {
+    try { localStorage.setItem(farmScopedKey('saved_answers'), JSON.stringify(list)); } catch (e) {}
+  }
+  function isAnswerSaved(topicId) {
+    return readSavedAnswers().includes(topicId);
+  }
+  window.toggleSaveAnswer = function(topicId) {
+    let list = readSavedAnswers();
+    if (list.includes(topicId)) {
+      list = list.filter(x => x !== topicId);
+    } else {
+      list.push(topicId);
+    }
+    writeSavedAnswers(list);
+    renderAgentChat();
   };
 
   // Simple HTML escape for user-provided question text
