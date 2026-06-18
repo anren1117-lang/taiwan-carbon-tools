@@ -5134,6 +5134,55 @@ This application supports starting organic-transition certification for ≥1 ha.
               { zh: '同業 LINE 群 — 加入「友善小農聯盟」、「有機農業聯盟」可即時問同行平均行情', en: 'Industry LINE groups — join "Friendly Farming Alliance" / "Organic Agriculture Alliance" for real-time peer prices' }
             ]
           } : null,
+          approaches: {
+            title: { zh: '4 種定價節奏 — 看你的階段', en: '4 pricing rhythms — match your stage' },
+            items: [
+              { tone: 'easy',
+                tag: { zh: 'A · 成本加成', en: 'A · Cost-plus' },
+                fit: (i) => (i.annualRevenueNT > 0 && i.annualRevenueNT < 800000) ? 3 : 1,
+                summary: { zh: '先求生存 — 成本 + 40% 毛利就賣', en: 'Survive first — cost + 40% margin' },
+                bullets: [
+                  { zh: '可確保不賠錢、有再投資緩衝', en: 'Guarantees no loss + reinvestment cushion' },
+                  { zh: '不用糾結通路差異，先把現金流轉起來', en: 'Skip channel debate; get cash flowing first' },
+                  { zh: '每 6 個月重新算一次成本', en: 'Recompute cost every 6 months' }
+                ],
+                who: { zh: '適合：剛起步、年營收 < 80 萬', en: 'For: starting out, revenue < NT$800k/yr' } },
+              { tone: 'balanced',
+                tag: { zh: 'B · 通路分層', en: 'B · Channel tiers' },
+                fit: (i) => (i.annualRevenueNT >= 800000 && i.annualRevenueNT < 2500000) ? 3 : 1,
+                summary: { zh: '3 個價位對 3 種通路 — 地板 / 永續 / 故事', en: '3 prices for 3 channels — floor / sustainable / story' },
+                bullets: [
+                  { zh: '拍賣 = 地板價 / 區域物流 = 永續價 / CSA = 故事價', en: 'Wholesale=floor / distributor=sustainable / CSA=story' },
+                  { zh: '同一作物可同時走 2-3 個通路', en: 'Same crop can hit 2-3 channels in parallel' },
+                  { zh: '看「定價工作室」一鍵生成 7 個通路報價', en: 'Use Pricing Studio for one-click 7-channel quotes' }
+                ],
+                who: { zh: '適合：有 2+ 個通路關係、想分散風險', en: 'For: 2+ channels active, diversifying risk' } },
+              { tone: 'bold',
+                tag: { zh: 'C · 故事溢價', en: 'C · Story premium' },
+                fit: (i) => {
+                  const certs = (CLIENT_CONFIG.certifications || []).length;
+                  const small = i.farmSize > 0 && i.farmSize <= 2;
+                  return (certs >= 2 ? 2 : 0) + (small ? 1 : 0);
+                },
+                summary: { zh: 'CSA / 主廚 / 禮盒 — 證據包帶上桌', en: 'CSA / chef / gift box — bring the evidence pack' },
+                bullets: [
+                  { zh: '證據包 = 認證 + 土壤碳趨勢 + 即時儀表板 URL', en: 'Pack = cert + soil-C trend + live dashboard URL' },
+                  { zh: '一張溢價單可值 5-10 張低價單', en: 'One premium order = 5-10 low-price orders' },
+                  { zh: '需要：每週 1 篇農場故事內容', en: 'Need: 1 weekly farm-story post' }
+                ],
+                who: { zh: '適合：認證齊全、會說故事、面積小', en: 'For: certs in place, can tell stories, small farm' } },
+              { tone: 'collab',
+                tag: { zh: 'D · 集體議價', en: 'D · Collective pricing' },
+                fit: (i) => (i.cropType === 'rice' || i.farmSize >= 4) ? 2 : 0,
+                summary: { zh: '產銷班 / 合作社統一報價 — 對大買家', en: 'Producer co-op unified pricing — for big buyers' },
+                bullets: [
+                  { zh: '5-10 戶聯合 = 議價力強過單戶 3-5 倍', en: '5-10 farms together = 3-5× bargaining vs solo' },
+                  { zh: '出貨量足夠進入連鎖 / 大宗通路', en: 'Volume enough for chain / institutional channels' },
+                  { zh: '注意：價格透明 = 個人故事溢價空間縮', en: 'Caveat: transparent pricing reduces personal-story margin' }
+                ],
+                who: { zh: '適合：水稻 / 大面積 / 想進連鎖通路', en: 'For: rice / large acreage / chain channels' } }
+            ]
+          },
           links: [
             { label: { zh: '看定價工作室', en: 'Open Pricing Studio' }, href: '#sec-pricing' }
           ]
@@ -5929,6 +5978,47 @@ This application supports starting organic-transition certification for ≥1 ha.
             { zh: '3. <strong>申請「青年從農」資源</strong> — 農業部「青農培育」、「百大青農」、農地租金補貼、創業貸款 — 子女回流的話這些可疊加 NT$ 100-500k 啟動資金。',
               en: '3. <strong>Apply for "Young Farmer" support</strong> — MOA\'s Young Farmer programs, "Top 100 Young Farmers", land-rent subsidies, startup loans — these stack to NT$ 100-500k seed capital for returning kids.' }
           ],
+          approaches: {
+            title: { zh: '4 種接班路徑 — 不一定是子女', en: '4 succession paths — not necessarily your kids' },
+            items: [
+              { tone: 'balanced',
+                tag: { zh: 'A · 家族接班', en: 'A · Family succession' },
+                summary: { zh: '經典模式 — 子女 / 配偶接手', en: 'Classic — children / spouse take over' },
+                bullets: [
+                  { zh: '5-10 年共同經營期，逐步交棒', en: '5-10yr co-run period, gradual handover' },
+                  { zh: '青農補助 + 低利貸款最豐厚', en: 'Most generous young-farmer subsidies + loans' },
+                  { zh: '前提：家人真心想做、不是被勸', en: 'Premise: family genuinely wants in, not coerced' }
+                ],
+                who: { zh: '適合：子女已表達興趣、家族文化深', en: 'For: kids expressed interest, strong family culture' } },
+              { tone: 'easy',
+                tag: { zh: 'B · 學徒制', en: 'B · Apprenticeship' },
+                summary: { zh: '招青年實習生 — 培養潛在接班人', en: 'Take youth interns — cultivate possible successors' },
+                bullets: [
+                  { zh: 'WWOOF、青農媒合平台、農校建教合作', en: 'WWOOF, Young Farmer platform, ag-school co-op' },
+                  { zh: '2-3 年觀察期再決定是否深化關係', en: '2-3yr observation before deepening commitment' },
+                  { zh: '低成本嘗試、不影響家庭關係', en: 'Low-cost trial, doesn\'t affect family dynamics' }
+                ],
+                who: { zh: '適合：家人無接班意願、想保留農場', en: 'For: family won\'t inherit, want farm preserved' } },
+              { tone: 'bold',
+                tag: { zh: 'C · 賣給有志者', en: 'C · Sell to a believer' },
+                summary: { zh: '出售給認同農法的青農 — 不是房地產', en: 'Sell to a like-minded young farmer — not as real estate' },
+                bullets: [
+                  { zh: '保留農法 + 故事 = 對方願意出較高價', en: 'Buyer pays premium when farming method + story stay' },
+                  { zh: '可分期收款 — 改善現金狀況', en: 'Installment terms — better cash position' },
+                  { zh: '注意：簽「持續友善耕作」條款保護土地', en: 'Add "continue friendly farming" clause to protect land' }
+                ],
+                who: { zh: '適合：想退休、家人無意願、捨不得土地慣行化', en: 'For: retiring, no family interest, won\'t see land go conventional' } },
+              { tone: 'collab',
+                tag: { zh: 'D · 共同農場', en: 'D · Cooperative farm' },
+                summary: { zh: '轉成合作社 / 社區農場 — 集體擁有', en: 'Convert to co-op / community farm — collective ownership' },
+                bullets: [
+                  { zh: '土地不賣 — 由多人共同經營與決策', en: 'Land stays — multi-person operation + governance' },
+                  { zh: '可申請「社區農業」補助 + 教育場域認定', en: 'Eligible for community-ag subsidies + ed-site status' },
+                  { zh: '需要：完善的法律與營運架構', en: 'Needs: solid legal + operational structure' }
+                ],
+                who: { zh: '適合：認同地方 / 社區、不執著個人擁有', en: 'For: community-rooted, not attached to private ownership' } }
+            ]
+          },
           links: [
             { label: { zh: '看本月 3 件事（給家人看）', en: 'Top 3 (to show family)' }, href: '#sec-top3' }
           ]
@@ -5952,6 +6042,54 @@ This application supports starting organic-transition certification for ≥1 ha.
             { zh: '3. <strong>跟在地網紅交換 — 不付錢</strong> — 找在地飲食 / 親子 / 環境議題的 KOL，提供農產交換她們發 1 篇真實使用文。比廣告便宜，背書效果強。',
               en: '3. <strong>Barter with local influencers</strong> — find local food / family / sustainability creators, send produce in exchange for one genuine post. Cheaper than ads, stronger endorsement.' }
           ],
+          approaches: {
+            title: { zh: '4 種行銷模式 — 依個性與時間選', en: '4 marketing modes — by personality + time' },
+            items: [
+              { tone: 'easy',
+                tag: { zh: 'A · LINE 為主', en: 'A · LINE-first' },
+                fit: (i) => i.annualRevenueNT > 0 && i.annualRevenueNT < 800000 ? 3 : 1,
+                summary: { zh: '熟客 LINE 群 — 直接、零成本', en: 'Customer LINE group — direct, zero cost' },
+                bullets: [
+                  { zh: '所有買過的人拉進一個群（≤100 人）', en: 'Pull every past customer into one group (≤100)' },
+                  { zh: '每週 1 則：本週可預訂 + 簡短田間照', en: 'Weekly: this week\'s pre-order + brief field photo' },
+                  { zh: '比 FB 廣告轉換率高 10 倍', en: '10× higher conversion than FB ads' }
+                ],
+                who: { zh: '適合：不擅文字、客戶熟、不想曝光', en: 'For: not a writer, close-knit customers, low-exposure' } },
+              { tone: 'balanced',
+                tag: { zh: 'B · 內容深耕', en: 'B · Content-deep' },
+                fit: (i) => {
+                  const certs = (CLIENT_CONFIG.certifications || []).length;
+                  return (certs >= 2 ? 2 : 0) + (i.cropType === 'fruit' || i.cropType === 'vegetables' ? 1 : 0);
+                },
+                summary: { zh: '每週 1 篇真實貼文 — 累積 6-12 個月', en: '1 weekly authentic post — compound over 6-12mo' },
+                bullets: [
+                  { zh: '主題：田間問題、學到的事、收成日記', en: 'Topics: field problems, lessons, harvest journal' },
+                  { zh: 'FB + IG 同步、不過度包裝、要真實', en: 'FB + IG cross-post, no over-polish, be real' },
+                  { zh: '12 個月後會有 200-500 名真實追隨者', en: '200-500 real followers after 12mo' }
+                ],
+                who: { zh: '適合：會寫、有時間、想做品牌', en: 'For: can write, has time, building a brand' } },
+              { tone: 'bold',
+                tag: { zh: 'C · 影片 / Reels', en: 'C · Video / Reels' },
+                fit: (i) => (i.cropType === 'fruit' && i.farmSize >= 1) ? 2 : 0,
+                summary: { zh: '短影片 — 觸及大 + 故事力強', en: 'Short videos — high reach + story power' },
+                bullets: [
+                  { zh: '每週 1-2 支 30-60 秒 Reels / TikTok', en: '1-2 short Reels/TikToks per week, 30-60s each' },
+                  { zh: '需要：拍攝設備 + 剪輯時間 + 接受出鏡', en: 'Need: gear + edit time + comfortable on-camera' },
+                  { zh: '單支爆款可帶來 1000+ 新客戶', en: 'One viral clip can bring 1000+ new customers' }
+                ],
+                who: { zh: '適合：年輕、會剪片、農場故事有畫面', en: 'For: younger, can edit, farm has visual story' } },
+              { tone: 'collab',
+                tag: { zh: 'D · 在地 KOL 互換', en: 'D · Local KOL barter' },
+                fit: (i) => (CLIENT_CONFIG.certifications || []).length >= 1 ? 2 : 0,
+                summary: { zh: '送農產 → 換 1 篇真實使用文', en: 'Send produce → trade 1 authentic post' },
+                bullets: [
+                  { zh: '找在地飲食 / 親子 / 環境議題 KOL', en: 'Find local food / family / sustainability creators' },
+                  { zh: '比廣告便宜、背書效果強', en: 'Cheaper than ads, stronger endorsement' },
+                  { zh: '一年合作 3-5 位即足夠', en: '3-5 partnerships/year is enough' }
+                ],
+                who: { zh: '適合：認證齊全、產品有差異化', en: 'For: certs in place, product is differentiated' } }
+            ]
+          },
           links: [
             { label: { zh: '看買家提案單', en: 'Buyer pitch sheet' }, href: 'farm-pitch.html', external: true }
           ]
@@ -6231,6 +6369,51 @@ This application supports starting organic-transition certification for ≥1 ha.
             { zh: '3. <strong>申請「有機驗證輔導補助」</strong> — 補貼驗證費用 50-100% + 轉型期年度給付。看「補助」面板的「有機驗證輔導」。',
               en: '3. <strong>Apply for "Organic Cert Support"</strong> — covers 50-100% of verification fees + transition-period annual payment. See "Organic Certification Support" in Subsidies.' }
           ],
+          approaches: {
+            title: { zh: '4 種轉型路徑 — 依現金 / 風險選', en: '4 transition paths — by cash + risk tolerance' },
+            items: [
+              { tone: 'easy',
+                tag: { zh: 'A · 先做友善', en: 'A · Friendly first' },
+                fit: (i) => i.annualRevenueNT > 0 && i.annualRevenueNT < 1000000 ? 3 : 1,
+                summary: { zh: '友善登錄 + TGAP — 同樣有補助、無轉型缺口', en: 'Friendly Farming + TGAP — same subsidies, no transition gap' },
+                bullets: [
+                  { zh: '30 分鐘線上登錄即得每公頃 NT$ 30k 補助', en: '30-min online enrollment → NT$30k/ha subsidy' },
+                  { zh: '可邊做邊累積有機證據（土壤碳、實踐時數）', en: 'Builds organic evidence (soil-C, practice hours) as you go' },
+                  { zh: '12-18 個月後再決定是否升級正式有機驗證', en: 'After 12-18mo, decide whether to upgrade to full organic cert' }
+                ],
+                who: { zh: '適合：現金緊、想先試水溫', en: 'For: cash-tight, want to test commitment first' } },
+              { tone: 'balanced',
+                tag: { zh: 'B · 分批轉型', en: 'B · Phased' },
+                fit: (i) => (i.farmSize >= 1.5) ? 3 : 1,
+                summary: { zh: '30% 面積先轉，2 年後再轉下一批', en: 'Convert 30% first, then next 30% after 2 years' },
+                bullets: [
+                  { zh: '風險可控 — 主面積仍有友善收入', en: 'Risk bounded — main area keeps friendly income' },
+                  { zh: '同地多認證 — 友善區 + 有機區並存', en: 'Multi-cert on same farm — friendly + organic coexist' },
+                  { zh: '需更多管理工夫：田區隔離、紀錄分流', en: 'More mgmt overhead: zone isolation, separate records' }
+                ],
+                who: { zh: '適合：面積 >1.5ha、不想 all-in 風險', en: 'For: >1.5ha, won\'t all-in risk' } },
+              { tone: 'bold',
+                tag: { zh: 'C · 全場一次轉', en: 'C · Full conversion' },
+                fit: (i) => (i.annualRevenueNT >= 2000000 && i.farmSize >= 1) ? 2 : 0,
+                summary: { zh: '所有面積同步進入 2 年轉型期', en: 'All acreage enters 2-yr transition simultaneously' },
+                bullets: [
+                  { zh: '最大化長期溢價 + 簡化管理', en: 'Max long-run premium + simpler ongoing mgmt' },
+                  { zh: '需要：1.5x 年支出的現金緩衝', en: 'Need: 1.5× annual-expense cash buffer' },
+                  { zh: '2 年內可能虧損 30-40% — 心理準備', en: 'May lose 30-40% in 2 yrs — be ready' }
+                ],
+                who: { zh: '適合：年營收 >200 萬 + 有現金緩衝', en: 'For: revenue >NT$2M + cash cushion' } },
+              { tone: 'collab',
+                tag: { zh: 'D · 集體驗證', en: 'D · Group cert' },
+                fit: (i) => i.cropType === 'rice' || (i.cropType === 'fruit' && i.farmSize >= 2) ? 2 : 0,
+                summary: { zh: '加入有機產銷班 — 共同驗證費 + 共同行銷', en: 'Join organic producer group — shared cert fee + marketing' },
+                bullets: [
+                  { zh: '驗證費 5-10 戶分攤 = 每戶 NT$ 5-15k', en: 'Cert fee split across 5-10 farms = NT$ 5-15k each' },
+                  { zh: '集體品牌可進入連鎖通路', en: 'Collective brand opens chain-retail channels' },
+                  { zh: '需服從產銷班的耕作與品管規範', en: 'Must follow group\'s farming + quality standards' }
+                ],
+                who: { zh: '適合：水稻、果樹、社區農業', en: 'For: rice, fruit, community-ag regions' } }
+            ]
+          },
           links: [
             { label: { zh: '看補助清單', en: 'Subsidies' }, href: '#sec-income' }
           ]
@@ -7491,6 +7674,62 @@ This application supports starting organic-transition certification for ≥1 ha.
             { zh: '5. <strong>放牧融入</strong>— 真正的再生需要動物參與。雞 / 鴨在作物收成後輪牧吃殘渣 + 留糞肥 = 模擬野牛遷徙模式。沒地方放牧的小農可考慮「拖車式雞舍」。',
               en: '5. <strong>Integrate grazing</strong> — true regenerative needs animals. Chickens / ducks rotate on post-harvest fields, eating residue + leaving manure = mimics wild grazer migration. Small farms without space can use "chicken tractors" (mobile coops).' }
           ],
+          approaches: {
+            title: { zh: '4 種進入再生農業的路徑', en: '4 paths into regenerative ag' },
+            items: [
+              { tone: 'easy',
+                tag: { zh: 'A · 從覆蓋作物起步', en: 'A · Start with cover crops' },
+                fit: (i) => {
+                  const pr = i.practices || {};
+                  return (!pr.coverCrop ? 3 : 1);
+                },
+                summary: { zh: '一個動作開始 — 從現有耕作加上覆蓋作物', en: 'Add one move — overlay cover crops on existing farming' },
+                bullets: [
+                  { zh: '不需轉型期、不需新認證', en: 'No transition period, no new cert needed' },
+                  { zh: '田休時種田菁 / 毛苕子 / 油菜 = 立即固碳', en: 'Off-season: sesbania / vetch / mustard = immediate C sink' },
+                  { zh: '12 個月後 SOC 可上升 0.1-0.3%', en: 'SOC can rise 0.1-0.3% in 12 months' }
+                ],
+                who: { zh: '適合：尚未做覆蓋作物的任何農場', en: 'For: any farm not yet doing cover crops' } },
+              { tone: 'balanced',
+                tag: { zh: 'B · 5 支柱漸進', en: 'B · 5 pillars phased' },
+                fit: (i) => {
+                  const pr = i.practices || {};
+                  const has = (pr.coverCrop ? 1 : 0) + (pr.residue ? 1 : 0) + (pr.compost ? 1 : 0);
+                  return (has >= 2) ? 3 : 1;
+                },
+                summary: { zh: '每年補 1 條支柱 — 5 年完成全套', en: 'Add 1 pillar/yr — full stack in 5 years' },
+                bullets: [
+                  { zh: '年 1 覆蓋作物、年 2 殘體還田、年 3 堆肥、年 4 多元化、年 5 動物', en: 'Y1 cover / Y2 residue / Y3 compost / Y4 diversity / Y5 animals' },
+                  { zh: '每年測 SOC = 看見進步', en: 'Annual SOC test = see progress' },
+                  { zh: '可同時申請友善 / 碳匯試辦', en: 'Stack with Friendly + Carbon Pilot subsidies' }
+                ],
+                who: { zh: '適合：已做 2+ 永續做法、想系統化', en: 'For: 2+ sustainable practices done, want systemize' } },
+              { tone: 'bold',
+                tag: { zh: 'C · 全套再生', en: 'C · Full regen' },
+                fit: (i) => {
+                  const pr = i.practices || {};
+                  const has = (pr.coverCrop ? 1 : 0) + (pr.residue ? 1 : 0) + (pr.compost ? 1 : 0) + (pr.noTill ? 1 : 0);
+                  return (has >= 3 && i.farmSize >= 2) ? 3 : 0;
+                },
+                summary: { zh: '一次到位 — 5 支柱同步、追國際認證', en: 'Go all-in — 5 pillars + international cert track' },
+                bullets: [
+                  { zh: 'ROC / Regenagri 認證 = 國際品牌入場券', en: 'ROC / Regenagri cert = international brand ticket' },
+                  { zh: '需要：1-2 年現金緩衝、現有實踐基礎', en: 'Need: 1-2yr cash buffer + existing practice base' },
+                  { zh: '回報：未來 5-10 年高溢價國際訂單', en: 'Reward: premium international orders in 5-10yr' }
+                ],
+                who: { zh: '適合：有經驗、有現金、外銷意向', en: 'For: experienced, cash buffer, export ambition' } },
+              { tone: 'collab',
+                tag: { zh: 'D · 碳匯區域試辦', en: 'D · Carbon pilot region' },
+                fit: (i) => i.cropType === 'rice' || i.farmSize >= 5 ? 3 : 1,
+                summary: { zh: '加入農業部 + 環境部碳匯試辦', en: 'Join MOA + MOENV carbon-sink pilot region' },
+                bullets: [
+                  { zh: 'NT$ 20,000/ha 補助 + 未來碳信用權利', en: 'NT$20k/ha subsidy + future carbon-credit rights' },
+                  { zh: '集體量測 = 個別成本下降', en: 'Group measurement = per-farm cost drops' },
+                  { zh: '台灣自願減量機制 (VRM) 啟動後可發行', en: 'Issuable once Taiwan VRM launches' }
+                ],
+                who: { zh: '適合：水稻、區域有試辦案、面積較大', en: 'For: rice, region has pilot, larger acreage' } }
+            ]
+          },
           links: [
             { label: { zh: '看碳匯補助', en: 'Carbon pilot subsidy' }, href: '#sec-income' }
           ]
