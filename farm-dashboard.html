@@ -2698,6 +2698,50 @@
     color: var(--accent-dark, var(--accent));
   }
 
+  /* Saved-answers panel — same shell as browse but with a remove×
+     per row and amber star prefix on the open button. */
+  .agent-saved > summary { color: var(--text); }
+  .agent-saved > summary > span:first-child {
+    background: linear-gradient(90deg, #fbbf24 0%, #f59e0b 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-weight: 800;
+  }
+  .agent-saved-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .agent-saved-row {
+    display: flex;
+    align-items: stretch;
+    gap: 4px;
+  }
+  .agent-saved-open {
+    flex: 1;
+  }
+  .agent-saved-remove {
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--text-muted);
+    width: 28px;
+    border-radius: 5px;
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+  }
+  .agent-saved-remove:hover {
+    background: rgba(220, 38, 38, 0.08);
+    color: #dc2626;
+    border-color: rgba(220, 38, 38, 0.2);
+  }
+  @media (prefers-color-scheme: dark) {
+    .agent-saved-remove:hover { background: rgba(248, 113, 113, 0.12); color: #f87171; }
+  }
+
   /* Typing indicator — 3 bouncing dots while the agent "thinks"
      before its bubble appears. Pure visual delay (~500ms) to make
      the chat feel responsive rather than instant. */
@@ -3212,6 +3256,15 @@
         <span class="agent-browse-count" id="agentBrowseCount"></span>
       </summary>
       <div class="agent-browse-body" id="agentBrowseBody"></div>
+    </details>
+
+    <!-- Saved answers — destination for the "★ Save" button. -->
+    <details class="agent-browse agent-saved" id="agentSavedPanel" style="display: none;">
+      <summary>
+        <span data-zh="★ 已保存的回答" data-en="★ Saved answers">★ 已保存的回答</span>
+        <span class="agent-browse-count" id="agentSavedCount"></span>
+      </summary>
+      <div class="agent-browse-body" id="agentSavedBody"></div>
     </details>
 
     <div id="agentBody"></div>
@@ -8620,6 +8673,38 @@ This application supports starting organic-transition certification for ≥1 ha.
     body.innerHTML = cats;
   }
 
+  // Saved-answers panel — destination for the "★ Save" button.
+  // Only renders when there are saved answers; otherwise hidden so
+  // the agent panel doesn\'t advertise an empty surface.
+  function renderAgentSavedPanel() {
+    const panel = document.getElementById('agentSavedPanel');
+    const body = document.getElementById('agentSavedBody');
+    const count = document.getElementById('agentSavedCount');
+    if (!panel || !body) return;
+    const isZh = currentLang !== 'en';
+    const saved = readSavedAnswers();
+    if (saved.length === 0) {
+      panel.style.display = 'none';
+      return;
+    }
+    panel.style.display = '';
+    if (count) count.textContent = isZh ? `${saved.length} 則` : `${saved.length}`;
+    const rows = saved
+      .map(id => AGENT_KB.find(e => e.id === id))
+      .filter(Boolean)
+      .map(e => {
+        const label = isZh ? e.topic.zh : e.topic.en;
+        const openLabel = isZh ? '開啟' : 'Open';
+        const removeTitle = isZh ? '移除' : 'Remove';
+        return `
+          <div class="agent-saved-row">
+            <button class="agent-browse-topic agent-saved-open" onclick="askAgentTopic('${e.id}')">★ ${label}</button>
+            <button class="agent-saved-remove" onclick="toggleSaveAnswer('${e.id}')" title="${removeTitle}" aria-label="${removeTitle}">×</button>
+          </div>`;
+      }).join('');
+    body.innerHTML = `<div class="agent-saved-list">${rows}</div>`;
+  }
+
   // Jump directly to a KB topic answer (used by related-chip clicks)
   window.askAgentTopic = function(topicId) {
     const entry = AGENT_KB.find(e => e.id === topicId);
@@ -8690,6 +8775,7 @@ This application supports starting organic-transition certification for ≥1 ha.
     }
     writeSavedAnswers(list);
     renderAgentChat();
+    renderAgentSavedPanel();
   };
 
   // Simple HTML escape for user-provided question text
@@ -12790,6 +12876,7 @@ Applicant: ${ownerName} (signature)
     try { localStorage.setItem('tct_lang', lang); } catch (e) {}
     render();
     renderAgentBrowseIndex();
+    renderAgentSavedPanel();
     renderAgentChat();
   }
 
@@ -13254,6 +13341,7 @@ Applicant: ${ownerName} (signature)
     applyLang(savedLang);
     renderFarmStatusBadge();
     renderAgentBrowseIndex();
+    renderAgentSavedPanel();
     // Reveal main content + hide the loader now that the dashboard
     // is fully rendered (a tick after applyLang triggers first render).
     requestAnimationFrame(() => document.body.classList.remove('loading'));
