@@ -2248,7 +2248,43 @@
   }
   .agent-quick:active { transform: translateY(0); }
   /* Q&A answer styling — reuse agent-bubble but tighter top spacing */
-  .ag-answer-topic { font-size: 11px; color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+  .ag-topic-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  .ag-answer-topic { font-size: 11px; color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+  .ag-topic-row .ag-answer-topic { margin-bottom: 0; }
+
+  /* Confidence badge — flags answers grounded in Taiwan-official
+     data (high) or in emerging fields where standards are still
+     forming (low). Medium = no badge. */
+  .ag-conf-badge {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    padding: 2px 8px;
+    border-radius: 999px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .ag-conf-badge.is-high {
+    background: rgba(22, 163, 74, 0.10);
+    color: #16a34a;
+    border: 1px solid rgba(22, 163, 74, 0.25);
+  }
+  .ag-conf-badge.is-low {
+    background: rgba(124, 58, 237, 0.08);
+    color: #7c3aed;
+    border: 1px solid rgba(124, 58, 237, 0.22);
+  }
+  @media (prefers-color-scheme: dark) {
+    .ag-conf-badge.is-high { color: #4ade80; background: rgba(74, 222, 128, 0.10); border-color: rgba(74, 222, 128, 0.25); }
+    .ag-conf-badge.is-low  { color: #a78bfa; background: rgba(167, 139, 250, 0.10); border-color: rgba(167, 139, 250, 0.28); }
+  }
+
 
   /* Personalization context strip — quiet row of pills under the
      topic showing the agent reads the actual farm data (size /
@@ -8374,6 +8410,41 @@ This application supports starting organic-transition certification for ≥1 ha.
   // Topic graph — what to suggest as "related questions" after each
   // answer. Edges chosen to form natural "consulting conversation
   // arcs" (price → negotiation → pitch / cash gap → financing / etc.)
+  // Confidence map — flags answers that lean on Taiwan-official data
+  // (high) or on emerging / frontier topics where the field is still
+  // forming (low). Default = medium = no badge, treated as
+  // "considered best-practice advice". Only flagging the two ends
+  // keeps the chat clean while letting farmers know when to trust
+  // hard vs verify locally.
+  const ENTRY_CONFIDENCE = {
+    // HIGH — anchored in Taiwan-official data, regulations, or
+    // numbers the agent dashboard literally computes from inputs
+    subsidies_available: 'high',
+    cert_question:       'high',
+    soil_test:           'high',
+    organic_transition:  'high',
+    packaging_rules:     'high',
+    tax_accounting:      'high',
+    climate_risk:        'high',
+    water_mgmt:          'high',
+    cash_short:          'high',
+    losing_money:        'high',
+    pricing_specific:    'high',
+    land_tenure:         'high',
+    insurance_plan:      'high',
+    retirement_plan:     'high',
+    storage_coldchain:   'high',
+
+    // LOW — emerging field where standards/markets are still
+    // forming; advice may shift in 12-24mo. Flag so farmers verify
+    // with current sources before committing large bets.
+    regenerative_ag:     'low',
+    biodynamic:          'low',
+    knf_korean:          'low',
+    shumei:              'low'
+    // everything else: medium (no badge)
+  };
+
   const RELATED_TOPICS = {
     price_too_low:       ['buyer_expensive', 'find_buyers', 'pricing_specific'],
     buyer_expensive:     ['price_too_low', 'pitch_buyer', 'find_buyers'],
@@ -8764,11 +8835,27 @@ This application supports starting organic-transition certification for ≥1 ha.
       actionToolbar = `<div class="ag-act-toolbar">${angleBtn}${saveBtn}</div>`;
     }
 
+    // Confidence badge — only shown for "high" (Taiwan-official
+    // data) or "low" (emerging field, verify locally). Medium =
+    // default = no badge, keeps the UI clean.
+    let confBadge = '';
+    if (!isConv && match.id && ENTRY_CONFIDENCE[match.id]) {
+      const lvl = ENTRY_CONFIDENCE[match.id];
+      if (lvl === 'high') {
+        confBadge = `<span class="ag-conf-badge is-high" title="${isZh ? '基於台灣官方資料 / 法規 / 儀表板計算' : 'Based on Taiwan-official data / regulations / dashboard computation'}">✓ ${isZh ? '高信心' : 'High confidence'}</span>`;
+      } else if (lvl === 'low') {
+        confBadge = `<span class="ag-conf-badge is-low" title="${isZh ? '新興議題、標準仍在形成 — 大決策前請再查最新資料' : 'Emerging topic, standards still forming — verify with current sources before big decisions'}">○ ${isZh ? '探索中' : 'Frontier topic'}</span>`;
+      }
+    }
+
     return userBubble + `
       <div class="chat-turn agent${isLast ? ' chat-latest' : ''}">
         <div class="chat-avatar">🌱</div>
         <div class="chat-bubble-agent">
-          <div class="ag-answer-topic">${isZh ? match.topic.zh : match.topic.en}</div>
+          <div class="ag-topic-row">
+            <div class="ag-answer-topic">${isZh ? match.topic.zh : match.topic.en}</div>
+            ${confBadge}
+          </div>
           ${ctxStrip}
           <div style="font-size: 15px; font-weight: 700; margin-bottom: 8px; line-height: 1.4;">${isZh ? ans.headline.zh : ans.headline.en}</div>
           <div style="font-size: 13px; line-height: 1.65; color: var(--text-muted);">${isZh ? ans.situation.zh : ans.situation.en}</div>
