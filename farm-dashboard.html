@@ -2333,6 +2333,100 @@
   }
   .ag-answer-links a:hover { background: var(--accent); color: #fff; }
 
+  /* Crisis-priority bubble — replaces the standard answer template
+     for burnout / venting intent. A farmer in crisis gets a single
+     short acknowledgement and a prominent hotline button, not a
+     consulting matrix. No approach grid, no save star, no Best-Fit
+     badge, no context pills. */
+  .chat-bubble-agent.crisis {
+    background: linear-gradient(180deg, rgba(220, 38, 38, 0.04) 0%, var(--bg-card) 100%);
+    border: 1px solid rgba(220, 38, 38, 0.18);
+    padding: 18px 20px;
+  }
+  @media (prefers-color-scheme: dark) {
+    .chat-bubble-agent.crisis {
+      background: linear-gradient(180deg, rgba(248, 113, 113, 0.10) 0%, var(--bg-card) 100%);
+      border-color: rgba(248, 113, 113, 0.25);
+    }
+  }
+  .crisis-ack {
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.55;
+    color: var(--text);
+    margin-bottom: 16px;
+  }
+  .crisis-hotlines {
+    margin: 14px 0 12px;
+  }
+  .crisis-cta {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    color: #fff;
+    border-radius: 10px;
+    text-decoration: none;
+    box-shadow: 0 4px 14px rgba(220, 38, 38, 0.25);
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
+  .crisis-cta:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(220, 38, 38, 0.35);
+  }
+  .crisis-cta-icon {
+    font-size: 22px;
+  }
+  .crisis-cta-body {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .crisis-cta-num {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    line-height: 1;
+  }
+  .crisis-cta-label {
+    font-size: 11.5px;
+    opacity: 0.92;
+    line-height: 1.3;
+  }
+  .crisis-alts {
+    margin-top: 10px;
+    font-size: 12px;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .crisis-alts a {
+    color: var(--text);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--text-muted);
+  }
+  .crisis-alts a:hover {
+    color: #dc2626;
+    border-color: #dc2626;
+  }
+  @media (prefers-color-scheme: dark) {
+    .crisis-alts a:hover { color: #f87171; border-color: #f87171; }
+  }
+  .crisis-alts-sep { opacity: 0.5; }
+  .crisis-follow {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--border);
+    font-size: 13px;
+    color: var(--text-muted);
+    font-style: italic;
+    line-height: 1.5;
+  }
+
+
   /* Action toolbar — "Another angle" + "Save" buttons that turn
      each answer from a one-shot into iterative exploration.
      Sits below the answer body, above the related-topic chips. */
@@ -8565,8 +8659,11 @@ This application supports starting organic-transition certification for ≥1 ha.
     if (list.length === 0) { host.innerHTML = ''; return; }
     const isZh = currentLang !== 'en';
     const chips = list.map(({ q }) => {
-      const safeQ = q.replace(/'/g, '&#39;').replace(/"/g, '&quot;');
-      const display = q.length > 30 ? q.slice(0, 28) + '…' : q;
+      // q comes from user input + survives in localStorage — escape both
+      // the onclick string-literal context AND the visible display text.
+      const safeQ = escapeHtml(q);
+      const displayRaw = q.length > 30 ? q.slice(0, 28) + '…' : q;
+      const display = escapeHtml(displayRaw);
       return `<button class="agent-recent-chip" onclick="askRecent('${safeQ}')" title="${safeQ}">${display}</button>`;
     }).join('');
     host.innerHTML = `
@@ -8805,6 +8902,42 @@ This application supports starting organic-transition certification for ≥1 ha.
               <a href="#sec-pricing">${isZh ? '💰 定價工作室' : '💰 Pricing Studio'}</a>
               <a href="#sec-income">${isZh ? '📋 補助清單' : '📋 Subsidies'}</a>
             </div>
+          </div>
+        </div>`;
+    }
+
+    // Crisis-priority short-circuit — when the user is venting OR the
+    // burnout topic fires, do NOT render the full template (headline +
+    // 4-approach grid + checklist + 5-action list + glossary). A farmer
+    // in crisis needs a short human acknowledgement and a single
+    // prominent hotline button — not a consulting matrix with the
+    // 1925 number buried as bullet 3 of a <ul> in the resources list.
+    const isCrisis = match.id === 'burnout' || match.id === '_conv_venting';
+    if (isCrisis) {
+      const ackZh = '我聽見你了。今天先停一下 — 不是放棄，是必要的休息。';
+      const ackEn = 'I hear you. Pause today — that\'s not giving up, that\'s necessary rest.';
+      const followZh = '想跟我講講今天怎麼了？或我可以幫你找下一步。';
+      const followEn = 'Want to tell me what\'s going on today? Or I can help you find a next step.';
+      return userBubble + `
+        <div class="chat-turn agent${isLast ? ' chat-latest' : ''}">
+          <div class="chat-avatar">🌱</div>
+          <div class="chat-bubble-agent crisis">
+            <div class="crisis-ack">${isZh ? ackZh : ackEn}</div>
+            <div class="crisis-hotlines">
+              <a class="crisis-cta" href="tel:1925" aria-label="${isZh ? '撥打衛福部安心專線 1925（24 小時免費）' : 'Call MOHW Mental Health Hotline 1925 (24h free)'}">
+                <span class="crisis-cta-icon">📞</span>
+                <span class="crisis-cta-body">
+                  <span class="crisis-cta-num">1925</span>
+                  <span class="crisis-cta-label">${isZh ? '衛福部安心專線 · 24 小時免費' : 'MOHW Mental Health · 24h free'}</span>
+                </span>
+              </a>
+              <div class="crisis-alts">
+                <a href="tel:1980">${isZh ? '張老師 1980（情緒支持）' : 'Teacher Chang 1980 (emotional support)'}</a>
+                <span class="crisis-alts-sep">·</span>
+                <a href="tel:1995">${isZh ? '生命線 1995（嚴重時）' : 'Lifeline 1995 (severe crisis)'}</a>
+              </div>
+            </div>
+            <div class="crisis-follow">${isZh ? followZh : followEn}</div>
           </div>
         </div>`;
     }
@@ -9785,7 +9918,7 @@ Applicant: ${ownerName} (signature)
         draftBlock = `
           <details style="margin-top: 10px;">
             <summary style="cursor: pointer; font-size: 12px; font-weight: 700; color: var(--accent); padding: 6px 10px; background: var(--accent-tint); border-radius: 6px; display: inline-block;">${tr('📋 產生申請草稿（可複製 / Email）', '📋 Generate application draft (copy / email)')}</summary>
-            <div style="margin-top: 10px; padding: 12px 14px; background: var(--bg-elev, var(--bg)); border: 1px solid var(--border); border-radius: 6px; font-size: 12.5px; line-height: 1.65; white-space: pre-wrap; font-family: ui-monospace, 'Noto Sans TC', monospace; max-height: 420px; overflow-y: auto;" id="${draftId}">${draftBody}</div>
+            <div style="margin-top: 10px; padding: 12px 14px; background: var(--bg-elev, var(--bg)); border: 1px solid var(--border); border-radius: 6px; font-size: 12.5px; line-height: 1.65; white-space: pre-wrap; font-family: ui-monospace, 'Noto Sans TC', monospace; max-height: 420px; overflow-y: auto;" id="${draftId}">${escapeHtml(draftBody)}</div>
             <div style="margin-top: 8px; display: flex; gap: 8px; flex-wrap: wrap;">
               <button onclick="copyOpener('${draftId}', this)" style="padding: 6px 14px; background: var(--accent); color: #fff; border: none; border-radius: 5px; font-size: 12px; font-weight: 600; cursor: pointer;">${tr('📋 複製草稿', '📋 Copy draft')}</button>
               <a href="${mailtoUrl}" style="padding: 6px 14px; background: var(--bg-card, var(--bg)); color: var(--accent); border: 1px solid var(--accent); border-radius: 5px; font-size: 12px; font-weight: 600; text-decoration: none;">${tr('📧 用 Email 發送', '📧 Send by email')}</a>
@@ -10692,7 +10825,7 @@ Applicant: ${ownerName} (signature)
             ${item.note ? `<div style="color: var(--text-muted); font-size: 11.5px; margin-top: 2px;">${trObj(item.note)}</div>` : ''}
           </div>`).join('');
       };
-      const addrLine = CLIENT_CONFIG.address ? `<div style="font-size: 11.5px; color: var(--text-muted); margin-bottom: 14px;">📍 ${tr('本農場地址', 'Farm address')}：${CLIENT_CONFIG.address}</div>` : '';
+      const addrLine = CLIENT_CONFIG.address ? `<div style="font-size: 11.5px; color: var(--text-muted); margin-bottom: 14px;">📍 ${tr('本農場地址', 'Farm address')}：${escapeHtml(CLIENT_CONFIG.address)}</div>` : '';
       routesEl.innerHTML = addrLine + `
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px;">
           <div style="background: var(--bg-subtle); border: 1px solid var(--border); border-left: 3px solid var(--s1); border-radius: 10px; padding: 14px 16px;">
