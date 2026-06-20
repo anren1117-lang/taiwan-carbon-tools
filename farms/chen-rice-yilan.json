@@ -43,6 +43,7 @@
     "trees": 18,
     "practices": { "coverCrop": false, "noTill": false, "compost": true, "residue": true },
     "annualYieldKg": 11500,
+    "annualRevenueNT": 720000,
     "productCategory": "rice"
   },
 

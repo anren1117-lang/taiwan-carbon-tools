@@ -13594,9 +13594,9 @@ Applicant: ${ownerName} (signature)
         ? `<div class="erp-empty">${tr('還沒有紀錄。第一筆從上方新增。', 'No entries yet. Add the first one above.')}</div>`
         : logs.map(l => `
             <div class="erp-row">
-              <span class="erp-date">${l.date || '—'}</span>
-              <span class="erp-tag">${trObj(ACTIVITY_LABELS[l.activity] || { zh: l.activity, en: l.activity })}</span>
-              <div class="erp-body">${l.area ? `<strong>${l.area}</strong> · ` : ''}${l.note || ''}</div>
+              <span class="erp-date">${escapeHtml(l.date || '—')}</span>
+              <span class="erp-tag">${escapeHtml(trObj(ACTIVITY_LABELS[l.activity] || { zh: l.activity, en: l.activity }))}</span>
+              <div class="erp-body">${l.area ? `<strong>${escapeHtml(l.area)}</strong> · ` : ''}${escapeHtml(l.note || '')}</div>
               <span class="erp-cost">${l.costNT ? 'NT$ ' + fmt0(l.costNT) : ''}</span>
               <button class="erp-del" title="${tr('刪除', 'Delete')}" data-module="log" data-id="${l.id}">×</button>
             </div>`).join('');
@@ -13612,9 +13612,9 @@ Applicant: ${ownerName} (signature)
         ? `<div class="erp-empty">${tr('還沒有品項。從上方新增庫存。', 'No items yet. Add inventory above.')}</div>`
         : inv.map(i => `
             <div class="erp-row">
-              <span class="erp-date">${trObj(INV_CATEGORY[i.category] || {zh:i.category,en:i.category})}</span>
-              <span class="erp-tag">${i.qty} ${i.unit || ''}</span>
-              <div class="erp-body"><strong>${i.name}</strong>${i.note ? `<div class="sub">${i.note}</div>` : ''}</div>
+              <span class="erp-date">${escapeHtml(trObj(INV_CATEGORY[i.category] || {zh:i.category,en:i.category}))}</span>
+              <span class="erp-tag">${escapeHtml(String(i.qty))} ${escapeHtml(i.unit || '')}</span>
+              <div class="erp-body"><strong>${escapeHtml(i.name || '')}</strong>${i.note ? `<div class="sub">${escapeHtml(i.note)}</div>` : ''}</div>
               <span></span>
               <button class="erp-del" title="${tr('刪除', 'Delete')}" data-module="inventory" data-id="${i.id}">×</button>
             </div>`).join('');
@@ -13631,10 +13631,10 @@ Applicant: ${ownerName} (signature)
         ? `<div class="erp-empty">${tr('還沒有收支紀錄。', 'No ledger entries yet.')}</div>`
         : led.map(l => `
             <div class="erp-row">
-              <span class="erp-date">${l.date || '—'}</span>
-              <span class="erp-tag ${l.type}">${l.type === 'income' ? tr('收入', 'Income') : tr('支出', 'Expense')}</span>
-              <div class="erp-body"><strong>${l.category || ''}</strong>${l.note ? ` · ${l.note}` : ''}</div>
-              <span class="erp-cost ${l.type}">${l.type === 'expense' ? '−' : '+'}NT$ ${fmt0(l.amount)}</span>
+              <span class="erp-date">${escapeHtml(l.date || '—')}</span>
+              <span class="erp-tag ${l.type === 'income' ? 'income' : 'expense'}">${l.type === 'income' ? tr('收入', 'Income') : tr('支出', 'Expense')}</span>
+              <div class="erp-body"><strong>${escapeHtml(l.category || '')}</strong>${l.note ? ` · ${escapeHtml(l.note)}` : ''}</div>
+              <span class="erp-cost ${l.type === 'income' ? 'income' : 'expense'}">${l.type === 'expense' ? '−' : '+'}NT$ ${fmt0(l.amount)}</span>
               <button class="erp-del" title="${tr('刪除', 'Delete')}" data-module="ledger" data-id="${l.id}">×</button>
             </div>`).join('');
 
@@ -13649,9 +13649,9 @@ Applicant: ${ownerName} (signature)
         ? `<div class="erp-empty">${tr('還沒有聯絡人。', 'No contacts yet.')}</div>`
         : con.map(c => `
             <div class="erp-row">
-              <span class="erp-date">${trObj(CONTACT_ROLE[c.role] || {zh:c.role,en:c.role})}</span>
-              <span class="erp-tag">${c.phone || c.email || '—'}</span>
-              <div class="erp-body"><strong>${c.name}</strong>${c.note ? `<div class="sub">${c.note}</div>` : ''}</div>
+              <span class="erp-date">${escapeHtml(trObj(CONTACT_ROLE[c.role] || {zh:c.role,en:c.role}))}</span>
+              <span class="erp-tag">${escapeHtml(c.phone || c.email || '—')}</span>
+              <div class="erp-body"><strong>${escapeHtml(c.name || '')}</strong>${c.note ? `<div class="sub">${escapeHtml(c.note)}</div>` : ''}</div>
               <span></span>
               <button class="erp-del" title="${tr('刪除', 'Delete')}" data-module="contacts" data-id="${c.id}">×</button>
             </div>`).join('');

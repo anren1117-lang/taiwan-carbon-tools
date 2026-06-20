@@ -41,6 +41,7 @@
     "trees": 30,
     "practices": { "coverCrop": true, "noTill": false, "compost": true, "residue": true },
     "annualYieldKg": 50000,
+    "annualRevenueNT": 1200000,
     "productCategory": "vegetables_leaf"
   },
 

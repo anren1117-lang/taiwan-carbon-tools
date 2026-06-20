@@ -49,6 +49,7 @@
     "trees": 25,
     "practices": { "coverCrop": false, "noTill": true, "compost": true, "residue": true },
     "annualYieldKg": 50000,
+    "annualRevenueNT": 2400000,
     "productCategory": "livestock_dairy"
   },
 

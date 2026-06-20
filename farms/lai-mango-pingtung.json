@@ -48,6 +48,7 @@
     "trees": 250,
     "practices": { "coverCrop": false, "noTill": true, "compost": true, "residue": true },
     "annualYieldKg": 40000,
+    "annualRevenueNT": 1800000,
     "productCategory": "fruit"
   },
 
