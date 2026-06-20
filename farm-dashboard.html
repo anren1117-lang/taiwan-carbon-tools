@@ -8535,7 +8535,7 @@ This application supports starting organic-transition certification for ≥1 ha.
   // Return-visit usefulness: a farmer who asked "what subsidies?"
   // last week sees that question as a one-tap chip next visit.
   function recentQStorageKey() {
-    const id = (CLIENT_CONFIG && CLIENT_CONFIG.id) || 'demo';
+    const id = (farmStatus && farmStatus.id) || 'demo';
     return 'tct_agent_recent_' + id;
   }
   function loadRecentQuestions() {
@@ -9804,7 +9804,7 @@ Applicant: ${ownerName} (signature)
         } else if (dl.daysAway <= 60) {
           deadlineBadge = `<div style="display:inline-block; margin-top: 6px; padding: 3px 9px; background: rgba(217, 119, 6, 0.12); color: #d97706; font-size: 11px; font-weight: 700; border-radius: 999px;">⏰ ${tr(`下次窗口 ${dl.daysAway} 天後（${dl.month} 月）`, `Next window in ${dl.daysAway} days (month ${dl.month})`)}</div>`;
         } else {
-          deadlineBadge = `<div style="display:inline-block; margin-top: 6px; padding: 3px 9px; background: var(--bg-subtle, var(--bg)); color: var(--muted); font-size: 11px; font-weight: 600; border-radius: 999px;">📅 ${tr(`下次窗口 ${dl.month} 月（${dl.daysAway} 天後）`, `Next window month ${dl.month} (${dl.daysAway} days)`)}</div>`;
+          deadlineBadge = `<div style="display:inline-block; margin-top: 6px; padding: 3px 9px; background: var(--bg-subtle, var(--bg)); color: var(--text-muted); font-size: 11px; font-weight: 600; border-radius: 999px;">📅 ${tr(`下次窗口 ${dl.month} 月（${dl.daysAway} 天後）`, `Next window month ${dl.month} (${dl.daysAway} days)`)}</div>`;
         }
       }
 
@@ -11372,7 +11372,7 @@ Applicant: ${ownerName} (signature)
             <div class="dc-card-title">${idx + 1}. ${isZh ? o.name.zh : o.name.en}</div>
             <span class="dc-card-badge">${fitLabel} · ${o.score}/100</span>
           </div>
-          <div style="font-size: 12px; color: var(--muted); margin-bottom: 10px; font-style: italic;">${isZh ? o.why.zh : o.why.en}</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px; font-style: italic;">${isZh ? o.why.zh : o.why.en}</div>
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; padding: 10px 0; border-top: 1px dashed var(--border); font-size: 12px;">
             <div><div class="u" style="font-size: 10px;">${isZh ? '建置成本' : 'Setup cost'}</div><div style="font-weight: 600; margin-top: 2px;">${isZh ? o.setup.zh : o.setup.en}</div></div>
             <div><div class="u" style="font-size: 10px;">${isZh ? '年潛在收入' : 'Annual potential'}</div><div style="font-weight: 600; margin-top: 2px;">${isZh ? o.income.zh : o.income.en}</div></div>
@@ -11562,7 +11562,7 @@ Applicant: ${ownerName} (signature)
       `;
     } else {
       html += `
-        <div style="padding: 10px 14px; background: var(--bg); border: 1px dashed var(--border); border-radius: 6px; font-size: 13px; margin-bottom: 16px; color: var(--muted);">
+        <div style="padding: 10px 14px; background: var(--bg); border: 1px dashed var(--border); border-radius: 6px; font-size: 13px; margin-bottom: 16px; color: var(--text-muted);">
           ${isZh ? '💡 在編輯抽屜輸入「年營收」後，這裡會自動算出實際毛利、損益兩平價、永續地板價。沒輸入也沒關係 — 下方心法照樣適用。' : '💡 Enter "annual revenue" in the editor drawer to auto-compute real margin, break-even, and sustainable floor pricing. Skip it and the mindset cards below still apply.'}
         </div>
       `;
@@ -11809,7 +11809,7 @@ Applicant: ${ownerName} (signature)
 
     if (!costPerKg) {
       host.innerHTML = `
-        <div style="padding: 14px 16px; background: var(--bg); border: 1px dashed var(--border); border-radius: 8px; color: var(--muted); font-size: 13px;">
+        <div style="padding: 14px 16px; background: var(--bg); border: 1px dashed var(--border); border-radius: 8px; color: var(--text-muted); font-size: 13px;">
           ${isZh ? '💡 需要「年產量」和帳單資料（在「資料來源」面板輸入電費 / 燃料費）才能算每公斤成本，進而給出定價建議。' : '💡 Need annual yield + bill data (enter electricity / fuel costs in the Data Sources panel) before per-kg cost and pricing can be computed.'}
         </div>`;
       return;
@@ -11853,16 +11853,16 @@ Applicant: ${ownerName} (signature)
                 <span>${isZh ? c.name.zh : c.name.en}</span>
                 <span style="font-size: 10px; padding: 2px 8px; border-radius: 999px; background: ${fit.color}; color: #fff; font-weight: 700; letter-spacing: 0.04em; white-space: nowrap;">${isZh ? fit.labelZh : fit.labelEn}</span>
               </div>
-              <div style="font-size: 18px; font-weight: 800; color: ${meta.color};">NT$ ${fmt(suggestedPrice, 1)}<span style="font-size: 12px; font-weight: 500; color: var(--muted);">/kg · ${channelMargin}% ${isZh ? '毛利' : 'margin'}</span></div>
+              <div style="font-size: 18px; font-weight: 800; color: ${meta.color};">NT$ ${fmt(suggestedPrice, 1)}<span style="font-size: 12px; font-weight: 500; color: var(--text-muted);">/kg · ${channelMargin}% ${isZh ? '毛利' : 'margin'}</span></div>
             </div>
-            ${fit.reason ? `<div style="font-size: 11.5px; color: var(--muted); margin-bottom: 8px; padding: 6px 10px; background: var(--bg-card, var(--bg)); border-radius: 5px; border-left: 2px solid ${fit.color};"><strong style="color: ${fit.color};">${isZh ? '你的距離：' : 'Your gap: '}</strong>${isZh ? fit.reason.zh : fit.reason.en}</div>` : ''}
+            ${fit.reason ? `<div style="font-size: 11.5px; color: var(--text-muted); margin-bottom: 8px; padding: 6px 10px; background: var(--bg-card, var(--bg)); border-radius: 5px; border-left: 2px solid ${fit.color};"><strong style="color: ${fit.color};">${isZh ? '你的距離：' : 'Your gap: '}</strong>${isZh ? fit.reason.zh : fit.reason.en}</div>` : ''}
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px 18px; font-size: 12px; line-height: 1.55; margin-bottom: 10px;">
               <div><span class="u">${isZh ? '現金時程' : 'Cash terms'}：</span>${isZh ? c.cashTiming.zh : c.cashTiming.en}</div>
               <div><span class="u">${isZh ? '優勢' : 'Pros'}：</span>${isZh ? c.pros.zh : c.pros.en}</div>
               <div><span class="u">${isZh ? '劣勢' : 'Cons'}：</span>${isZh ? c.cons.zh : c.cons.en}</div>
               <div><span class="u">${isZh ? '需要證據' : 'Required evidence'}：</span>${isZh ? c.evidence.zh : c.evidence.en}</div>
             </div>
-            ${c.verdict ? `<div style="font-size: 12px; font-style: italic; color: var(--muted); margin-bottom: 8px;">${isZh ? c.verdict.zh : c.verdict.en}</div>` : ''}
+            ${c.verdict ? `<div style="font-size: 12px; font-style: italic; color: var(--text-muted); margin-bottom: 8px;">${isZh ? c.verdict.zh : c.verdict.en}</div>` : ''}
             ${c.firstWeek ? `<div style="margin-top: 6px; padding: 8px 10px; background: rgba(29, 158, 117, 0.08); border-radius: 6px; font-size: 12px; line-height: 1.6;"><strong style="color: var(--accent);">${isZh ? '🚀 本週做：' : '🚀 This week: '}</strong>${isZh ? c.firstWeek.zh : c.firstWeek.en}</div>` : ''}
             ${c.pitfall ? `<div style="margin-top: 6px; padding: 8px 10px; background: rgba(220, 38, 38, 0.06); border-radius: 6px; font-size: 12px; line-height: 1.6;"><strong style="color: #dc2626;">${isZh ? '⚠️ 別這樣：' : '⚠️ Avoid: '}</strong>${isZh ? c.pitfall.zh : c.pitfall.en}</div>` : ''}
             ${openerText ? (() => {
@@ -11905,7 +11905,7 @@ Applicant: ${ownerName} (signature)
 
   // ── Carbon group collapsible: default collapsed, state per-farm ─
   function carbonGroupStorageKey() {
-    const id = (CLIENT_CONFIG && CLIENT_CONFIG.id) || 'demo';
+    const id = (farmStatus && farmStatus.id) || 'demo';
     return 'tct_carbon_group_' + id;
   }
   window.toggleCarbonGroup = function() {
@@ -11945,7 +11945,7 @@ Applicant: ${ownerName} (signature)
 
   // ── Weekly Check-in: ritual loop, stored per-farm in localStorage ─
   function weeklyStorageKey() {
-    const id = (CLIENT_CONFIG && CLIENT_CONFIG.id) || 'demo';
+    const id = (farmStatus && farmStatus.id) || 'demo';
     return 'tct_weekly_' + id;
   }
 
@@ -11998,7 +11998,7 @@ Applicant: ${ownerName} (signature)
       <div style="display: flex; flex-wrap: wrap; gap: 14px; align-items: baseline; margin-bottom: 14px;">
         <div style="font-size: 14px; font-weight: 700; color: var(--accent);">📅 ${isZh ? '本週' : 'This week'}: ${currentWeek}</div>
         ${streak > 0 ? `<div style="font-size: 13px; padding: 4px 12px; background: rgba(217, 119, 6, 0.12); color: #d97706; border-radius: 999px; font-weight: 700;">🔥 ${isZh ? `連續紀錄 ${streak} 週` : `${streak}-week streak`}</div>` : ''}
-        ${currentEntry.savedAt ? `<div style="font-size: 12px; color: var(--muted);">${isZh ? '✓ 本週已紀錄' : '✓ logged'}</div>` : ''}
+        ${currentEntry.savedAt ? `<div style="font-size: 12px; color: var(--text-muted);">${isZh ? '✓ 本週已紀錄' : '✓ logged'}</div>` : ''}
       </div>
       <div style="display: grid; gap: 8px; margin-bottom: 12px;">
     `;
@@ -12038,9 +12038,9 @@ Applicant: ${ownerName} (signature)
         const verdict = yesCount >= 3 ? '🟢' : (yesCount >= 1 ? '🟡' : '⚪');
         html += `
           <div style="display: grid; grid-template-columns: auto auto 1fr; gap: 12px; align-items: start; padding: 8px 12px; background: var(--bg); border-radius: 6px; font-size: 12.5px;">
-            <div style="font-weight: 700; color: var(--muted);">${wk}</div>
-            <div>${verdict} <span style="color: var(--muted);">${yesCount}/4 yes</span></div>
-            <div style="color: var(--text); ${e.note ? '' : 'font-style: italic; color: var(--muted);'}">${e.note || (isZh ? '（無筆記）' : '(no notes)')}</div>
+            <div style="font-weight: 700; color: var(--text-muted);">${wk}</div>
+            <div>${verdict} <span style="color: var(--text-muted);">${yesCount}/4 yes</span></div>
+            <div style="color: var(--text); ${e.note ? '' : 'font-style: italic; color: var(--text-muted);'}">${e.note || (isZh ? '（無筆記）' : '(no notes)')}</div>
           </div>
         `;
       });
@@ -12170,13 +12170,13 @@ Applicant: ${ownerName} (signature)
     const isZh = currentLang !== 'en';
 
     if (!peerSamplesCache) {
-      host.innerHTML = `<div style="padding: 14px; color: var(--muted); font-size: 13px;">${isZh ? '載入示範農場資料中…' : 'Loading sample farms…'}</div>`;
+      host.innerHTML = `<div style="padding: 14px; color: var(--text-muted); font-size: 13px;">${isZh ? '載入示範農場資料中…' : 'Loading sample farms…'}</div>`;
       loadPeerSamples().then(() => render());
       return;
     }
 
     if (peerSamplesCache.length === 0) {
-      host.innerHTML = `<div style="padding: 14px; color: var(--muted); font-size: 13px;">${isZh ? '無法載入示範農場（離線或路徑錯誤）。' : 'Could not load sample farms (offline or path error).'}</div>`;
+      host.innerHTML = `<div style="padding: 14px; color: var(--text-muted); font-size: 13px;">${isZh ? '無法載入示範農場（離線或路徑錯誤）。' : 'Could not load sample farms (offline or path error).'}</div>`;
       return;
     }
 
@@ -12232,11 +12232,11 @@ Applicant: ${ownerName} (signature)
     let html = `
       <style>
         .pc-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-        .pc-table th { padding: 8px 10px; text-align: left; font-weight: 700; color: var(--muted); border-bottom: 2px solid var(--border); font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; }
+        .pc-table th { padding: 8px 10px; text-align: left; font-weight: 700; color: var(--text-muted); border-bottom: 2px solid var(--border); font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; }
         .pc-table td { padding: 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
         .pc-table .farm-name { font-weight: 700; color: var(--text); }
         .pc-table .farm-name.you { color: var(--accent); }
-        .pc-table .farm-meta { font-size: 11px; color: var(--muted); margin-top: 2px; }
+        .pc-table .farm-meta { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
         .pc-table td.best { background: rgba(5, 150, 105, 0.10); font-weight: 700; color: #059669; }
         .pc-table td.worst { background: rgba(217, 119, 6, 0.08); color: #d97706; }
         .pc-table tr.you { background: var(--accent-tint); }
@@ -12289,7 +12289,7 @@ Applicant: ${ownerName} (signature)
         </tbody>
       </table>
       </div>
-      <div style="margin-top: 14px; padding: 10px 14px; background: var(--bg-subtle, var(--bg)); border: 1px dashed var(--border); border-radius: 6px; font-size: 11.5px; color: var(--muted); line-height: 1.55;">
+      <div style="margin-top: 14px; padding: 10px 14px; background: var(--bg-subtle, var(--bg)); border: 1px dashed var(--border); border-radius: 6px; font-size: 11.5px; color: var(--text-muted); line-height: 1.55;">
         ${isZh ? '<strong style="color: #059669;">綠色＝該指標最佳</strong>　<strong style="color: #d97706;">橘色＝該指標最差</strong>　示範農場可在 <a href="farms.html" style="color: var(--accent);">farms.html</a> 看完整資料。' : '<strong style="color: #059669;">Green = best</strong> · <strong style="color: #d97706;">Amber = worst</strong> · Full sample farm data at <a href="farms.html" style="color: var(--accent);">farms.html</a>.'}
       </div>
     `;
@@ -12302,7 +12302,7 @@ Applicant: ${ownerName} (signature)
   // (from dashboard data) ÷ target. Pace verdict considers calendar
   // month: by month X, you should be X/12 of the way there.
   function goalStorageKey() {
-    const id = (CLIENT_CONFIG && CLIENT_CONFIG.id) || 'demo';
+    const id = (farmStatus && farmStatus.id) || 'demo';
     return 'tct_goals_' + id;
   }
 
@@ -12385,12 +12385,12 @@ Applicant: ${ownerName} (signature)
         <div style="padding: 14px 16px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px;">
           <div style="font-size: 13px; font-weight: 700; margin-bottom: 8px;">${isZh ? g.title.zh : g.title.en}</div>
           <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 10px;">
-            <div style="font-size: 11px; color: var(--muted);">${isZh ? '現況' : 'Current'}: <strong style="color: var(--text); font-size: 14px;">${g.currentLabel}</strong></div>
-            <div style="font-size: 11px; color: var(--muted);">${isZh ? '目標' : 'Target'}: <input type="number" id="goal-${g.id}" value="${target || g.suggestion()}" placeholder="${g.placeholder}" step="${g.step || 1}" style="width: 90px; padding: 4px 6px; border: 1px solid var(--border); border-radius: 4px; font-size: 12px; text-align: right; background: var(--bg-elev, var(--bg)); color: var(--text);"></div>
+            <div style="font-size: 11px; color: var(--text-muted);">${isZh ? '現況' : 'Current'}: <strong style="color: var(--text); font-size: 14px;">${g.currentLabel}</strong></div>
+            <div style="font-size: 11px; color: var(--text-muted);">${isZh ? '目標' : 'Target'}: <input type="number" id="goal-${g.id}" value="${target || g.suggestion()}" placeholder="${g.placeholder}" step="${g.step || 1}" style="width: 90px; padding: 4px 6px; border: 1px solid var(--border); border-radius: 4px; font-size: 12px; text-align: right; background: var(--bg-elev, var(--bg)); color: var(--text);"></div>
           </div>
           <div style="height: 10px; background: var(--bg-subtle, var(--border)); border-radius: 999px; overflow: hidden; margin-bottom: 8px;">
             <div style="height: 100%; background: ${barColor}; width: ${pct}%; transition: width 0.3s, background 0.3s;"></div>
-            ${pct < 100 && pacePct > 0 ? `<div style="position: relative; top: -10px; left: ${pacePct}%; width: 2px; height: 10px; background: var(--muted); opacity: 0.5;"></div>` : ''}
+            ${pct < 100 && pacePct > 0 ? `<div style="position: relative; top: -10px; left: ${pacePct}%; width: 2px; height: 10px; background: var(--text-muted); opacity: 0.5;"></div>` : ''}
           </div>
           <div style="font-size: 11.5px; color: ${verdict.color}; font-weight: 600; line-height: 1.5;">${isZh ? verdict.zh : verdict.en}</div>
           ${g.manualIncrement ? `<button onclick="incrementGoalCounter('${g.id}')" style="margin-top: 8px; padding: 4px 10px; background: var(--accent); color: #fff; border: none; border-radius: 5px; font-size: 11px; font-weight: 600; cursor: pointer;">${isZh ? '+1 新客戶談成' : '+1 new buyer landed'}</button>` : ''}
@@ -12400,7 +12400,7 @@ Applicant: ${ownerName} (signature)
     html += '</div>';
 
     html += `
-      <div style="margin-top: 14px; padding: 10px 14px; background: var(--bg-subtle, var(--bg)); border-radius: 6px; font-size: 12px; color: var(--muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+      <div style="margin-top: 14px; padding: 10px 14px; background: var(--bg-subtle, var(--bg)); border-radius: 6px; font-size: 12px; color: var(--text-muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
         <div>${isZh ? `目前是 ${monthOfYear} 月 — 你應該完成年度目標的 ${(paceFraction * 100).toFixed(0)}%。` : `It's month ${monthOfYear} — you should be at ${(paceFraction * 100).toFixed(0)}% of annual goals.`}</div>
         <button onclick="saveGoalsFromInputs()" style="padding: 5px 14px; background: var(--accent); color: #fff; border: none; border-radius: 5px; font-size: 12px; font-weight: 600; cursor: pointer;">${isZh ? '儲存目標' : 'Save goals'}</button>
       </div>
@@ -12736,7 +12736,7 @@ Applicant: ${ownerName} (signature)
       .replace(/[^a-zA-Z0-9_-]/g, '_').slice(0, 80);
   }
   function doneStorageKey() {
-    const id = (CLIENT_CONFIG && CLIENT_CONFIG.id) || 'demo';
+    const id = (farmStatus && farmStatus.id) || 'demo';
     return 'tct_top3_done_' + id;
   }
   function loadDoneThisWeek() {
@@ -12821,7 +12821,7 @@ Applicant: ${ownerName} (signature)
           ${completed.map(a => `
             <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 4px 0; font-size: 12px;">
               <div style="color: var(--text); text-decoration: line-through; opacity: 0.75;">${a.title}</div>
-              <button onclick="unmarkTopActionDone('${a._id}')" style="background: transparent; color: var(--muted); border: none; cursor: pointer; font-size: 11px; padding: 2px 6px;" title="${isZh ? '取消標記' : 'Unmark'}">↺</button>
+              <button onclick="unmarkTopActionDone('${a._id}')" style="background: transparent; color: var(--text-muted); border: none; cursor: pointer; font-size: 11px; padding: 2px 6px;" title="${isZh ? '取消標記' : 'Unmark'}">↺</button>
             </div>
           `).join('')}
         </div>`;
@@ -12942,22 +12942,22 @@ Applicant: ${ownerName} (signature)
             <div class="dc-card-title">${isZh ? p.label.zh : p.label.en}</div>
             <span class="dc-card-badge">${tierLabel}</span>
           </div>
-          <div style="font-size: 12.5px; color: var(--muted); line-height: 1.55; margin-bottom: 10px;">${isZh ? p.why.zh : p.why.en}</div>
+          <div style="font-size: 12.5px; color: var(--text-muted); line-height: 1.55; margin-bottom: 10px;">${isZh ? p.why.zh : p.why.en}</div>
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; padding-top: 10px; border-top: 1px dashed var(--border);">
             <div><div class="u" style="font-size: 10px;">${isZh ? '建置成本' : 'Setup cost'}</div><div style="font-weight: 700; font-size: 14px;">NT$ ${fmt0(p.totalSetup)}</div></div>
-            <div><div class="u" style="font-size: 10px;">${isZh ? '年淨節省' : 'Net annual saving'}</div><div style="font-weight: 700; font-size: 14px; color: ${p.netAnnual > 0 ? 'var(--pri-3)' : 'var(--muted)'};">NT$ ${fmt0(p.netAnnual)}</div></div>
+            <div><div class="u" style="font-size: 10px;">${isZh ? '年淨節省' : 'Net annual saving'}</div><div style="font-weight: 700; font-size: 14px; color: ${p.netAnnual > 0 ? 'var(--pri-3)' : 'var(--text-muted)'};">NT$ ${fmt0(p.netAnnual)}</div></div>
             <div><div class="u" style="font-size: 10px;">${isZh ? '回本期' : 'Payback'}</div><div style="font-weight: 700; font-size: 14px;">${p.paybackMonths < Infinity ? `${p.paybackMonths.toFixed(0)} ${isZh ? '個月' : 'mo'}` : '—'}</div></div>
             <div><div class="u" style="font-size: 10px;">${isZh ? '5 年淨收' : '5-yr net'}</div><div style="font-weight: 700; font-size: 14px; color: ${p.fiveYearNet > 0 ? 'var(--pri-3)' : 'var(--pri-1)'};">NT$ ${fmt0(p.fiveYearNet)}</div></div>
           </div>
           ${p.subsidy ? `<div style="margin-top: 10px; padding: 8px 12px; background: var(--pri-3-bg); border-radius: 6px; font-size: 12px; color: var(--pri-3);"><strong>${isZh ? '💰 補助加成：' : '💰 Subsidy stack: '}</strong>${isZh ? p.subsidy.zh : p.subsidy.en}</div>` : ''}
-          ${p.note ? `<div style="margin-top: 8px; font-size: 11.5px; color: var(--muted); font-style: italic;">${isZh ? p.note.zh : p.note.en}</div>` : ''}
+          ${p.note ? `<div style="margin-top: 8px; font-size: 11.5px; color: var(--text-muted); font-style: italic;">${isZh ? p.note.zh : p.note.en}</div>` : ''}
         </div>
       `;
     });
     html += '</div>';
 
     html += `
-      <div style="margin-top: 16px; padding: 10px 14px; background: var(--bg-elev, var(--bg)); border: 1px dashed var(--border); border-radius: 6px; font-size: 11.5px; color: var(--muted); line-height: 1.6;">
+      <div style="margin-top: 16px; padding: 10px 14px; background: var(--bg-elev, var(--bg)); border: 1px dashed var(--border); border-radius: 6px; font-size: 11.5px; color: var(--text-muted); line-height: 1.6;">
         ${isZh
           ? '* 估算為台灣農業推廣資料的保守值，依本農場規模換算。實際成本可能因地區、勞動力、設備而異。建議從「⚡ 一年內回本」開始，現金流壓力最小。'
           : '* Conservative estimates from Taiwan ag extension data, scaled to your farm size. Actual costs vary by region, labor, and equipment. Start with "⚡ Payback < 1 year" — lowest cash-flow pressure.'}
@@ -13007,7 +13007,7 @@ Applicant: ${ownerName} (signature)
 
     if (revenue <= 0) {
       host.innerHTML = `
-        <div style="padding: 14px 16px; background: var(--bg); border: 1px dashed var(--border); border-radius: 8px; color: var(--muted); font-size: 13px;">
+        <div style="padding: 14px 16px; background: var(--bg); border: 1px dashed var(--border); border-radius: 8px; color: var(--text-muted); font-size: 13px;">
           ${isZh ? '💡 輸入「年營收」（編輯抽屜）後，現金流月曆會自動展開，標出缺口月並提供周轉建議。' : '💡 Enter annual revenue (in the editor drawer) — the cash flow calendar will auto-expand, highlight the gap month, and suggest financing options.'}
         </div>`;
       return;
@@ -13080,10 +13080,10 @@ Applicant: ${ownerName} (signature)
       </div>
       <div style="padding: 14px 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; overflow-x: auto;">
         <div class="cf-chart">${bars}</div>
-        <div style="display: flex; justify-content: center; gap: 18px; margin-top: 12px; font-size: 11px; color: var(--muted);">
+        <div style="display: flex; justify-content: center; gap: 18px; margin-top: 12px; font-size: 11px; color: var(--text-muted);">
           <span><span style="display: inline-block; width: 10px; height: 10px; background: #059669; border-radius: 2px; vertical-align: middle;"></span> ${isZh ? '月收入' : 'Monthly income'}</span>
           <span><span style="display: inline-block; width: 10px; height: 10px; background: #dc2626; border-radius: 2px; vertical-align: middle;"></span> ${isZh ? '月支出' : 'Monthly expense'}</span>
-          <span style="color: var(--muted);">${isZh ? '下方數字＝累積餘額 (千)' : 'Bottom number = running balance (k)'}</span>
+          <span style="color: var(--text-muted);">${isZh ? '下方數字＝累積餘額 (千)' : 'Bottom number = running balance (k)'}</span>
         </div>
       </div>
       ${advice}
