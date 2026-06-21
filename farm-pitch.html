@@ -445,6 +445,13 @@
 <script>
 let CLIENT_CONFIG = null;
 let currentLang = 'zh';
+// Restore persisted language preference (shared key with the dashboard
+// + onboarding, so toggling lang on one page carries to the others).
+try {
+  const saved = localStorage.getItem('tct_lang');
+  if (saved === 'zh' || saved === 'en') currentLang = saved;
+} catch (e) {}
+document.documentElement.lang = currentLang === 'zh' ? 'zh-Hant' : 'en';
 
 // ── Load from URL fragment (#data=base64) or farms/<id>.json ───────
 async function loadConfig() {
@@ -754,11 +761,15 @@ document.getElementById('langToggle').addEventListener('click', () => {
   currentLang = currentLang === 'zh' ? 'en' : 'zh';
   document.documentElement.lang = currentLang === 'zh' ? 'zh-Hant' : 'en';
   document.getElementById('langToggle').textContent = currentLang === 'zh' ? 'English' : '中文';
+  try { localStorage.setItem('tct_lang', currentLang); } catch (e) {}
   render();
 });
 
 (async () => {
   await loadConfig();
+  // Reflect the restored lang in the toggle label on load
+  const lt = document.getElementById('langToggle');
+  if (lt) lt.textContent = currentLang === 'zh' ? 'English' : '中文';
   render();
 })();
 </script>
