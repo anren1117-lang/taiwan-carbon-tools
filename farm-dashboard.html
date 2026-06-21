@@ -13223,6 +13223,16 @@ Applicant: ${ownerName} (signature)
     `;
   }
 
+  // Debounced render — coalesces keystroke bursts so typing a long
+  // number into a field doesn't fire 31 renderX() calls per character.
+  // 'change' events (select / checkbox commits) still call render
+  // directly for instant feedback; 'input' events route here.
+  let _renderTimer = null;
+  function renderDebounced() {
+    if (_renderTimer) clearTimeout(_renderTimer);
+    _renderTimer = setTimeout(() => { _renderTimer = null; render(); }, 90);
+  }
+
   function render() {
     const inp = readInputs();
     const r = calcFromInputs(inp);
@@ -13478,7 +13488,10 @@ Applicant: ${ownerName} (signature)
     ];
     liveInputs.forEach(id => {
       const el = document.getElementById(id);
-      el.addEventListener('input', render);
+      // Keystroke bursts coalesce via 90ms debounce; commit-style
+      // events (blur, select-change, checkbox-change) fire render
+      // immediately so the user sees the result on field exit.
+      el.addEventListener('input', renderDebounced);
       el.addEventListener('change', render);
     });
     PRACTICES.forEach(p => {
