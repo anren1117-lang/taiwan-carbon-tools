@@ -4088,9 +4088,9 @@
     <div class="advisor-text">
       <div class="label" data-zh="本儀表板由" data-en="Prepared by">本儀表板由</div>
       <div class="name">何安仁 An-Ren Ho</div>
-      <div class="blurb" data-zh="台灣碳排工具獨立顧問。資料來源於台灣官方排放係數與 IPCC Tier 1 預設值。" data-en="Independent advisor, Taiwan Carbon Tools. Data from Taiwan official emission factors and IPCC Tier 1 defaults.">台灣碳排工具獨立顧問。資料來源於台灣官方排放係數與 IPCC Tier 1 預設值。</div>
+      <div class="blurb" data-zh="台灣碳排工具獨立開發者。資料來源於台灣官方排放係數與 IPCC Tier 1 預設值。" data-en="Independent maker of Taiwan Carbon Tools. Data from Taiwan official emission factors and IPCC Tier 1 defaults.">台灣碳排工具獨立開發者。資料來源於台灣官方排放係數與 IPCC Tier 1 預設值。</div>
     </div>
-    <a href="mailto:anren.carbon@gmail.com" class="advisor-cta" data-zh="後續諮詢" data-en="Follow-up session">後續諮詢</a>
+    <a href="mailto:anren.carbon@gmail.com" class="advisor-cta" data-zh="聯絡 / 反饋" data-en="Contact / feedback">聯絡 / 反饋</a>
   </section>
 
   <div class="methodology" data-zh="排放係數：經濟部能源署 113 年度電力排碳係數 0.474 kg/kWh、環境部燃料燃燒係數。碳匯：IPCC 2019 Refinement Tier 1 預設值（亞熱帶濕潤氣候），實際 SOC 變化需以土壤採樣驗證。本儀表板為教育與估算用途，不能取代正式 ISO 14064 盤查或 Verra VM0042 等碳權方法學申請。" data-en="Factors: MOEA 2024 grid 0.474 kg/kWh, MOENV fuel combustion factors. Sinks: IPCC 2019 Refinement Tier 1 defaults (subtropical moist) — real SOC change requires soil sampling. This dashboard is for educational + decision-support estimation only and does not substitute for formal ISO 14064 inventory or methodology-based credit issuance (e.g. Verra VM0042).">排放係數：經濟部能源署 113 年度電力排碳係數 0.474 kg/kWh、環境部燃料燃燒係數。碳匯：IPCC 2019 Refinement Tier 1 預設值（亞熱帶濕潤氣候），實際 SOC 變化需以土壤採樣驗證。本儀表板為教育與估算用途，不能取代正式 ISO 14064 盤查或 Verra VM0042 等碳權方法學申請。</div>
@@ -8460,7 +8460,7 @@ This application supports starting organic-transition certification for ≥1 ha.
     const responses = {
       greeting: {
         topic: { zh: '打招呼', en: 'Greeting' },
-        headline: { zh: '哈囉 👋 — 我是你的永續經營顧問', en: 'Hi 👋 — I\'m your sustainable-ops advisor' },
+        headline: { zh: '哈囉 👋 — 我是你的農場助手', en: 'Hi 👋 — I\'m your farm helper' },
         situation: { zh: '你可以問我任何關於農場經營、種植技術、農法選擇、農夫生活的問題。或點上方的「常見問題 / 種植知識 / 農法選擇 / 農夫生活」快速問問題。',
                      en: 'Ask me anything about farm operations, agronomy, farming methods, or farmer life. Or tap the quick-chip rows above for common questions.' },
         actions: [
@@ -9428,8 +9428,8 @@ This application supports starting organic-transition certification for ≥1 ha.
         steps.push({
           title: tr(`鎖定已符合的補助合計 NT$${fmt0(subsidies.total)}`,
                     `Capture the NT$${fmt0(subsidies.total)} you're already eligible for`),
-          desc: tr(`已符合 ${subsidies.eligible.length} 項補助 — 由顧問協助文件準備與申辦時程。`,
-                   `Eligible for ${subsidies.eligible.length} programs — let the advisor handle paperwork and timing.`)
+          desc: tr(`已符合 ${subsidies.eligible.length} 項補助 — 開「補助申請草稿」一鍵生成可寄出的申請函。`,
+                   `Eligible for ${subsidies.eligible.length} programs — open "Subsidy application drafts" to generate sendable letters in one click.`)
         });
       } else {
         steps.push({
@@ -9483,8 +9483,8 @@ This application supports starting organic-transition certification for ≥1 ha.
       });
       // Step 3: 1-page carbon disclosure deliverable
       steps.push({
-        title: tr('整理對買方的碳揭露文件（顧問可代擬）',
-                  'Prepare a buyer-facing carbon disclosure (advisor can draft)'),
+        title: tr('整理對買方的碳揭露文件（用「📄 買家提案單」一鍵生成）',
+                  'Prepare a buyer-facing carbon disclosure (use the 📄 Buyer pitch sheet)'),
         desc: tr('包含：方法學、感測器/帳單原始來源、年度強度、SOC 基準。直接給統一、義美等 ESG 採購窗口。',
                  'Includes: methodology, sensor/bill data sources, annual intensity, SOC baseline. Hand directly to PCSC, IMEI, etc.')
       });
@@ -9517,8 +9517,8 @@ This application supports starting organic-transition certification for ≥1 ha.
         });
       }
       steps.push({
-        title: tr('與顧問做認證落差分析（gap analysis）',
-                  'Run a certification gap analysis with the advisor'),
+        title: tr('做認證落差分析（gap analysis）— 看「認證」面板對照',
+                  'Run a certification gap analysis — use the Certification panel'),
         desc: tr('盤點當前田間紀錄、投入品來源、隔離緩衝等實際狀況，給出明確待辦清單。',
                  'Inventory your field records, input sources, buffer zones, etc., and produce a concrete to-do list.')
       });
@@ -9559,7 +9559,7 @@ This application supports starting organic-transition certification for ≥1 ha.
           fix:   tr('每加一項土地管理（覆蓋作物、免耕、堆肥、殘體還田）= 抗極端天氣能力上升一階。再做一次土壤採樣建立基準。', 'Each added land practice (cover crop / no-till / compost / residue) bumps climate resilience another tier. Plus get a soil sample done to establish baseline.') + climateRiskNote },
         { key: 'income',     m: m.income,
           worse: tr('收益來源單一性', 'income concentration'),
-          fix:   tr('鎖定已符合的補助 — 顧問可代擬申請文件。長期累積 SOC 後再進台灣自願減量機制。', 'Lock in the subsidies you already qualify for (advisor can draft applications). Long-term, SOC growth opens the Taiwan VRM as a second income channel.') }
+          fix:   tr('鎖定已符合的補助 — 用「補助申請草稿」一鍵生成可寄出的申請函。長期累積 SOC 後再進台灣自願減量機制。', 'Lock in the subsidies you already qualify for — use "Subsidy application drafts" for sendable letters. Long-term, SOC growth opens the Taiwan VRM as a second income channel.') }
       ];
       ranked.sort((a, b) => tierRank[a.m.tier] - tierRank[b.m.tier]);
 
