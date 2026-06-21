@@ -1698,6 +1698,21 @@
      Quiet but credible: data sources, methodology link, version,
      contact, disclaimer. Signals "this is real, maintained work"
      to farmers + their buyers / off-takers / certifiers. */
+
+  /* ── Peer-compare table (hoisted from renderPeerCompare to avoid
+        re-injecting 13 CSS rules on every render() call). */
+  .pc-wrap { overflow-x: auto; }
+  .pc-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .pc-table th { padding: 8px 10px; text-align: left; font-weight: 700; color: var(--text-muted); border-bottom: 2px solid var(--border); font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; }
+  .pc-table td { padding: 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  .pc-table .farm-name { font-weight: 700; color: var(--text); }
+  .pc-table .farm-name.you { color: var(--accent); }
+  .pc-table .farm-meta { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+  .pc-table td.best { background: rgba(5, 150, 105, 0.10); font-weight: 700; color: #059669; }
+  .pc-table td.worst { background: rgba(217, 119, 6, 0.08); color: #d97706; }
+  .pc-table tr.you { background: var(--accent-tint); }
+  .pc-table tr.you td { font-weight: 600; }
+
   .trust-footer {
     max-width: 1180px;
     margin: 48px auto 24px;
@@ -12363,19 +12378,6 @@ Applicant: ${ownerName} (signature)
     const cropEn = { rice: 'Rice', vegetables: 'Vegetables', fruit: 'Fruit', livestock: 'Livestock', mixed: 'Mixed' };
 
     let html = `
-      <style>
-        .pc-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-        .pc-table th { padding: 8px 10px; text-align: left; font-weight: 700; color: var(--text-muted); border-bottom: 2px solid var(--border); font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; }
-        .pc-table td { padding: 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
-        .pc-table .farm-name { font-weight: 700; color: var(--text); }
-        .pc-table .farm-name.you { color: var(--accent); }
-        .pc-table .farm-meta { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
-        .pc-table td.best { background: rgba(5, 150, 105, 0.10); font-weight: 700; color: #059669; }
-        .pc-table td.worst { background: rgba(217, 119, 6, 0.08); color: #d97706; }
-        .pc-table tr.you { background: var(--accent-tint); }
-        .pc-table tr.you td { font-weight: 600; }
-        .pc-wrap { overflow-x: auto; }
-      </style>
       <div class="pc-wrap">
       <table class="pc-table">
         <thead>
