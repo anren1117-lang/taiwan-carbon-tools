@@ -2704,6 +2704,17 @@
     transform: translateY(-1px);
   }
   /* ── Chat-thread UI (multi-turn agent) ─────────────────────── */
+  /* Screen-reader-only — visible label for the agent input that
+     stays off-screen visually but is announced by AT. */
+  .sr-only {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
   .chat-thread {
     display: flex; flex-direction: column;
     gap: 14px;
@@ -3416,7 +3427,9 @@
     <div class="agent-recent" id="agentRecent" aria-label="Recent questions"></div>
     <!-- Free-form Q&A bar — keyword-routed knowledge base -->
     <form id="agentAskForm" class="agent-ask" onsubmit="askAgent(event)" autocomplete="off">
+      <label for="agentQuestion" class="sr-only" data-zh="問農場助手一個問題" data-en="Ask the farm helper a question">問農場助手一個問題</label>
       <input type="text" id="agentQuestion" class="agent-q-input"
+             aria-label="問農場助手"
              data-zh-placeholder="例：買家嫌貴怎麼辦？我能拿什麼補助？什麼通路毛利最高？哪個做法最快回本？..."
              data-en-placeholder="e.g. Buyer says I'm too expensive — what do I say? What subsidies can I claim? Which practice pays back fastest?"
              placeholder="例：買家嫌貴怎麼辦？我能拿什麼補助？什麼通路毛利最高？哪個做法最快回本？...">
@@ -3491,7 +3504,7 @@
       <div class="agent-browse-body" id="agentSavedBody"></div>
     </details>
 
-    <div id="agentBody"></div>
+    <div id="agentBody" role="log" aria-live="polite" aria-atomic="false"></div>
   </section>
 
   <!-- ── Cash Flow Calendar (moved up) ─────────────────────── -->
