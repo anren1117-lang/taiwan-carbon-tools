@@ -5288,6 +5288,7 @@ This application supports starting organic-transition certification for ≥1 ha.
     agentState.thread = [];
     agentState.lastQuestion = null;
     agentState.lastAnswer = null;
+    try { localStorage.removeItem(farmScopedKey('chat_thread')); } catch (e) {}
     renderAgentChat();
   };
 
@@ -9200,6 +9201,7 @@ This application supports starting organic-transition certification for ≥1 ha.
       last.match = match || null;
       last.matchId = match ? match.id : null;
       renderAgentChat();
+      saveAgentThread();
       const latest = document.querySelector('.chat-latest');
       if (latest) latest.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }, 520);
@@ -9347,6 +9349,35 @@ This application supports starting organic-transition certification for ≥1 ha.
   }
   function isAnswerSaved(topicId) {
     return readSavedAnswers().includes(topicId);
+  }
+
+  // Persist the chat thread per farm so the conversation survives
+  // page reload. Only stores {q, matchId, ts} — conversational
+  // synthetic turns (_conv_*) and unmatched turns are dropped at
+  // persist time since their `match` object isn\'t serializable and
+  // they don\'t carry standalone meaning across sessions anyway.
+  function saveAgentThread() {
+    try {
+      const slim = agentState.thread
+        .filter(t => t.matchId && !/^_conv_/.test(t.matchId))
+        .map(t => ({ q: t.q, matchId: t.matchId, ts: t.ts || Date.now() }));
+      localStorage.setItem(farmScopedKey('chat_thread'), JSON.stringify(slim));
+    } catch (e) {}
+  }
+  function loadAgentThread() {
+    try {
+      const raw = localStorage.getItem(farmScopedKey('chat_thread'));
+      if (!raw) return;
+      const slim = JSON.parse(raw);
+      if (!Array.isArray(slim)) return;
+      agentState.thread = slim
+        .map(t => {
+          const m = AGENT_KB.find(e => e.id === t.matchId);
+          return m ? { q: t.q, match: m, matchId: t.matchId, ts: t.ts } : null;
+        })
+        .filter(Boolean)
+        .slice(-AGENT_THREAD_MAX);
+    } catch (e) {}
   }
   window.toggleSaveAnswer = function(topicId) {
     let list = readSavedAnswers();
@@ -13959,6 +13990,10 @@ Applicant: ${ownerName} (signature)
     renderFarmStatusBadge();
     renderAgentBrowseIndex();
     renderAgentSavedPanel();
+    // Restore chat thread from per-farm localStorage (cycle 18) so
+    // the conversation survives reload. Render after to surface it.
+    loadAgentThread();
+    renderAgentChat();
     // Reveal main content + hide the loader now that the dashboard
     // is fully rendered (a tick after applyLang triggers first render).
     requestAnimationFrame(() => document.body.classList.remove('loading'));
