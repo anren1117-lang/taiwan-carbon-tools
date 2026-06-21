@@ -13472,7 +13472,12 @@ Applicant: ${ownerName} (signature)
     if (!farmId) return;
     farmStatus.id = farmId;
     try {
-      const res = await fetch(`farms/${farmId}.json`, { cache: 'no-cache' });
+      // 8s timeout — slow rural Yunlin 4G otherwise leaves the
+      // loading overlay up forever with no fallback signal.
+      const ac = new AbortController();
+      const timeoutId = setTimeout(() => ac.abort(), 8000);
+      const res = await fetch(`farms/${farmId}.json`, { cache: 'no-cache', signal: ac.signal });
+      clearTimeout(timeoutId);
       if (!res.ok) throw new Error('HTTP ' + res.status);
       const data = await res.json();
       if (data.token && data.token !== token) {
@@ -13495,8 +13500,8 @@ Applicant: ${ownerName} (signature)
       banner.textContent = (currentLang === 'zh' ? '客戶代號：' : 'Client ID: ') + farmStatus.id;
     } else if (farmStatus.id && farmStatus.tokenError) {
       banner.textContent = (currentLang === 'zh'
-        ? '🔒 此農場需要存取代碼 — 請聯絡顧問取得正確 URL'
-        : '🔒 This farm requires an access token — contact the advisor for the correct URL');
+        ? '🔒 此農場需要存取代碼 — 請取得正確 URL'
+        : '🔒 This farm requires an access token — get the correct URL');
       banner.style.background = 'rgba(180,83,9,0.35)';
     } else if (farmStatus.id && !farmStatus.loaded) {
       banner.textContent = (currentLang === 'zh'
