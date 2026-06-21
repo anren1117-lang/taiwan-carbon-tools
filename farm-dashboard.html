@@ -1772,6 +1772,44 @@
   .dash-print-btn:hover { background: var(--accent-dark); transform: translateY(-1px); }
   @media (max-width: 1340px) { .dash-print-btn { bottom: 16px; right: 16px; padding: 9px 14px; font-size: 12px; } }
 
+  /* Back-to-top FAB — appears after the user scrolls > 800px and
+     parks above the print button. Tap → smooth scroll to the agent
+     panel (their most-used entry point), not the absolute top. */
+  .dash-top-btn {
+    position: fixed;
+    bottom: 72px;
+    right: 22px;
+    width: 44px; height: 44px;
+    background: var(--bg-card);
+    color: var(--accent);
+    border: 1.5px solid var(--accent);
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.10);
+    z-index: 99;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(8px);
+    transition: opacity 0.18s ease, transform 0.18s ease, background 0.15s, color 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: inherit;
+  }
+  .dash-top-btn.visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+  .dash-top-btn:hover { background: var(--accent); color: #fff; }
+  @media (max-width: 1340px) { .dash-top-btn { bottom: 64px; right: 16px; } }
+  @media print { .dash-top-btn { display: none !important; } }
+  @media (prefers-reduced-motion: reduce) {
+    .dash-top-btn { transition: opacity 0.18s ease; transform: none; }
+  }
+
   /* ── Trust footer ───────────────────────────────────────────────
      Quiet but credible: data sources, methodology link, version,
      contact, disclaimer. Signals "this is real, maintained work"
@@ -4117,6 +4155,7 @@
 
 </main>
 
+<button class="dash-top-btn" id="dashTopBtn" aria-label="回到頂部 / Back to top" title="回到問助手 / Back to top">↑</button>
 <button class="dash-print-btn" id="dashPrintBtn" onclick="window.print()" data-zh="📄 列印 / 存為 PDF" data-en="📄 Print / Save as PDF">📄 列印 / 存為 PDF</button>
 
 <!-- Shared carbon math (EF, SINK, calcFromInputs, fmt, etc.) — see farm-carbon-engine.js -->
@@ -13994,6 +14033,24 @@ Applicant: ${ownerName} (signature)
     // the conversation survives reload. Render after to surface it.
     loadAgentThread();
     renderAgentChat();
+
+    // Back-to-top FAB (cycle 20): appears after 800px scroll, jumps
+    // to the agent panel (the farmer\'s most-used entry point).
+    const topBtn = document.getElementById('dashTopBtn');
+    if (topBtn) {
+      let topRaf = null;
+      window.addEventListener('scroll', () => {
+        if (topRaf) return;
+        topRaf = requestAnimationFrame(() => {
+          topRaf = null;
+          topBtn.classList.toggle('visible', window.scrollY > 800);
+        });
+      }, { passive: true });
+      topBtn.addEventListener('click', () => {
+        const target = document.getElementById('sec-agent') || document.body;
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    }
     // Reveal main content + hide the loader now that the dashboard
     // is fully rendered (a tick after applyLang triggers first render).
     requestAnimationFrame(() => document.body.classList.remove('loading'));
