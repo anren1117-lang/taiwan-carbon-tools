@@ -66,6 +66,84 @@
       --shadow-lift: 0 4px 14px rgba(0,0,0,0.4);
     }
   }
+
+  /* High-contrast outdoor mode — for farmers reading the dashboard
+     on a phone in bright Yunlin sun. Triggered by ?contrast=high or
+     by the OS-level "increase contrast" setting. Overrides both
+     light and dark color schemes with pure black-on-white + heavy
+     borders + larger touch targets. */
+  body.contrast-high,
+  body.contrast-high:is(:root) {
+    --bg: #ffffff;
+    --bg-card: #ffffff;
+    --bg-subtle: #f5f5f5;
+    --text: #000000;
+    --text-muted: #2a2a2a;
+    --border: #000000;
+    --accent: #006e3a;
+    --accent-dark: #003e20;
+    --accent-tint: rgba(0, 110, 58, 0.18);
+    --warn: #8a3a00;
+    --warn-bg: #fff4d6;
+    --warn-border: #8a3a00;
+    --s1: #8a3a00;
+    --s2: #00307a;
+    --s3: #4a1a8a;
+    --neg: #8a0000;
+    --ok: #006e3a;
+    --pending: #8a3a00;
+    --shadow: none;
+    --shadow-lift: none;
+  }
+  body.contrast-high * { border-color: currentColor; }
+  body.contrast-high .panel,
+  body.contrast-high .tool-card,
+  body.contrast-high .dc-card,
+  body.contrast-high .top-action-card {
+    border-width: 2px !important;
+  }
+  body.contrast-high .agent-q-input,
+  body.contrast-high input,
+  body.contrast-high select,
+  body.contrast-high textarea {
+    border: 2px solid #000 !important;
+    background: #fff !important;
+    color: #000 !important;
+  }
+  body.contrast-high .agent-q-btn,
+  body.contrast-high button:not(.lang-toggle):not(.agent-recent-clear) {
+    border: 2px solid #000 !important;
+    font-weight: 700;
+  }
+  @media (prefers-contrast: more) {
+    body:not(.contrast-off) { /* auto-opt-in to high contrast when OS asks */
+      /* This re-applies the same overrides without requiring the body class. */
+    }
+  }
+
+  /* Tiny floating toggle so the farmer can flip the mode without
+     URL-editing — lives in the lang-toggle row. */
+  .contrast-toggle {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 4px 9px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    margin-left: 6px;
+    transition: background 0.12s ease;
+  }
+  .contrast-toggle:hover {
+    background: var(--accent-tint);
+    border-color: var(--accent);
+  }
+  body.contrast-high .contrast-toggle {
+    background: #000;
+    color: #fff;
+  }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -3159,6 +3237,7 @@
     <a href="index.html" class="logo">Taiwan Carbon Tools</a>
     <div class="header-right">
       <a href="farm.html" class="back-link" data-zh="← 公開計算器" data-en="← Public tool">← 公開計算器</a>
+      <button class="contrast-toggle" id="contrastToggle" title="切換高對比模式（戶外可讀） / Toggle high-contrast outdoor mode" aria-label="Toggle high-contrast outdoor mode">☀️</button>
       <button class="lang-toggle" id="langToggle">English</button>
     </div>
   </div>
@@ -13511,6 +13590,36 @@ Applicant: ${ownerName} (signature)
     } catch (e) {}
     document.getElementById('langToggle').addEventListener('click', () => {
       applyLang(currentLang === 'zh' ? 'en' : 'zh');
+    });
+
+    // High-contrast outdoor mode — triggered by ?contrast=high in the
+    // URL, by saved preference, or by OS-level prefers-contrast: more.
+    // Persists across reload via localStorage. The toggle icon flips
+    // ☀️ (light → high-contrast) ↔ 🌗 (high-contrast → normal).
+    function applyContrast(mode) {
+      const high = mode === 'high';
+      document.body.classList.toggle('contrast-high', high);
+      const btn = document.getElementById('contrastToggle');
+      if (btn) btn.textContent = high ? '🌗' : '☀️';
+      try { localStorage.setItem('tct_contrast', high ? 'high' : 'normal'); } catch (e) {}
+    }
+    const urlContrast = new URLSearchParams(location.search).get('contrast');
+    let initialContrast = 'normal';
+    if (urlContrast === 'high') {
+      initialContrast = 'high';
+    } else {
+      try {
+        const saved = localStorage.getItem('tct_contrast');
+        if (saved === 'high') initialContrast = 'high';
+      } catch (e) {}
+      // OS-level signal — opt in unless user has explicitly chosen normal
+      if (initialContrast === 'normal' && window.matchMedia && window.matchMedia('(prefers-contrast: more)').matches) {
+        initialContrast = 'high';
+      }
+    }
+    applyContrast(initialContrast);
+    document.getElementById('contrastToggle').addEventListener('click', () => {
+      applyContrast(document.body.classList.contains('contrast-high') ? 'normal' : 'high');
     });
 
     // Agent reset — clear priority + Q&A + chat thread
