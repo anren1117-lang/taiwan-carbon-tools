@@ -8426,6 +8426,16 @@ This application supports starting organic-transition certification for ≥1 ha.
     if (/(你覺得|你建議|你會怎麼|你的意見|what do you think|what would you do|your opinion|your suggestion)/.test(lq)) {
       return { type: 'opinion' };
     }
+    // Vague / under-specified question — ask back instead of dumping a
+    // textbook chapter. Triggers when the question is very short OR
+    // is a bare "help me" / "what should I do" with no domain hook.
+    // Cycle-2 customer critic: "the bot talks; it doesn\'t listen."
+    if (lq.length < 5 && !/[？?!！。.]/.test(lq)) {
+      return { type: 'clarify', reason: 'too_short' };
+    }
+    if (/^(幫我|help me|怎麼辦|what do i do|what should i do|i don.t know|不知道)[\s.!?,，。！？]*$/.test(lq)) {
+      return { type: 'clarify', reason: 'too_vague' };
+    }
     return { type: 'lookup' };
   }
 
@@ -8470,6 +8480,19 @@ This application supports starting organic-transition certification for ≥1 ha.
         situation: { zh: '我不會強迫一個答案。每個農場的條件都不同。可以告訴我：你的情況跟我說的哪裡不一樣？或我可以從別的角度回答這個問題。',
                      en: 'I won\'t force one answer. Every farm is different. Can you tell me: what about your situation differs from what I described? Or I can come at the question from another angle.' },
         actions: []
+      },
+      clarify: {
+        topic: { zh: '想多了解一點再回答你', en: 'Want to know a bit more first' },
+        headline: { zh: '我可以幫忙，但要先抓對方向 — 告訴我多一點', en: 'I can help — but tell me a bit more so I aim at the right thing' },
+        situation: { zh: '空泛的問題我給出空泛的答案，對你沒幫助。可以挑一個方向告訴我，我就能給具體的建議。',
+                     en: 'A vague question gets a vague answer — that doesn\'t help. Pick a direction and I can give you something concrete.' },
+        actions: [
+          { zh: '<strong>是錢的事嗎？</strong> — 例如「這個月發不出工錢」、「補助不知道怎麼領」、「定價不知道怎麼開」', en: '<strong>About money?</strong> — e.g. "can\'t pay wages this month", "don\'t know how to claim subsidies", "don\'t know how to price"' },
+          { zh: '<strong>是田裡的事嗎？</strong> — 例如「葉子變黃」、「蟲咬」、「水太多」、「土壤改良」', en: '<strong>About the field?</strong> — e.g. "yellowing leaves", "pest damage", "waterlogging", "soil improvement"' },
+          { zh: '<strong>是賣的事嗎？</strong> — 例如「沒通路」、「買家殺價」、「找不到客戶」', en: '<strong>About sales?</strong> — e.g. "no channels", "buyers haggling", "can\'t find customers"' },
+          { zh: '<strong>是人的事嗎？</strong> — 例如「累」、「孤單」、「家人有意見」、「想接班」', en: '<strong>About you / family?</strong> — e.g. "tired", "lonely", "family disagrees", "succession"' },
+          { zh: '或直接點下方「📚 瀏覽全部主題」看看 83 個主題中哪個最像你的問題。', en: 'Or tap "📚 Browse all topics" below to scan the 83 topics for the closest match.' }
+        ]
       },
       venting: {
         topic: { zh: '我聽見你了', en: 'I hear you' },
