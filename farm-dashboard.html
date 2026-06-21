@@ -5282,12 +5282,8 @@ This application supports starting organic-transition certification for ≥1 ha.
   // Match can be a KB entry or a conversational-intent synthetic object.
   let agentState = { priority: null, lastQuestion: null, lastAnswer: null, thread: [] };
   const AGENT_THREAD_MAX = 5;
-  function pushThread(q, match) {
-    agentState.thread.push({ q, match: match || null, matchId: match ? match.id : null, ts: Date.now() });
-    if (agentState.thread.length > AGENT_THREAD_MAX) {
-      agentState.thread.shift();
-    }
-  }
+  // (pushThread removed cycle 17 — all callers route through
+  // pushThreadWithTyping which handles thread cap + render.)
   window.clearAgentThread = function() {
     agentState.thread = [];
     agentState.lastQuestion = null;
@@ -9209,11 +9205,8 @@ This application supports starting organic-transition certification for ≥1 ha.
     }, 520);
   }
 
-  // Backwards-compat wrapper — kept for any external callers, but
-  // delegates to renderAgentChat which renders the full thread.
-  function renderAgentAnswer(q, match, inp, r) {
-    renderAgentChat();
-  }
+  // (renderAgentAnswer wrapper removed cycle 17 — no external
+  // callers existed; renderAgentChat is now the single entry point.)
 
   // Browse-all-topics index — third discovery path beyond typing and
   // quick-chips. Groups every KB entry by category so a farmer can
