@@ -12405,6 +12405,18 @@ Applicant: ${ownerName} (signature)
     }
     return streak;
   }
+  // Days since the most recent weekly entry (any field set). Returns
+  // -1 when there are zero entries (signals "first-time" empty state).
+  function daysSinceLastCheckin(entries) {
+    let latest = 0;
+    for (const k of Object.keys(entries || {})) {
+      const e = entries[k];
+      const ts = e && e.savedAt ? new Date(e.savedAt).getTime() : 0;
+      if (ts > latest) latest = ts;
+    }
+    if (!latest) return -1;
+    return Math.floor((Date.now() - latest) / 86400000);
+  }
 
   function renderWeeklyCheckin() {
     const host = document.getElementById('weeklyCheckinContent');
@@ -12414,6 +12426,7 @@ Applicant: ${ownerName} (signature)
     const currentWeek = isoWeekKey();
     const currentEntry = entries[currentWeek] || {};
     const streak = computeStreak(entries);
+    const daysSince = daysSinceLastCheckin(entries);
 
     const questions = [
       { id: 'q_sales', zh: '本週有出貨 / 銷售嗎？', en: 'Made any sales this week?' },
@@ -12422,11 +12435,22 @@ Applicant: ${ownerName} (signature)
       { id: 'q_issue', zh: '本週有任何天氣 / 病蟲 / 設備問題？', en: 'Any weather / pest / equipment issues?' }
     ];
 
+    // "Days since last check-in" prompt
+    let staleBadge = '';
+    if (daysSince === -1) {
+      staleBadge = `<div style="font-size: 12px; padding: 4px 12px; background: var(--accent-tint); color: var(--accent); border-radius: 999px; font-weight: 600;">${isZh ? '👋 第一次紀錄 — 30 秒就好' : '👋 First entry — 30 seconds'}</div>`;
+    } else if (daysSince >= 14) {
+      staleBadge = `<div style="font-size: 12px; padding: 4px 12px; background: rgba(217, 119, 6, 0.14); color: #d97706; border-radius: 999px; font-weight: 600;">${isZh ? `📭 ${daysSince} 天沒紀錄了` : `📭 ${daysSince} days since last`}</div>`;
+    } else if (daysSince >= 7 && !currentEntry.savedAt) {
+      staleBadge = `<div style="font-size: 12px; padding: 4px 12px; background: var(--bg-subtle); color: var(--text-muted); border-radius: 999px; font-weight: 600;">${isZh ? `上次紀錄 ${daysSince} 天前` : `Last logged ${daysSince}d ago`}</div>`;
+    }
+
     // Render current week form
     let html = `
-      <div style="display: flex; flex-wrap: wrap; gap: 14px; align-items: baseline; margin-bottom: 14px;">
+      <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: baseline; margin-bottom: 14px;">
         <div style="font-size: 14px; font-weight: 700; color: var(--accent);">📅 ${isZh ? '本週' : 'This week'}: ${currentWeek}</div>
         ${streak > 0 ? `<div style="font-size: 13px; padding: 4px 12px; background: rgba(217, 119, 6, 0.12); color: #d97706; border-radius: 999px; font-weight: 700;">🔥 ${isZh ? `連續紀錄 ${streak} 週` : `${streak}-week streak`}</div>` : ''}
+        ${staleBadge}
         ${currentEntry.savedAt ? `<div style="font-size: 12px; color: var(--text-muted);">${isZh ? '✓ 本週已紀錄' : '✓ logged'}</div>` : ''}
       </div>
       <div style="display: grid; gap: 8px; margin-bottom: 12px;">
