@@ -145,6 +145,21 @@
     color: #fff;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* Global reduce-motion guard. Beats the scattered per-component
+     guards by setting a hard ceiling: anyone with the OS preference
+     enabled gets near-instant animations + transitions across the
+     whole dashboard, including any future component that forgets to
+     add its own override. */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
   body {
     font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     background: var(--bg);
