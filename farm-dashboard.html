@@ -8918,6 +8918,7 @@ This application supports starting organic-transition certification for ≥1 ha.
     climate_risk:        'high',
     water_mgmt:          'high',
     cash_short:          'high',
+    delayed_payment:     'high',
     losing_money:        'high',
     pricing_specific:    'high',
     land_tenure:         'high',
@@ -8939,7 +8940,8 @@ This application supports starting organic-transition certification for ≥1 ha.
     price_too_low:       ['buyer_expensive', 'find_buyers', 'pricing_specific'],
     buyer_expensive:     ['price_too_low', 'pitch_buyer', 'find_buyers'],
     subsidies_available: ['organic_transition', 'practice_invest', 'cash_short'],
-    cash_short:          ['subsidies_available', 'how_diversify', 'reduce_cost'],
+    cash_short:          ['subsidies_available', 'how_diversify', 'reduce_cost', 'delayed_payment'],
+    delayed_payment:     ['cash_short', 'find_buyers', 'pitch_buyer'],
     how_diversify:       ['practice_invest', 'find_buyers', 'marketing_social'],
     practice_invest:     ['cert_question', 'subsidies_available', 'soil_test'],
     cert_question:       ['organic_transition', 'find_buyers', 'subsidies_available'],
@@ -9485,7 +9487,7 @@ This application supports starting organic-transition certification for ≥1 ha.
   // keywords. Re-renders on language change.
   const BROWSE_CATEGORIES = [
     { key: 'biz',    zh: '💼 經營 / 通路 / 補助',     en: '💼 Business / channels / subsidies',
-      ids: ['cash_short', 'find_buyers', 'subsidies_available', 'price_too_low', 'buyer_expensive',
+      ids: ['cash_short', 'delayed_payment', 'find_buyers', 'subsidies_available', 'price_too_low', 'buyer_expensive',
             'how_diversify', 'practice_invest', 'losing_money', 'reduce_cost', 'compare_peers',
             'pitch_buyer', 'pricing_premium', 'goal_setting', 'climate_risk', 'cert_question',
             'soil_test', 'what_to_do_now', 'hiring_labor', 'succession', 'marketing_social',
