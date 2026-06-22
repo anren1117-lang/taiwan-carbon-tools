@@ -1968,7 +1968,33 @@
     .trust-footer-meta { flex-direction: column; align-items: flex-start; }
   }
   @media print {
-    .trust-footer { display: none !important; }
+    /* Trust footer: hide the grid + meta, but keep the methodology
+       block (already in the main flow as <div class="methodology">)
+       and KEEP the emergency hotlines — if the printout is handed
+       to a farmer in distress, those numbers should still be there. */
+    .trust-footer-grid,
+    .trust-footer-meta,
+    .trust-footer-disclaimer {
+      display: none !important;
+    }
+    .trust-footer {
+      max-width: none;
+      margin: 16px 0 0;
+      padding: 12px 0;
+      border-top: 1px solid #000;
+      border-radius: 0;
+      background: transparent;
+      page-break-inside: avoid;
+    }
+    .trust-hotlines {
+      background: transparent !important;
+      border: 1px solid #000 !important;
+      border-left: 3px solid #000 !important;
+      font-size: 9pt;
+      page-break-inside: avoid;
+    }
+    .trust-hotlines a strong { color: #000 !important; }
+    .trust-hotlines a { color: #000 !important; border-bottom: none !important; }
   }
 
   @media print {
