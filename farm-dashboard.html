@@ -3422,6 +3422,16 @@
   if (new URLSearchParams(window.location.search).get('id')) {
     document.body.classList.add('loading');
   }
+  // Register service worker for offline support (cycle 33). Best-effort
+  // — silently skips when the browser doesn\'t support it (older
+  // mobile browsers, file://, etc.). No update prompt; sw uses
+  // network-first for HTML so updates land naturally on next online
+  // load.
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js').catch(() => {});
+    });
+  }
 </script>
 
 <div class="dash-loader" id="dashLoader" aria-hidden="true">
