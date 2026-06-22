@@ -6924,6 +6924,103 @@ This application supports starting organic-transition certification for ≥1 ha.
       }
     },
     {
+      id: 'delayed_payment',
+      keywords: ['拖款', '欠款', '月結', '貨款', '沒付錢', '催款', '逾期', '帳沒收', 'delayed payment', 'overdue', 'invoice', 'net 60', 'net 90', 'late payment', 'unpaid invoice', 'collections'],
+      topic: { zh: '買家拖款', en: 'Buyer delayed payment' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '月結 60 天變 120 天 — 4 步驟把錢追回來不破關係', en: 'Net-60 stretched to net-120 — 4 steps to collect without burning the relationship' },
+          situation: { zh: '台灣中小農場最常見的隱性現金殺手：說好月結 60 天，實際收款 90-120 天。買家不是惡意，是他們自己的客戶也在拖。但這個「習慣性延遲」會直接吃掉你下季的肥料 + 工錢預算。處理時順序很重要：客觀紀錄 → 軟性提醒 → 正式催款 → 改條款 / 換買家。',
+                       en: 'The #1 silent cash killer for Taiwan small farms: agreed net-60 becomes actual 90-120 days. Buyer isn\'t usually malicious — their own customers are also late. But "habitual delay" eats your next season\'s fertilizer + wages budget. Order matters: objective record → soft reminder → formal collection → renegotiate / replace buyer.' },
+          actions: [
+            { zh: '1. <strong>翻出每一筆貨款</strong> — 寫一張表：出貨日 / 應付日 / 實收日 / 落差天數。每個買家都算一次。對的買家會嚇一跳「啊我有這麼慢喔」，錯的買家會避而不答。',
+              en: '1. <strong>List every invoice</strong> — ship date / due date / actual paid date / lag days. Per buyer. Honest ones go "wait, am I that slow?", problem ones dodge.' },
+            { zh: '2. <strong>軟性提醒（出貨後 45 天）</strong> — 不是「催款」是「對帳」。LINE 一句「請問 X 月貨款方便確認進度嗎？」，留紀錄但不撕破臉。多數 60% 的延遲在這一步收回。',
+              en: '2. <strong>Soft reminder (day 45 post-ship)</strong> — frame as "reconciliation", not "collection". LINE "Just checking the X invoice — any update?". Logs intent without burning relationship. ~60% of lateness resolves here.' },
+            { zh: '3. <strong>正式催款（90 天 +）</strong> — Email 列「應付日 / 實際逾期天數 / 累計金額 / 期望付款日」清清楚楚。CC 給對方財務窗口（不只業務）。同時用「下次出貨需先付清前批」當隱性壓力。',
+              en: '3. <strong>Formal collection (90+ days)</strong> — Email with "due date / actual lag / cumulative amount / expected pay date" itemized. CC the buyer\'s finance contact (not just sales). Pair with "next shipment requires clearing previous" as implicit leverage.' },
+            { zh: '4. <strong>改條款 / 換買家</strong> — 同一個買家拖過 2 次 = 結構性問題。改成「先付 50% 才出貨」或「縮短月結 30 天」。談不下來 = 換買家。看「找通路」答案 — 一個拖款買家換 2 個準時買家通常還划算。',
+              en: '4. <strong>Renegotiate or replace</strong> — 2× lateness from same buyer = structural problem. Switch to "50% upfront" or "net-30". If they won\'t agree → replace. See "Find buyers" — one late buyer swapped for 2 timely ones usually pencils out.' }
+          ],
+          checklist: {
+            title: { zh: '簽合約 / 開戶前先確認', en: 'Confirm before signing / opening' },
+            items: [
+              { zh: '<strong>白紙黑字付款條款</strong> — 沒 Email 沒簽名的口頭月結，後面追不到。', en: '<strong>Written payment terms</strong> — verbal net-X with no email / signature is uncollectable later.' },
+              { zh: '<strong>逾期罰則條款</strong> — 比方逾期一日 0.05% 利息，買家會更尊重期限。', en: '<strong>Late-fee clause</strong> — e.g. 0.05%/day interest. Makes buyers respect the deadline more.' },
+              { zh: '<strong>買家信用查核</strong> — 同行 LINE 群問一聲「XX 公司有跟你們合作過嗎？付款準時嗎？」5 分鐘換 6 個月不踩雷。', en: '<strong>Credit check the buyer</strong> — ask industry LINE groups "anyone work with XX? pay on time?". 5 minutes saves 6 months of pain.' },
+              { zh: '<strong>單一買家上限 30% 營收</strong> — 任何買家拖款都會傷，但 > 30% 集中 = 致命傷。', en: '<strong>No single buyer > 30% of revenue</strong> — any buyer can delay; concentration turns "annoying" into "fatal".' }
+            ]
+          },
+          pitfalls: {
+            title: { zh: '常見地雷', en: 'Common landmines' },
+            items: [
+              { zh: '<strong>「都老朋友，不好意思問」</strong> — 友情會死，現金不會回來。對帳是專業，不是不信任。', en: '<strong>"Old friend, can\'t bring it up"</strong> — the friendship dies, the cash doesn\'t come back. Reconciliation is professional, not distrust.' },
+              { zh: '<strong>口頭月結沒紀錄</strong> — 沒對方確認的 Email / LINE，法律上很難主張。先在 LINE 寫一句「謝謝確認 X 月 X 日前付款」對方按讚就是證據。', en: '<strong>Verbal terms with no record</strong> — without confirmation Email / LINE, hard to assert legally. Drop "thanks, confirming pay by X/X" in LINE; a 👍 from them is evidence.' },
+              { zh: '<strong>連續出貨給已欠款買家</strong> — 每出一批就放大缺口。第 2 批就該停。', en: '<strong>Keep shipping to a buyer who already owes</strong> — every shipment magnifies the gap. Stop by shipment #2.' },
+              { zh: '<strong>不告知配偶</strong> — 兩人經營的農場、配偶不知道「拖了 60 萬」會被冷不防的家庭爭吵打爆。每個拖款月結要兩人都知道。', en: '<strong>Hiding it from spouse</strong> — in a couple-run farm, the spouse not knowing "NT$600k is hanging" leads to blindsiding family conflict. Both partners need to know about every late invoice.' }
+            ]
+          },
+          resources: {
+            title: { zh: '收不到錢的最終手段', en: 'Last-resort collection paths' },
+            items: [
+              { zh: '<strong>農會 / 信用部</strong>：可協助寄發催款律師函，對中小型買家有效。', en: '<strong>Farmers Association / credit-coop</strong>: can help send a formal demand letter. Effective vs small/mid buyers.' },
+              { zh: '<strong>支付命令（小額訴訟）</strong>：地方法院聲請費 NT$ 500，債權清楚的話 3 個月內可拿到執行名義。', en: '<strong>Payment order (small claims)</strong>: file at district court, NT$500 fee; with clear debt, get enforcement title in 3 months.' },
+              { zh: '<strong>商會 / 工會仲裁</strong>：若買家是商會會員，仲裁壓力比訴訟還大且更快。', en: '<strong>Trade-association arbitration</strong>: if the buyer is a member, peer pressure beats lawsuits in speed.' },
+              { zh: '<strong>1955 勞動部專線</strong>：若你被買家當作勞工拖薪，可用這條（少見但存在）。', en: '<strong>1955 MOL Labor Hotline</strong>: applicable if the buyer is treating you as labor and withholding pay (rare but possible).' }
+            ]
+          },
+          approaches: {
+            title: { zh: '4 種收款策略 — 依與買家關係', en: '4 collection strategies — by relationship depth' },
+            items: [
+              { tone: 'easy',
+                tag: { zh: 'A · 自動扣款 / 預付', en: 'A · Auto-pay / prepay' },
+                fit: (i) => i.annualRevenueNT > 0 && i.annualRevenueNT < 1000000 ? 3 : 1,
+                summary: { zh: '小額買家先收錢再出貨', en: 'Small buyers: cash first, ship second' },
+                bullets: [
+                  { zh: '銀行轉帳 / LINE Pay / 街口 — 收到再出貨', en: 'Bank / LINE Pay / JKO — ship only after received' },
+                  { zh: 'CSA / 訂閱戶天然適合', en: 'CSA / subscription customers are natural fit' },
+                  { zh: '初次合作優先用這個', en: 'Use this for all first-time buyers' }
+                ],
+                who: { zh: '適合：個人客戶、社區團購、初次合作', en: 'For: individual customers, community group-buy, first-time buyers' } },
+              { tone: 'balanced',
+                tag: { zh: 'B · 嚴守條款 + 罰則', en: 'B · Strict terms + late fees' },
+                fit: (i) => (i.annualRevenueNT >= 1000000 && i.annualRevenueNT < 3000000) ? 3 : 1,
+                summary: { zh: '簽合約寫清逾期罰息 + 對帳排程', en: 'Written contract with late-fee clause + reconciliation schedule' },
+                bullets: [
+                  { zh: '逾期一日 0.05% 利息（合理區間）', en: 'Late fee 0.05%/day (defensible range)' },
+                  { zh: '每月 5 日 / 20 日固定對帳', en: 'Reconcile on the 5th + 20th of each month' },
+                  { zh: '拖款 3 次自動降為「先付後出」', en: '3 strikes → auto-downgrade to prepay-only' }
+                ],
+                who: { zh: '適合：超商、有機通路、餐廳直供', en: 'For: convenience stores, organic retail, chef-direct' } },
+              { tone: 'bold',
+                tag: { zh: 'C · 保理 / 應收帳款融資', en: 'C · Factoring / receivables financing' },
+                fit: (i) => i.annualRevenueNT >= 3000000 ? 2 : 0,
+                summary: { zh: '把應收帳款賣給銀行 — 立刻拿 80-90% 現金', en: 'Sell receivables to bank — get 80-90% cash today' },
+                bullets: [
+                  { zh: '年費率 3-6%，比拖款 3 個月的機會成本低', en: '3-6% annual rate, cheaper than 3-month cash lag' },
+                  { zh: '銀行幫你追款 — 不傷你跟買家的關係', en: 'Bank chases the buyer — you stay friendly' },
+                  { zh: '需要月營收 100k+ 才有銀行願意承做', en: 'Need NT$100k+/mo for any bank to engage' }
+                ],
+                who: { zh: '適合：大宗供應、買家穩定但結帳慢', en: 'For: bulk supply, stable buyers but slow payers' } },
+              { tone: 'collab',
+                tag: { zh: 'D · 產銷班集體議約', en: 'D · Co-op collective terms' },
+                fit: (i) => i.cropType === 'rice' || i.farmSize >= 4 ? 2 : 0,
+                summary: { zh: '透過合作社統一收款 — 個別農戶不直面拖款', en: 'Collect via the co-op — individual farms never face delayed payment' },
+                bullets: [
+                  { zh: '合作社統一對買家收款 + 統一分配給農戶', en: 'Co-op invoices buyer + distributes to farms uniformly' },
+                  { zh: '個別農戶現金流穩定，不再被單一買家綁架', en: 'Per-farm cash flow stabilizes, no single-buyer hostage' },
+                  { zh: '需要：加入有財務職能的產銷班', en: 'Need: join a producer group with finance function' }
+                ],
+                who: { zh: '適合：水稻、大面積、有合作社的區域', en: 'For: rice, large acreage, regions with co-ops' } }
+            ]
+          },
+          links: [
+            { label: { zh: '看「現金流月曆」缺口月分析', en: 'See Cash Flow Calendar gap analysis' }, href: '#sec-cashflow' }
+          ]
+        };
+      }
+    },
+    {
       id: 'pricing_specific',
       keywords: ['多少錢', '一斤多少', '一公斤多少錢', '行情', '市場價', 'how much per kg', 'market price', 'going rate', 'price per kg'],
       topic: { zh: '市場行情 vs 你的價', en: 'Market price vs your price' },
