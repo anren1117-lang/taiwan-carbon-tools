@@ -14380,6 +14380,21 @@ Applicant: ${ownerName} (signature)
     loadAgentThread();
     renderAgentChat();
 
+    // Cross-tab sync (cycle 35) — when the farmer flips language or
+    // contrast in another open tab (e.g. the pitch sheet), this tab
+    // picks it up immediately via the storage event. Otherwise tabs
+    // would silently drift out of sync.
+    window.addEventListener('storage', (ev) => {
+      if (ev.key === 'tct_lang' && (ev.newValue === 'zh' || ev.newValue === 'en')) {
+        if (ev.newValue !== currentLang) applyLang(ev.newValue);
+      }
+      if (ev.key === 'tct_contrast' && (ev.newValue === 'high' || ev.newValue === 'normal')) {
+        document.body.classList.toggle('contrast-high', ev.newValue === 'high');
+        const btn = document.getElementById('contrastToggle');
+        if (btn) btn.textContent = ev.newValue === 'high' ? '🌗' : '☀️';
+      }
+    });
+
     // Browse-all-topics search filter (cycle 24) — typing in the
     // search box hides non-matching chips + categories.
     const browseSearch = document.getElementById('agentBrowseSearch');
