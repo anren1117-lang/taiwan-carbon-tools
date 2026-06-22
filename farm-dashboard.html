@@ -2838,6 +2838,29 @@
     transform: translateY(-1px);
   }
   /* ── Chat-thread UI (multi-turn agent) ─────────────────────── */
+  /* Skip-to-content link — invisible until keyboard-focused. Lets a
+     screen-reader / keyboard user bypass the header + nav and jump
+     straight into the dashboard body. WCAG bypass-blocks pattern. */
+  .skip-link {
+    position: absolute;
+    top: -40px;
+    left: 12px;
+    z-index: 1000;
+    background: var(--accent);
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 0 0 6px 6px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 13px;
+    transition: top 0.18s ease;
+  }
+  .skip-link:focus {
+    top: 0;
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+  }
+
   /* Screen-reader-only — visible label for the agent input that
      stays off-screen visually but is announced by AT. */
   .sr-only {
@@ -3405,6 +3428,8 @@
 </style>
 </head>
 <body>
+
+<a href="#sec-overview" class="skip-link" data-zh="跳至主要內容" data-en="Skip to main content">跳至主要內容 · Skip to main content</a>
 
 <noscript>
   <div style="max-width: 640px; margin: 60px auto; padding: 28px 32px; border: 2px solid #1D9E75; border-radius: 12px; background: #f7f8f7; color: #1a1a1a; font-family: 'Noto Sans TC', -apple-system, system-ui, sans-serif; line-height: 1.6;">
