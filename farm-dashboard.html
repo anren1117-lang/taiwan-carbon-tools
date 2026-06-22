@@ -2950,6 +2950,51 @@
     padding: 4px 16px 14px;
     border-top: 1px solid var(--border);
   }
+  .agent-browse-search-wrap {
+    position: relative;
+    padding: 10px 16px 6px;
+    border-top: 1px solid var(--border);
+  }
+  .agent-browse-search {
+    width: 100%;
+    padding: 8px 32px 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    background: var(--bg-card);
+    color: var(--text);
+    font-family: inherit;
+    font-size: 13px;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .agent-browse-search:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-tint);
+  }
+  .agent-browse-search::-webkit-search-cancel-button { -webkit-appearance: none; appearance: none; }
+  .agent-browse-clear {
+    position: absolute;
+    right: 22px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 4px 8px;
+  }
+  .agent-browse-clear:hover { color: var(--text); }
+  .agent-browse-empty {
+    padding: 12px 16px 16px;
+    font-size: 12.5px;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+  .agent-browse-topic[hidden] { display: none !important; }
+  .agent-browse-cat[hidden] { display: none !important; }
   .agent-browse-cat {
     margin-top: 12px;
   }
@@ -3550,7 +3595,16 @@
         <span data-zh="📚 瀏覽全部主題" data-en="📚 Browse all topics">📚 瀏覽全部主題</span>
         <span class="agent-browse-count" id="agentBrowseCount"></span>
       </summary>
+      <div class="agent-browse-search-wrap">
+        <input type="search" id="agentBrowseSearch" class="agent-browse-search"
+               data-zh-placeholder="🔍 篩選主題（中英文皆可）..."
+               data-en-placeholder="🔍 Filter topics (zh or en)..."
+               placeholder="🔍 篩選主題..."
+               aria-label="篩選主題">
+        <button type="button" class="agent-browse-clear" id="agentBrowseClear" style="display:none" aria-label="清除篩選">×</button>
+      </div>
       <div class="agent-browse-body" id="agentBrowseBody"></div>
+      <div class="agent-browse-empty" id="agentBrowseEmpty" style="display:none" data-zh="沒有符合的主題 — 試試別的關鍵字，或直接在上方問助手。" data-en="No topics match — try different keywords, or ask the helper above directly.">沒有符合的主題 — 試試別的關鍵字，或直接在上方問助手。</div>
     </details>
 
     <!-- Saved answers — destination for the "★ Save" button. -->
@@ -9304,7 +9358,7 @@ This application supports starting organic-transition certification for ≥1 ha.
       const items = cat.ids
         .map(id => AGENT_KB.find(e => e.id === id))
         .filter(Boolean)
-        .map(e => `<button class="agent-browse-topic" onclick="askAgentTopic('${e.id}')">${isZh ? e.topic.zh : e.topic.en}</button>`)
+        .map(e => `<button class="agent-browse-topic" data-topic-id="${e.id}" data-search="${escapeHtml((e.topic.zh + ' ' + e.topic.en + ' ' + (e.keywords || []).join(' ')).toLowerCase())}" onclick="askAgentTopic('${e.id}')">${isZh ? e.topic.zh : e.topic.en}</button>`)
         .join('');
       if (!items) return '';
       return `
@@ -9314,6 +9368,35 @@ This application supports starting organic-transition certification for ≥1 ha.
         </div>`;
     }).join('');
     body.innerHTML = cats;
+    // Re-apply the active filter after re-render (e.g. on lang switch)
+    const searchEl = document.getElementById('agentBrowseSearch');
+    if (searchEl && searchEl.value) filterAgentBrowse(searchEl.value);
+  }
+
+  // Filter topic chips by free-text match against zh-topic + en-topic
+  // + keywords. Hides empty categories entirely + surfaces an empty
+  // state when no chip matches. Case-insensitive substring match.
+  function filterAgentBrowse(query) {
+    const q = (query || '').toLowerCase().trim();
+    const body = document.getElementById('agentBrowseBody');
+    const empty = document.getElementById('agentBrowseEmpty');
+    const clear = document.getElementById('agentBrowseClear');
+    if (!body) return;
+    if (clear) clear.style.display = q ? '' : 'none';
+    const chips = body.querySelectorAll('.agent-browse-topic');
+    let visible = 0;
+    chips.forEach(chip => {
+      const hay = chip.dataset.search || (chip.textContent || '').toLowerCase();
+      const match = !q || hay.includes(q);
+      chip.hidden = !match;
+      if (match) visible++;
+    });
+    // Hide categories with zero visible chips
+    body.querySelectorAll('.agent-browse-cat').forEach(cat => {
+      const anyVisible = cat.querySelector('.agent-browse-topic:not([hidden])');
+      cat.hidden = !anyVisible;
+    });
+    if (empty) empty.style.display = (q && visible === 0) ? '' : 'none';
   }
 
   // Saved-answers panel — destination for the "★ Save" button.
@@ -14053,6 +14136,31 @@ Applicant: ${ownerName} (signature)
     // the conversation survives reload. Render after to surface it.
     loadAgentThread();
     renderAgentChat();
+
+    // Browse-all-topics search filter (cycle 24) — typing in the
+    // search box hides non-matching chips + categories.
+    const browseSearch = document.getElementById('agentBrowseSearch');
+    const browseClear = document.getElementById('agentBrowseClear');
+    if (browseSearch) {
+      browseSearch.addEventListener('input', () => filterAgentBrowse(browseSearch.value));
+    }
+    if (browseClear) {
+      browseClear.addEventListener('click', () => {
+        if (browseSearch) { browseSearch.value = ''; browseSearch.focus(); }
+        filterAgentBrowse('');
+      });
+    }
+
+    // Apply restored placeholders for the search input (data-zh /
+    // data-en placeholder are not auto-applied by applyLang).
+    if (browseSearch) {
+      const updatePh = () => {
+        const ph = currentLang === 'en' ? browseSearch.getAttribute('data-en-placeholder') : browseSearch.getAttribute('data-zh-placeholder');
+        if (ph) browseSearch.placeholder = ph;
+      };
+      updatePh();
+      document.getElementById('langToggle').addEventListener('click', () => setTimeout(updatePh, 0));
+    }
 
     // Back-to-top FAB (cycle 20): appears after 800px scroll, jumps
     // to the agent panel (the farmer\'s most-used entry point).
