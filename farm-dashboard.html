@@ -151,6 +151,23 @@
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
+  /* Global focus-visible ring — applies to every interactive element
+     when navigated via keyboard. Mouse clicks don\'t trigger it
+     (focus-visible only matches "the user is keyboarding"). Sets a
+     consistent accent-tinted halo so tab-navigation stays readable
+     across the 13k-line dashboard without per-component overrides. */
+  :focus-visible {
+    outline: 2px solid var(--accent, #1D9E75);
+    outline-offset: 2px;
+    border-radius: 3px;
+  }
+  /* Buttons + summary chips already have visible borders; tighten
+     the offset so the focus ring doesn\'t fight existing rounded
+     corners. */
+  button:focus-visible, summary:focus-visible, [role="button"]:focus-visible {
+    outline-offset: 1px;
+  }
+
   /* Global reduce-motion guard. Beats the scattered per-component
      guards by setting a hard ceiling: anyone with the OS preference
      enabled gets near-instant animations + transitions across the
