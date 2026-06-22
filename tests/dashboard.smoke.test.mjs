@@ -106,3 +106,24 @@ test('agent input has accessible label (cycle 16)', () => {
   assert.ok(/<label[^>]+for="agentQuestion"/.test(html), 'agent input missing <label for=agentQuestion>');
   assert.ok(/id="agentQuestion"[^>]*aria-label/.test(html), 'agent input missing aria-label fallback');
 });
+
+test('i18n parity — every element with data-zh has data-en (cycle 36)', () => {
+  // Walk every <tag ... data-zh="..." ...> and check the same
+  // element has a data-en attr. Catches the common "added a new
+  // Chinese label but forgot the English fallback" drift.
+  // Element-level regex (not perfect HTML parse but the dashboard
+  // sticks to one-line attribute blocks for these labels).
+  const tagRe = /<[a-zA-Z][^>]*\sdata-zh=(?:"[^"]*"|'[^']*')[^>]*>/g;
+  let missing = 0;
+  const examples = [];
+  let m;
+  while ((m = tagRe.exec(html)) !== null) {
+    const tag = m[0];
+    if (!/\sdata-en=(?:"[^"]*"|'[^']*')/.test(tag)) {
+      missing++;
+      if (examples.length < 3) examples.push(tag.slice(0, 120));
+    }
+  }
+  assert.equal(missing, 0,
+    `${missing} elements have data-zh without data-en. First few:\n  ${examples.join('\n  ')}`);
+});
