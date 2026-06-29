@@ -4150,17 +4150,17 @@
       <div class="editor-section">
         <h4 data-zh="農場資料" data-en="Farm profile">農場資料</h4>
         <div class="editor-grid">
-          <div><label data-zh="負責人姓名" data-en="Owner / contact name">負責人姓名 <span class="u">(name)</span></label><input type="text" id="contactName" placeholder="王大明"></div>
+          <div><label data-zh="負責人姓名" data-en="Owner / contact name">負責人姓名 <span class="u">(name)</span></label><input type="text" id="contactName" data-zh-placeholder="王大明" data-en-placeholder="e.g. Wang Da-Ming" placeholder="王大明"></div>
           <div><label data-zh="聯絡電話" data-en="Phone">聯絡電話 <span class="u">(phone)</span></label><input type="tel" id="contactPhone" placeholder="0912-345-678"></div>
           <div><label data-zh="電子郵件" data-en="Email">電子郵件 <span class="u">(email)</span></label><input type="email" id="contactEmail" placeholder="farm@example.com"></div>
           <div style="grid-column: 1 / -1;">
             <label data-zh="已取得認證（用逗號分隔；補助申請與買家提案會用到）" data-en="Certifications (comma-separated; used in subsidy drafts + buyer pitch)">已取得認證 <span class="u">(comma-separated)</span></label>
-            <input type="text" id="certificationsText" placeholder="TGAP, 友善耕作, 有機轉型期">
+            <input type="text" id="certificationsText" data-zh-placeholder="TGAP, 友善耕作, 有機轉型期" data-en-placeholder="TGAP, Friendly Farming, Organic transition" placeholder="TGAP, 友善耕作, 有機轉型期">
           </div>
           <div><label data-zh="耕作面積 " data-en="Farm size ">耕作面積 <span class="u">(ha)</span></label><input type="number" id="farmSize" min="0" step="0.1"></div>
           <div style="grid-column: 1 / -1;">
             <label data-zh="實際地址（用於市場路徑、就近通路推薦）" data-en="Actual address (drives market routing + nearest channels)">實際地址 <span class="u">(address)</span></label>
-            <input type="text" id="address" placeholder="例：屏東縣枋寮鄉xxx路 123 號">
+            <input type="text" id="address" data-zh-placeholder="例：屏東縣枋寮鄉xxx路 123 號" data-en-placeholder="e.g. 123 XXX Rd, Fangliao, Pingtung" placeholder="例：屏東縣枋寮鄉xxx路 123 號">
           </div>
           <div>
             <label data-zh="所在區域（影響建議內容）" data-en="Region (affects recommendations)">所在區域 <span class="u">(region)</span></label>
@@ -4310,7 +4310,7 @@
   <details class="editor" id="notes" style="margin-top: 0;">
     <summary data-zh="諮詢筆記（自動儲存於本機）" data-en="Engagement notes (autosaved locally)">諮詢筆記（自動儲存於本機）</summary>
     <div class="editor-body">
-      <textarea id="notesText" rows="8" placeholder="諮詢過程的筆記、客戶問題、討論結論..." style="width: 100%; padding: 12px 14px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-card); color: var(--text); font-family: inherit; font-size: 14px; line-height: 1.6; resize: vertical;"></textarea>
+      <textarea id="notesText" rows="8" data-zh-placeholder="筆記、提醒、會議重點、靈感..." data-en-placeholder="Notes, reminders, meeting points, ideas..." placeholder="筆記、提醒、會議重點、靈感..." style="width: 100%; padding: 12px 14px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-card); color: var(--text); font-family: inherit; font-size: 14px; line-height: 1.6; resize: vertical;"></textarea>
       <div id="notesStatus" style="margin-top: 8px; font-size: 11px; color: var(--text-muted); text-align: right;"></div>
     </div>
   </details>
@@ -13960,6 +13960,14 @@ Applicant: ${ownerName} (signature)
     document.querySelectorAll('[data-zh]').forEach(el => {
       const v = el.dataset[lang];
       if (v !== undefined) el.textContent = v;
+    });
+    // Placeholder i18n (cycle 40) — inputs/textareas opt in by
+    // declaring data-zh-placeholder + data-en-placeholder. Skipped
+    // by the textContent walker above since they have no data-zh.
+    document.querySelectorAll('[data-zh-placeholder]').forEach(el => {
+      const key = lang === 'en' ? 'enPlaceholder' : 'zhPlaceholder';
+      const v = el.dataset[key];
+      if (v !== undefined) el.placeholder = v;
     });
     document.getElementById('langToggle').textContent = lang === 'zh' ? 'English' : '中文';
     try { localStorage.setItem('tct_lang', lang); } catch (e) {}
