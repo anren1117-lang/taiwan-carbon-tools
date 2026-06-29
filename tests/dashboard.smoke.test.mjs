@@ -127,3 +127,47 @@ test('i18n parity — every element with data-zh has data-en (cycle 36)', () => 
   assert.equal(missing, 0,
     `${missing} elements have data-zh without data-en. First few:\n  ${examples.join('\n  ')}`);
 });
+
+test('i18n placeholder parity — data-zh-placeholder ↔ data-en-placeholder (cycle 41)', () => {
+  // Same shape as the text-content parity check but for input
+  // placeholder pairs introduced in cycle 40.
+  const tagRe = /<[a-zA-Z][^>]*\sdata-zh-placeholder=(?:"[^"]*"|'[^']*')[^>]*>/g;
+  let missing = 0;
+  const examples = [];
+  let m;
+  while ((m = tagRe.exec(html)) !== null) {
+    const tag = m[0];
+    if (!/\sdata-en-placeholder=(?:"[^"]*"|'[^']*')/.test(tag)) {
+      missing++;
+      if (examples.length < 3) examples.push(tag.slice(0, 120));
+    }
+  }
+  assert.equal(missing, 0,
+    `${missing} elements have data-zh-placeholder without data-en-placeholder. First few:\n  ${examples.join('\n  ')}`);
+});
+
+test('no Chinese-only placeholders on inputs/textareas (cycle 41)', () => {
+  // Catches inputs that have a Chinese-only placeholder= without
+  // either data-zh-placeholder/data-en-placeholder pair OR a
+  // runtime tr() call. Free-form placeholder= with CJK chars and
+  // no i18n attrs = English user sees Chinese.
+  const tagRe = /<(?:input|textarea)\b[^>]*\splaceholder=(?:"[^"]*"|'[^']*')[^>]*>/g;
+  const cjkRe = /[一-鿿]/;
+  let missing = 0;
+  const examples = [];
+  let m;
+  while ((m = tagRe.exec(html)) !== null) {
+    const tag = m[0];
+    const phMatch = tag.match(/\splaceholder=(?:"([^"]*)"|'([^']*)')/);
+    const phValue = phMatch ? (phMatch[1] || phMatch[2]) : '';
+    if (!cjkRe.test(phValue)) continue; // english-only placeholder, fine
+    // Skip if dynamic (contains ${...} template literal — rendered at runtime)
+    if (phValue.includes('${')) continue;
+    // Skip if both i18n attrs present
+    if (/\sdata-zh-placeholder=/.test(tag) && /\sdata-en-placeholder=/.test(tag)) continue;
+    missing++;
+    if (examples.length < 3) examples.push(tag.slice(0, 140));
+  }
+  assert.equal(missing, 0,
+    `${missing} inputs/textareas have Chinese-only placeholders without bilingual pair. First few:\n  ${examples.join('\n  ')}`);
+});
