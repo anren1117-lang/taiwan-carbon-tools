@@ -8526,6 +8526,60 @@ This application supports starting organic-transition certification for ≥1 ha.
               { zh: '<strong>手機</strong>：田裡常帶 + 緊急聯絡人快撥設定', en: '<strong>Mobile phone</strong>: keep in field + emergency contact speed-dial set' }
             ]
           },
+          approaches: {
+            title: { zh: '4 種預防策略 — 依年齡與身體狀況', en: '4 protection strategies — by age + body state' },
+            items: [
+              { tone: 'easy',
+                tag: { zh: 'A · 防曬優先', en: 'A · Sun-first' },
+                fit: (i) => 2,
+                summary: { zh: '裝備 + 時段管理 — 零學習門檻', en: 'Gear + time-of-day — zero learning curve' },
+                bullets: [
+                  { zh: '寬邊帽 + SPF50 + 長袖 + 11-15 點避田', en: 'Wide hat + SPF50 + long sleeves + skip field 11am-3pm' },
+                  { zh: '一次性投資 NT$ 1-2k，立刻有效', en: 'One-time NT$ 1-2k, immediately effective' },
+                  { zh: '皮膚癌風險 3 倍 → 普通水準', en: 'Skin cancer risk 3× → baseline' }
+                ],
+                who: { zh: '適合：任何年齡，立刻能做', en: 'For: any age, can do today' } },
+              { tone: 'balanced',
+                tag: { zh: 'B · 工序重設計', en: 'B · Redesign tasks' },
+                fit: (i) => 2,
+                summary: { zh: '蹲改半坐 / 工具升級 / 30 分一站', en: 'Squat → half-sit / better tools / stand every 30min' },
+                bullets: [
+                  { zh: '農夫椅 (NT$ 500-1k) — 收成不用蹲', en: 'Farmer stool (NT$ 500-1k) — no squat-harvest' },
+                  { zh: '輕量化機具 / 把手長度 = 身高 - 20cm', en: 'Lighter equipment / handle length = height - 20cm' },
+                  { zh: '番茄鐘工作法 — 強制間歇', en: 'Pomodoro timing — forced micro-breaks' }
+                ],
+                who: { zh: '適合：40+、有腰背膝痛點', en: 'For: 40+, body-pain points' } },
+              { tone: 'bold',
+                tag: { zh: 'C · 定期復健 / 醫療', en: 'C · Regular PT / medical' },
+                fit: (i) => 1,
+                summary: { zh: '每月物理治療 + 每年完整健檢', en: 'Monthly PT + annual full health check' },
+                bullets: [
+                  { zh: '健保物理治療 NT$ 200-500/次', en: 'NHI PT NT$ 200-500/visit' },
+                  { zh: '皮膚科痣檢查 (年/1 次)', en: 'Dermatology mole check (1×/yr)' },
+                  { zh: '腰椎 MRI 一次釐清結構問題', en: 'One lumbar MRI to map structural issues' }
+                ],
+                who: { zh: '適合：50+ 或已有慢性疼痛', en: 'For: 50+ or established chronic pain' } },
+              { tone: 'collab',
+                tag: { zh: 'D · 共聘 / 機械化', en: 'D · Co-hire / mechanize' },
+                fit: (i) => i.farmSize >= 3 ? 2 : 0,
+                summary: { zh: '把最傷身體的活外包或機械化', en: 'Outsource or mechanize the most body-damaging work' },
+                bullets: [
+                  { zh: '採收高峰共聘工讀生 / WWOOFer', en: 'Hire seasonal help / WWOOFer for harvest peak' },
+                  { zh: '中耕、噴灌、運輸的機械化', en: 'Mechanize tillage, irrigation, transport' },
+                  { zh: '農機補助每年都開放 — 看「補助清單」', en: 'Equipment subsidies open yearly — see Subsidies' }
+                ],
+                who: { zh: '適合：面積大、體力下降', en: 'For: larger farm, declining stamina' } }
+            ]
+          },
+          resources: {
+            title: { zh: '緊急 + 健康資源', en: 'Emergency + health resources' },
+            items: [
+              { zh: '<strong>119</strong> — 中暑、外傷、過敏休克立刻打', en: '<strong>119</strong> — heat-stroke, trauma, anaphylaxis: call immediately' },
+              { zh: '<strong>1925</strong> 衛福部安心專線 — 心理累 / 撐不下去', en: '<strong>1925</strong> MOHW Mental Health Hotline — when mentally exhausted' },
+              { zh: '農會勞健保 — 每年免費健檢 (45 歲+) ，記得用', en: 'Farmers assoc Labor/Health insurance — annual free check (45+), use it' },
+              { zh: '農藥中毒專線 <strong>0800-024-111</strong> — 噴藥意外', en: 'Pesticide poisoning hotline <strong>0800-024-111</strong> — spray accident' }
+            ]
+          },
           links: []
         };
       }
@@ -9073,6 +9127,7 @@ This application supports starting organic-transition certification for ≥1 ha.
     cash_short:          'high',
     delayed_payment:     'high',
     input_cost_spike:    'high',
+    farmer_health:       'high',
     losing_money:        'high',
     pricing_specific:    'high',
     land_tenure:         'high',
