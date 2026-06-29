@@ -1,0 +1,39 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run engine tests
+        run: node --test tests/engine.test.mjs
+
+      - name: Run farms schema tests
+        run: node --test tests/farms.test.mjs
+
+      - name: Run dashboard smoke tests
+        run: node --test tests/dashboard.smoke.test.mjs
+
+      - name: Run sibling-page drift tests
+        run: node --test tests/siblings.test.mjs
+
+      - name: Summary
+        if: always()
+        run: node --test tests/ || true
