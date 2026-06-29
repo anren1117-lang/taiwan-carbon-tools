@@ -6177,6 +6177,98 @@ This application supports starting organic-transition certification for ≥1 ha.
       }
     },
     {
+      id: 'input_cost_spike',
+      keywords: ['肥料漲價', '飼料漲價', '油價漲', '農藥漲價', '進口', '進口飼料', '物料漲', '材料漲', 'fertilizer prices', 'feed prices', 'fuel prices', 'input costs', 'cost spike', 'price increase', 'supply chain'],
+      topic: { zh: '投入品漲價', en: 'Input cost spike' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '肥料 / 飼料漲 30% 不能漲價就吃掉毛利 — 4 條對應路', en: 'Fertilizer / feed up 30% + you can\'t raise prices = margin gone. 4 responses' },
+          situation: { zh: '2022 以來俄烏戰爭、油價、運費、原物料三重打擊讓台灣農業投入品系統性漲價：肥料 +30-60%、飼料 +20-40%、農藥 +15-30%、油料波動大。買家不見得讓你跟著漲。短期：能換的換、能省的省。中期：減少對外部投入品的依賴。',
+                       en: 'Since 2022 the Russia-Ukraine war + fuel + freight + raw materials triple-hit pushed Taiwan ag input prices up structurally: fertilizer +30-60%, feed +20-40%, pesticides +15-30%, fuel volatile. Buyers won\'t always let you pass it through. Short-term: substitute + cut. Mid-term: reduce dependency on external inputs.' },
+          actions: [
+            { zh: '1. <strong>立刻：列出 top 5 投入品的目前 vs 1 年前單價</strong>。沒這張表，就不知道是「感覺貴」還是「真的崩」。每樣 ≥ 20% 漲幅，標紅。',
+              en: '1. <strong>Right now: list top-5 input prices today vs 1 year ago</strong>. Without this table, "feels expensive" is unverifiable. Flag any ≥20% increase in red.' },
+            { zh: '2. <strong>本季：找替代品 / 集中採購</strong>。化肥 → 堆肥 + 綠肥（自給）。化學農藥 → 生物農藥 + IPM。進口飼料 → 在地草料 / 玉米。加入產銷班團購可壓 8-15%。',
+              en: '2. <strong>This quarter: substitute + group buy</strong>. Chemical fert → compost + green manure (self-supply). Chemical pesticide → biopesticide + IPM. Import feed → local forage / corn. Producer-group bulk buy saves 8-15%.' },
+            { zh: '3. <strong>3-6 個月：跟買家溝通漲價</strong>。準備數字：哪幾項投入漲了多少 %、每公斤增加多少成本、希望調整的售價。給數據不給情緒。看「議價演練」面板。',
+              en: '3. <strong>3-6 months: raise prices with buyers</strong>. Bring numbers: which inputs rose what %, per-kg cost increase, requested price adjustment. Data, not emotion. See the Buyer Negotiation Rehearsal panel.' },
+            { zh: '4. <strong>1-3 年：結構性減少外部依賴</strong>。覆蓋作物 + 殘體還田 → 自然肥力；蓄水 / 雨水 → 水費；太陽能 → 電費；機具電動化 → 油料。每件單看 5-10 年回本，但「漲價免疫力」立刻多一層。',
+              en: '4. <strong>1-3 years: structurally reduce external dependency</strong>. Cover crops + residue → natural fertility; rainwater → water bill; solar → electricity; electrification → fuel. Each is 5-10 yr payback alone, but "price-spike immunity" kicks in immediately.' }
+          ],
+          checklist: {
+            title: { zh: '採購前先做的事', en: 'Before buying' },
+            items: [
+              { zh: '<strong>同型農會 + 產銷班團購群</strong> — 同樣肥料，集體下單通常 8-15% 便宜', en: '<strong>Farmers assoc + co-op group-buy LINE groups</strong> — same fertilizer, group order typically 8-15% cheaper' },
+              { zh: '<strong>政府公告台肥報價</strong> — 台肥公司每月公告，作為「市場底線」', en: '<strong>TFC monthly published fertilizer prices</strong> — Taiwan Fertilizer Corp publishes monthly, treat as market floor' },
+              { zh: '<strong>農會推廣股的補助配方</strong> — 各縣農會有「平價肥料」配方，比市售貴肥料便宜 20-30%', en: '<strong>Subsidized formulations from county farmers assoc</strong> — "affordable fert" formulations 20-30% below market' },
+              { zh: '<strong>剩 30% 內才補貨</strong> — 永遠保留 30% 緩衝，避免「沒了急著買」的高價陷阱', en: '<strong>Reorder at 30% remaining</strong> — keep 30% buffer; avoid "panic buy at peak price" trap' }
+            ]
+          },
+          pitfalls: {
+            title: { zh: '常見地雷', en: 'Common landmines' },
+            items: [
+              { zh: '<strong>「現在貴一點先撐撐看」</strong> — 6 個月後一算，毛利已經負了。要先有數字。', en: '<strong>"It\'s just a bit pricier, let\'s tough it out"</strong> — 6 months later margins are negative. Track the numbers first.' },
+              { zh: '<strong>追加配方</strong>（缺氮就再撒一點）— 沒土壤檢測就追加 = 通常加 30% 才有 10% 效果。先測再施。', en: '<strong>Blind top-dressing</strong> ("looks N-deficient, add more") — without soil test = add 30% for 10% effect. Test first.' },
+              { zh: '<strong>不敢漲價怕客戶跑</strong> — 投入品漲 30%、你不漲 = 你補貼客戶。看「議價演練」面板的 5 種對話。', en: '<strong>Afraid to raise prices, customers may leave</strong> — inputs up 30%, you absorb = you subsidize the customer. See the 5 negotiation scenarios.' },
+              { zh: '<strong>囤貨抗漲</strong> — 通常農資儲存 6 個月以上會變質，反而虧。除非有專業儲存。', en: '<strong>Stockpiling vs price rises</strong> — most ag inputs degrade after 6mo storage. Worse outcome unless you have proper storage.' }
+            ]
+          },
+          approaches: {
+            title: { zh: '4 種應對策略 — 依你的時間與資金', en: '4 response paths — by time + cash' },
+            items: [
+              { tone: 'easy',
+                tag: { zh: 'A · 集體採購', en: 'A · Group buying' },
+                fit: (i) => i.annualRevenueNT > 0 && i.annualRevenueNT < 1500000 ? 3 : 1,
+                summary: { zh: '加入產銷班 / 農會團購 — 8-15% 立省', en: 'Join producer / assoc group buys — 8-15% off' },
+                bullets: [
+                  { zh: '同樣產品、同樣品牌，下單成本下降', en: 'Same product, same brand, lower per-unit cost' },
+                  { zh: '不需要改變耕作模式或投入', en: 'No farming-method changes required' },
+                  { zh: '12 個月內可吸收 30% 漲幅的 1/3', en: 'Absorbs ~1/3 of a 30% price spike within 12mo' }
+                ],
+                who: { zh: '適合：現金緊、不想動現有流程', en: 'For: cash-tight, don\'t want process changes' } },
+              { tone: 'balanced',
+                tag: { zh: 'B · 替代品轉換', en: 'B · Substitution' },
+                fit: (i) => {
+                  const pr = i.practices || {};
+                  return !pr.compost ? 3 : 1;
+                },
+                summary: { zh: '化肥 → 堆肥 / 綠肥 / 殘體還田', en: 'Chemical fert → compost / green manure / residue' },
+                bullets: [
+                  { zh: '中期省下 50-70% 化肥支出', en: 'Mid-term: 50-70% fertilizer spend cut' },
+                  { zh: '同時申請「友善耕作」每公頃 NT$30k 補助', en: 'Stacks: Friendly Farming subsidy NT$30k/ha' },
+                  { zh: '需要 2-3 季適應，產量短期可能 -10%', en: 'Needs 2-3 seasons to stabilize; yield may dip -10%' }
+                ],
+                who: { zh: '適合：化肥用量大、未做友善登錄', en: 'For: heavy chemical-fert use, not yet Friendly-registered' } },
+              { tone: 'bold',
+                tag: { zh: 'C · 漲價 + 證據包', en: 'C · Raise prices + evidence' },
+                fit: (i) => (CLIENT_CONFIG.certifications || []).length >= 1 ? 3 : 1,
+                summary: { zh: '帶投入品漲幅證據跟買家談 8-15% 加價', en: 'Bring input-cost data to buyers; negotiate 8-15% raise' },
+                bullets: [
+                  { zh: '證據包：每樣投入過去 12 個月單價走勢', en: 'Evidence: 12-mo price trend for each input' },
+                  { zh: '提案：永續通路接受 / 拍賣通路抗拒 — 換通路', en: 'Premium channels accept, wholesale resists — switch channels' },
+                  { zh: '最壞情況：失去 1 個拒談買家、保住毛利', en: 'Worst case: lose 1 resistant buyer, keep margin' }
+                ],
+                who: { zh: '適合：有認證、有故事、毛利已被擠壓', en: 'For: cert in place, story-rich, margin already squeezed' } },
+              { tone: 'collab',
+                tag: { zh: 'D · 自給投入體系', en: 'D · Self-sufficiency' },
+                fit: (i) => i.cropType === 'mixed' || i.farmSize >= 2 ? 2 : 0,
+                summary: { zh: '長期：堆肥 + 育苗 + 留種 + 雨水 + 太陽能', en: 'Long-term: compost + nursery + seed-save + rainwater + solar' },
+                bullets: [
+                  { zh: '5-10 年外部投入降 60-80%', en: '5-10yr external input drops 60-80%' },
+                  { zh: '一次性投資 NT$ 200-500k（多項補助可疊加）', en: 'One-time invest NT$ 200-500k (multiple subsidies stack)' },
+                  { zh: '對未來漲價系統性免疫', en: 'Systemically immunizes against future price spikes' }
+                ],
+                who: { zh: '適合：長期經營意向、有空間做基礎建設', en: 'For: long-term, space for infrastructure' } }
+            ]
+          },
+          links: [
+            { label: { zh: '看議價演練', en: 'Buyer negotiation rehearsal' }, href: '#sec-negotiation' },
+            { label: { zh: '看補助清單', en: 'Subsidies' }, href: '#sec-income' }
+          ]
+        };
+      }
+    },
+    {
       id: 'compare_peers',
       keywords: ['比較', '同行', '別的農場', '平均', '我這樣好嗎', 'compare', 'peer', 'other farms', 'average', 'how am i doing'],
       topic: { zh: '同儕比較', en: 'Peer comparison' },
@@ -8980,6 +9072,7 @@ This application supports starting organic-transition certification for ≥1 ha.
     water_mgmt:          'high',
     cash_short:          'high',
     delayed_payment:     'high',
+    input_cost_spike:    'high',
     losing_money:        'high',
     pricing_specific:    'high',
     land_tenure:         'high',
@@ -9009,7 +9102,8 @@ This application supports starting organic-transition certification for ≥1 ha.
     find_buyers:         ['pitch_buyer', 'price_too_low', 'marketing_social'],
     soil_test:           ['cert_question', 'practice_invest', 'subsidies_available'],
     losing_money:        ['price_too_low', 'cash_short', 'reduce_cost'],
-    reduce_cost:         ['practice_invest', 'subsidies_available', 'water_mgmt'],
+    reduce_cost:         ['practice_invest', 'subsidies_available', 'water_mgmt', 'input_cost_spike'],
+    input_cost_spike:    ['reduce_cost', 'practice_invest', 'price_too_low'],
     compare_peers:       ['practice_invest', 'how_diversify', 'cert_question'],
     pitch_buyer:         ['buyer_expensive', 'find_buyers', 'marketing_social'],
     what_to_do_now:      ['compare_peers', 'practice_invest', 'subsidies_available'],
@@ -9549,7 +9643,7 @@ This application supports starting organic-transition certification for ≥1 ha.
   const BROWSE_CATEGORIES = [
     { key: 'biz',    zh: '💼 經營 / 通路 / 補助',     en: '💼 Business / channels / subsidies',
       ids: ['cash_short', 'delayed_payment', 'find_buyers', 'subsidies_available', 'price_too_low', 'buyer_expensive',
-            'how_diversify', 'practice_invest', 'losing_money', 'reduce_cost', 'compare_peers',
+            'how_diversify', 'practice_invest', 'losing_money', 'reduce_cost', 'input_cost_spike', 'compare_peers',
             'pitch_buyer', 'pricing_premium', 'goal_setting', 'climate_risk', 'cert_question',
             'soil_test', 'what_to_do_now', 'hiring_labor', 'succession', 'marketing_social',
             'storage_coldchain', 'packaging_rules', 'tax_accounting', 'land_tenure', 'when_scale',
