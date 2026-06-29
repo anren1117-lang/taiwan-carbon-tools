@@ -1791,8 +1791,8 @@
   /* ── Dashboard print button + print CSS ─────────────────── */
   .dash-print-btn {
     position: fixed;
-    bottom: 22px;
-    right: 22px;
+    bottom: max(22px, env(safe-area-inset-bottom, 0px));
+    right: max(22px, env(safe-area-inset-right, 0px));
     padding: 11px 18px;
     background: var(--accent);
     color: white;
@@ -1814,8 +1814,8 @@
      panel (their most-used entry point), not the absolute top. */
   .dash-top-btn {
     position: fixed;
-    bottom: 72px;
-    right: 22px;
+    bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+    right: max(22px, env(safe-area-inset-right, 0px));
     width: 44px; height: 44px;
     background: var(--bg-card);
     color: var(--accent);
