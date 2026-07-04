@@ -12,17 +12,23 @@
 //   - Bumps the cache name when this file changes — old caches
 //     auto-cleared on activate.
 
-const CACHE = 'tct-v2-2026-06-29';
+const CACHE = 'tct-v3-2026-07-04';
 const PRECACHE = [
   './',
   './index.html',
   './farm-dashboard.html',
   './farm-pitch.html',
   './farm-onboard.html',
+  './farm-buyer.html',
   './farms.html',
+  './household.html',
+  './business.html',
+  './farm.html',
   './farm-carbon-engine.js?v=3',
   './farm-carbon-engine.js?v=2',
   './manifest.webmanifest',
+  './robots.txt',
+  './sitemap.xml',
   './farms/demo.json',
   './farms/chen-rice-yilan.json',
   './farms/wei-dairy-changhua.json',
