@@ -7396,6 +7396,110 @@ This application supports starting organic-transition certification for ≥1 ha.
       }
     },
     {
+      id: 'water_rights',
+      keywords: ['用水權', '灌溉權', '水利會', '灌溉組合', '水源', '取水', '停灌', '限水', 'water rights', 'irrigation rights', 'water access', 'irrigation association', 'water shortage', 'water fee'],
+      topic: { zh: '灌溉水權 / 農水會', en: 'Water rights / irrigation association' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '沒水權就沒農場 — 加入農水會、備第二水源、留紀錄', en: 'No water rights = no farm. Join the water assoc, build a backup source, keep records' },
+          situation: { zh: '2020 起氣候變遷 + 農業用水被工業截取，台灣中南部停灌 / 限水成常態。有農田水利會會員身份 = 優先分配輪灌水；沒加入或會員名冊沒你 = 被列後段。同時 2020 年「農田水利法」改制後，各農水會併入農業部旗下的「農田水利署」— 制度與繳費方式有變動。查你的水源身分很關鍵。',
+                       en: 'Since 2020, climate change + industry water diversion has made irrigation cutoffs / restrictions routine in central-south Taiwan. Membership in the Irrigation Association (農田水利會) = priority in rotation water allocation. Not on the roster = last in line. Also, since the 2020 Irrigation Act reform, associations were folded into the MOA\'s Agricultural Irrigation Agency (農田水利署) — dues + procedure changed. Verify your water status.' },
+          actions: [
+            { zh: '1. <strong>查你的水源身分</strong>：<br>(a) 加入農田水利署（地方分署）→ 有輪灌權 + 排水；<br>(b) 自有井（需申請水利法水權登記）；<br>(c) 溪流 / 山泉取水（也需水權登記）；<br>(d) 都無 → 你其實在違法取水，遲早被查。',
+              en: '1. <strong>Verify your water source status</strong>:<br>(a) Registered with the Irrigation Agency (local branch) → rotation water + drainage rights;<br>(b) Own well (requires Water Rights registration under Water Act);<br>(c) Stream / spring intake (also requires registration);<br>(d) None of the above → you\'re technically extracting water illegally. Will be caught eventually.' },
+            { zh: '2. <strong>沒加入農水會就先申請</strong> — 需要土地所有權 / 承租證明 + 農地屬性符合。年會費 NT$ 200-800 / 分（依地區）— 相對優惠。同時看有沒有「限量新增會員」政策。',
+              en: '2. <strong>Not a member? Apply immediately</strong> — needs land title / lease proof + land classification match. Annual dues NT$ 200-800/0.1ha (varies by region) — quite affordable. Also check whether "new-member cap" policy applies in your area.' },
+            { zh: '3. <strong>停灌 / 限水期做 3 件事</strong>：<br>(a) 立刻通報農水會 → 有補償金申請（水稻停灌約 NT$ 8-15 萬 / 公頃）；<br>(b) 全田使用滴灌 + 覆蓋 → 節水 40-50%；<br>(c) 啟用備用水源（雨水收集、井水），但用量要紀錄以備申報。',
+              en: '3. <strong>During cutoff / restriction periods, do 3 things</strong>:<br>(a) Immediately notify the water assoc → compensation available (rice cutoff ~NT$ 80-150k/ha);<br>(b) Field-wide drip + mulch → 40-50% savings;<br>(c) Activate backup source (rainwater, well) but log usage for reporting.' },
+            { zh: '4. <strong>建立第二水源 = 農場保險</strong>：屋頂雨水收集（100 m² ≈ 70-90 噸 / 年）+ 蓄水池 + 井（如允許）。政府「農田灌溉水源開發」補助最多 50%。氣候風險越高 = 越值得投資。',
+              en: '4. <strong>Build a backup water source = farm insurance</strong>: rooftop rainwater harvest (100m² ≈ 70-90 tons/yr) + cistern + well (where permitted). "Agricultural irrigation source development" subsidy up to 50%. The more climate risk, the more this pays off.' },
+            { zh: '5. <strong>記錄用水量（每月）</strong>：一來自我管理，二來未來若走碳權市場「農業節水」是重要證據。灌溉抽水機裝水表 NT$ 500-2k，記一年就是硬證據。',
+              en: '5. <strong>Log monthly water use</strong>: for management + as evidence if carbon markets recognize "agricultural water saving" credits. Meter on pump costs NT$ 500-2k. One year of records = hard evidence.' }
+          ],
+          checklist: {
+            title: { zh: '確認你的水權狀態', en: 'Water status checklist' },
+            items: [
+              { zh: '<strong>農田水利署會員資格</strong> — 用「農田水利會員系統」線上查（需身分證 + 地籍）', en: '<strong>Irrigation Agency membership</strong> — check online via the members portal (need ID + parcel info)' },
+              { zh: '<strong>水權登記證明</strong>（如自有井 / 溪水）— 到縣水利處查', en: '<strong>Water Rights registration</strong> (if own well / stream) — check county Water Bureau' },
+              { zh: '<strong>輪灌時段表</strong> — 每季公告，記下你的田區配水時段', en: '<strong>Rotation schedule</strong> — published quarterly, note your plot\'s allocation time slots' },
+              { zh: '<strong>備用水源</strong> — 停灌時能撐多久？至少 2 週', en: '<strong>Backup water source</strong> — during cutoff, how long can you last? Aim for 2+ weeks' },
+              { zh: '<strong>節水設備</strong> — 滴灌、微噴、覆蓋物、AWD（水稻）', en: '<strong>Water-saving equipment</strong> — drip, micro-spray, mulch, AWD (rice)' }
+            ]
+          },
+          pitfalls: {
+            title: { zh: '常見地雷', en: 'Common landmines' },
+            items: [
+              { zh: '<strong>假設「田裡的水就是我的」</strong> — 溪水、地下水都要申請水權才合法', en: '<strong>Assuming "the water on my land is mine"</strong> — stream + groundwater both require Water Rights registration to use legally' },
+              { zh: '<strong>停灌時擅自從溪流抽水</strong> — 除了違法還可能斷下游供水，被鄰居舉報', en: '<strong>Illegally pumping stream water during cutoffs</strong> — illegal + cuts downstream users off + neighbors will report' },
+              { zh: '<strong>沒申請停灌補償</strong> — 每次都有補償金，錯過就沒了，5-14 天內申請', en: '<strong>Missing cutoff compensation applications</strong> — every cutoff has compensation; miss the 5-14 day window = zero' },
+              { zh: '<strong>設備老舊漏水沒修</strong> — 漏水 30-50% 是台灣舊灌溉系統常態，你可能一直被算「多用水」', en: '<strong>Old leaky equipment</strong> — 30-50% leakage is common in old Taiwan systems; you may be charged for water you never received' }
+            ]
+          },
+          resources: {
+            title: { zh: '相關單位', en: 'Relevant agencies' },
+            items: [
+              { zh: '<strong>農田水利署</strong>：<a href="https://www.iaa.gov.tw/" target="_blank" rel="noopener">iaa.gov.tw</a>（會員資格 / 輪灌時段 / 補償金）', en: '<strong>Agricultural Irrigation Agency</strong>: <a href="https://www.iaa.gov.tw/" target="_blank" rel="noopener">iaa.gov.tw</a> (membership / rotation / compensation)' },
+              { zh: '<strong>經濟部水利署</strong>：<a href="https://www.wra.gov.tw/" target="_blank" rel="noopener">wra.gov.tw</a>（水權登記 / 河川取水申請）', en: '<strong>Water Resources Agency</strong>: <a href="https://www.wra.gov.tw/" target="_blank" rel="noopener">wra.gov.tw</a> (water rights / river intake permits)' },
+              { zh: '<strong>各縣水利處</strong> — 地方井水申請、私有水源疑問', en: '<strong>County Water Bureau</strong> — private well applications, local source questions' },
+              { zh: '<strong>中央氣象署乾旱監測</strong>：<a href="https://www.cwa.gov.tw/" target="_blank" rel="noopener">cwa.gov.tw</a>（提前預測旱季 → 提前備水）', en: '<strong>CWA drought monitoring</strong>: <a href="https://www.cwa.gov.tw/" target="_blank" rel="noopener">cwa.gov.tw</a> (early warning → prep buffer)' }
+            ]
+          },
+          approaches: {
+            title: { zh: '4 種水源策略 — 依你的水源身分', en: '4 water strategies — by your source status' },
+            items: [
+              { tone: 'easy',
+                tag: { zh: 'A · 加入農水會', en: 'A · Join irrigation assoc' },
+                fit: (i) => i.cropType === 'rice' ? 3 : 2,
+                summary: { zh: '最基本 — 有輪灌 + 補償金申請權', en: 'Baseline — rotation + compensation eligibility' },
+                bullets: [
+                  { zh: '年費 NT$ 200-800/分 — 便宜', en: 'Dues NT$ 200-800/0.1ha — cheap' },
+                  { zh: '合法用水 + 補償金申請權', en: 'Legal water use + eligible for compensation' },
+                  { zh: '沒加入 = 被查後罰款 + 停止取水', en: 'Not joined → fined + water cut off' }
+                ],
+                who: { zh: '適合：任何未加入者，立刻做', en: 'For: anyone not yet enrolled, do now' } },
+              { tone: 'balanced',
+                tag: { zh: 'B · 節水設備 + AWD', en: 'B · Water-saving gear + AWD' },
+                fit: (i) => {
+                  const midRev = i.annualRevenueNT >= 1000000;
+                  return midRev ? 3 : 1;
+                },
+                summary: { zh: '滴灌 / 微噴 / AWD — 用量降 40-50%', en: 'Drip / micro-spray / AWD — cut usage 40-50%' },
+                bullets: [
+                  { zh: '一次投資 NT$ 30-100k / 公頃', en: 'One-time NT$ 30-100k/ha' },
+                  { zh: '多數有 30-50% 政府補助', en: '30-50% government subsidy on most' },
+                  { zh: '2-4 年回本 + 抗停灌能力 +', en: '2-4yr payback + cutoff resilience' }
+                ],
+                who: { zh: '適合：年營收 100 萬+、常在乾旱季受影響', en: 'For: revenue NT$1M+, hit by dry seasons' } },
+              { tone: 'bold',
+                tag: { zh: 'C · 自建水源', en: 'C · Build own source' },
+                fit: (i) => i.farmSize >= 1 && i.annualRevenueNT >= 1500000 ? 2 : 0,
+                summary: { zh: '雨水池 / 井 — 對抗系統性缺水', en: 'Rainwater cistern / well — system-immune' },
+                bullets: [
+                  { zh: 'NT$ 20-100k 蓄水池 + 屋頂集水', en: 'NT$ 20-100k cistern + roof collection' },
+                  { zh: '井需水利法登記，NT$ 5-20k 申請費', en: 'Well needs Water Act registration, NT$ 5-20k' },
+                  { zh: '氣候風險越高 = 越值得', en: 'Higher climate risk = higher payoff' }
+                ],
+                who: { zh: '適合：面積 >1ha、水源不穩區', en: 'For: >1ha, unstable-source region' } },
+              { tone: 'collab',
+                tag: { zh: 'D · 集體水權', en: 'D · Collective water rights' },
+                fit: (i) => i.cropType === 'rice' && i.farmSize >= 3 ? 2 : 0,
+                summary: { zh: '產銷班 / 合作社統一協商水權配額', en: 'Producer co-op negotiates collective allocation' },
+                bullets: [
+                  { zh: '集體議價力大 = 分配時段 + 額度較好', en: 'Group leverage → better time slots + volume' },
+                  { zh: '停灌時可爭取「特別方案」', en: 'During cutoffs → collective can push for "special package"' },
+                  { zh: '需要：加入有水利事務職能的產銷班', en: 'Need: producer group with water function' }
+                ],
+                who: { zh: '適合：水稻、大面積、區域有合作社', en: 'For: rice, large acreage, region has co-op' } }
+            ]
+          },
+          links: [
+            { label: { zh: '看水資源管理答案', en: 'Water management answer' }, href: '#sec-agent' },
+            { label: { zh: '看氣候風險答案', en: 'Climate risk answer' }, href: '#sec-agent' }
+          ]
+        };
+      }
+    },
+    {
       id: 'pricing_specific',
       keywords: ['多少錢', '一斤多少', '一公斤多少錢', '行情', '市場價', 'how much per kg', 'market price', 'going rate', 'price per kg'],
       topic: { zh: '市場行情 vs 你的價', en: 'Market price vs your price' },
@@ -9352,6 +9456,7 @@ This application supports starting organic-transition certification for ≥1 ha.
     farmer_health:       'high',
     typhoon_recovery:    'high',
     succession_paperwork:'high',
+    water_rights:        'high',
     losing_money:        'high',
     pricing_specific:    'high',
     land_tenure:         'high',
@@ -9403,7 +9508,8 @@ This application supports starting organic-transition certification for ≥1 ha.
     when_scale:          ['hiring_labor', 'compare_peers', 'land_tenure'],
     organic_transition:  ['cert_question', 'subsidies_available', 'practice_invest'],
     find_mentor:         ['burnout', 'hiring_labor', 'compare_peers'],
-    water_mgmt:          ['practice_invest', 'climate_risk', 'reduce_cost'],
+    water_mgmt:          ['practice_invest', 'climate_risk', 'reduce_cost', 'water_rights'],
+    water_rights:        ['water_mgmt', 'climate_risk', 'typhoon_recovery'],
     pricing_specific:    ['price_too_low', 'find_buyers', 'pitch_buyer'],
     contract_farming:    ['compare_peers', 'find_buyers', 'pricing_specific'],
     processing_coop:     ['hiring_labor', 'reduce_cost', 'storage_coldchain'],
@@ -9932,7 +10038,7 @@ This application supports starting organic-transition certification for ≥1 ha.
             'find_mentor', 'succession_paperwork'] },
     { key: 'agro',   zh: '🌾 田間農藝',                en: '🌾 Field agronomy',
       ids: ['pest_disease', 'aphids_pests', 'fungal_disease', 'crop_rotation', 'composting',
-            'water_mgmt', 'fertilizer_timing', 'organic_transition', 'fruit_pruning',
+            'water_mgmt', 'water_rights', 'fertilizer_timing', 'organic_transition', 'fruit_pruning',
             'yellow_leaves', 'seasonal_planting', 'seed_saving', 'typhoon_recovery'] },
     { key: 'method', zh: '🌳 農法 / 方法論',          en: '🌳 Farming methods',
       ids: ['method_comparison', 'natural_fukuoka', 'knf_korean', 'permaculture',
