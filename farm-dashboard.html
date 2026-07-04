@@ -6433,6 +6433,117 @@ This application supports starting organic-transition certification for ≥1 ha.
       }
     },
     {
+      id: 'typhoon_recovery',
+      keywords: ['颱風', '風災', '水災', '淹水', '倒伏', '果樹倒', '被打壞', '災後', 'typhoon', 'storm damage', 'flood', 'lodging', 'recovery', 'disaster recovery', 'post-storm'],
+      topic: { zh: '颱風災後復原', en: 'Post-typhoon recovery' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '48 小時內動作 — 報案 + 拍照 + 排水，決定你能領多少補助', en: 'First 48 hours matter — report + photo + drain determines your subsidy amount' },
+          situation: { zh: '台灣每年 3-5 次颱風，果樹倒伏、蔬菜淹水、稻穀倒地是常態。政府「農業天然災害現金救助」補助有效，但過期或未拍照就領不到。搶救順序：安全 → 排水 → 現場證據 → 通報 → 復原。錯過時間窗會既損失作物又拿不到救助金。',
+                       en: 'Taiwan gets 3-5 typhoons a year; orchards flatten, veg drown, rice lodges. The "Agricultural Natural Disaster Cash Aid" subsidy works but expires or fails without photos. Recovery order: safety → drain → document → report → restore. Miss the window and you lose the crop AND the aid.' },
+          actions: [
+            { zh: '1. <strong>0-24 小時：先確保人身安全</strong>。斷電、倒樹壓在電線上、坍方，先不進田。等地方公告安全再入場。人比作物值錢。',
+              en: '1. <strong>0-24hr: personal safety first</strong>. Downed lines, fallen trees on wires, mudslides → do NOT enter field. Wait for local safe-to-return notice. Life beats crops.' },
+            { zh: '2. <strong>24-48 小時：拍照存證 + 排水</strong>。手機把每塊受災田拍全景 + 特寫，含日期戳記（拍手機時鐘）。同時開始抽水／挖排水溝救還能救的作物。淹水 24 小時以上根系會爛。',
+              en: '2. <strong>24-48hr: photo evidence + drain</strong>. Phone-shot every damaged plot: wide + close-up, include date stamp (shoot the clock too). Simultaneously pump / trench-drain what can still be saved. Roots rot after 24hr submerged.' },
+            { zh: '3. <strong>3-7 天：通報災損 → 農會 / 鄉鎮公所</strong>。「農業天然災害現金救助」7 日內通報是門檻。填「災損查報表」+ 附照片。田區座標可用 GPS App 標。晚 1 天就 0 元。',
+              en: '3. <strong>3-7 days: report loss to farmers assoc / township office</strong>. "Agricultural Natural Disaster Cash Aid" requires filing within 7 days. Fill the loss-assessment form + attach photos. Mark plot GPS coordinates. 1 day late = NT$0.' },
+            { zh: '4. <strong>1-4 週：復耕決策</strong>。倒伏果樹能不能扶正（老樹 30% 存活率）、菜苗要不要重種、稻穀要不要收割。同時申請「農作物復耕（種苗）補助」— 種子/秧苗政府幫買 30-50%。',
+              en: '4. <strong>1-4 weeks: replant decisions</strong>. Can toppled fruit trees be righted (30% survival for old trees)? Reseed veg? Salvage lodged rice? File "Replanting Aid" — 30-50% seed/seedling subsidy.' },
+            { zh: '5. <strong>1-3 個月：談通路 / 現金流</strong>。CSA 客戶要主動告知延誤；買家合約要「不可抗力」條款豁免；申請農會周轉貸款頂過空窗期。',
+              en: '5. <strong>1-3 months: renegotiate channels / cash flow</strong>. Proactively tell CSA subscribers about delay; invoke "force majeure" in buyer contracts; take a farmers assoc bridge loan through the gap.' }
+          ],
+          checklist: {
+            title: { zh: '「災前」預防清單', en: '"Pre-disaster" prep checklist' },
+            items: [
+              { zh: '<strong>投保農作物保險</strong> — 保費政府補貼 50-80%。看縣農會有哪些品項', en: '<strong>Crop insurance</strong> — premium 50-80% subsidized. Ask county farmers assoc which crops are covered' },
+              { zh: '<strong>防風林 / 支撐架 / 排水溝</strong> — 果樹、瓜果棚架都要每年檢查一次', en: '<strong>Windbreaks / trellis / drainage ditches</strong> — orchards + trellised crops need annual inspection' },
+              { zh: '<strong>抽水機 / 發電機</strong> — 至少借得到就行。停電 24 小時冷藏庫全毀', en: '<strong>Pump / generator</strong> — at least know where to borrow one. Cold storage dies after 24hr no power' },
+              { zh: '<strong>手機備用電源 + 田區 GPS 地圖</strong> — 事後通報要不了命的東西', en: '<strong>Phone power bank + GPS map of plots</strong> — essential for post-event reporting' },
+              { zh: '<strong>鄰居互助 LINE 群</strong> — 災後互相通報災情、共享工具、代排班值守', en: '<strong>Neighbor mutual-aid LINE group</strong> — share damage reports, tools, watch shifts' }
+            ]
+          },
+          timeline: {
+            title: { zh: '通報 + 補助時程', en: 'Reporting + aid timeline' },
+            items: [
+              { zh: '<strong>Day 0-7</strong>：災損通報（農會 / 鄉鎮公所）— <strong>錯過就 0 元</strong>', en: '<strong>Day 0-7</strong>: file loss report (farmers assoc / township office) — <strong>miss = NT$0</strong>' },
+              { zh: '<strong>Day 7-14</strong>：現場勘查（政府派員實地查核）— 你要在場帶路', en: '<strong>Day 7-14</strong>: on-site inspection (government inspector) — be there to guide' },
+              { zh: '<strong>Day 14-30</strong>：核定金額（果樹 NT$6-12k/公頃、蔬菜 NT$3-5k/公頃）', en: '<strong>Day 14-30</strong>: aid amount confirmed (orchard NT$6-12k/ha, veg NT$3-5k/ha)' },
+              { zh: '<strong>Day 30-60</strong>：撥款入農會帳戶', en: '<strong>Day 30-60</strong>: funds deposited to farmers assoc account' },
+              { zh: '<strong>Day 60+</strong>：如同期申請復耕種苗補助 → 另外撥款', en: '<strong>Day 60+</strong>: if replanting aid was also filed → separate disbursement' }
+            ]
+          },
+          pitfalls: {
+            title: { zh: '常見地雷', en: 'Common landmines' },
+            items: [
+              { zh: '<strong>沒拍全景 + 特寫</strong> — 只有一種角度，查核時可能被質疑', en: '<strong>Only wide OR only close-ups</strong> — inspectors may dispute; take both' },
+              { zh: '<strong>災後立刻大整地</strong> — 現場破壞 = 查核困難。先照相、再整地', en: '<strong>Bulldozing before inspection</strong> — destroys evidence, hard to verify. Photo first, then restore' },
+              { zh: '<strong>沒申請保險就抱怨補助少</strong> — 保險賠付 + 政府補助兩個是分開的', en: '<strong>Complaining about small aid without insurance</strong> — insurance payout + government aid are separate' },
+              { zh: '<strong>忘了通知買家</strong> — 3 週後才說「這批貨沒了」= 信任重傷', en: '<strong>Delayed buyer notification</strong> — telling them 3 weeks later "no goods" = trust damage' }
+            ]
+          },
+          resources: {
+            title: { zh: '緊急資源', en: 'Emergency resources' },
+            items: [
+              { zh: '<strong>1999</strong>（各縣災害通報）+ <strong>119</strong>（人身危急）', en: '<strong>1999</strong> (county disaster reporting) + <strong>119</strong> (life-threatening)' },
+              { zh: '<strong>農業部災害查報系統</strong>：<a href="https://disaster.moa.gov.tw/" target="_blank" rel="noopener">disaster.moa.gov.tw</a>', en: '<strong>MOA disaster reporting system</strong>: <a href="https://disaster.moa.gov.tw/" target="_blank" rel="noopener">disaster.moa.gov.tw</a>' },
+              { zh: '<strong>中央氣象署颱風動態</strong>：<a href="https://www.cwa.gov.tw/" target="_blank" rel="noopener">cwa.gov.tw</a>', en: '<strong>CWA typhoon tracker</strong>: <a href="https://www.cwa.gov.tw/" target="_blank" rel="noopener">cwa.gov.tw</a>' },
+              { zh: '所在縣農業處 / 農糧署（區辦公室）— 加入他們的 LINE 官方帳號隨時看災害公告', en: 'County Agricultural Bureau / regional AFA office — follow their LINE OA for real-time notices' }
+            ]
+          },
+          approaches: {
+            title: { zh: '4 種災後策略 — 依損害程度', en: '4 recovery strategies — by damage severity' },
+            items: [
+              { tone: 'easy',
+                tag: { zh: 'A · 輕微損害', en: 'A · Minor damage' },
+                fit: (i) => 1,
+                summary: { zh: '排水 + 病蟲害追蹤 + 通報', en: 'Drain + pest-disease watch + report' },
+                bullets: [
+                  { zh: '48 小時內完成基本清理', en: 'Basic cleanup in 48hr' },
+                  { zh: '仍要通報（未來累積氣候險證據）', en: 'Still file report (climate risk record)' },
+                  { zh: '每週檢查有沒有腐爛 / 病害', en: 'Weekly check for rot / disease' }
+                ],
+                who: { zh: '適合：受影響 < 20% 面積', en: 'For: < 20% area affected' } },
+              { tone: 'balanced',
+                tag: { zh: 'B · 中度損害', en: 'B · Moderate damage' },
+                fit: (i) => 2,
+                summary: { zh: '通報 + 復耕補助 + 短季替代作物', en: 'Report + replant aid + short-cycle substitute crop' },
+                bullets: [
+                  { zh: '完整拍照通報 = 領兩份補助', en: 'Full photo report = 2 subsidies' },
+                  { zh: '短季葉菜 60 天可上市，補現金流', en: 'Short-cycle leafy 60-day harvest, refills cash flow' },
+                  { zh: '通知買家延誤 + 談替代品項', en: 'Tell buyers about delay + offer substitutes' }
+                ],
+                who: { zh: '適合：受影響 20-50% 面積', en: 'For: 20-50% area affected' } },
+              { tone: 'bold',
+                tag: { zh: 'C · 重度損害', en: 'C · Severe damage' },
+                fit: (i) => 1,
+                summary: { zh: '暫停生產 + 全額申請 + 現金流融資', en: 'Pause production + max claims + bridge loan' },
+                bullets: [
+                  { zh: '疊加：災損補助 + 保險 + 復耕補助 + 貸款', en: 'Stack: aid + insurance + replant aid + loan' },
+                  { zh: '評估：這一整季可能沒收入，要撐 3-6 個月', en: 'Plan: possibly zero income this season, 3-6mo runway' },
+                  { zh: '考慮暫時打工補家用', en: 'Consider temporary off-farm work to bridge' }
+                ],
+                who: { zh: '適合：受影響 > 50% 面積', en: 'For: > 50% area affected' } },
+              { tone: 'collab',
+                tag: { zh: 'D · 區域性災害', en: 'D · Regional disaster' },
+                fit: (i) => i.cropType === 'rice' || i.farmSize >= 3 ? 2 : 1,
+                summary: { zh: '產銷班集體通報 + 政府特別方案', en: 'Producer-group collective report + special government package' },
+                bullets: [
+                  { zh: '整區受災 → 政府常有加碼補助 / 免利貸款', en: 'Region-wide loss → government often adds enhanced aid / zero-interest loans' },
+                  { zh: '合作社集體採購復耕物資 → 折扣大', en: 'Co-op bulk buying of replant inputs → big discounts' },
+                  { zh: '媒體報導助爭取更多資源', en: 'Media coverage helps unlock more resources' }
+                ],
+                who: { zh: '適合：整個區域都受災', en: 'For: whole region affected' } }
+            ]
+          },
+          links: [
+            { label: { zh: '看氣候風險答案', en: 'Climate risk answer' }, href: '#sec-agent' },
+            { label: { zh: '看現金流月曆', en: 'Cash Flow Calendar' }, href: '#sec-cashflow' }
+          ]
+        };
+      }
+    },
+    {
       id: 'pest_disease',
       keywords: ['病蟲害', '蟲害', '病害', '生病', '蟲咬', '蟲子', '害蟲', 'pest', 'disease', 'bug', 'insect', 'infestation'],
       topic: { zh: '病蟲害', en: 'Pest / disease' },
@@ -9128,6 +9239,7 @@ This application supports starting organic-transition certification for ≥1 ha.
     delayed_payment:     'high',
     input_cost_spike:    'high',
     farmer_health:       'high',
+    typhoon_recovery:    'high',
     losing_money:        'high',
     pricing_specific:    'high',
     land_tenure:         'high',
@@ -9163,7 +9275,8 @@ This application supports starting organic-transition certification for ≥1 ha.
     pitch_buyer:         ['buyer_expensive', 'find_buyers', 'marketing_social'],
     what_to_do_now:      ['compare_peers', 'practice_invest', 'subsidies_available'],
     goal_setting:        ['compare_peers', 'what_to_do_now', 'how_diversify'],
-    climate_risk:        ['practice_invest', 'water_mgmt', 'crop_rotation'],
+    climate_risk:        ['practice_invest', 'water_mgmt', 'crop_rotation', 'typhoon_recovery'],
+    typhoon_recovery:    ['climate_risk', 'cash_short', 'subsidies_available'],
     pest_disease:        ['crop_rotation', 'practice_invest', 'find_mentor'],
     hiring_labor:        ['burnout', 'succession', 'when_scale'],
     succession:          ['hiring_labor', 'when_scale', 'burnout'],
@@ -9706,7 +9819,7 @@ This application supports starting organic-transition certification for ≥1 ha.
     { key: 'agro',   zh: '🌾 田間農藝',                en: '🌾 Field agronomy',
       ids: ['pest_disease', 'aphids_pests', 'fungal_disease', 'crop_rotation', 'composting',
             'water_mgmt', 'fertilizer_timing', 'organic_transition', 'fruit_pruning',
-            'yellow_leaves', 'seasonal_planting', 'seed_saving'] },
+            'yellow_leaves', 'seasonal_planting', 'seed_saving', 'typhoon_recovery'] },
     { key: 'method', zh: '🌳 農法 / 方法論',          en: '🌳 Farming methods',
       ids: ['method_comparison', 'natural_fukuoka', 'knf_korean', 'permaculture',
             'shumei_natural', 'regenerative', 'biodynamic', 'sheet_mulch'] },
