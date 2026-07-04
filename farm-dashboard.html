@@ -6717,6 +6717,96 @@ This application supports starting organic-transition certification for ≥1 ha.
       }
     },
     {
+      id: 'succession_paperwork',
+      keywords: ['過戶', '贈與', '繼承', '遺產稅', '贈與稅', '農地移轉', '三親等', '節稅', '登記', 'succession paperwork', 'gift tax', 'estate tax', 'farmland transfer', 'title transfer', 'inheritance tax'],
+      topic: { zh: '接班文書 / 過戶', en: 'Succession paperwork / title transfer' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '農地過戶有稅務優惠 — 但要走對流程', en: 'Farmland transfer has tax breaks — but requires the right procedure' },
+          situation: { zh: '台灣農地移轉稅務結構有「三親等」優惠 + 農業經營承受人門檻，用對可以省 100-500 萬贈與 / 遺產稅。但常見錯誤：贈與後受贈人 5 年內轉作非農 = 追稅。分年贈與 vs 一次過戶 vs 遺囑繼承 各有適用情境。決定前務必先諮詢地政士 + 農會，別靠 LINE 群或親戚建議。',
+                       en: 'Taiwan farmland transfer has tax advantages: "3-degree relative" clause + qualifying agricultural successor + optional exemptions can save NT$1M-5M in gift/estate tax. Common trap: recipient converts land to non-ag within 5 years → tax clawback. Yearly gift vs one-shot transfer vs inheritance-via-will each fit different cases. Consult a licensed land agent (地政士) + farmers assoc BEFORE deciding. Don\'t rely on LINE groups or relatives\' opinions.' },
+          actions: [
+            { zh: '1. <strong>先弄清「你的農地屬性」</strong> — 特定農業區 / 一般農業區 / 山坡地保育區 / 農牧用地 影響過戶條件與稅率。到縣府地政事務所或用「內政部地籍圖資網路便民服務系統」查。',
+              en: '1. <strong>Clarify your land classification</strong> — Special Ag Zone / General Ag Zone / Slope Conservation / Grazing use — determines transfer conditions + tax. Check at the Land Administration Bureau or MOI\'s cadastral GIS web service.' },
+            { zh: '2. <strong>選擇適合的移轉方式</strong>：<br>(a) 生前分年贈與（每年免稅額 NT$ 244 萬 / 人） — 適合分階段交棒；<br>(b) 一次過戶 + 農業使用證明（免徵土地增值稅、贈與稅） — 適合接班人願意 5 年內持續農用；<br>(c) 遺囑繼承 — 農地承受人可享遺產稅減免。',
+              en: '2. <strong>Choose the transfer method</strong>:<br>(a) Yearly lifetime gifts (NT$ 2.44M/yr per person exemption) — good for phased handover;<br>(b) One-shot transfer + "agricultural use certificate" (waives land value tax + gift tax) — good if successor commits to 5-yr ag use;<br>(c) Inheritance via will — qualifying ag successor gets estate tax reduction.' },
+            { zh: '3. <strong>備齊文件</strong>：土地所有權狀、贈與 / 過戶契約書、農業使用證明、承受人身分文件、地政士簽章。地政士費用 NT$ 15-30k / 案，但比自己搞省下 5-10 倍時間 + 避免踩雷。',
+              en: '3. <strong>Documents needed</strong>: title deed, gift/transfer contract, agricultural use certificate, successor ID docs, licensed land-agent signature. Agent fee NT$ 15-30k/case, but saves 5-10× time + avoids common traps.' },
+            { zh: '4. <strong>過戶後 5 年關鍵期</strong>：受贈人 / 繼承人必須<strong>繼續農用</strong>。轉作非農（蓋房、廢耕）= 補徵原本免徵的稅金 + 罰款。5 年後才「安全」。',
+              en: '4. <strong>Critical 5-year post-transfer window</strong>: recipient MUST continue agricultural use. Convert to non-ag (build house, abandon) → clawback of waived tax + penalty. Only safe after year 5.' },
+            { zh: '5. <strong>留下書面 + 家族討論會議紀錄</strong>：即便法律通過，家族其他成員（兄弟姊妹）可能不服。事前開會、書面同意、必要時公證，避免十年後訴訟。',
+              en: '5. <strong>Document family meetings</strong>: even if legally clean, other family members (siblings) may dispute. Meet ahead of time, get written consent, notarize if needed — avoids lawsuits 10 years later.' }
+          ],
+          checklist: {
+            title: { zh: '開始過戶前確認', en: 'Confirm before initiating' },
+            items: [
+              { zh: '<strong>接班人具備農民身分</strong> — 農保 / 農民健保 / 農業經營承受人資格', en: '<strong>Successor qualifies as farmer</strong> — farmer insurance / national farmers health / ag successor status' },
+              { zh: '<strong>農地面積下限</strong> — 特農區通常最小 0.25 公頃，一般農業區可能不同', en: '<strong>Minimum parcel size</strong> — Special Ag typically 0.25 ha min, General Ag may differ' },
+              { zh: '<strong>接班人有 5 年繼續農用意願</strong> — 否則過戶時的節稅優惠會被追回', en: '<strong>Successor commits to 5-year continuous ag use</strong> — otherwise the tax break is clawed back' },
+              { zh: '<strong>家族內其他繼承人已知情且同意</strong> — 書面優先', en: '<strong>Other family heirs informed + consenting</strong> — written preferred' },
+              { zh: '<strong>已找地政士諮詢</strong> — 農地過戶自己處理極易踩雷', en: '<strong>Consulted a licensed land agent</strong> — DIY farmland transfer often mis-fires' }
+            ]
+          },
+          pitfalls: {
+            title: { zh: '常見地雷', en: 'Common landmines' },
+            items: [
+              { zh: '<strong>「省地政士費自己辦」</strong> — 錯一個檔可能追稅 100 萬。地政士費是保險', en: '<strong>"Skip the agent to save fees"</strong> — one wrong form can clawback NT$1M. Agent fee is insurance' },
+              { zh: '<strong>過戶後接班人「借地」給別人蓋工廠</strong> — 立刻違反農業使用，稅金追回', en: '<strong>Successor "lends" land for non-ag use</strong> — instant ag-use violation, tax clawback' },
+              { zh: '<strong>只給一個子女 → 其他兄弟姊妹跳出來爭產</strong>：即使父母口頭同意，法律上其他繼承人仍有特留分', en: '<strong>Give to one child → others contest</strong>: even if parents verbally agree, other heirs still have "guaranteed share" under Taiwan law' },
+              { zh: '<strong>贈與稅計算沒考慮「10 年前的贈與」</strong>：兩人配偶累加、10 年內累計計算，很多人漏算', en: '<strong>Miss the 10-year gift accumulation rule</strong>: spousal aggregation + 10-yr cumulative — many miscalculate' }
+            ]
+          },
+          resources: {
+            title: { zh: '諮詢資源', en: 'Consulting resources' },
+            items: [
+              { zh: '<strong>地政士公會</strong>：<a href="https://www.landagents.org.tw/" target="_blank" rel="noopener">landagents.org.tw</a>（查合格會員）', en: '<strong>Land Agents Guild</strong>: <a href="https://www.landagents.org.tw/" target="_blank" rel="noopener">landagents.org.tw</a> (find qualified member)' },
+              { zh: '<strong>財政部國稅局</strong>：贈與稅 / 遺產稅諮詢電話 0800-000-321', en: '<strong>MOF National Tax Bureau</strong>: gift + estate tax hotline 0800-000-321' },
+              { zh: '<strong>地方農會青農輔導員</strong>：農業承受人資格認定 + 農業使用證明申請', en: '<strong>Township Farmers Assoc Young-Farmer Advisor</strong>: ag-successor qualification + ag-use certificate' },
+              { zh: '<strong>內政部地政司</strong>：<a href="https://www.land.moi.gov.tw/" target="_blank" rel="noopener">land.moi.gov.tw</a>（法規、地政雲）', en: '<strong>MOI Land Administration</strong>: <a href="https://www.land.moi.gov.tw/" target="_blank" rel="noopener">land.moi.gov.tw</a> (regulations + land info)' }
+            ]
+          },
+          approaches: {
+            title: { zh: '3 種過戶時機 — 依家庭狀況', en: '3 timing paths — by family situation' },
+            items: [
+              { tone: 'easy',
+                tag: { zh: 'A · 生前分年贈與', en: 'A · Yearly lifetime gifts' },
+                fit: (i) => 2,
+                summary: { zh: '每年逐筆過戶一部分 — 分階段交棒', en: 'Gift portions each year — phased handover' },
+                bullets: [
+                  { zh: '免稅額每年 NT$ 244 萬 / 贈與人 × 2 配偶', en: 'Exempt NT$ 2.44M/yr per donor × 2 spouses' },
+                  { zh: '接班人邊做邊交，減少「一次全給」壓力', en: 'Successor eases in; avoids "all at once" pressure' },
+                  { zh: '需要規劃 5-10 年 — 太老才開始就來不及', en: 'Needs 5-10 yr planning window — start too late = miss it' }
+                ],
+                who: { zh: '適合：50-65 歲、接班人已在農場、有時間規劃', en: 'For: 50-65, successor already on farm, planning ahead' } },
+              { tone: 'balanced',
+                tag: { zh: 'B · 一次過戶 + 農業使用', en: 'B · One-shot + ag-use certificate' },
+                fit: (i) => 2,
+                summary: { zh: '免徵土增稅 + 贈與稅 — 一次完成', en: 'Waive land value tax + gift tax — done in one go' },
+                bullets: [
+                  { zh: '接班人須簽農業使用切結 5 年不變', en: 'Successor signs 5-yr ag-use commitment' },
+                  { zh: '省下 100-500 萬稅金（依土地價值）', en: 'Saves NT$ 1M-5M in tax (depending on land value)' },
+                  { zh: '違約 = 追稅 + 罰款 — 5 年內不能亂用', en: 'Breach = clawback + penalty. Land must stay ag for 5 yrs' }
+                ],
+                who: { zh: '適合：接班人明確承諾農業經營、想一次完成', en: 'For: successor firmly committed to farming, prefers one-shot' } },
+              { tone: 'bold',
+                tag: { zh: 'C · 遺囑繼承', en: 'C · Inheritance via will' },
+                fit: (i) => 1,
+                summary: { zh: '留書面遺囑指定農地承受人', en: 'Written will designates agricultural successor' },
+                bullets: [
+                  { zh: '合格農業承受人享遺產稅減免', en: 'Qualifying ag successor gets estate tax reduction' },
+                  { zh: '避開生前贈與稅（但長輩仍可繼續管理）', en: 'Avoids lifetime gift tax (elder retains control)' },
+                  { zh: '仍要處理其他繼承人的特留分', en: 'Must still address other heirs\' guaranteed share' }
+                ],
+                who: { zh: '適合：長輩想保留控制、接班人可等', en: 'For: elder wants to retain control, successor can wait' } }
+            ]
+          },
+          links: [
+            { label: { zh: '看接班策略答案', en: 'Farm succession answer' }, href: '#sec-agent' }
+          ]
+        };
+      }
+    },
+    {
       id: 'marketing_social',
       keywords: ['行銷', '宣傳', 'facebook', 'instagram', 'line', '社群', '粉絲', '臉書', '社團', 'marketing', 'social media', 'promote', 'fb', 'ig'],
       topic: { zh: '社群行銷', en: 'Social media marketing' },
@@ -9261,6 +9351,7 @@ This application supports starting organic-transition certification for ≥1 ha.
     input_cost_spike:    'high',
     farmer_health:       'high',
     typhoon_recovery:    'high',
+    succession_paperwork:'high',
     losing_money:        'high',
     pricing_specific:    'high',
     land_tenure:         'high',
@@ -9300,7 +9391,8 @@ This application supports starting organic-transition certification for ≥1 ha.
     typhoon_recovery:    ['climate_risk', 'cash_short', 'subsidies_available'],
     pest_disease:        ['crop_rotation', 'practice_invest', 'find_mentor'],
     hiring_labor:        ['burnout', 'succession', 'when_scale'],
-    succession:          ['hiring_labor', 'when_scale', 'burnout'],
+    succession:          ['hiring_labor', 'when_scale', 'burnout', 'succession_paperwork'],
+    succession_paperwork:['succession', 'tax_accounting', 'land_tenure'],
     marketing_social:    ['pitch_buyer', 'find_buyers', 'how_diversify'],
     storage_coldchain:   ['find_buyers', 'subsidies_available', 'cert_question'],
     crop_rotation:       ['pest_disease', 'practice_invest', 'soil_test'],
@@ -9837,7 +9929,7 @@ This application supports starting organic-transition certification for ≥1 ha.
             'pitch_buyer', 'pricing_premium', 'goal_setting', 'climate_risk', 'cert_question',
             'soil_test', 'what_to_do_now', 'hiring_labor', 'succession', 'marketing_social',
             'storage_coldchain', 'packaging_rules', 'tax_accounting', 'land_tenure', 'when_scale',
-            'find_mentor'] },
+            'find_mentor', 'succession_paperwork'] },
     { key: 'agro',   zh: '🌾 田間農藝',                en: '🌾 Field agronomy',
       ids: ['pest_disease', 'aphids_pests', 'fungal_disease', 'crop_rotation', 'composting',
             'water_mgmt', 'fertilizer_timing', 'organic_transition', 'fruit_pruning',
