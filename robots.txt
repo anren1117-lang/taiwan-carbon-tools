@@ -26,3 +26,5 @@ Disallow: /*#data=
 # Do not aggressively crawl (this is a small solo-run static site
 # on GitHub Pages)
 Crawl-delay: 5
+
+Sitemap: https://anren1117-lang.github.io/taiwan-carbon-tools/sitemap.xml
