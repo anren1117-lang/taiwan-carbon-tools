@@ -1,0 +1,28 @@
+# Taiwan Carbon Tools — Farm Operations Dashboard
+# Individual farm URLs contain private farm data in the URL fragment
+# (#data=<base64>) or reference private per-farm JSONs via ?id=.
+# We do NOT want search engines indexing these paths; the URL IS the
+# account and indexing would break the "share only what you mean to
+# share" model.
+#
+# Allow only the public landing pages (index, household, business,
+# farm calc, and the anonymous farm gallery). Block the operations
+# dashboard, onboarding, pitch, and any URL with a query string.
+
+User-agent: *
+Allow: /
+Allow: /index.html
+Allow: /household.html
+Allow: /business.html
+Allow: /farm.html
+Allow: /farms.html
+Disallow: /farm-dashboard.html
+Disallow: /farm-onboard.html
+Disallow: /farm-pitch.html
+Disallow: /farm-buyer.html
+Disallow: /*?id=
+Disallow: /*#data=
+
+# Do not aggressively crawl (this is a small solo-run static site
+# on GitHub Pages)
+Crawl-delay: 5
