@@ -2001,10 +2001,31 @@
     @page { size: A4; margin: 12mm 10mm; }
     body { background: white !important; color: black !important; font-size: 10.5pt; line-height: 1.45; }
     header, .section-nav, .dash-print-btn, .lang-toggle,
-    .agent-panel, #yieldPanel,
+    .agent-panel:not(.print-agent), #yieldPanel,
     .editor:not(#notes),
     section[id="sec-scenarios"], .scenario-result,
     .agent-chips, .agent-reset { display: none !important; }
+
+    /* When the agent panel has .print-agent (added via
+       "🖨 Print this answer" button on any chat bubble), keep it
+       visible on print and strip the chrome (search box, quick chips,
+       browse index, saved panel, action toolbar). Farmer can hand a
+       printed KB answer to spouse / buyer / co-worker as-is. */
+    .agent-panel.print-agent {
+      display: block !important;
+      break-inside: avoid;
+    }
+    .agent-panel.print-agent .agent-ask,
+    .agent-panel.print-agent .agent-quick-chips,
+    .agent-panel.print-agent .agent-recent,
+    .agent-panel.print-agent .agent-browse,
+    .agent-panel.print-agent .agent-saved,
+    .agent-panel.print-agent .ag-act-toolbar,
+    .agent-panel.print-agent .chat-followup,
+    .agent-panel.print-agent .agent-header { display: none !important; }
+    .agent-panel.print-agent .chat-thread .chat-turn:not(.chat-latest) { display: none; }
+    .agent-panel.print-agent .chat-latest .chat-avatar { display: none; }
+    .agent-panel.print-agent .chat-bubble-agent { max-width: 100% !important; }
 
     /* Notes drawer: show in print only if non-empty; force open */
     #notes { display: block; page-break-inside: avoid; margin-top: 14px; }
@@ -9686,7 +9707,8 @@ This application supports starting organic-transition certification for ≥1 ha.
         ? `<button class="ag-act-btn" onclick="askDifferentAngle('${match.id}')" title="${isZh ? '看相關主題的另一個切入點' : 'Pull a related topic for another angle'}">🔄 ${isZh ? '換個角度' : 'Another angle'}</button>`
         : '';
       const saveBtn = `<button class="ag-act-btn ag-act-save${saved ? ' is-saved' : ''}" onclick="toggleSaveAnswer('${match.id}')" title="${isZh ? '保存這個回答' : 'Save this answer'}">${saved ? '★' : '☆'} ${isZh ? (saved ? '已保存' : '保存') : (saved ? 'Saved' : 'Save')}</button>`;
-      actionToolbar = `<div class="ag-act-toolbar">${angleBtn}${saveBtn}</div>`;
+      const printBtn = `<button class="ag-act-btn" onclick="printCurrentAnswer()" title="${isZh ? '把這個答案列印或存為 PDF（給家人或買家）' : 'Print this answer or save as PDF (for family / buyer)'}">🖨 ${isZh ? '列印' : 'Print'}</button>`;
+      actionToolbar = `<div class="ag-act-toolbar">${angleBtn}${saveBtn}${printBtn}</div>`;
     }
 
     // Confidence badge — only shown for "high" (Taiwan-official
@@ -10012,6 +10034,23 @@ This application supports starting organic-transition certification for ≥1 ha.
     writeSavedAnswers(list);
     renderAgentChat();
     renderAgentSavedPanel();
+  };
+
+  // Print just the current KB answer — adds .print-agent to the
+  // agent panel so the print stylesheet (cycle 47) keeps only the
+  // latest chat bubble visible, strips search/chips/toolbar chrome,
+  // then removes the class after the print dialog closes.
+  window.printCurrentAnswer = function() {
+    const panel = document.querySelector('.agent-panel');
+    if (!panel) return;
+    panel.classList.add('print-agent');
+    const cleanup = () => {
+      panel.classList.remove('print-agent');
+      window.removeEventListener('afterprint', cleanup);
+    };
+    window.addEventListener('afterprint', cleanup);
+    // Small delay so the class-add lands before the print dialog opens
+    setTimeout(() => window.print(), 50);
   };
 
   // Simple HTML escape for user-provided question text
