@@ -7375,6 +7375,97 @@ This application supports starting organic-transition certification for ≥1 ha.
       }
     },
     {
+      id: 'land_conversion_trap',
+      keywords: ['農地違建', '違規使用', '農舍', '蓋房子', '倉庫', '土地變更', '拆除', '罰款', '違章', 'illegal building', 'illegal use', 'farm house', 'shed', 'warehouse', 'land conversion', 'demolition', 'fine', 'violation'],
+      topic: { zh: '農地違建 / 土地違規', en: 'Farmland illegal use trap' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '農地不是你想蓋什麼就蓋什麼 — 農舍規則 + 違建拆除 + 稅金翻倍', en: 'Farmland ≠ do-whatever-you-want land — house rules + demolition orders + double taxes' },
+          situation: { zh: '2000 年後農地違規使用 / 違建被檢舉率暴增。「農舍」有嚴格條件：0.25 公頃以上 + 農民身分 + 90% 土地要繼續農用。倉庫、烘豆間、包裝廠都常被歸類為「違建」。一旦被檢舉，處理三選一：拆除、農業設施補正、罰款分期。稅金也會從農地稅（極低）跳到「非農使用」稅（10-30 倍）。事後補救的困難度是 10 倍事前規劃的成本。',
+                       en: 'Since 2000, illegal farmland use / structures have seen a surge in whistleblower reports. "Farmhouse" has strict criteria: 0.25 ha+ + farmer status + 90% of land must stay agricultural. Warehouses, roasting rooms, packing sheds all often get reclassified as "illegal structures". Once reported: 3 options: demolish, correct as ag facility, or fine-in-installments. Tax also jumps from farmland (very low) to "non-ag use" (10-30× higher). Retroactive fixes cost 10× more than upfront planning.' },
+          actions: [
+            { zh: '1. <strong>先確認你要蓋的屬性</strong>：<br>(a) 農舍（住宅）— 需 0.25 甲以上 + 有農保 + 農地面積 90% 保持農用 + 建蔽率 10%；<br>(b) 農業設施（倉庫、育苗、機具棚）— 需向縣府申請許可 + 有明確農業用途；<br>(c) 加工廠 — 有「食品工廠登記」+ 農地變更許可（極難）；<br>(d) 民宿 / 農遊 — 需申請「休閒農業區」認定 + 商業登記。',
+              en: '1. <strong>Confirm the classification of what you\'re building</strong>:<br>(a) Farmhouse (residence) — needs ≥0.25 甲 (0.25 ha) + farmer insurance + 90% ag use + 10% building coverage;<br>(b) Ag facility (warehouse, nursery, equipment shed) — needs county permit + clear ag purpose;<br>(c) Processing plant — needs Food Factory Registration + land-use conversion (very hard);<br>(d) B&B / agritourism — needs "Recreational Ag Zone" designation + business registration.' },
+            { zh: '2. <strong>絕對禁止 — 不申請就蓋</strong>：即使無害的小倉庫，未經許可就是「違建」。一旦被鄰居檢舉、空拍發現、政府例行稽查發現，可被要求限期拆除。「先蓋再說」在 2010 年後基本行不通。',
+              en: '2. <strong>Absolute red line — don\'t build without permit</strong>: even a harmless small shed is "illegal" without pre-approval. Neighbor complaint, drone imaging, routine inspection → demolition order. "Build first, deal with it later" stopped working around 2010.' },
+            { zh: '3. <strong>已違建 — 走「合法化」流程</strong>：找地政士或代辦公司幫你申請「農業設施補正」。<br>(a) 提出補建圖說 + 農業用途說明；<br>(b) 縣府勘查 + 條件補正（可能要縮小 / 移除部分）；<br>(c) 補發使用執照。費用 NT$ 30-100k / 案，但比直接拆除便宜 5-10 倍。',
+              en: '3. <strong>Already illegal — pursue "legalization"</strong>: hire a land agent or admin service to file "Ag Facility Retroactive Approval". <br>(a) Submit as-built drawings + ag-use justification;<br>(b) County inspection + condition corrections (may need to shrink / remove parts);<br>(c) Get retroactive use permit. Cost NT$ 30-100k/case but 5-10× cheaper than demolition.' },
+            { zh: '4. <strong>已被檢舉 — 停止擴建 + 立即諮詢</strong>：接到「違規使用農地」公文後，通常有 30-60 天處理期。立刻找地政士 / 律師諮詢。「認罪 + 補正」通常比「抗辯 + 拒不執行」結果好 2-3 倍。抗辯只在明確有理由（誤判、實際是農業設施）時才用。',
+              en: '4. <strong>Received a notice — stop construction + consult immediately</strong>: after receiving a "farmland violation" notice, typically 30-60 days to respond. Consult land agent / lawyer immediately. "Admit + correct" usually 2-3× better outcome than "contest + refuse". Contest only when clearly wrong (misclassification, actually ag facility).' },
+            { zh: '5. <strong>稅金衝擊要早算</strong>：農業用地稅 NT$ 200-500 / 分年；非農使用稅 NT$ 2,000-6,000 / 分年（10-30 倍）+ 補追過去年度 = 一年可能被追 NT$ 100-500k。這個成本要算進蓋前的成本分析。',
+              en: '5. <strong>Model the tax hit early</strong>: farmland tax NT$ 200-500/0.1ha/yr; non-ag use tax NT$ 2,000-6,000/0.1ha/yr (10-30×) + retroactive charges = could owe NT$ 100-500k in one shot. Include this in the pre-build cost analysis.' }
+          ],
+          checklist: {
+            title: { zh: '蓋任何東西前的清單', en: 'Before building anything checklist' },
+            items: [
+              { zh: '<strong>確認地目 + 使用分區</strong>：一般農業區 vs 特農區 vs 山坡地 — 規則不同', en: '<strong>Verify land classification + use zone</strong>: General Ag / Special Ag / Slope Conservation — different rules' },
+              { zh: '<strong>面積 / 建蔽率 / 高度限制</strong>：找地政事務所出示規範', en: '<strong>Area / building coverage / height limits</strong>: get the specification from Land Admin Bureau' },
+              { zh: '<strong>設計圖說 + 農業用途說明</strong>：預先請專業繪製', en: '<strong>Drawings + ag-use justification</strong>: get professional prep upfront' },
+              { zh: '<strong>鄰居關係</strong>：先跟鄰田打招呼比較不會被檢舉', en: '<strong>Neighbor relationship</strong>: give neighbors a heads-up; reduces complaint risk' },
+              { zh: '<strong>找地政士或建築師諮詢</strong>：NT$ 5-15k 諮詢費，比事後補救省 10 倍', en: '<strong>Consult land agent or architect</strong>: NT$ 5-15k upfront, saves 10× vs retroactive fixes' }
+            ]
+          },
+          pitfalls: {
+            title: { zh: '常見地雷', en: 'Common landmines' },
+            items: [
+              { zh: '<strong>「小小的沒關係」</strong> — 大小不是判準，「有沒有申請」才是', en: '<strong>"It\'s small, it\'s fine"</strong> — size isn\'t the criterion, "did you apply" is' },
+              { zh: '<strong>先蓋後補</strong> — 2010 後成功率極低，通常拆除', en: '<strong>Build first, apply later</strong> — success rate is very low post-2010; usually demolished' },
+              { zh: '<strong>忽略稅金差異</strong> — 蓋一間違章倉庫，10 年被追 NT$ 500k 稅金 + 罰款', en: '<strong>Ignoring tax jump</strong> — one illegal shed could mean NT$500k in back-taxes + penalties over 10 years' },
+              { zh: '<strong>被檢舉後躲避不理</strong> — 罰款會利滾利，最後強制拆除還要負擔費用', en: '<strong>Ignoring the notice after being reported</strong> — fines compound, forced demolition still charges you the cost' }
+            ]
+          },
+          resources: {
+            title: { zh: '相關單位', en: 'Relevant agencies' },
+            items: [
+              { zh: '<strong>各縣地政事務所</strong> — 地目查詢、使用分區、規範', en: '<strong>County Land Administration Bureau</strong> — classification, zoning, specs' },
+              { zh: '<strong>各縣工務局 / 建管科</strong> — 建照、使用執照', en: '<strong>County Public Works Bureau / Building Mgmt</strong> — construction + use permits' },
+              { zh: '<strong>農業部農糧署</strong> — 農業設施認定、農舍規則', en: '<strong>MOA AFA</strong> — ag facility recognition, farmhouse rules' },
+              { zh: '<strong>地政士公會</strong>：<a href="https://www.landagents.org.tw/" target="_blank" rel="noopener">landagents.org.tw</a> — 找專業諮詢', en: '<strong>Land Agents Guild</strong>: <a href="https://www.landagents.org.tw/" target="_blank" rel="noopener">landagents.org.tw</a> — find pro consult' }
+            ]
+          },
+          approaches: {
+            title: { zh: '3 種蓋東西策略', en: '3 build strategies' },
+            items: [
+              { tone: 'easy',
+                tag: { zh: 'A · 用可移動設施', en: 'A · Mobile / temp only' },
+                fit: (i) => 2,
+                summary: { zh: '不建 = 不違規 — 用臨時 / 可移動的', en: 'No build = no violation — go mobile / temporary' },
+                bullets: [
+                  { zh: '拖車型農具倉、臨時遮雨棚', en: 'Trailer-style equipment shed, temp weather cover' },
+                  { zh: '不需申請、可隨時撤除', en: 'No permit needed, removable anytime' },
+                  { zh: '成本低但長期不划算', en: 'Cheap short-term, doesn\'t scale' }
+                ],
+                who: { zh: '適合：小農、租地、不確定長期需求', en: 'For: small farms, rented land, unclear long-term need' } },
+              { tone: 'balanced',
+                tag: { zh: 'B · 走農業設施申請', en: 'B · Ag facility permit' },
+                fit: (i) => i.farmSize >= 0.5 ? 3 : 1,
+                summary: { zh: '合法申請 — 3-6 個月流程，一勞永逸', en: 'Proper permit — 3-6mo process, permanent peace of mind' },
+                bullets: [
+                  { zh: '建蔽率通常 10% 以內、高度限制', en: '10% building coverage cap, height limits' },
+                  { zh: '申請費 NT$ 5-30k，比違建罰款便宜', en: 'Permit fee NT$ 5-30k, way cheaper than fines' },
+                  { zh: '合法 = 未來可貸款 / 保險 / 轉手更容易', en: 'Legal = future loans / insurance / resale easier' }
+                ],
+                who: { zh: '適合：0.5 甲以上、長期經營、真的需要固定建物', en: 'For: ≥0.5甲, long-term, genuinely need permanent structure' } },
+              { tone: 'bold',
+                tag: { zh: 'C · 農舍申請', en: 'C · Farmhouse permit' },
+                fit: (i) => i.farmSize >= 0.25 ? 1 : 0,
+                summary: { zh: '2.5 分地以上農民可蓋自住農舍', en: 'Qualifying farmers can build a residence farmhouse' },
+                bullets: [
+                  { zh: '需農民身分 + 農保 + 90% 土地繼續農用', en: 'Need farmer status + farmer insurance + 90% land stays ag' },
+                  { zh: '建蔽率 10%、綠覆率 30%', en: '10% building coverage, 30% green cover' },
+                  { zh: '申請流程 6-12 個月，找專業建築師合作', en: '6-12mo process, work with a specialized architect' }
+                ],
+                who: { zh: '適合：長期農業經營、面積 ≥ 2.5 分', en: 'For: long-term agriculture, ≥ 0.25 甲' } }
+            ]
+          },
+          links: [
+            { label: { zh: '看農地 / 租賃', en: 'Land / leasing' }, href: '#sec-agent' },
+            { label: { zh: '看租約糾紛', en: 'Lease disputes' }, href: '#sec-agent' }
+          ]
+        };
+      }
+    },
+    {
       id: 'when_scale',
       keywords: ['擴大', '擴張', '加大', '長大', '更多地', '長遠計畫', 'scale', 'scale up', 'expand', 'grow bigger', 'more land'],
       topic: { zh: '何時擴張', en: 'When to scale' },
@@ -9870,6 +9961,7 @@ This application supports starting organic-transition certification for ≥1 ha.
     lease_dispute:       'high',
     quarantine_pests:    'high',
     foreign_workers:     'high',
+    land_conversion_trap:'high',
     losing_money:        'high',
     pricing_specific:    'high',
     land_tenure:         'high',
@@ -9921,7 +10013,8 @@ This application supports starting organic-transition certification for ≥1 ha.
     tax_accounting:      ['packaging_rules', 'how_diversify', 'goal_setting'],
     burnout:             ['hiring_labor', 'when_scale', 'find_mentor'],
     land_tenure:         ['when_scale', 'succession', 'soil_test', 'lease_dispute'],
-    lease_dispute:       ['land_tenure', 'tax_accounting', 'find_mentor'],
+    lease_dispute:       ['land_tenure', 'tax_accounting', 'find_mentor', 'land_conversion_trap'],
+    land_conversion_trap:['land_tenure', 'lease_dispute', 'tax_accounting'],
     when_scale:          ['hiring_labor', 'compare_peers', 'land_tenure'],
     organic_transition:  ['cert_question', 'subsidies_available', 'practice_invest'],
     find_mentor:         ['burnout', 'hiring_labor', 'compare_peers'],
@@ -10452,7 +10545,7 @@ This application supports starting organic-transition certification for ≥1 ha.
             'pitch_buyer', 'pricing_premium', 'goal_setting', 'climate_risk', 'cert_question',
             'soil_test', 'what_to_do_now', 'hiring_labor', 'succession', 'marketing_social',
             'storage_coldchain', 'packaging_rules', 'tax_accounting', 'land_tenure', 'when_scale',
-            'find_mentor', 'succession_paperwork', 'lease_dispute', 'foreign_workers'] },
+            'find_mentor', 'succession_paperwork', 'lease_dispute', 'foreign_workers', 'land_conversion_trap'] },
     { key: 'agro',   zh: '🌾 田間農藝',                en: '🌾 Field agronomy',
       ids: ['pest_disease', 'aphids_pests', 'quarantine_pests', 'fungal_disease', 'crop_rotation', 'composting',
             'water_mgmt', 'water_rights', 'fertilizer_timing', 'organic_transition', 'fruit_pruning',
