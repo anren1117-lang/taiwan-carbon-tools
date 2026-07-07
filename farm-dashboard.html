@@ -7182,6 +7182,106 @@ This application supports starting organic-transition certification for ≥1 ha.
       }
     },
     {
+      id: 'lease_dispute',
+      keywords: ['租約糾紛', '地主要收回', '租金漲', '不續約', '租約糾紛', '收回土地', '拆遷', '越界', 'lease dispute', 'landlord dispute', 'rent hike', 'non-renewal', 'reclaim land', 'boundary', 'trespass'],
+      topic: { zh: '租約糾紛', en: 'Lease disputes' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '不要對地主生氣 — 先看合約、留紀錄、找調解人', en: 'Don\'t get angry with the landlord — first check the contract, keep records, find a mediator' },
+          situation: { zh: '租地種田的農夫十有八九會遇到租約糾紛：地主要漲租金、地主要收回土地蓋房、繼承人不同意續約、地界爭議、投入的土壤改良沒補償。台灣「耕地三七五減租條例」對承租人（尤其長期的）有保障，但新型合約多為「一般農地租賃」不受此條例保護。多數糾紛可透過鄉鎮公所調解免除訴訟。',
+                       en: 'Rented-land farmers almost always face lease disputes: landlord raises rent, wants land back to build, heirs refuse renewal, boundary disputes, soil improvements go uncompensated. Taiwan\'s "375 Farmland Rent Reduction Act" protects long-term tenants, but most new leases are "general farmland lease" outside its scope. Most disputes can be settled at township-level mediation, avoiding court.' },
+          actions: [
+            { zh: '1. <strong>先找出原本的合約</strong>：口頭合約 = 只能靠民法一般條文（承租人保障弱）。書面合約 = 白紙黑字爭。若你是承租人但沒書面，先想辦法補簽或 email/LINE 上留下條件記錄（時間 + 金額 + 面積）。',
+              en: '1. <strong>Find the original contract</strong>: verbal-only = falls under general Civil Code (weak tenant protection). Written = clear terms. If you\'re a tenant without written contract, get one now, or record the terms via email/LINE dated.' },
+            { zh: '2. <strong>紀錄糾紛全程</strong>：時間、對話內容、對方要求、你的回應、證人。全部寫入 LINE 或 Email 有時戳。地主威脅 / 侮辱 / 恐嚇要立刻報警（113 家暴不適用，但派出所有記錄）。',
+              en: '2. <strong>Log the whole dispute</strong>: dates, conversations, demands, responses, witnesses. Record via LINE / Email with timestamps. If the landlord threatens / insults / intimidates, call police immediately (not 113, but the local station\'s report).' },
+            { zh: '3. <strong>先走鄉鎮公所調解委員會（免費）</strong>：任一方申請即可召開，另一方原則上要出席。調解成立 = 法律效力等同判決。多數農地糾紛在這一步就結束，不用律師、不上法院。',
+              en: '3. <strong>Township mediation committee first (free)</strong>: either party can file; the other should attend. Successful mediation = legal effect equivalent to a court judgment. Most farmland disputes end here — no lawyer, no court.' },
+            { zh: '4. <strong>要地界爭議 = 找地政士 / 地政事務所複丈</strong>：地籍圖上的界線常與現場圍籬不符。複丈費用 NT$ 8-15k / 案，一勞永逸。如果對方拒絕分擔，你先付、日後主張。',
+              en: '4. <strong>Boundary dispute → land agent / Land Administration Bureau resurvey</strong>: cadastral map lines often diverge from actual fences. Resurvey fee NT$ 8-15k/case — settles it forever. If the other side won\'t split cost, pay now, claim later.' },
+            { zh: '5. <strong>調解不成 → 上法院前先評估</strong>：訴訟 6-24 個月、律師費 NT$ 30-100k、勝負難料。多數農地糾紛「不繼續合作但和平離場」的方式（一次性補償 + 土壤改良折現）反而快 + 便宜。除非對方真的過分，法律途徑通常是「兩敗俱傷」。',
+              en: '5. <strong>Mediation fails → assess before court</strong>: 6-24 months, lawyer NT$ 30-100k, uncertain outcome. Most farmland disputes settle faster + cheaper via "part ways peacefully" (one-time compensation + soil improvement buyout). Unless the other side is genuinely abusive, litigation is usually "both sides lose".' }
+          ],
+          checklist: {
+            title: { zh: '避免糾紛預防清單', en: 'Prevent-dispute checklist' },
+            items: [
+              { zh: '<strong>書面合約</strong>（哪怕只有 A4 一頁也好）：租期、租金、續約條件、退場條件、地界、土壤改良歸屬', en: '<strong>Written contract</strong> (even a single A4): term, rent, renewal terms, exit terms, boundaries, soil-improvement ownership' },
+              { zh: '<strong>合約公證</strong>（NT$ 3-8k）— 大幅降低日後爭議機率', en: '<strong>Notarize the contract</strong> (NT$ 3-8k) — dramatically reduces future disputes' },
+              { zh: '<strong>年度租金收據 / 匯款紀錄</strong> — 3 年不斷紀錄 = 你是「常態承租人」，法律地位穩', en: '<strong>Annual rent receipts / bank transfer records</strong> — 3 years continuous = "regular tenant" legal standing' },
+              { zh: '<strong>與地主每年一次「檢視會議」</strong> — 主動溝通比被動被驚喜好', en: '<strong>Annual "review meeting" with landlord</strong> — proactive beats surprise-driven' },
+              { zh: '<strong>投入前先算「拿不回來的成本」</strong>：如果 5 年租期你投了 NT$ 200k 土壤改良，能不能寫進合約作為續約條件？', en: '<strong>Model the "unrecoverable cost" before investing</strong>: if you invest NT$200k in soil over 5yr, can that be written into the contract as a renewal condition?' }
+            ]
+          },
+          pitfalls: {
+            title: { zh: '常見地雷', en: 'Common landmines' },
+            items: [
+              { zh: '<strong>「我跟地主是好朋友，不用簽約」</strong> — 地主的子女 / 繼承人跟你不認識', en: '<strong>"Landlord is my friend, no need to sign"</strong> — but the landlord\'s heirs don\'t know you' },
+              { zh: '<strong>租金一直用現金</strong> — 沒有紀錄，主張「你不是承租人」時你無從證明', en: '<strong>Cash rent forever</strong> — no records; when the other side denies you\'re the tenant, you can\'t prove otherwise' },
+              { zh: '<strong>投入大筆改良沒白紙黑字</strong>：5 年後地主要收回，你的 NT$300k 打水漂', en: '<strong>Major improvements with nothing written down</strong>: 5 years later landlord wants land back; NT$300k evaporates' },
+              { zh: '<strong>找律師之前不走調解</strong> — 律師費 3-10 倍於調解，糾紛還可能更難修復', en: '<strong>Skipping mediation for direct lawsuit</strong> — 3-10× the cost, and often permanently damages relationships' }
+            ]
+          },
+          resources: {
+            title: { zh: '調解 / 法律資源', en: 'Mediation / legal resources' },
+            items: [
+              { zh: '<strong>鄉鎮市區公所調解委員會</strong> — 免費，你所在地公所即可申請', en: '<strong>Township mediation committee</strong> — free, apply at your township office' },
+              { zh: '<strong>法律扶助基金會 (LAF)</strong>：0800-024-528 — 低收 / 中低收免費律師', en: '<strong>Legal Aid Foundation</strong>: 0800-024-528 — free lawyer for low + middle-low income' },
+              { zh: '<strong>各縣農會法律諮詢</strong> — 農會會員通常有免費法律窗口', en: '<strong>County farmers assoc legal consult</strong> — usually free for members' },
+              { zh: '<strong>內政部地政司</strong>：<a href="https://www.land.moi.gov.tw/" target="_blank" rel="noopener">land.moi.gov.tw</a>（租賃契約範本 + 三七五條例）', en: '<strong>MOI Land Administration</strong>: <a href="https://www.land.moi.gov.tw/" target="_blank" rel="noopener">land.moi.gov.tw</a> (lease templates + 375 Act)' }
+            ]
+          },
+          approaches: {
+            title: { zh: '4 種糾紛處理路徑 — 依關係與時間壓力', en: '4 dispute-resolution paths — by relationship + time pressure' },
+            items: [
+              { tone: 'easy',
+                tag: { zh: 'A · 面談協商', en: 'A · Direct talk' },
+                fit: (i) => 2,
+                summary: { zh: '一杯茶 + 一張紙 = 多數糾紛解', en: 'A cup of tea + one page of paper = most disputes resolved' },
+                bullets: [
+                  { zh: '不帶情緒地列出雙方需求', en: 'Unemotionally list both sides\' needs' },
+                  { zh: '達成後立刻書面 + 簽名 + 拍照', en: 'When agreed, write down + sign + photo immediately' },
+                  { zh: '成本：0；成功率：60-70%', en: 'Cost: 0; success rate: 60-70%' }
+                ],
+                who: { zh: '適合：關係還可以、糾紛不激烈', en: 'For: relationship still workable, dispute mild' } },
+              { tone: 'balanced',
+                tag: { zh: 'B · 鄉鎮公所調解', en: 'B · Township mediation' },
+                fit: (i) => 3,
+                summary: { zh: '免費 + 一個月內 + 有法律效力', en: 'Free + within a month + legal effect' },
+                bullets: [
+                  { zh: '任一方申請 = 委員會召開', en: 'Either party files = committee convenes' },
+                  { zh: '調解成立 = 等同法院判決', en: 'Successful mediation = equivalent to court judgment' },
+                  { zh: '成本：0；成功率：50-60%', en: 'Cost: 0; success rate: 50-60%' }
+                ],
+                who: { zh: '適合：面談無效但還沒到訴訟', en: 'For: direct talk failed, not ready for court' } },
+              { tone: 'bold',
+                tag: { zh: 'C · 訴訟', en: 'C · Litigation' },
+                fit: (i) => 0,
+                summary: { zh: '最後手段 — 6-24 個月 + NT$ 30-100k', en: 'Last resort — 6-24 months + NT$ 30-100k' },
+                bullets: [
+                  { zh: '低收 / 中低收 → 法扶免費律師 (LAF)', en: 'Low income → LAF free lawyer' },
+                  { zh: '勝訴常伴關係徹底破裂', en: 'Winning usually destroys the relationship' },
+                  { zh: '成本：高；成功率：50%', en: 'Cost: high; success: 50%' }
+                ],
+                who: { zh: '適合：對方惡意、金額大、其他都失敗', en: 'For: bad faith + big money + all else failed' } },
+              { tone: 'collab',
+                tag: { zh: 'D · 農會 / 產銷班介入', en: 'D · Farmers assoc / co-op intervene' },
+                fit: (i) => 1,
+                summary: { zh: '第三方調停 — 不是官方但有社群壓力', en: 'Third-party mediation — informal but with social leverage' },
+                bullets: [
+                  { zh: '農會理事、產銷班長帶頭做見證', en: 'Assoc board / co-op leader as witness' },
+                  { zh: '社群壓力比法律有時更有效', en: 'Social pressure sometimes more effective than legal' },
+                  { zh: '需要：你在該群體有一定關係', en: 'Need: some standing in the group' }
+                ],
+                who: { zh: '適合：長期經營區、你有社群連結', en: 'For: established region + you have community ties' } }
+            ]
+          },
+          links: [
+            { label: { zh: '看農地 / 租賃', en: 'Land / leasing' }, href: '#sec-agent' }
+          ]
+        };
+      }
+    },
+    {
       id: 'when_scale',
       keywords: ['擴大', '擴張', '加大', '長大', '更多地', '長遠計畫', 'scale', 'scale up', 'expand', 'grow bigger', 'more land'],
       topic: { zh: '何時擴張', en: 'When to scale' },
@@ -9579,6 +9679,7 @@ This application supports starting organic-transition certification for ≥1 ha.
     succession_paperwork:'high',
     water_rights:        'high',
     hail_damage:         'high',
+    lease_dispute:       'high',
     losing_money:        'high',
     pricing_specific:    'high',
     land_tenure:         'high',
@@ -9627,7 +9728,8 @@ This application supports starting organic-transition certification for ≥1 ha.
     packaging_rules:     ['how_diversify', 'find_buyers', 'tax_accounting'],
     tax_accounting:      ['packaging_rules', 'how_diversify', 'goal_setting'],
     burnout:             ['hiring_labor', 'when_scale', 'find_mentor'],
-    land_tenure:         ['when_scale', 'succession', 'soil_test'],
+    land_tenure:         ['when_scale', 'succession', 'soil_test', 'lease_dispute'],
+    lease_dispute:       ['land_tenure', 'tax_accounting', 'find_mentor'],
     when_scale:          ['hiring_labor', 'compare_peers', 'land_tenure'],
     organic_transition:  ['cert_question', 'subsidies_available', 'practice_invest'],
     find_mentor:         ['burnout', 'hiring_labor', 'compare_peers'],
@@ -10158,7 +10260,7 @@ This application supports starting organic-transition certification for ≥1 ha.
             'pitch_buyer', 'pricing_premium', 'goal_setting', 'climate_risk', 'cert_question',
             'soil_test', 'what_to_do_now', 'hiring_labor', 'succession', 'marketing_social',
             'storage_coldchain', 'packaging_rules', 'tax_accounting', 'land_tenure', 'when_scale',
-            'find_mentor', 'succession_paperwork'] },
+            'find_mentor', 'succession_paperwork', 'lease_dispute'] },
     { key: 'agro',   zh: '🌾 田間農藝',                en: '🌾 Field agronomy',
       ids: ['pest_disease', 'aphids_pests', 'fungal_disease', 'crop_rotation', 'composting',
             'water_mgmt', 'water_rights', 'fertilizer_timing', 'organic_transition', 'fruit_pruning',
@@ -15129,7 +15231,7 @@ Applicant: ${ownerName} (signature)
   <div class="trust-footer-meta">
     <div class="trust-footer-version">
       <span data-zh="儀表板版本" data-en="Dashboard version">儀表板版本</span>
-      <code id="trustFooterVersion">v2.8 · 2026-07-04 · 88 KB topics · 123 tests · offline-capable</code>
+      <code id="trustFooterVersion">v2.9 · 2026-07-07 · 91 KB topics · 123 tests · offline PWA</code>
     </div>
     <div data-zh="製作者 · An-Ren Ho (何安仁)" data-en="Built by An-Ren Ho">製作者 · An-Ren Ho (何安仁)</div>
   </div>
