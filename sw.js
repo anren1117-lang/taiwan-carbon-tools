@@ -38,7 +38,14 @@ const PRECACHE = [
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE).then((c) =>
-      Promise.allSettled(PRECACHE.map((u) => c.add(u).catch(() => null)))
+      // { cache: 'reload' } forces a network fetch that bypasses
+      // the browser HTTP cache so we're pre-caching current content,
+      // not whatever old copy the browser had lying around.
+      Promise.allSettled(PRECACHE.map((u) =>
+        fetch(u, { cache: 'reload' })
+          .then((res) => (res && res.ok) ? c.put(u, res) : null)
+          .catch(() => null)
+      ))
     ).then(() => self.skipWaiting())
   );
 });
