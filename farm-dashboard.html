@@ -8352,6 +8352,101 @@ This application supports starting organic-transition certification for ≥1 ha.
       }
     },
     {
+      id: 'quarantine_pests',
+      keywords: ['入侵物種', '檢疫害蟲', '紅火蟻', '入侵紅火蟻', '福壽螺', '荔枝椿象', '斑腿泛樹蛙', '外來', '通報', '防檢局', 'invasive species', 'quarantine pest', 'fire ant', 'RIFA', 'golden apple snail', 'lychee stink bug', 'exotic pest', 'BAPHIQ'],
+      topic: { zh: '入侵 / 檢疫害蟲', en: 'Invasive / quarantine pests' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '看到入侵種先通報再處理 — 這不是普通害蟲，是全區責任', en: 'Report before treating — invasive species aren\'t normal pests, they\'re a regional problem' },
+          situation: { zh: '入侵紅火蟻（RIFA）、福壽螺、荔枝椿象、斑翅果蠅、東方果實蠅本地變種等，都是台灣近 10 年重點檢疫害蟲。特點：擴散極快、對特定作物毀滅性大、鄰居沒處理你處理也沒用。政府有專案防治補助 + 免費藥劑 + 集體施藥計畫，但要主動通報。錯過通報 = 自己買藥、自己撲滅、失敗率高。',
+                       en: 'Red Imported Fire Ant (RIFA), golden apple snail, lychee stink bug, spotted-wing drosophila, local variants of oriental fruit fly — all high-priority quarantine pests in Taiwan over the last 10 years. Characteristics: spread very fast, devastating for specific crops, useless if neighbors don\'t coordinate. Government has dedicated programs + free chemicals + regional coordinated spraying — but you must report to get access. Missing the report = buy your own supplies + spray alone + high failure rate.' },
+          actions: [
+            { zh: '1. <strong>辨識 → 拍照 → 通報</strong>：iNaturalist、農業病蟲害輔助鑑定 LINE 群、防檢局全球資訊網、TAgriBAPHIQ App 都可上傳照片辨識。<strong>不確定就通報</strong> — 誤報沒事，漏報後果重。',
+              en: '1. <strong>Identify → photo → report</strong>: iNaturalist, ag pest LINE groups, BAPHIQ website, TAgriBAPHIQ App — all accept photos for ID. <strong>Report even if unsure</strong> — false positives are fine; missed real ones are serious.' },
+            { zh: '2. <strong>紅火蟻 → 直接聯絡「國家紅火蟻防治中心」</strong>：0800-095-590（免費專線）。他們會派員鑑定、免費提供餌劑、指導兩階段（餌劑 + 個別巢處理）。自己買藥常沒效或反效果。',
+              en: '2. <strong>Fire ants → contact National Fire Ant Center</strong>: 0800-095-590 (free hotline). They send inspectors, provide free bait, guide 2-step treatment (bait + individual-mound). DIY chemicals often fail or backfire.' },
+            { zh: '3. <strong>福壽螺 → 田區集體用藥</strong>：農會有專案補助苦茶粕 + 水泥粉。<strong>單戶處理沒用</strong> — 隔壁田不做，一個月後又回來。用「產銷班統一施藥」最有效。',
+              en: '3. <strong>Golden apple snail → regional coordinated treatment</strong>: farmers assoc subsidizes tea-seed meal + cement powder. <strong>Single-farm treatment fails</strong> — neighbor\'s field re-infects yours in a month. Producer-group coordinated spraying is the only real solution.' },
+            { zh: '4. <strong>荔枝椿象 → 冬季卵期集中防治</strong>：11-2 月荔枝、龍眼、芒果樹上刷除卵塊。1 個卵塊 = 春天 20-50 隻若蟲。這一步比任何時期噴藥都有效。',
+              en: '4. <strong>Lychee stink bug → winter egg-mass removal</strong>: Nov-Feb, brush egg masses off lychee / longan / mango trunks. 1 egg mass = 20-50 spring nymphs. This step beats any spray period.' },
+            { zh: '5. <strong>斑翅果蠅 → 誘餌 + 溫網</strong>：藍莓、櫻桃、莓類必備。誘餌陷阱 NT$ 200-500 / 甫、溫網 NT$ 15-30k / 分地。有補助時集體採購。',
+              en: '5. <strong>Spotted-wing drosophila → traps + insect nets</strong>: essential for blueberries, cherries, berries. Bait traps NT$ 200-500 each, insect net NT$ 15-30k/0.1ha. Bulk-buy via co-op when subsidized.' }
+          ],
+          checklist: {
+            title: { zh: '入侵種發現時的清單', en: 'When you spot an invasive' },
+            items: [
+              { zh: '<strong>拍照存證</strong>（全景 + 特寫 + 尺寸對比 + 位置 GPS）', en: '<strong>Photo evidence</strong> (wide + close-up + size reference + GPS location)' },
+              { zh: '<strong>通報防檢局</strong>：0800-039-131 或全球資訊網', en: '<strong>Report to BAPHIQ</strong>: 0800-039-131 or official website' },
+              { zh: '<strong>不擾動、不整地</strong> — 政府勘查會來', en: '<strong>Don\'t disturb the site</strong> — government inspectors will come' },
+              { zh: '<strong>通知鄰居</strong>：入侵種只有集體防治才有效', en: '<strong>Alert neighbors</strong>: invasive treatment only works collectively' },
+              { zh: '<strong>檢查所有進口 / 外購種苗</strong>：不明來源是入侵種主要進場點', en: '<strong>Check all imported / purchased seedlings</strong>: unknown source = main invasive entry vector' }
+            ]
+          },
+          pitfalls: {
+            title: { zh: '常見地雷', en: 'Common landmines' },
+            items: [
+              { zh: '<strong>自己買殺蟲劑亂噴</strong> — 對紅火蟻大多沒效，反而殺天敵讓螞蟻回彈更兇', en: '<strong>DIY spraying broad-spectrum insecticides</strong> — mostly ineffective on fire ants; kills natural enemies → worse rebound' },
+              { zh: '<strong>只處理自己田不通報</strong> — 隔壁田再感染，事倍功半', en: '<strong>Treating only your field without reporting</strong> — neighbor\'s field re-infects; wasted effort' },
+              { zh: '<strong>看到就打死</strong> — 有些入侵種需要活體樣本供防檢局鑑定', en: '<strong>Killing on sight</strong> — some invasives need live samples for BAPHIQ identification' },
+              { zh: '<strong>忽略早期少量發現</strong> — 5-10 隻紅火蟻不處理，2 個月變 5,000 隻', en: '<strong>Ignoring early small findings</strong> — 5-10 fire ants untreated = 5,000 in 2 months' }
+            ]
+          },
+          resources: {
+            title: { zh: '通報 + 諮詢資源', en: 'Reporting + consulting resources' },
+            items: [
+              { zh: '<strong>國家紅火蟻防治中心</strong>：0800-095-590（RIFA 免費專線）', en: '<strong>National Fire Ant Center</strong>: 0800-095-590 (RIFA hotline)' },
+              { zh: '<strong>防檢局</strong>：0800-039-131 · <a href="https://www.baphiq.gov.tw/" target="_blank" rel="noopener">baphiq.gov.tw</a>', en: '<strong>BAPHIQ (Bureau of Ag Plant Quarantine)</strong>: 0800-039-131 · <a href="https://www.baphiq.gov.tw/" target="_blank" rel="noopener">baphiq.gov.tw</a>' },
+              { zh: '<strong>農業試驗所應用動物組</strong> — 病蟲害鑑定支援', en: '<strong>MOA Applied Zoology Division</strong> — pest ID support' },
+              { zh: '<strong>iNaturalist</strong>：<a href="https://www.inaturalist.org/" target="_blank" rel="noopener">inaturalist.org</a>（公民科學 ID 平台，速度快）', en: '<strong>iNaturalist</strong>: <a href="https://www.inaturalist.org/" target="_blank" rel="noopener">inaturalist.org</a> (citizen science ID, fast turnaround)' }
+            ]
+          },
+          approaches: {
+            title: { zh: '3 種入侵種對應策略', en: '3 invasive-response strategies' },
+            items: [
+              { tone: 'easy',
+                tag: { zh: 'A · 早期單一發現', en: 'A · Early single find' },
+                fit: (i) => 2,
+                summary: { zh: '拍照 + 通報 + 保留活體樣本', en: 'Photo + report + preserve live sample' },
+                bullets: [
+                  { zh: '通報 24-48 小時內政府會派員', en: 'Government inspector visits within 24-48hr' },
+                  { zh: '不亂噴藥、不整地、留現場', en: 'No spraying, no bulldozing, preserve scene' },
+                  { zh: '可能取得免費撲滅資源', en: 'May qualify for free eradication resources' }
+                ],
+                who: { zh: '適合：初次發現、規模小', en: 'For: first-time sighting, small scale' } },
+              { tone: 'balanced',
+                tag: { zh: 'B · 已擴散區域', en: 'B · Already-spread area' },
+                fit: (i) => 3,
+                summary: { zh: '產銷班統一防治 + 政府補助', en: 'Producer-group coordinated treatment + government subsidy' },
+                bullets: [
+                  { zh: '10-20 戶同步施藥 = 效果 5-10 倍', en: '10-20 farms simultaneous treatment = 5-10× effect' },
+                  { zh: '藥劑補助率 50-80%', en: 'Subsidy 50-80% on chemicals' },
+                  { zh: '3-6 個月階段性壓制，非一次撲滅', en: '3-6mo phased suppression, not one-shot eradication' }
+                ],
+                who: { zh: '適合：已擴散 > 10 公頃、產銷班活躍', en: 'For: spread > 10 ha, active producer group' } },
+              { tone: 'bold',
+                tag: { zh: 'C · 長期抗性建立', en: 'C · Long-term resistance building' },
+                fit: (i) => {
+                  const pr = i.practices || {};
+                  const has = (pr.coverCrop ? 1 : 0) + (pr.compost ? 1 : 0) + (pr.residue ? 1 : 0);
+                  return has >= 2 ? 2 : 0;
+                },
+                summary: { zh: '生態多樣化 = 天敵回來 = 長期壓制', en: 'Ecosystem diversity → natural enemies return → long-term suppression' },
+                bullets: [
+                  { zh: '田邊草生 / 生態緩衝帶留住天敵', en: 'Field-edge grassland / ecological buffer keeps natural enemies' },
+                  { zh: '減少廣譜藥劑，改為 IPM', en: 'Reduce broad-spectrum chemicals, shift to IPM' },
+                  { zh: '2-3 年後生態自然平衡', en: '2-3yr later ecosystem naturally balances' }
+                ],
+                who: { zh: '適合：友善 / 有機 / 長期經營者', en: 'For: friendly / organic / long-term operators' } }
+            ]
+          },
+          links: [
+            { label: { zh: '看病蟲害答案', en: 'General pest / disease' }, href: '#sec-agent' },
+            { label: { zh: '看蚜蟲 / 吸食害蟲', en: 'Aphids / sucking pests' }, href: '#sec-agent' }
+          ]
+        };
+      }
+    },
+    {
       id: 'fungal_disease',
       keywords: ['霉菌', '白粉病', '銹病', '炭疽病', '露菌病', '腐爛', '病害', 'fungal', 'mildew', 'rust', 'anthracnose', 'blight', 'fungus', 'rot'],
       topic: { zh: '黴菌 / 真菌病害', en: 'Fungal diseases' },
@@ -9680,6 +9775,7 @@ This application supports starting organic-transition certification for ≥1 ha.
     water_rights:        'high',
     hail_damage:         'high',
     lease_dispute:       'high',
+    quarantine_pests:    'high',
     losing_money:        'high',
     pricing_specific:    'high',
     land_tenure:         'high',
@@ -9718,7 +9814,8 @@ This application supports starting organic-transition certification for ≥1 ha.
     climate_risk:        ['practice_invest', 'water_mgmt', 'crop_rotation', 'typhoon_recovery'],
     typhoon_recovery:    ['climate_risk', 'cash_short', 'subsidies_available', 'hail_damage'],
     hail_damage:         ['typhoon_recovery', 'climate_risk', 'fruit_pruning'],
-    pest_disease:        ['crop_rotation', 'practice_invest', 'find_mentor'],
+    pest_disease:        ['crop_rotation', 'practice_invest', 'find_mentor', 'quarantine_pests'],
+    quarantine_pests:    ['pest_disease', 'aphids_pests', 'find_mentor'],
     hiring_labor:        ['burnout', 'succession', 'when_scale'],
     succession:          ['hiring_labor', 'when_scale', 'burnout', 'succession_paperwork'],
     succession_paperwork:['succession', 'tax_accounting', 'land_tenure'],
@@ -10262,7 +10359,7 @@ This application supports starting organic-transition certification for ≥1 ha.
             'storage_coldchain', 'packaging_rules', 'tax_accounting', 'land_tenure', 'when_scale',
             'find_mentor', 'succession_paperwork', 'lease_dispute'] },
     { key: 'agro',   zh: '🌾 田間農藝',                en: '🌾 Field agronomy',
-      ids: ['pest_disease', 'aphids_pests', 'fungal_disease', 'crop_rotation', 'composting',
+      ids: ['pest_disease', 'aphids_pests', 'quarantine_pests', 'fungal_disease', 'crop_rotation', 'composting',
             'water_mgmt', 'water_rights', 'fertilizer_timing', 'organic_transition', 'fruit_pruning',
             'yellow_leaves', 'seasonal_planting', 'seed_saving', 'typhoon_recovery', 'hail_damage'] },
     { key: 'method', zh: '🌳 農法 / 方法論',          en: '🌳 Farming methods',
