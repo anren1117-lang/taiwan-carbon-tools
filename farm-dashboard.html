@@ -6565,6 +6565,97 @@ This application supports starting organic-transition certification for ≥1 ha.
       }
     },
     {
+      id: 'hail_damage',
+      keywords: ['冰雹', '雹災', '打壞', '果實破皮', '冰雹災害', 'hail', 'hailstorm', 'ice damage', 'fruit bruise', 'hail net'],
+      topic: { zh: '冰雹災害', en: 'Hail damage' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '冰雹 15 分鐘毀掉 1 年果實 — 事前防護 + 事後急救 + 通報三管齊下', en: 'Hail wipes a year of fruit in 15 minutes — pre-net + post-triage + reporting, all three' },
+          situation: { zh: '中央山脈 3-8 月午後對流常伴冰雹，梨山 / 拉拉山 / 大禹嶺 / 阿里山果農每 3-5 年遭遇一次「災難級」冰雹。特點：範圍極小（幾公頃）但強度極高；預測極差（3 小時前才有跡象）。單次事件可讓果農年收入歸零。與颱風不同：氣象局預警窗口很短、政府補助認定也較嚴格（要證明「冰雹」不是「暴雨」）。',
+                       en: 'Central Mountain 3-8pm afternoon convection often carries hail. Lishan / Lala Mtn / Dayuling / Alishan fruit growers face "catastrophic" hail every 3-5 years. Signature: very localized (few hectares) + very intense; hard to predict (only ~3hr warning). One event can wipe out a farmer\'s annual income. Different from typhoons: CWA warning window is short + government aid recognition is stricter (need to prove "hail" not "heavy rain").' },
+          actions: [
+            { zh: '1. <strong>事前 — 防雹網</strong>（果農最重要投資）：架設 4×4 mm 或 8×8 mm 防雹網於樹冠上方 2 公尺。造價 NT$ 80-150k / 分（含支柱與網），5-8 年壽命。防護率 90%+。有農業部「防護設施補助」通常補 30-50%。',
+              en: '1. <strong>Pre-emptive — hail net</strong> (most impactful fruit-grower investment): 4×4mm or 8×8mm net 2m above canopy. Cost NT$ 80-150k/0.1ha (posts + net), 5-8yr lifespan. 90%+ protection. MOA "protective infrastructure subsidy" typically 30-50% covered.' },
+            { zh: '2. <strong>事前 — 雷達警戒 + 應變流程</strong>：氣象署「劇烈天氣監測系統」App 收 30-60 分鐘警報；家人 / 工人分工 → 誰罩帆布、誰移動盆栽、誰關溫室通風、誰通報。事前演練 1 次比事後補救 10 次有效。',
+              en: '2. <strong>Pre-emptive — radar watch + response drill</strong>: CWA "Severe Weather" App gives 30-60min warnings; family / workers roles: who tarps, who moves potted plants, who closes greenhouse vents, who reports. One dry-run beats ten post-hoc fixes.' },
+            { zh: '3. <strong>事後 0-2 小時 — 拍照 + 別碰</strong>：每塊受災果實特寫（帶尺寸對照）+ 全園廣角，含日期戳記。不要清理、不要移動、不要修剪 → 「現場證據」是補助認定關鍵。',
+              en: '3. <strong>Post-event 0-2hr — photo + do NOT touch</strong>: close-ups of each hit fruit (with size reference) + wide-angle orchard shots, date-stamped. Do NOT clean, move, or prune → intact scene = key evidence for aid recognition.' },
+            { zh: '4. <strong>事後 2-24 小時 — 冰雹分級 + 通報</strong>：分級（皮下傷 / 表皮傷 / 破裂）。48 小時內通報農會 / 鄉鎮公所，同時到氣象局申請「冰雹事件證明」（政府補助認定要）。',
+              en: '4. <strong>2-24hr — grade damage + report</strong>: classify (sub-skin bruise / skin damage / cracked). File loss report with farmers assoc / township within 48hr. Also apply to CWA for "hail event certificate" (required for aid recognition).' },
+            { zh: '5. <strong>事後 3-30 天 — 果實處理決策</strong>：<br>(a) 輕傷（皮下）→ 加工果醬 / 果乾（有價，30-40% 原價）；<br>(b) 中傷（表皮）→ 訪銷本地市場低價出（20-30% 原價）；<br>(c) 重傷（破裂）→ 立即摘除避免蟲害擴散。同時噴果實保護劑防細菌感染。',
+              en: '5. <strong>3-30 days — fruit-triage decision</strong>:<br>(a) Minor (sub-skin) → process to jam / dried (30-40% original value);<br>(b) Moderate (skin) → discount local market (20-30% value);<br>(c) Severe (cracked) → cull immediately to prevent pest spread. Spray fruit protectant against bacterial infection.' }
+          ],
+          checklist: {
+            title: { zh: '果農雹災預防清單', en: 'Fruit-grower hail-prevention checklist' },
+            items: [
+              { zh: '<strong>防雹網已裝設 / 已規劃</strong>（單價高但一次能保 5-8 年）', en: '<strong>Hail net installed or planned</strong> (high one-time cost, 5-8yr protection)' },
+              { zh: '<strong>果實保險</strong>：農作物保險有「雹害」條款，年費相對便宜', en: '<strong>Crop insurance with hail rider</strong>: relatively cheap annual premium' },
+              { zh: '<strong>CWA 劇烈天氣 App 已安裝</strong>+ 家人 / 工人都收警報', en: '<strong>CWA Severe Weather App installed</strong> on family + worker phones' },
+              { zh: '<strong>應變分工單</strong>：3-5 人各自的任務寫在紙上、貼冰箱', en: '<strong>Emergency response chart</strong>: 3-5 person task list, printed + on fridge' },
+              { zh: '<strong>臨時遮罩備料</strong>：帆布、防雹布、繩索、支柱、鐵絲網準備好', en: '<strong>Emergency tarps + materials</strong>: cloth, hail cloth, rope, posts, wire mesh ready' }
+            ]
+          },
+          pitfalls: {
+            title: { zh: '常見地雷', en: 'Common landmines' },
+            items: [
+              { zh: '<strong>心痛立刻整地</strong> — 破壞證據 = 補助被砍', en: '<strong>Heartbroken bulldozing</strong> — destroys evidence = reduced aid' },
+              { zh: '<strong>不去申請冰雹事件證明</strong> — 沒證明就變成「風雨損害」，補助認定較嚴', en: '<strong>Skipping hail-event certification</strong> — without it, classified as "storm damage" with stricter aid criteria' },
+              { zh: '<strong>沒噴保護劑</strong> — 破皮果實 2-3 天內就會感染，剩下 5% 的可用果也沒了', en: '<strong>Not spraying protectant</strong> — cracked fruit infects in 2-3 days; even the 5% salvageable is lost' },
+              { zh: '<strong>過度承諾買家「照常出貨」</strong> — 冒品質差風險 → 傷長期關係。誠實告知，多數買家能配合', en: '<strong>Overpromising "shipping as usual"</strong> — risks quality issues + long-term buyer trust. Honesty scales better' }
+            ]
+          },
+          resources: {
+            title: { zh: '相關單位', en: 'Relevant agencies' },
+            items: [
+              { zh: '<strong>中央氣象署</strong>：<a href="https://www.cwa.gov.tw/" target="_blank" rel="noopener">cwa.gov.tw</a>（劇烈天氣 App + 冰雹事件證明申請）', en: '<strong>CWA</strong>: <a href="https://www.cwa.gov.tw/" target="_blank" rel="noopener">cwa.gov.tw</a> (Severe Weather App + hail-event certificate)' },
+              { zh: '<strong>農業部災害查報系統</strong>：<a href="https://disaster.moa.gov.tw/" target="_blank" rel="noopener">disaster.moa.gov.tw</a>', en: '<strong>MOA disaster reporting</strong>: <a href="https://disaster.moa.gov.tw/" target="_blank" rel="noopener">disaster.moa.gov.tw</a>' },
+              { zh: '<strong>果樹保險（各縣農會）</strong> — 有「冰雹」附加條款', en: '<strong>Fruit tree insurance (county farmers assoc)</strong> — hail rider available' },
+              { zh: '<strong>果農產銷班</strong>（如梨山、拉拉山）— 集體採購防雹網可折 15-25%', en: '<strong>Fruit growers producer group</strong> (Lishan, Lala Mtn) — bulk hail-net purchases 15-25% off' }
+            ]
+          },
+          approaches: {
+            title: { zh: '3 種雹災策略 — 依果園規模與位置', en: '3 hail strategies — by orchard size + location' },
+            items: [
+              { tone: 'balanced',
+                tag: { zh: 'A · 全區防雹網', en: 'A · Full-orchard net' },
+                fit: (i) => i.cropType === 'fruit' && i.farmSize >= 0.5 ? 3 : 0,
+                summary: { zh: '一次投資 — 5-8 年 90%+ 防護', en: 'One-time invest — 5-8yr, 90%+ protection' },
+                bullets: [
+                  { zh: '每分地 NT$ 80-150k，補助後 NT$ 40-100k', en: 'NT$ 80-150k/0.1ha, NT$ 40-100k after subsidy' },
+                  { zh: '順帶防鳥害 + 部分防蟲害 + 遮陽', en: 'Also blocks birds + some pests + partial shade' },
+                  { zh: '一次雹災就回本', en: 'One hail event = full ROI' }
+                ],
+                who: { zh: '適合：山區果園、種高單價果', en: 'For: mountain orchards, high-value fruit' } },
+              { tone: 'easy',
+                tag: { zh: 'B · 保險 + 應變', en: 'B · Insurance + response drill' },
+                fit: (i) => i.cropType === 'fruit' ? 2 : 1,
+                summary: { zh: '保費便宜 + 演練分工 — 損失後有理賠', en: 'Cheap premium + drilled response = post-event payout' },
+                bullets: [
+                  { zh: '果樹保險年費 NT$ 3-8k / 公頃', en: 'Fruit-tree insurance NT$ 3-8k/ha/yr' },
+                  { zh: '應變分工單 + CWA App = 事前 30 分鐘準備', en: 'Response chart + CWA App = 30min pre-event' },
+                  { zh: '賠付 NT$ 6-15k / 公頃（依受損程度）', en: 'Payout NT$ 6-15k/ha (severity-based)' }
+                ],
+                who: { zh: '適合：暫無資金裝網、低海拔果農', en: 'For: no capital for net, lower-elevation growers' } },
+              { tone: 'collab',
+                tag: { zh: 'C · 集體防護', en: 'C · Collective protection' },
+                fit: (i) => i.cropType === 'fruit' && i.farmSize >= 2 ? 2 : 0,
+                summary: { zh: '產銷班統一採購防雹網 + 集體理賠', en: 'Producer group bulk-buys net + collective claims' },
+                bullets: [
+                  { zh: '團購 15-25% 折扣 → 每分地 NT$ 65-125k', en: 'Bulk 15-25% off → NT$ 65-125k/0.1ha' },
+                  { zh: '合作社協助應變演練與通報', en: 'Co-op runs response drills + reporting' },
+                  { zh: '同區受災 → 共同爭取加碼補助', en: 'Regional damage → collectively push for enhanced aid' }
+                ],
+                who: { zh: '適合：果樹產銷班、山區集中的區域', en: 'For: fruit producer groups, mountain-clustered regions' } }
+            ]
+          },
+          links: [
+            { label: { zh: '看颱風災後復原', en: 'Post-typhoon recovery' }, href: '#sec-agent' },
+            { label: { zh: '看氣候風險', en: 'Climate risk' }, href: '#sec-agent' }
+          ]
+        };
+      }
+    },
+    {
       id: 'pest_disease',
       keywords: ['病蟲害', '蟲害', '病害', '生病', '蟲咬', '蟲子', '害蟲', 'pest', 'disease', 'bug', 'insect', 'infestation'],
       topic: { zh: '病蟲害', en: 'Pest / disease' },
@@ -9457,6 +9548,7 @@ This application supports starting organic-transition certification for ≥1 ha.
     typhoon_recovery:    'high',
     succession_paperwork:'high',
     water_rights:        'high',
+    hail_damage:         'high',
     losing_money:        'high',
     pricing_specific:    'high',
     land_tenure:         'high',
@@ -9493,7 +9585,8 @@ This application supports starting organic-transition certification for ≥1 ha.
     what_to_do_now:      ['compare_peers', 'practice_invest', 'subsidies_available'],
     goal_setting:        ['compare_peers', 'what_to_do_now', 'how_diversify'],
     climate_risk:        ['practice_invest', 'water_mgmt', 'crop_rotation', 'typhoon_recovery'],
-    typhoon_recovery:    ['climate_risk', 'cash_short', 'subsidies_available'],
+    typhoon_recovery:    ['climate_risk', 'cash_short', 'subsidies_available', 'hail_damage'],
+    hail_damage:         ['typhoon_recovery', 'climate_risk', 'fruit_pruning'],
     pest_disease:        ['crop_rotation', 'practice_invest', 'find_mentor'],
     hiring_labor:        ['burnout', 'succession', 'when_scale'],
     succession:          ['hiring_labor', 'when_scale', 'burnout', 'succession_paperwork'],
@@ -10039,7 +10132,7 @@ This application supports starting organic-transition certification for ≥1 ha.
     { key: 'agro',   zh: '🌾 田間農藝',                en: '🌾 Field agronomy',
       ids: ['pest_disease', 'aphids_pests', 'fungal_disease', 'crop_rotation', 'composting',
             'water_mgmt', 'water_rights', 'fertilizer_timing', 'organic_transition', 'fruit_pruning',
-            'yellow_leaves', 'seasonal_planting', 'seed_saving', 'typhoon_recovery'] },
+            'yellow_leaves', 'seasonal_planting', 'seed_saving', 'typhoon_recovery', 'hail_damage'] },
     { key: 'method', zh: '🌳 農法 / 方法論',          en: '🌳 Farming methods',
       ids: ['method_comparison', 'natural_fukuoka', 'knf_korean', 'permaculture',
             'shumei_natural', 'regenerative', 'biodynamic', 'sheet_mulch'] },
