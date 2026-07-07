@@ -9075,6 +9075,97 @@ This application supports starting organic-transition certification for ≥1 ha.
       }
     },
     {
+      id: 'seasonal_planting',
+      keywords: ['季節', '什麼時候種', '什麼季節', '時令', '節氣', '春耕', '夏耕', '秋耕', '冬耕', '時序', 'seasonal', 'planting calendar', 'when to plant', 'crop calendar', 'season'],
+      topic: { zh: '季節種植 / 時令作物', en: 'Seasonal planting calendar' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '台灣有 4 個明顯的種植季 — 逆季風險高 3-5 倍', en: 'Taiwan has 4 distinct planting seasons — off-season = 3-5× risk' },
+          situation: { zh: '台灣位處亞熱帶，多數蔬果一年可種 1-3 期。順天氣種植 = 病蟲害少、產量高、成本低。逆季種 = 需要溫室 / 燈光 / 高投入才能撐起。新農最常見錯誤：跟本地平均慢 2-4 週入園 → 病蟲害高峰期正好碰上採收期 → 全軍覆沒。',
+                       en: 'Taiwan sits in the subtropics; most vegetables + fruits can grow 1-3 crops/year. With-season planting = low pest pressure, high yield, low cost. Off-season = requires greenhouse / lighting / heavy inputs to sustain. Most common new-farmer mistake: planting 2-4 weeks later than local average → pest peak lands on harvest window → total loss.' },
+          actions: [
+            { zh: '1. <strong>春季（3-5 月）</strong>：溫暖濕潤，最多元的種植期。<br>葉菜：萵苣、小白菜、青花菜（初期）；<br>瓜果：番茄、小黃瓜、南瓜；<br>雜糧：玉米、綠豆；<br>果樹：管理採後追肥、修剪整枝。',
+              en: '1. <strong>Spring (Mar-May)</strong>: warm + moist, most diverse. <br>Leafy: lettuce, bok choy, broccoli (early);<br>Cucurbits: tomato, cucumber, pumpkin;<br>Grains: corn, mung bean;<br>Fruit trees: post-harvest fertilizer, pruning.' },
+            { zh: '2. <strong>夏季（6-8 月）</strong>：高溫多雨 + 颱風季。避免葉菜。<br>種：抗高溫的空心菜、莧菜、地瓜葉、絲瓜；<br>果樹：芒果、荔枝、龍眼採收 + 病蟲害預防；<br><strong>逆季葉菜要溫網 + 遮光 + 排水改善</strong>。',
+              en: '2. <strong>Summer (Jun-Aug)</strong>: hot + wet + typhoon season. Avoid leafy.<br>Plant: heat-tolerant water spinach, amaranth, sweet potato leaf, luffa;<br>Fruit trees: mango, lychee, longan harvest + pest prevention;<br><strong>Off-season leafy = needs insect net + shade + drainage.</strong>' },
+            { zh: '3. <strong>秋季（9-11 月）</strong>：氣溫降 + 病蟲減少 = 種植黃金期。<br>葉菜：所有品項最佳；<br>瓜果：番茄（秋作最好吃）、青椒；<br>果樹：柑橘、柿子、棗子採收；<br>下期作物準備土壤。',
+              en: '3. <strong>Autumn (Sep-Nov)</strong>: temperature drops + pest pressure declines = golden window.<br>Leafy: all thrive;<br>Cucurbits: tomato (autumn = best taste), pepper;<br>Fruit trees: citrus, persimmon, jujube harvest;<br>Prep soil for next crop.' },
+            { zh: '4. <strong>冬季（12-2 月）</strong>：涼爽乾燥。北部低溫、南部溫和。<br>葉菜：高麗菜、白菜、蘿蔔類、菠菜、豌豆；<br>瓜果：草莓；<br>果樹：休眠期修剪、施基肥；<br>中南部可種番茄。',
+              en: '4. <strong>Winter (Dec-Feb)</strong>: cool + dry. Cold in north, mild in south.<br>Leafy: cabbage, napa, radishes, spinach, snow pea;<br>Cucurbits: strawberry;<br>Fruit trees: dormant pruning + base fertilizer;<br>South can grow tomato.' },
+            { zh: '5. <strong>用 2 個工具校準時序</strong>：<br>(a) 農糧署「農作物栽培曆」網站 — 各作物種植 / 施肥 / 病害時期；<br>(b) LINE「XX 縣農友群組」— 問本地經驗豐富農友「今年幾月幾號下」— 準比書本準。',
+              en: '5. <strong>Use 2 tools to time it right</strong>:<br>(a) AFA "Crop Cultivation Calendar" website — planting / fertilizing / disease periods per crop;<br>(b) LINE "county farmer group" — ask experienced local farmers "what date this year" — beats textbooks.' }
+          ],
+          checklist: {
+            title: { zh: '換季前確認清單', en: 'Before-season checklist' },
+            items: [
+              { zh: '<strong>過去 3 年氣象紀錄</strong>：本區的實際降雨、氣溫、颱風 — 別只信平均值', en: '<strong>Past 3-year weather record</strong>: actual rain / temp / typhoons — don\'t rely on averages alone' },
+              { zh: '<strong>病蟲害高峰月份</strong>：哪個月最有可能發生大爆發（如 5-6 月薊馬、9-10 月斜紋夜蛾）', en: '<strong>Pest peak months</strong>: when outbreaks are likely (e.g. thrips May-Jun, armyworm Sep-Oct)' },
+              { zh: '<strong>採收時序 vs 病蟲害</strong>：採收期不能重疊病蟲害高峰', en: '<strong>Harvest vs pest timing</strong>: harvest can\'t overlap with pest peak' },
+              { zh: '<strong>市場價低點</strong>：農糧署行情站查該作物的年度低價月份', en: '<strong>Market price low points</strong>: AFA price site shows the crop\'s low-price months' },
+              { zh: '<strong>本地農友時序</strong>：跟已有 5+ 年經驗的本地農友確認', en: '<strong>Local farmer timing</strong>: verify with local farmers with 5+ years experience' }
+            ]
+          },
+          pitfalls: {
+            title: { zh: '常見地雷', en: 'Common landmines' },
+            items: [
+              { zh: '<strong>逆季搶價</strong> — 認為冬天賣夏天葉菜賺翻，實際上溫室成本 + 損耗常抵掉溢價', en: '<strong>Off-season "premium hunting"</strong> — thinking winter-summer-leafy pays big, but greenhouse cost + losses often eat the premium' },
+              { zh: '<strong>跟隨鄰居 = 全區同時上市</strong>：稍早或稍晚 2 週可獲得單價 20-40% 溢價', en: '<strong>Following neighbors = all harvest at once</strong>: 2 weeks earlier or later can capture 20-40% price premium' },
+              { zh: '<strong>連續 3 期同作物</strong>：土壤病害累積、產量遞減 3-5%/期', en: '<strong>3 straight seasons same crop</strong>: soil disease compounds, yield drops 3-5%/season' },
+              { zh: '<strong>忽略「早」品種 vs 「晚」品種差異</strong>：一年多期的靈感在品種選擇', en: '<strong>Ignoring early / late variety differences</strong>: multi-season potential lives in variety choice' }
+            ]
+          },
+          resources: {
+            title: { zh: '時令參考資源', en: 'Seasonal reference resources' },
+            items: [
+              { zh: '<strong>農糧署「農作物栽培曆」</strong>：<a href="https://www.afa.gov.tw/" target="_blank" rel="noopener">afa.gov.tw</a>（各作物種植期）', en: '<strong>AFA Crop Cultivation Calendar</strong>: <a href="https://www.afa.gov.tw/" target="_blank" rel="noopener">afa.gov.tw</a>' },
+              { zh: '<strong>中央氣象署農業氣象網</strong>：<a href="https://agr.cwa.gov.tw/" target="_blank" rel="noopener">agr.cwa.gov.tw</a>（週旬預報）', en: '<strong>CWA Agricultural Weather</strong>: <a href="https://agr.cwa.gov.tw/" target="_blank" rel="noopener">agr.cwa.gov.tw</a>' },
+              { zh: '<strong>各縣改良場作物專家</strong> — 免費時序諮詢', en: '<strong>County Improvement Station crop specialists</strong> — free timing consultation' },
+              { zh: '<strong>各作物 FB / LINE 農友社團</strong> — 即時分享本地實況', en: '<strong>Crop-specific FB / LINE farmer groups</strong> — real-time local conditions' }
+            ]
+          },
+          approaches: {
+            title: { zh: '3 種時序策略 — 依規模與風險偏好', en: '3 timing strategies — by scale + risk tolerance' },
+            items: [
+              { tone: 'easy',
+                tag: { zh: 'A · 跟隨本地', en: 'A · Follow locals' },
+                fit: (i) => 2,
+                summary: { zh: '和鄰居同時 — 最安全但單價普通', en: 'Same as neighbors — safest but average pricing' },
+                bullets: [
+                  { zh: '風險最低、無需研究', en: 'Lowest risk, no research needed' },
+                  { zh: '單價 = 市場平均', en: 'Price = market average' },
+                  { zh: '入門推薦', en: 'Recommended for beginners' }
+                ],
+                who: { zh: '適合：新農、還在學', en: 'For: new farmers, still learning' } },
+              { tone: 'balanced',
+                tag: { zh: 'B · 提前 2 週', en: 'B · 2 weeks earlier' },
+                fit: (i) => (CLIENT_CONFIG.certifications || []).length >= 1 ? 3 : 2,
+                summary: { zh: '搶「首收」市場 — 溢價 20-40%', en: 'First-to-harvest premium 20-40%' },
+                bullets: [
+                  { zh: '需要：溫網 / 遮蓋、選早品種', en: 'Need: insect net / cover, early variety' },
+                  { zh: '風險：晚寒潮、病蟲提早爆', en: 'Risk: late cold snap, early pest outbreak' },
+                  { zh: '第 1 週 = 溢價、第 3 週 = 打平', en: 'Week 1 = premium, week 3 = market rate' }
+                ],
+                who: { zh: '適合：有經驗、有溫網、可承擔風險', en: 'For: experienced, has net, risk-tolerant' } },
+              { tone: 'bold',
+                tag: { zh: 'C · 延後 3-4 週', en: 'C · Delay 3-4 weeks' },
+                fit: (i) => (CLIENT_CONFIG.certifications || []).length >= 1 ? 2 : 1,
+                summary: { zh: '搶「季末」市場 — 溢價 15-25%', en: 'End-of-season premium 15-25%' },
+                bullets: [
+                  { zh: '需要：晚品種、耐儲存', en: 'Need: late variety, good storage' },
+                  { zh: '風險：颱風、病蟲害壓力大', en: 'Risk: typhoon, high pest pressure' },
+                  { zh: '通常比提前種收入更穩', en: 'Usually more stable revenue than early' }
+                ],
+                who: { zh: '適合：本地經驗豐富、儲存能力好', en: 'For: local experience + storage capacity' } }
+            ]
+          },
+          links: [
+            { label: { zh: '看輪作 / 間作', en: 'Crop rotation' }, href: '#sec-agent' },
+            { label: { zh: '看病蟲害', en: 'Pest / disease' }, href: '#sec-agent' }
+          ]
+        };
+      }
+    },
+    {
       id: 'seed_saving',
       keywords: ['留種', '保種', '自家種子', '原生種', '種子', '採種', 'seed saving', 'save seeds', 'heritage seed', 'isolate', 'open-pollinated'],
       topic: { zh: '留種 / 保種', en: 'Seed saving' },
@@ -10359,6 +10450,7 @@ This application supports starting organic-transition certification for ≥1 ha.
     farmers_market:      'high',
     agritourism:         'high',
     fungal_disease:      'high',
+    seasonal_planting:   'high',
     losing_money:        'high',
     pricing_specific:    'high',
     land_tenure:         'high',
@@ -10406,7 +10498,8 @@ This application supports starting organic-transition certification for ≥1 ha.
     marketing_social:    ['pitch_buyer', 'find_buyers', 'how_diversify', 'farmers_market'],
     farmers_market:      ['marketing_social', 'find_buyers', 'pitch_buyer'],
     storage_coldchain:   ['find_buyers', 'subsidies_available', 'cert_question'],
-    crop_rotation:       ['pest_disease', 'practice_invest', 'soil_test'],
+    crop_rotation:       ['pest_disease', 'practice_invest', 'soil_test', 'seasonal_planting'],
+    seasonal_planting:   ['crop_rotation', 'pest_disease', 'fungal_disease'],
     packaging_rules:     ['how_diversify', 'find_buyers', 'tax_accounting'],
     tax_accounting:      ['packaging_rules', 'how_diversify', 'goal_setting'],
     burnout:             ['hiring_labor', 'when_scale', 'find_mentor'],
