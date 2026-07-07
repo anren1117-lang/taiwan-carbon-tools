@@ -677,6 +677,15 @@
     .top-action-card { grid-template-columns: auto 1fr; gap: 12px; padding: 14px; }
     .top-action-card .ta-link { grid-column: 1 / -1; text-align: center; margin-top: 6px; padding: 11px 16px; }
   }
+  @media (max-width: 400px) {
+    /* Yunlin field-farmer phone: tighter padding + smaller number
+       chip so the whole Top 3 card still fits without horizontal
+       scroll on 360px viewports (older Android). */
+    .top-action-card { padding: 12px; gap: 10px; margin-bottom: 8px; }
+    .top-action-card .ta-num { width: 32px; height: 32px; font-size: 14px; }
+    .top-action-card .ta-body { font-size: 13px; line-height: 1.45; }
+    .top-action-card .ta-body strong { font-size: 14px; }
+  }
   .group-divider {
     max-width: 1100px;
     margin: 28px auto 16px;
