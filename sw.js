@@ -12,7 +12,7 @@
 //   - Bumps the cache name when this file changes — old caches
 //     auto-cleared on activate.
 
-const CACHE = 'tct-v5-2026-07-07b';
+const CACHE = 'tct-v6-2026-07-07c';
 const PRECACHE = [
   './',
   './index.html',
