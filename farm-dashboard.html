@@ -7199,10 +7199,78 @@ This application supports starting organic-transition certification for ≥1 ha.
             { zh: '2. <strong>共用冷鏈</strong> — 在地產銷班通常有合作冷藏倉庫（NT$ 1-3k/月租用）— 比自建便宜得多。',
               en: '2. <strong>Shared cold chain</strong> — local production groups often have shared cold storage (NT$ 1-3k/mo lease) — much cheaper than building your own.' },
             { zh: '3. <strong>申請冷鏈設備補助</strong> — 農業部「農產品冷鏈物流」補助可達設備 50%。看「補助與碳匯收益」面板。',
-              en: '3. <strong>Apply for cold-chain equipment subsidy</strong> — MOA\'s "Agricultural Cold Chain Logistics" grant covers up to 50% of equipment. See the Subsidies panel.' }
+              en: '3. <strong>Apply for cold-chain equipment subsidy</strong> — MOA\'s "Agricultural Cold Chain Logistics" grant covers up to 50% of equipment. See the Subsidies panel.' },
+            { zh: '4. <strong>學品項對溫度需求</strong>：葉菜 0-4°C、瓜果 8-13°C、熱帶水果 10-15°C。混放同一冰箱 = 部分品項壞得快。做分區或分櫃。',
+              en: '4. <strong>Learn per-crop temperature</strong>: leafy 0-4°C, melons 8-13°C, tropical fruit 10-15°C. Mixing in one fridge = fast spoilage. Zone or use separate units.' },
+            { zh: '5. <strong>物流冷鏈</strong>：宅配 4-6 小時內用保冷袋 + 冰寶足夠。超過 6 小時（如：跨縣配送）需要冷藏物流。宅配通、黑貓探險隊、順豐都提供。',
+              en: '5. <strong>Cold-chain logistics</strong>: home delivery within 4-6hr = insulated bag + ice pack sufficient. Over 6hr (e.g. cross-county) needs refrigerated logistics. Hsinchu Cold Chain, Kuroneko, SF all offer.' }
           ],
+          checklist: {
+            title: { zh: '冷鏈起步清單', en: 'Cold chain starter checklist' },
+            items: [
+              { zh: '<strong>需求驗證</strong>：主要買家是否明確要求冷藏出貨？', en: '<strong>Demand verified</strong>: do major buyers explicitly require chilled delivery?' },
+              { zh: '<strong>電費預算</strong>：商用冰箱每月 NT$ 500-1,500 電費', en: '<strong>Electricity budget</strong>: commercial fridge NT$ 500-1,500/month' },
+              { zh: '<strong>溫度計 / 記錄</strong>：出貨前後測溫，紀錄 3 個月建立信任', en: '<strong>Thermometer + logging</strong>: measure pre/post shipment, log 3 months to build buyer trust' },
+              { zh: '<strong>停電備案</strong>：發電機、乾冰、備用冰塊', en: '<strong>Power outage plan</strong>: generator, dry ice, backup ice packs' },
+              { zh: '<strong>包材</strong>：保溫箱 + 冰寶或凝膠 + 密封膠帶', en: '<strong>Packaging</strong>: insulated box + ice packs / gel + sealing tape' }
+            ]
+          },
+          pitfalls: {
+            title: { zh: '常見地雷', en: 'Common landmines' },
+            items: [
+              { zh: '<strong>買家用冷鏈品質判斷你「認不認真」</strong> — 一次收到熱貨可能被列黑名單', en: '<strong>Buyers judge you by cold-chain quality</strong> — one warm shipment = blacklisted' },
+              { zh: '<strong>混放不同品項</strong> — 香蕉旁邊放葉菜 = 乙烯氣體讓葉菜快壞', en: '<strong>Mixing crop types</strong> — bananas next to leafy → ethylene ripens leafy fast' },
+              { zh: '<strong>停電沒備案</strong> — 一晚停電 = 整倉損失 + 保險不見得賠', en: '<strong>No outage backup</strong> — one overnight outage = whole storage lost + insurance may not cover' },
+              { zh: '<strong>紀錄不齊全</strong> — 買家投訴時無法舉證 = 只能吞下損失', en: '<strong>Incomplete records</strong> — can\'t counter buyer complaints = eat the loss' }
+            ]
+          },
+          resources: {
+            title: { zh: '冷鏈資源', en: 'Cold chain resources' },
+            items: [
+              { zh: '<strong>農業部農產運銷處</strong> — 冷鏈物流補助公告 + 標準', en: '<strong>MOA Agricultural Logistics Dept</strong> — subsidy announcements + standards' },
+              { zh: '<strong>各縣產銷班共用冷藏</strong> — 農會 / 合作社詢問', en: '<strong>Producer group shared cold storage</strong> — ask farmers assoc / co-op' },
+              { zh: '<strong>宅配通、黑貓、順豐（冷藏）</strong> — 個別農戶最容易的物流', en: '<strong>Hsinchu Cold Chain, Kuroneko, SF (chilled)</strong> — most accessible logistics' },
+              { zh: '<strong>中古商用設備</strong>：LineY / 露天拍賣 / 直接跟關店餐廳談', en: '<strong>Used commercial equipment</strong>: Line Y / Ruten / negotiate with closing restaurants' }
+            ]
+          },
+          approaches: {
+            title: { zh: '3 種冷鏈策略 — 依規模與通路', en: '3 cold-chain strategies — by scale + channel' },
+            items: [
+              { tone: 'easy',
+                tag: { zh: 'A · 保冷袋 + 冰寶', en: 'A · Insulated bag + ice' },
+                fit: (i) => i.annualRevenueNT > 0 && i.annualRevenueNT < 500000 ? 3 : 1,
+                summary: { zh: 'CSA / 市集 / 短距離宅配 — 最低成本', en: 'CSA / markets / short-distance delivery — cheapest' },
+                bullets: [
+                  { zh: '一次投資 NT$ 3-8k（保冷袋 + 冰寶）', en: 'One-time NT$ 3-8k (bags + ice packs)' },
+                  { zh: '4-6 小時運送有效', en: 'Works for 4-6hr delivery' },
+                  { zh: '不需商用冰箱', en: 'No commercial fridge needed' }
+                ],
+                who: { zh: '適合：週末市集、CSA 訂閱、本地配送', en: 'For: weekend markets, CSA, local delivery' } },
+              { tone: 'balanced',
+                tag: { zh: 'B · 商用冷藏 + 專配', en: 'B · Commercial fridge + dedicated delivery' },
+                fit: (i) => i.annualRevenueNT >= 500000 && i.annualRevenueNT < 3000000 ? 3 : 1,
+                summary: { zh: '一台商用冰箱 + 冷藏物流 — 進溢價通路', en: 'One commercial fridge + chilled logistics — enter premium channels' },
+                bullets: [
+                  { zh: '中古商用冰箱 NT$ 40-60k', en: 'Used commercial fridge NT$ 40-60k' },
+                  { zh: '每月 NT$ 5-15k 物流費（宅配通冷藏）', en: 'NT$ 5-15k/mo logistics (Hsinchu Cold Chain)' },
+                  { zh: '打開主婦聯盟、GREEN & SAFE 通路', en: 'Unlocks Homemakers Union, GREEN & SAFE' }
+                ],
+                who: { zh: '適合：年營收 50 萬-300 萬、有溢價需求', en: 'For: NT$500k-3M revenue, premium demand' } },
+              { tone: 'collab',
+                tag: { zh: 'C · 共用大型冷鏈', en: 'C · Shared large cold storage' },
+                fit: (i) => i.farmSize >= 2 ? 3 : 1,
+                summary: { zh: '產銷班合作冷藏倉 — 每月 NT$ 1-3k 租用', en: 'Producer-group shared warehouse — NT$ 1-3k/mo lease' },
+                bullets: [
+                  { zh: '不用自建、電費 / 維修分攤', en: 'No build cost, split electricity + maintenance' },
+                  { zh: '可處理量體大的品項（如整批收成）', en: 'Handles bulk volume (whole-harvest batches)' },
+                  { zh: '需要：合作社 / 產銷班內有此資源', en: 'Need: co-op / producer group has facility' }
+                ],
+                who: { zh: '適合：大面積、規模大、合作社活躍區', en: 'For: large area, scale, active co-op region' } }
+            ]
+          },
           links: [
-            { label: { zh: '看補助清單', en: 'Subsidy list' }, href: '#sec-income' }
+            { label: { zh: '看補助清單', en: 'Subsidy list' }, href: '#sec-income' },
+            { label: { zh: '看找通路', en: 'Find buyers' }, href: '#sec-agent' }
           ]
         };
       }
