@@ -75,3 +75,19 @@ test('every page that uses agentQuestion ID also has the related form', () => {
       `${f}: has #agentQuestion but no #agentAskForm — submit won\'t work`);
   }
 });
+
+test('primary user-facing pages share PWA meta (cycles 70+71)', () => {
+  // Dashboard, onboarding, pitch, and buyer view are the 4 farmer-
+  // or buyer-facing pages that ought to install / theme consistently.
+  const primary = ['farm-dashboard.html', 'farm-onboard.html', 'farm-pitch.html'];
+  for (const f of primary) {
+    if (!(f in READ)) continue;
+    const html = READ[f];
+    assert.ok(/viewport-fit=cover/.test(html), `${f}: missing viewport-fit=cover`);
+    assert.ok(/theme-color[^>]*prefers-color-scheme: light/.test(html), `${f}: missing light theme-color`);
+    assert.ok(/theme-color[^>]*prefers-color-scheme: dark/.test(html), `${f}: missing dark theme-color`);
+    assert.ok(/apple-mobile-web-app-capable/.test(html), `${f}: missing apple-mobile-web-app-capable`);
+    assert.ok(/<link rel="manifest"/.test(html), `${f}: missing manifest link`);
+    assert.ok(/<link rel="icon"/.test(html), `${f}: missing favicon link`);
+  }
+});
