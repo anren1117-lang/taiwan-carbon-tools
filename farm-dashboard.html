@@ -13764,7 +13764,11 @@ Applicant: ${ownerName} (signature)
     }
 
     if (peerSamplesCache.length === 0) {
-      host.innerHTML = `<div style="padding: 14px; color: var(--text-muted); font-size: 13px;">${isZh ? '無法載入示範農場（離線或路徑錯誤）。' : 'Could not load sample farms (offline or path error).'}</div>`;
+      host.innerHTML = `<div style="padding: 20px; text-align: center; color: var(--text-muted); font-size: 13.5px; line-height: 1.6;">
+        <div style="font-size: 22px; margin-bottom: 8px;">📊</div>
+        <div style="font-weight: 600; color: var(--text); margin-bottom: 4px;">${isZh ? '離線 — 示範農場資料未快取' : 'Offline — sample farm data not cached'}</div>
+        <div>${isZh ? '第一次上線時會自動下載 4 個示範農場（Chen 稻米 / Wei 乳牛 / Lai 芒果 / 示範）。稍後有網路時再看。' : 'The 4 sample farms (Chen rice / Wei dairy / Lai mango / demo) will download on next online visit. Try again with network.'}</div>
+      </div>`;
       return;
     }
 
