@@ -14579,7 +14579,7 @@ Applicant: ${ownerName} (signature)
         buyerLink.style.display = '';
         copyBtn.style.display = '';
         copyBtn.onclick = async () => {
-          const text = `${tr('顧問儀表板', 'Consulting dashboard')}：\n${dashUrl}\n\n${tr('買方分享頁', 'Buyer share view')}：\n${buyerUrl}`;
+          const text = `${tr('農場儀表板', 'Farm dashboard')}：\n${dashUrl}\n\n${tr('買方分享頁', 'Buyer share view')}：\n${buyerUrl}`;
           try {
             await navigator.clipboard.writeText(text);
             const orig = copyBtn.textContent;
