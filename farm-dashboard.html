@@ -7208,6 +7208,101 @@ This application supports starting organic-transition certification for ≥1 ha.
       }
     },
     {
+      id: 'farmers_market',
+      keywords: ['擺攤', '農夫市集', '市集', '直銷', '假日市集', '花博', '希望廣場', 'farmers market', 'pop-up', 'direct sale', 'stall', 'weekend market'],
+      topic: { zh: '擺攤 / 農夫市集', en: 'Farmers markets / pop-ups' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '擺攤 = 現金流 + 客戶關係 + 品牌試驗場 — 但 3 場才知道值不值', en: 'Pop-ups = cash + customer intimacy + brand testbed — but you need 3 events to know if it works' },
+          situation: { zh: '台灣有 100+ 個常態農夫市集 + 每年 500+ 場 pop-up 活動。收入極快（當天現金）+ 客戶第一手回饋 + 品牌辨識度累積。缺點：時間成本高（一天投入 12 小時）、天候風險、成本結構像小型零售。「擺一次沒賣完就放棄」是最常見的錯誤 — 前 3 次都在學。',
+                       en: '100+ regular farmers markets in Taiwan + 500+ pop-up events yearly. Cash-fast (same-day revenue) + first-hand customer feedback + brand recognition compounds. Downsides: high time cost (12hr day), weather risk, cost structure like small retail. "Sold poorly once, gave up" is the #1 mistake — the first 3 events are all learning.' },
+          actions: [
+            { zh: '1. <strong>先觀察 3 場（不擺）</strong>：買杯咖啡、看隔壁攤怎麼陳列、聽客人問什麼、算流量。每場 2-3 小時，比自己盲目擺兩天有價值。台北希望廣場、花博農民市集、水花園有機市集是必看。',
+              en: '1. <strong>Observe 3 markets first (don\'t sell yet)</strong>: buy a coffee, watch how neighbors display, listen to what customers ask, count foot traffic. 2-3hr per event beats blindly setting up twice. Taipei Hope Square, Expo Farmers Market, Water Garden Organic are must-visits.' },
+            { zh: '2. <strong>核算成本 → 決定最低攤位營收</strong>：<br>攤位費 NT$ 500-1,500 / 場 + 運輸 NT$ 500-1,000 + 冰塊 / 保鮮 NT$ 200-500 + 人力（你 + 一人助手）12 小時 = <strong>單場最低要賣到 NT$ 6-10k 才不賠</strong>。<br>低於這個 = 你在補貼客戶。',
+              en: '2. <strong>Cost model → minimum per-event revenue</strong>:<br>Stall NT$ 500-1,500 + transport NT$ 500-1,000 + ice / preservation NT$ 200-500 + labor (you + 1 helper) 12hr = <strong>NT$ 6-10k per event minimum to break even</strong>.<br>Below that = you\'re subsidizing the customer.' },
+            { zh: '3. <strong>準備「3 種產品 × 3 種價位」矩陣</strong>：<br>(a) 主打單品高單價（NT$ 200-500）— 打品質戰；<br>(b) 中段組合價（NT$ 100-200）— 適合初次購買；<br>(c) 「試吃 / 小份量」（NT$ 50-100）— 降低嘗試門檻。三價位覆蓋不同客層。',
+              en: '3. <strong>Prepare "3 products × 3 price tiers"</strong>:<br>(a) Hero item high price (NT$ 200-500) — quality signal;<br>(b) Mid bundles (NT$ 100-200) — first-time buyers;<br>(c) "Tastings / small portions" (NT$ 50-100) — lower barrier.<br>Covers different customer segments.' },
+            { zh: '4. <strong>擺攤 = 客戶關係養成</strong>：把每個買家的 LINE / 電話留起來（記事本、擺攤限量登記表）。3 個月後你有 100-300 個真實客戶名單 = 可辦 CSA / 訂閱 / 團購。市集賺的錢不是重點，客戶名單才是。',
+              en: '4. <strong>Pop-ups = customer relationships</strong>: capture every buyer\'s LINE / phone (notebook, "limited edition signup" list). 3 months in you have 100-300 real customers = you can launch CSA / subscription / group-buy. The revenue isn\'t the point — the customer list is.' },
+            { zh: '5. <strong>擺 3 場後評估 continuation vs pivot</strong>：擺 3 次的實收成本 + 客戶回饋 → 決定是否繼續。訊號好的：<br>(a) 3 次都賣完；(b) 有 5+ 位客戶主動加 LINE；(c) 買家問「下次何時來」。訊號不好的：撤退去 CSA / 訂閱制、實體店會更好。',
+              en: '5. <strong>After 3 events, decide: continue or pivot</strong>: cost + customer feedback → decide. Good signs: (a) sold out 3× ; (b) 5+ customers added LINE unprompted ; (c) buyers ask "when back?". Bad signs: retreat to CSA / subscription / physical retail may fit better.' }
+          ],
+          checklist: {
+            title: { zh: '擺攤裝備清單', en: 'Pop-up gear checklist' },
+            items: [
+              { zh: '<strong>可摺疊桌 + 桌巾 + 遮陽傘</strong>（NT$ 3-8k 一次投資）', en: '<strong>Foldable table + tablecloth + umbrella</strong> (NT$ 3-8k one-time)' },
+              { zh: '<strong>保冷箱 + 冰塊</strong>（生鮮必備）', en: '<strong>Cooler + ice</strong> (essential for fresh)' },
+              { zh: '<strong>手寫價格牌 + 農場故事看板</strong>（不用花錢做，但一定要有）', en: '<strong>Handwritten price tags + farm story board</strong> (free but essential)' },
+              { zh: '<strong>零錢 NT$ 2,000 起</strong>（100/50/10 元組合）+ 手機支付（LINE Pay / 街口）', en: '<strong>Change from NT$ 2,000</strong> (100/50/10 mix) + mobile pay (LINE Pay / JKO)' },
+              { zh: '<strong>試吃道具</strong>：小刀、切板、竹籤、試吃杯', en: '<strong>Tasting kit</strong>: small knife, cutting board, toothpicks, sample cups' },
+              { zh: '<strong>LINE 收單本</strong>：紙本或 Google Form 二維碼', en: '<strong>LINE signup notebook</strong>: paper OR Google Form QR code' },
+              { zh: '<strong>備案帆布</strong>：中午下雨怎麼辦？', en: '<strong>Rain tarp</strong>: what if it rains midday?' }
+            ]
+          },
+          pitfalls: {
+            title: { zh: '常見地雷', en: 'Common landmines' },
+            items: [
+              { zh: '<strong>只擺 1 次就放棄</strong> — 前 3 次都是學習，收支平衡是後續才有的', en: '<strong>Giving up after 1 event</strong> — the first 3 are learning; breakeven comes later' },
+              { zh: '<strong>價格照批發價</strong> — 擺攤成本結構完全不同，該定「零售價 × 0.8」', en: '<strong>Pricing at wholesale rate</strong> — pop-up cost structure is different; use "retail × 0.8"' },
+              { zh: '<strong>沒帶零錢</strong> — 客戶掏 500 你找不開 = 直接流失', en: '<strong>No change on hand</strong> — customer hands you NT$500 you can\'t break = lost sale' },
+              { zh: '<strong>沒收 LINE 名單</strong> — 擺攤真正的價值在關係，不是當天營收', en: '<strong>Not collecting LINE contacts</strong> — the real value is relationships, not day-of revenue' },
+              { zh: '<strong>試吃太摳門</strong> — 花 NT$ 300 試吃可換 NT$ 3,000 銷售', en: '<strong>Stingy on tastings</strong> — NT$300 in tastings → NT$3,000 in sales' }
+            ]
+          },
+          resources: {
+            title: { zh: '主要農夫市集資源', en: 'Major farmers market resources' },
+            items: [
+              { zh: '<strong>希望廣場（台北）</strong> — 每週六日 · 農委會直營、免攤位費、需申請', en: '<strong>Hope Square (Taipei)</strong> — weekends · MOA-operated, no stall fee, needs application' },
+              { zh: '<strong>花博農民市集</strong> — 每週日 · 精緻小農為主', en: '<strong>Expo Farmers Market</strong> — Sundays · specialized small farms' },
+              { zh: '<strong>水花園有機市集</strong> — 週六 · 有機農產專屬', en: '<strong>Water Garden Organic Market</strong> — Saturdays · organic-only' },
+              { zh: '<strong>各縣農會週末市集</strong> — 諮詢當地農會', en: '<strong>Weekend markets at county farmers assoc</strong> — ask your local assoc' },
+              { zh: '<strong>台灣農夫市集聯盟</strong> — <a href="https://www.facebook.com/farmersmarketstw/" target="_blank" rel="noopener">FB 社團</a>：即時活動 + 攤主經驗', en: '<strong>Taiwan Farmers Market Alliance</strong> — <a href="https://www.facebook.com/farmersmarketstw/" target="_blank" rel="noopener">FB group</a>: events + vendor tips' }
+            ]
+          },
+          approaches: {
+            title: { zh: '3 種擺攤策略 — 依你目標', en: '3 pop-up strategies — by your goal' },
+            items: [
+              { tone: 'easy',
+                tag: { zh: 'A · 品牌試驗', en: 'A · Brand test' },
+                fit: (i) => (CLIENT_CONFIG.certifications || []).length < 2 ? 3 : 1,
+                summary: { zh: '3-6 場，主要學習不是賺錢', en: '3-6 events, learn > earn' },
+                bullets: [
+                  { zh: '嘗試不同價格、包裝、故事講法', en: 'Test prices, packaging, story hooks' },
+                  { zh: '目標：找出主打商品 + 顧客特徵', en: 'Goal: identify hero product + customer profile' },
+                  { zh: '單場賺不到錢也 OK — 這是 R&D', en: 'Not making money OK — this is R&D' }
+                ],
+                who: { zh: '適合：新品牌、還在找定位', en: 'For: new brand, still finding position' } },
+              { tone: 'balanced',
+                tag: { zh: 'B · 常態通路', en: 'B · Regular channel' },
+                fit: (i) => (CLIENT_CONFIG.certifications || []).length >= 2 ? 3 : 2,
+                summary: { zh: '固定攤位 + 累積客群 3-12 個月', en: 'Fixed stall + build customer base 3-12mo' },
+                bullets: [
+                  { zh: '每週或每兩週固定攤 — 熟客會等你', en: 'Weekly or biweekly regular — repeat customers form' },
+                  { zh: '客戶名單累積 → 6 個月後可轉 CSA', en: 'Contact list compounds → can pivot to CSA in 6mo' },
+                  { zh: '單場目標：NT$ 8-15k 營收', en: 'Per-event target: NT$ 8-15k revenue' }
+                ],
+                who: { zh: '適合：有故事、有認證、可長期投入時間', en: 'For: story-rich, certified, can commit time weekly' } },
+              { tone: 'collab',
+                tag: { zh: 'C · 共同攤位', en: 'C · Shared stall' },
+                fit: (i) => (i.farmSize < 1 || i.annualRevenueNT < 500000) ? 3 : 1,
+                summary: { zh: '2-4 家農場共擺 — 分攤時間 + 品項豐富', en: '2-4 farms share stall — split time + richer offerings' },
+                bullets: [
+                  { zh: '一家出人力 3 場 = 覆蓋 12 場排班', en: '1 farm staffs 3 events = covers 12-event rotation' },
+                  { zh: '產品互補（葉菜 + 水果 + 加工）吸引全客層', en: 'Complementary products (veg + fruit + processed) attract full range' },
+                  { zh: '成本每人分攤 = 個別農場門檻降 60%', en: 'Cost split per person = 60% lower entry per farm' }
+                ],
+                who: { zh: '適合：小規模、有信賴的夥伴', en: 'For: smaller farms, trusted partner farms' } }
+            ]
+          },
+          links: [
+            { label: { zh: '看社群行銷', en: 'Social media marketing' }, href: '#sec-agent' },
+            { label: { zh: '看找通路', en: 'Find buyers' }, href: '#sec-agent' }
+          ]
+        };
+      }
+    },
+    {
       id: 'crop_rotation',
       keywords: ['輪作', '輪種', '休耕', '間作', '套作', '什麼作物', '下季種什麼', 'rotation', 'rotate', 'fallow', 'intercrop', 'next season'],
       topic: { zh: '輪作 / 間作', en: 'Crop rotation' },
@@ -10055,6 +10150,7 @@ This application supports starting organic-transition certification for ≥1 ha.
     quarantine_pests:    'high',
     foreign_workers:     'high',
     land_conversion_trap:'high',
+    farmers_market:      'high',
     losing_money:        'high',
     pricing_specific:    'high',
     land_tenure:         'high',
@@ -10099,7 +10195,8 @@ This application supports starting organic-transition certification for ≥1 ha.
     foreign_workers:     ['hiring_labor', 'when_scale', 'tax_accounting'],
     succession:          ['hiring_labor', 'when_scale', 'burnout', 'succession_paperwork'],
     succession_paperwork:['succession', 'tax_accounting', 'land_tenure'],
-    marketing_social:    ['pitch_buyer', 'find_buyers', 'how_diversify'],
+    marketing_social:    ['pitch_buyer', 'find_buyers', 'how_diversify', 'farmers_market'],
+    farmers_market:      ['marketing_social', 'find_buyers', 'pitch_buyer'],
     storage_coldchain:   ['find_buyers', 'subsidies_available', 'cert_question'],
     crop_rotation:       ['pest_disease', 'practice_invest', 'soil_test'],
     packaging_rules:     ['how_diversify', 'find_buyers', 'tax_accounting'],
@@ -10637,7 +10734,7 @@ This application supports starting organic-transition certification for ≥1 ha.
             'how_diversify', 'practice_invest', 'losing_money', 'reduce_cost', 'input_cost_spike', 'compare_peers',
             'pitch_buyer', 'pricing_premium', 'goal_setting', 'climate_risk', 'cert_question',
             'soil_test', 'what_to_do_now', 'hiring_labor', 'succession', 'marketing_social',
-            'storage_coldchain', 'packaging_rules', 'tax_accounting', 'land_tenure', 'when_scale',
+            'farmers_market', 'storage_coldchain', 'packaging_rules', 'tax_accounting', 'land_tenure', 'when_scale',
             'find_mentor', 'succession_paperwork', 'lease_dispute', 'foreign_workers', 'land_conversion_trap'] },
     { key: 'agro',   zh: '🌾 田間農藝',                en: '🌾 Field agronomy',
       ids: ['pest_disease', 'aphids_pests', 'quarantine_pests', 'fungal_disease', 'crop_rotation', 'composting',
