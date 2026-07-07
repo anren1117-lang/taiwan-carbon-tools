@@ -6736,8 +6736,67 @@ This application supports starting organic-transition certification for ≥1 ha.
             { zh: '3. 鄰近農場改良場（每縣都有）有免費田間診斷 — 嚴重時請他們來現場。',
               en: '3. Your county Agricultural Improvement Station has free on-site diagnostic visits — call them for serious outbreaks.' }
           ],
+          approaches: {
+            title: { zh: '4 種防治策略 — 依緊急度與農法', en: '4 pest strategies — by urgency + farm method' },
+            items: [
+              { tone: 'easy',
+                tag: { zh: 'A · 監測優先', en: 'A · Monitor first' },
+                fit: (i) => {
+                  const pr = i.practices || {};
+                  const noSpray = pr.coverCrop && pr.residue;
+                  return noSpray ? 3 : 1;
+                },
+                summary: { zh: '每週巡田 + 拍照 + 紀錄 — 大多不用噴', en: 'Weekly scouting + photo + log — most don\'t need spraying' },
+                bullets: [
+                  { zh: '一半以上問題 3-7 天內自解 (天敵、天氣、換季)', en: '>50% resolve themselves in 3-7 days (natural enemies, weather, seasonal)' },
+                  { zh: '巡田本身養敏感度 — 未來看得更準', en: 'Scouting builds intuition — future diagnosis sharper' },
+                  { zh: '成本：0；適用：友善 / 有機', en: 'Cost: 0; suited to friendly / organic' }
+                ],
+                who: { zh: '適合：友善 / 有機、低密度、還沒失控', en: 'For: friendly / organic, low density, not out of control' } },
+              { tone: 'balanced',
+                tag: { zh: 'B · IPM 綜合防治', en: 'B · IPM integrated' },
+                fit: (i) => 3,
+                summary: { zh: '天敵 + 物理 + 生物 + 必要時最低藥劑', en: 'Natural enemies + physical + biological + minimum chemical last' },
+                bullets: [
+                  { zh: '黃色黏板、費洛蒙陷阱、遮蟲網 (物理)', en: 'Yellow sticky boards, pheromone traps, insect nets (physical)' },
+                  { zh: '瓢蟲、寄生蜂、蘇力菌 (生物)', en: 'Ladybugs, parasitic wasps, Bt (biological)' },
+                  { zh: '藥劑只在門檻超過時用，最低劑量、輪換', en: 'Chemicals only if threshold exceeded, min dose, rotated' }
+                ],
+                who: { zh: '適合：多數農場的標準做法', en: 'For: most farms — the standard approach' } },
+              { tone: 'bold',
+                tag: { zh: 'C · 緊急藥劑', en: 'C · Emergency chemical' },
+                fit: (i) => 0,
+                summary: { zh: '嚴重密度 → 精準用藥 + 立刻通報', en: 'Severe density → precise chemical + immediate report' },
+                bullets: [
+                  { zh: '先確診，別亂噴廣譜殺蟲劑', en: 'Confirm ID first, don\'t spray broad-spectrum' },
+                  { zh: '輪換不同作用機制，避免抗性', en: 'Rotate mode-of-action, avoid resistance' },
+                  { zh: '安全採收期要嚴守', en: 'Strictly observe pre-harvest interval' }
+                ],
+                who: { zh: '適合：作物即將採收 + 密度失控', en: 'For: harvest imminent + density out of control' } },
+              { tone: 'collab',
+                tag: { zh: 'D · 區域集體防治', en: 'D · Regional coordinated' },
+                fit: (i) => 2,
+                summary: { zh: '產銷班統一施藥 / 監測 — 對果實蠅、褐飛蝨等有效', en: 'Producer-group coordinated — works for fruit fly, planthopper, etc.' },
+                bullets: [
+                  { zh: '同區同時施藥 = 效果 3-5 倍', en: 'Same-region simultaneous = 3-5× effective' },
+                  { zh: '共用陷阱 + 監測站分攤成本', en: 'Shared traps + monitoring stations split costs' },
+                  { zh: '入侵種必走這條路（見「入侵種」答案）', en: 'For invasives, this is the only real path (see "quarantine_pests")' }
+                ],
+                who: { zh: '適合：果農、水稻、產銷班活躍', en: 'For: fruit, rice, active producer group' } }
+            ]
+          },
+          resources: {
+            title: { zh: '免費診斷資源', en: 'Free diagnostic resources' },
+            items: [
+              { zh: '<strong>各縣農業改良場</strong> — 免費田間診斷 + 線上諮詢', en: '<strong>County Agricultural Improvement Station</strong> — free on-site diagnosis + online' },
+              { zh: '<strong>iNaturalist</strong> + LINE「台灣農業病蟲害辨識」社團 — 24 小時內回覆', en: '<strong>iNaturalist</strong> + LINE "Taiwan Ag Pest ID" group — <24h reply' },
+              { zh: '<strong>農業試驗所</strong> — 疑難雜症寄樣本鑑定', en: '<strong>MOA Agricultural Research Institute</strong> — mail-in sample identification' },
+              { zh: '<strong>台大 / 中興植物病理學系</strong> — 學術諮詢管道', en: '<strong>NTU / NCHU Plant Pathology depts</strong> — academic consultation' }
+            ]
+          },
           links: [
-            { label: { zh: '看農事日誌（紀錄症狀）', en: 'Activity log (record symptoms)' }, href: '#sec-erp' }
+            { label: { zh: '看農事日誌（紀錄症狀）', en: 'Activity log (record symptoms)' }, href: '#sec-erp' },
+            { label: { zh: '看入侵 / 檢疫害蟲', en: 'Invasive / quarantine pests' }, href: '#sec-agent' }
           ]
         };
       }
