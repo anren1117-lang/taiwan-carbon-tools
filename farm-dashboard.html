@@ -6774,6 +6774,99 @@ This application supports starting organic-transition certification for ≥1 ha.
       }
     },
     {
+      id: 'foreign_workers',
+      keywords: ['移工', '外籍勞工', '越南人', '印尼人', '泰國人', '菲律賓人', '農業移工', '外勞', 'foreign worker', 'migrant worker', 'agriculture worker', 'vietnamese worker', 'indonesian worker', 'thai worker'],
+      topic: { zh: '農業移工', en: 'Foreign farm workers' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '本地缺工是死結 — 農業移工政策 2019 開放後，是能撐大農場的關鍵', en: 'Local labor shortage is structural — the 2019 Ag migrant worker program is the key to sustaining large-farm operations' },
+          situation: { zh: '台灣中大型農場 30 歲以下勞動人口 2020 已跌破 5%。「找不到人」不是短期問題。農業部 + 勞動部 2019 開放「農業移工引進試辦計畫」： 特定作物 / 特定規模可申請，每 2 分地 1 位、需先証明本地招募失敗。多數農場錯過的原因不是資格，是文件複雜。用對仲介 + 走對流程可以合法引進 3-15 位。管理跨文化團隊是完全新的技能，做對後農場才能真正規模化。',
+                       en: 'Under-30 agricultural workforce in Taiwan dropped below 5% by 2020. "Can\'t find people" isn\'t a short-term problem. MOA + MOL opened the "Agricultural Foreign Worker Pilot Program" in 2019: specific crops / farm sizes can apply, 1 worker per 0.2ha, must prove failed local recruitment. Most farms miss it not for eligibility but paperwork complexity. Right broker + right process = 3-15 legal workers. Managing a cross-cultural team is a new skill; done right, only then can a farm actually scale.' },
+          actions: [
+            { zh: '1. <strong>先確認資格</strong>：農場面積 ≥ 2 甲、種植特定核准作物（茶、菇、瓜果、蘭花、稻米大戶等）、加入農業移工申請系統。到「農委會農業移工推動辦公室」查最新開放清單。',
+              en: '1. <strong>Verify eligibility first</strong>: farm ≥ 2 hectares (2 甲), planting approved crops (tea, mushroom, melon, orchid, large-scale rice, etc.), registered in the Ag Foreign Worker system. Check the "COA Ag Foreign Worker Office" for latest approved crop list.' },
+            { zh: '2. <strong>找專業農業移工仲介</strong>：不是普通仲介！農業有特殊條款。介紹費約 NT$ 15-25k / 人（含健檢、證件、機票、簽證）。仲介公司要有勞動部「農業移工引進資格」認證。省仲介費常變大坑。',
+              en: '2. <strong>Use a specialized ag migrant broker</strong>: NOT a general labor broker! Ag has special clauses. Placement fee NT$ 15-25k/worker (health check + docs + flight + visa). Broker must have MOL "Ag Migrant Worker Placement" certification. Skipping brokers usually backfires.' },
+            { zh: '3. <strong>證明本地招募失敗</strong>：透過就業服務處刊登 21 天以上、時薪 ≥ 基本工資、無人應徵或應徵條件不符。留紙本 / 電子紀錄。這是申請通關的關鍵步驟。',
+              en: '3. <strong>Prove failed local recruitment</strong>: post via Employment Service for ≥ 21 days, at ≥ minimum wage, no applicants or unqualified. Keep paper / digital records. This is the critical gate step.' },
+            { zh: '4. <strong>薪資 + 保險 + 住宿</strong>：月薪 NT$ 28-35k 起（依契約）+ 勞健保 + 提供符合居住品質的住宿（不能是農具間）。加班要照勞基法算，違規會被拉黑禁申請 3-5 年。',
+              en: '4. <strong>Wages + insurance + housing</strong>: NT$ 28-35k/mo baseline (contract-dependent) + labor + health insurance + housing that meets living-quality standards (NOT a tool shed). Overtime per Labor Standards Act. Violations = 3-5 year blacklist from future applications.' },
+            { zh: '5. <strong>跨文化管理 — 這是新學問</strong>：學基本印尼 / 越南話問候詞、尊重宗教飲食（穆斯林不吃豬肉、有齋戒月）、每週有一次「大家一起」的活動（不用花大錢）、清楚寫下工時 / 休假 / 加班規則。做得對，移工留任率 3-5 年；做得爛，半年就跑掉。',
+              en: '5. <strong>Cross-cultural management is new</strong>: learn basic Indonesian / Vietnamese greetings, respect religious dietary needs (Muslims no pork, Ramadan fasting), do one weekly "together" activity (doesn\'t need money), clearly document hours / days off / overtime rules. Done right: 3-5yr retention. Done poorly: they leave in 6 months.' }
+          ],
+          checklist: {
+            title: { zh: '申請前確認清單', en: 'Before applying checklist' },
+            items: [
+              { zh: '<strong>作物在核准清單</strong>（每年更新，向農委會確認）', en: '<strong>Crop is on approved list</strong> (updated yearly, verify with COA)' },
+              { zh: '<strong>農場登記狀態</strong>：農民保險、經營型農場、良好農業規範</', en: '<strong>Farm registration status</strong>: farmer insurance, professional-farm status, GAP compliance' },
+              { zh: '<strong>住宿空間確認</strong>：每人 ≥ 3.6 m²、有廚房 / 廁所 / 熱水 / 冷氣', en: '<strong>Housing verified</strong>: ≥3.6m² per person, kitchen / bathroom / hot water / AC' },
+              { zh: '<strong>本地招募 21+ 天紀錄</strong>：招募廣告、應徵者名單、拒絕原因', en: '<strong>21+ days local recruitment record</strong>: job ad, applicant list, rejection reasons' },
+              { zh: '<strong>選定合格仲介</strong>：勞動部認證的農業引進機構', en: '<strong>Selected certified broker</strong>: MOL-certified ag placement agency' },
+              { zh: '<strong>財務規劃</strong>：預留 3 個月薪資 + 突發 (急救 / 送機 / 契約糾紛)', en: '<strong>Cash budget</strong>: 3 months wages + emergency (medical / repatriation / dispute)' }
+            ]
+          },
+          pitfalls: {
+            title: { zh: '常見地雷', en: 'Common landmines' },
+            items: [
+              { zh: '<strong>用一般仲介辦農業引進</strong> — 常違反農業細則被打回，重申請要等半年', en: '<strong>Using generic broker for ag placement</strong> — often violates ag-specific rules; rejected apps waste 6 months' },
+              { zh: '<strong>沒住宿或用臨時鐵皮屋當住宿</strong> — 稽查最容易的紅牌，被禁申請 3-5 年', en: '<strong>No housing or using temp corrugated-iron shed</strong> — inspection red-card, blacklisted 3-5 years' },
+              { zh: '<strong>要求「全年無休」</strong> — 違反勞基法，工人可主張賠償 + 移工署禁令', en: '<strong>Demanding "no days off"</strong> — Labor Standards violation; worker can sue + MOL bans' },
+              { zh: '<strong>把移工當「便宜勞力」</strong> — 就會被投訴、跑掉、無法留住優秀工人', en: '<strong>Treating workers as "cheap labor"</strong> — leads to complaints, runaway workers, unable to retain talent' },
+              { zh: '<strong>沒學基本語言 / 文化</strong> — 溝通斷裂 → 工作品質差 + 情緒問題 + 離職', en: '<strong>Not learning basic language / culture</strong> — communication breakdown → poor work quality + mood issues + turnover' }
+            ]
+          },
+          resources: {
+            title: { zh: '相關單位', en: 'Relevant agencies' },
+            items: [
+              { zh: '<strong>農業部農業移工推動辦公室</strong> — 核准作物、資格、申請流程', en: '<strong>MOA Ag Foreign Worker Office</strong> — approved crops, eligibility, procedure' },
+              { zh: '<strong>勞動部勞動力發展署</strong>：<a href="https://www.wda.gov.tw/" target="_blank" rel="noopener">wda.gov.tw</a>（引進 + 管理）', en: '<strong>MOL Workforce Development Agency</strong>: <a href="https://www.wda.gov.tw/" target="_blank" rel="noopener">wda.gov.tw</a> (placement + management)' },
+              { zh: '<strong>1955 移工諮詢申訴專線</strong> — 移工 / 雇主雙方都可用', en: '<strong>1955 Migrant Worker Consultation Hotline</strong> — for workers + employers' },
+              { zh: '<strong>台灣國際勞工協會 (TIWA)</strong> — 勞資糾紛調解', en: '<strong>Taiwan International Workers Assoc (TIWA)</strong> — labor dispute mediation' }
+            ]
+          },
+          approaches: {
+            title: { zh: '3 種勞動力擴增策略', en: '3 labor expansion strategies' },
+            items: [
+              { tone: 'easy',
+                tag: { zh: 'A · 先試短期換工', en: 'A · Start with short-term exchange' },
+                fit: (i) => i.farmSize < 3 ? 3 : 1,
+                summary: { zh: 'WWOOF / 學生實習 / 打工換宿 — 練習跨文化管理', en: 'WWOOF / student intern / work-exchange — practice cross-cultural mgmt' },
+                bullets: [
+                  { zh: '2 週到 3 個月短期，風險低', en: '2wk to 3mo, low commitment' },
+                  { zh: '練 20+ 人後，你才知道正式移工要什麼', en: 'After 20+ short-timers, you know what full migrants need' },
+                  { zh: '成本低，多數提供食宿即可', en: 'Cheap — food + shelter usually enough' }
+                ],
+                who: { zh: '適合：< 2 甲、還沒申請資格、想先練', en: 'For: < 2 hectares, not yet qualified, want to practice' } },
+              { tone: 'balanced',
+                tag: { zh: 'B · 1-2 位移工試辦', en: 'B · 1-2 workers pilot' },
+                fit: (i) => i.farmSize >= 3 && i.farmSize < 10 ? 3 : 1,
+                summary: { zh: '從最小規模開始，學管理再擴', en: 'Start smallest, master management, then scale' },
+                bullets: [
+                  { zh: '第一年目標：不是 6 個人，是「留住 1-2 個 2 年+」', en: 'Year 1 goal: NOT 6 workers, is "keep 1-2 for 2+ years"' },
+                  { zh: '住宿投資 NT$ 100-200k 一次到位', en: 'Housing invest NT$ 100-200k once' },
+                  { zh: '每月成本 NT$ 35-45k / 人（薪 + 保險 + 住宿）', en: 'Monthly cost NT$ 35-45k/worker (wages + insurance + housing)' }
+                ],
+                who: { zh: '適合：3-10 甲、想長期經營、想學管理', en: 'For: 3-10 hectares, long-term, willing to learn mgmt' } },
+              { tone: 'collab',
+                tag: { zh: 'C · 產銷班共同申請', en: 'C · Co-op joint application' },
+                fit: (i) => i.farmSize >= 5 && (i.cropType === 'rice' || i.cropType === 'fruit') ? 2 : 0,
+                summary: { zh: '合作社統一申請 + 分派 — 個農分攤成本與管理', en: 'Co-op files + assigns — individual farms share cost + mgmt' },
+                bullets: [
+                  { zh: '單農申請門檻高，合作社統一申請較容易通過', en: 'Solo applications hard; co-op joint often easier' },
+                  { zh: '住宿可集中，成本個農降 30-40%', en: 'Housing centralized, per-farm cost drops 30-40%' },
+                  { zh: '合作社需要有專職人事主管', en: 'Co-op needs dedicated HR person' }
+                ],
+                who: { zh: '適合：合作社已運作、大面積、水稻 / 果', en: 'For: active co-op, large area, rice / fruit' } }
+            ]
+          },
+          links: [
+            { label: { zh: '看人力 / 雇工', en: 'Labor / hiring' }, href: '#sec-agent' },
+            { label: { zh: '看擴張時機', en: 'When to scale' }, href: '#sec-agent' }
+          ]
+        };
+      }
+    },
+    {
       id: 'succession',
       keywords: ['接班', '傳承', '繼承', '下一代', '小孩', '兒子', '女兒', '家族', '退休', 'succession', 'inherit', 'next generation', 'son', 'daughter', 'retire', 'family farm'],
       topic: { zh: '農場接班 / 傳承', en: 'Farm succession' },
@@ -9776,6 +9869,7 @@ This application supports starting organic-transition certification for ≥1 ha.
     hail_damage:         'high',
     lease_dispute:       'high',
     quarantine_pests:    'high',
+    foreign_workers:     'high',
     losing_money:        'high',
     pricing_specific:    'high',
     land_tenure:         'high',
@@ -9816,7 +9910,8 @@ This application supports starting organic-transition certification for ≥1 ha.
     hail_damage:         ['typhoon_recovery', 'climate_risk', 'fruit_pruning'],
     pest_disease:        ['crop_rotation', 'practice_invest', 'find_mentor', 'quarantine_pests'],
     quarantine_pests:    ['pest_disease', 'aphids_pests', 'find_mentor'],
-    hiring_labor:        ['burnout', 'succession', 'when_scale'],
+    hiring_labor:        ['burnout', 'succession', 'when_scale', 'foreign_workers'],
+    foreign_workers:     ['hiring_labor', 'when_scale', 'tax_accounting'],
     succession:          ['hiring_labor', 'when_scale', 'burnout', 'succession_paperwork'],
     succession_paperwork:['succession', 'tax_accounting', 'land_tenure'],
     marketing_social:    ['pitch_buyer', 'find_buyers', 'how_diversify'],
@@ -10357,7 +10452,7 @@ This application supports starting organic-transition certification for ≥1 ha.
             'pitch_buyer', 'pricing_premium', 'goal_setting', 'climate_risk', 'cert_question',
             'soil_test', 'what_to_do_now', 'hiring_labor', 'succession', 'marketing_social',
             'storage_coldchain', 'packaging_rules', 'tax_accounting', 'land_tenure', 'when_scale',
-            'find_mentor', 'succession_paperwork', 'lease_dispute'] },
+            'find_mentor', 'succession_paperwork', 'lease_dispute', 'foreign_workers'] },
     { key: 'agro',   zh: '🌾 田間農藝',                en: '🌾 Field agronomy',
       ids: ['pest_disease', 'aphids_pests', 'quarantine_pests', 'fungal_disease', 'crop_rotation', 'composting',
             'water_mgmt', 'water_rights', 'fertilizer_timing', 'organic_transition', 'fruit_pruning',
