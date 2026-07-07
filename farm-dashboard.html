@@ -8909,7 +8909,75 @@ This application supports starting organic-transition certification for ≥1 ha.
             { zh: '5. <strong>必要化學藥劑 — 預防勝過治療</strong>。系統性殺菌劑（如三泰芬）必須在發病前噴。發病後再噴只能控制不能逆轉。',
               en: '5. <strong>If chemical needed — prevention beats cure</strong>. Systemic fungicides (e.g. triadimefon) must be applied BEFORE symptoms. Post-symptom = containment only, no reversal.' }
           ],
-          links: []
+          checklist: {
+            title: { zh: '真菌病害預防清單', en: 'Fungal prevention checklist' },
+            items: [
+              { zh: '<strong>植株間距</strong>：讓風走得動 = 相對濕度降 10-20%', en: '<strong>Plant spacing</strong>: airflow → RH drops 10-20%' },
+              { zh: '<strong>灌溉方式</strong>：滴灌 / 溝灌 > 噴灑 — 葉面不濕就不感染', en: '<strong>Irrigation</strong>: drip / furrow > overhead — dry leaves = no infection' },
+              { zh: '<strong>抗病品種清單</strong>：向縣農改場拿當季推薦', en: '<strong>Resistant variety list</strong>: get seasonal recommendation from county improvement station' },
+              { zh: '<strong>清園</strong>：收成後 2 週內清除全部殘體 + 落葉', en: '<strong>Field cleanup</strong>: remove all crop residue + fallen leaves within 2 wk post-harvest' },
+              { zh: '<strong>輪作記錄</strong>：農事日誌記每塊田近 3 年作物 + 病害', en: '<strong>Rotation log</strong>: activity log records 3yr crops + disease per plot' }
+            ]
+          },
+          pitfalls: {
+            title: { zh: '常見地雷', en: 'Common landmines' },
+            items: [
+              { zh: '<strong>發病後才想到殺菌劑</strong> — 只能控制不能逆轉，浪費藥錢', en: '<strong>Reaching for fungicide after symptoms</strong> — containment only, wasted money' },
+              { zh: '<strong>病株堆肥</strong> — 病原菌會活過堆肥過程，回田再感染', en: '<strong>Composting diseased plants</strong> — pathogens survive → re-infect the field' },
+              { zh: '<strong>持續灌葉面</strong> — 每晚噴灑 = 每天給真菌創造感染機會', en: '<strong>Overhead watering evening</strong> — nightly overhead = daily infection window' },
+              { zh: '<strong>連作同科作物</strong> — 病原菌在土裡累積，明年 10 倍嚴重', en: '<strong>Repeat-cropping same family</strong> — soil pathogen load compounds, next year 10× worse' }
+            ]
+          },
+          resources: {
+            title: { zh: '參考資源', en: 'Reference resources' },
+            items: [
+              { zh: '<strong>各縣農業改良場</strong> — 抗病品種清單、免費田間診斷', en: '<strong>County Improvement Station</strong> — resistant variety list, free on-site diagnosis' },
+              { zh: '<strong>植物疫情資訊網</strong>（防檢局）— 各作物歷年疫情', en: '<strong>Plant Disease Info System</strong> (BAPHIQ) — historical outbreak data per crop' },
+              { zh: '<strong>台灣植物病害圖鑑</strong>（線上）— 症狀辨識', en: '<strong>Taiwan Plant Disease Atlas</strong> (online) — symptom identification' },
+              { zh: '<strong>LINE「台灣農業病蟲害辨識」社團</strong> — 24h 專家回覆', en: '<strong>LINE "Taiwan Ag Pest ID" group</strong> — 24h expert reply' }
+            ]
+          },
+          approaches: {
+            title: { zh: '3 種抗真菌策略 — 依作物與農法', en: '3 fungal-resistance strategies — by crop + method' },
+            items: [
+              { tone: 'easy',
+                tag: { zh: 'A · 環境優先', en: 'A · Environment first' },
+                fit: (i) => {
+                  const pr = i.practices || {};
+                  return (pr.coverCrop || pr.residue) ? 3 : 2;
+                },
+                summary: { zh: '通風 + 滴灌 + 抗病品種 — 90% 問題預防', en: 'Airflow + drip + resistant varieties = 90% problems prevented' },
+                bullets: [
+                  { zh: '植株間距、修剪、滴灌 = 免費預防', en: 'Spacing, pruning, drip = free prevention' },
+                  { zh: '一次選對品種 = 每季少一半戰爭', en: 'One-time variety choice = half the seasonal battles' },
+                  { zh: '零藥劑成本、符合友善 / 有機', en: 'Zero chemical cost; friendly / organic compatible' }
+                ],
+                who: { zh: '適合：友善 / 有機、任何作物', en: 'For: friendly / organic, any crop' } },
+              { tone: 'balanced',
+                tag: { zh: 'B · 有機藥劑防治', en: 'B · Organic-approved protectants' },
+                fit: (i) => (CLIENT_CONFIG.certifications || []).length >= 1 ? 3 : 2,
+                summary: { zh: '銅劑 / 硫磺 / 小蘇打 — 常態預防噴灑', en: 'Copper / sulfur / baking soda — routine preventive spray' },
+                bullets: [
+                  { zh: '週噴一次，濕度高季節加強', en: 'Weekly spray, intensify during high-humidity season' },
+                  { zh: '銅 / 硫磺是有機可用（有累積上限）', en: 'Copper + sulfur allowed under organic (accumulation caps)' },
+                  { zh: '成本 NT$ 200-500 / 分月', en: 'Cost NT$ 200-500 / 0.1ha / month' }
+                ],
+                who: { zh: '適合：友善 / 有機、需要主動預防', en: 'For: friendly / organic, want active prevention' } },
+              { tone: 'bold',
+                tag: { zh: 'C · 系統性殺菌劑', en: 'C · Systemic fungicides' },
+                fit: (i) => 0,
+                summary: { zh: '嚴重壓力 → 精準預防噴 — 慣行路線', en: 'Severe pressure → precise preventive spray — conventional route' },
+                bullets: [
+                  { zh: '必須在症狀前噴，發病後只能控制', en: 'Must apply BEFORE symptoms; after = containment only' },
+                  { zh: '輪換不同作用機制避免抗性', en: 'Rotate mode-of-action to avoid resistance' },
+                  { zh: '嚴守安全採收期', en: 'Strictly observe pre-harvest interval' }
+                ],
+                who: { zh: '適合：慣行、大面積、高濕地區', en: 'For: conventional, large area, humid region' } }
+            ]
+          },
+          links: [
+            { label: { zh: '看病蟲害', en: 'Pest / disease' }, href: '#sec-agent' }
+          ]
         };
       }
     },
@@ -10222,6 +10290,7 @@ This application supports starting organic-transition certification for ≥1 ha.
     land_conversion_trap:'high',
     farmers_market:      'high',
     agritourism:         'high',
+    fungal_disease:      'high',
     losing_money:        'high',
     pricing_specific:    'high',
     land_tenure:         'high',
