@@ -50,6 +50,14 @@ self.addEventListener('install', (event) => {
   );
 });
 
+// Allow the page to trigger skipWaiting on the new SW so the
+// user\'s "🔄 New version ready" pill click activates instantly.
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+});
+
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys()

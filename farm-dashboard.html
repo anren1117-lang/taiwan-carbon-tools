@@ -3475,7 +3475,31 @@
   // load.
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('sw.js').catch(() => {});
+      navigator.serviceWorker.register('sw.js').then((reg) => {
+        // Detect updated SW waiting → show a small "new version ready"
+        // pill. User taps to activate + reload. Silent no-op if no
+        // update available.
+        function showUpdatePill(sw) {
+          const pill = document.getElementById('swUpdatePill');
+          if (!pill) return;
+          pill.style.display = '';
+          pill.onclick = () => {
+            sw.postMessage({ type: 'SKIP_WAITING' });
+            pill.textContent = '⏳ ...';
+            setTimeout(() => location.reload(), 300);
+          };
+        }
+        if (reg.waiting) showUpdatePill(reg.waiting);
+        reg.addEventListener('updatefound', () => {
+          const nw = reg.installing;
+          if (!nw) return;
+          nw.addEventListener('statechange', () => {
+            if (nw.state === 'installed' && navigator.serviceWorker.controller) {
+              showUpdatePill(nw);
+            }
+          });
+        });
+      }).catch(() => {});
     });
   }
   // PWA install nudge — capture beforeinstallprompt so the ⬇️
@@ -4400,6 +4424,7 @@
 
 </main>
 
+<button id="swUpdatePill" style="display: none; position: fixed; bottom: 22px; left: 22px; padding: 8px 14px; background: var(--accent); color: #fff; border: none; border-radius: 999px; font-family: inherit; font-size: 12px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 14px rgba(29,158,117,0.30); z-index: 99;" title="有新版本可用，點擊更新 / New version ready, tap to refresh">🔄 新版本已就緒 · New version</button>
 <button class="dash-top-btn" id="dashTopBtn" aria-label="回到頂部 / Back to top" title="回到問助手 / Back to top">↑</button>
 <button class="dash-print-btn" id="dashPrintBtn" onclick="window.print()" data-zh="📄 列印 / 存為 PDF" data-en="📄 Print / Save as PDF">📄 列印 / 存為 PDF</button>
 
