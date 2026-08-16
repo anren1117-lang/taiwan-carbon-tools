@@ -9895,6 +9895,41 @@ This application supports starting organic-transition certification for ≥1 ha.
               { zh: '<strong>不切割「家人時間」</strong>— 跟家人吃飯也手機講電話、思考農場。家人感覺被排擠 → 關係出問題 = 農場也撐不下去', en: '<strong>Not protecting family time</strong> — phone calls + farm thoughts during family dinner. Family feels sidelined → relationship breaks down → farm also fails' }
             ]
           },
+          approaches: {
+            title: { zh: '3 種日常節奏 — 依規模與家庭', en: '3 daily rhythms — by scale + family' },
+            items: [
+              { tone: 'easy',
+                tag: { zh: 'A · 個人早晚兩段', en: 'A · Solo dawn + dusk' },
+                fit: (i) => i.farmSize < 1.5 && i.annualRevenueNT < 1000000 ? 3 : 1,
+                summary: { zh: '5-9 + 15:30-18 兩段田間 + 中午 5 小時', en: '5-9am + 3:30-6pm field + 5hr midday off' },
+                bullets: [
+                  { zh: '單人可長期執行的節奏', en: 'Sustainable solo rhythm' },
+                  { zh: '中午 5 小時可加工 / 休息 / 陪家人', en: '5hr midday for processing / rest / family' },
+                  { zh: '週一天完全不工作', en: '1 full day off per week' }
+                ],
+                who: { zh: '適合：< 1.5 甲、獨立經營、無雇工', en: 'For: < 1.5甲, solo op, no employees' } },
+              { tone: 'balanced',
+                tag: { zh: 'B · 夫妻分工型', en: 'B · Couple split' },
+                fit: (i) => i.farmSize >= 1 && i.farmSize < 4 ? 3 : 1,
+                summary: { zh: '一人主田 + 一人主行銷 / 客服 / 帳務', en: 'One in field + one on marketing / CS / books' },
+                bullets: [
+                  { zh: '明確分工 = 少衝突', en: 'Clear lines = less conflict' },
+                  { zh: '週一次「夫妻會議」對齊優先事項', en: 'Weekly "couple meeting" to align priorities' },
+                  { zh: '兩人都要有「不工作時段」', en: 'Both need protected off-time' }
+                ],
+                who: { zh: '適合：夫妻經營、面積 1-4 甲', en: 'For: couple-run, 1-4甲' } },
+              { tone: 'collab',
+                tag: { zh: 'C · 有雇工班表', en: 'C · With hired staff' },
+                fit: (i) => i.annualRevenueNT >= 2000000 ? 3 : 0,
+                summary: { zh: '排班表 + 週會 + 明確權責', en: 'Shift schedule + weekly meeting + clear responsibilities' },
+                bullets: [
+                  { zh: '你變成「教練 + 品管」，不是每件事都做', en: 'You become "coach + QA", not doing every task' },
+                  { zh: '週會 30 分鐘對齊本週工作 + 問題', en: '30min weekly meeting for planning + issues' },
+                  { zh: '書面 SOP 讓新人 3 天上手', en: 'Written SOP → new hire onboards in 3 days' }
+                ],
+                who: { zh: '適合：年營收 200 萬+ 有 1+ 員工', en: 'For: revenue NT$2M+, 1+ employees' } }
+            ]
+          },
           links: []
         };
       }
