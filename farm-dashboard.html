@@ -10216,6 +10216,41 @@ This application supports starting organic-transition certification for ≥1 ha.
             { zh: '6. <strong>無接班人路徑：售地 + 退休 vs 出租 + 半退休</strong>。無接班可考慮「賣地一次性退休」或「出租收租 + 簡化操作半退休」。各有 trade-off。早點想清楚。',
               en: '6. <strong>No-successor paths: sell + retire vs lease + semi-retire</strong>. Without a successor, choose between "sell + full retirement" or "lease + simplified operation". Each has trade-offs. Think it through early.' }
           ],
+          approaches: {
+            title: { zh: '3 種退休路徑 — 依有無接班人 + 資產', en: '3 retirement paths — by successor + assets' },
+            items: [
+              { tone: 'balanced',
+                tag: { zh: 'A · 傳承路線', en: 'A · Transition to successor' },
+                fit: (i) => 2,
+                summary: { zh: '有接班人 → 逐步交棒 5-10 年', en: 'Has successor → gradual handover 5-10 yrs' },
+                bullets: [
+                  { zh: '55-60 歲共同經營，65 歲完全交棒', en: 'Co-run at 55-60, full handover at 65' },
+                  { zh: '老農津貼 + 農場分潤 = 舒適退休', en: 'Senior allowance + farm profit share = comfortable' },
+                  { zh: '看「農場接班」+「接班文書」答案', en: 'See "farm succession" + "succession paperwork" answers' }
+                ],
+                who: { zh: '適合：家人有意願、關係穩定', en: 'For: willing family, stable relationships' } },
+              { tone: 'easy',
+                tag: { zh: 'B · 出租 + 半退休', en: 'B · Lease + semi-retire' },
+                fit: (i) => i.farmSize >= 1 ? 3 : 1,
+                summary: { zh: '無接班 → 農地出租 + 保留自用區', en: 'No successor → lease farmland + keep personal plot' },
+                bullets: [
+                  { zh: '每公頃年租 NT$ 15-40k（依地區）', en: 'Annual rent NT$ 15-40k/ha (region-varying)' },
+                  { zh: '保留 0.1-0.3 甲自用 = 有事做 + 自給', en: 'Keep 0.1-0.3甲 for own use = purpose + food' },
+                  { zh: '老農津貼 + 租金 = 生活無虞', en: 'Senior allowance + rent = comfortable living' }
+                ],
+                who: { zh: '適合：無接班、想留土地、身體健康', en: 'For: no successor, keep land, healthy body' } },
+              { tone: 'bold',
+                tag: { zh: 'C · 賣地 + 全退休', en: 'C · Sell + full retirement' },
+                fit: (i) => (i.farmSize >= 1 && i.annualRevenueNT < 1000000) ? 2 : 0,
+                summary: { zh: '一次到位 — 但要算清楚稅金 + 房價', en: 'One-shot — but model tax + housing carefully' },
+                bullets: [
+                  { zh: '農地變更用地稅金負擔重（詳見「農地違建」答案）', en: 'Land-use change tax burden heavy (see "land conversion trap")' },
+                  { zh: '賣的錢 30-50% 通常繳稅 + 買替代住宅', en: '30-50% of sale usually goes to tax + replacement housing' },
+                  { zh: '完全脫離農業 = 心理適應期 1-2 年', en: 'Full ag exit = 1-2yr mental adjustment' }
+                ],
+                who: { zh: '適合：無接班、健康下降、想搬到都市', en: 'For: no successor, declining health, urban move' } }
+            ]
+          },
           links: []
         };
       }
