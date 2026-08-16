@@ -8957,6 +8957,100 @@ This application supports starting organic-transition certification for ≥1 ha.
       }
     },
     {
+      id: 'livestock_disease',
+      keywords: ['非洲豬瘟', '禽流感', '口蹄疫', '狂牛症', '豬瘟', '雞瘟', '鴨瘟', '牛結節疹', '疫情', '撲殺', '通報', 'ASF', 'avian flu', 'bird flu', 'FMD', 'foot mouth', 'livestock disease', 'outbreak', 'cull'],
+      topic: { zh: '畜禽疫情 / 通報', en: 'Livestock disease outbreak / reporting' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '疑似疫情 = 立刻停止移動 + 通報 → 隱匿 = 全場撲殺 + 沒補償', en: 'Suspected outbreak = STOP all movement + report → hiding = full cull + no compensation' },
+          situation: { zh: 'ASF（非洲豬瘟）在台灣邊境守 6+ 年、禽流感每年冬季爆發、口蹄疫 2020 才拔針。任何一波都可能讓你的場區數週內歸零。<strong>台灣政策：主動通報 = 有補償金 + 復養支援；隱匿被查獲 = 撲殺無補償 + 3-5 年禁止復養 + 刑責</strong>。這是農民最容易誤判的算式：「先看看情況」= 通常太晚。',
+                       en: 'ASF has been kept at Taiwan\'s border for 6+ years; avian flu erupts every winter; FMD only fully cleared in 2020. Any wave could wipe your operation in weeks. <strong>Taiwan policy: report early = compensation + restocking support; hide + get caught = culled with no compensation + 3-5 yr restock ban + criminal charges</strong>. Farmers most often misjudge this: "wait and see" = usually too late.' },
+          actions: [
+            { zh: '1. <strong>發現疑似 → 立刻做 3 件事</strong>：<br>(a) 停止所有動物、飼料、設備、車輛進出；<br>(b) 通報「動物防疫所」— 24 小時內優先處理；<br>(c) 拍照 + 記錄發病時序（幾隻、何時開始、症狀變化）。<strong>不要自己動手處理死畜</strong>，等防疫員來。',
+              en: '1. <strong>Suspected → do 3 things immediately</strong>: <br>(a) STOP all animal / feed / equipment / vehicle movement; <br>(b) Report to Animal Disease Control (24hr priority);<br>(c) Photo + timeline (how many, onset, symptom progression). <strong>Do NOT handle dead animals yourself</strong> — wait for the inspector.' },
+            { zh: '2. <strong>疑似 ASF / 高致病禽流感 → 農業部撲殺補償</strong>：撲殺後每頭補償約 <br>(a) 豬 NT$ 1,800-6,000/頭（依體重）；<br>(b) 蛋雞 NT$ 200-400/隻；<br>(c) 肉雞 NT$ 100-200/隻。<br>另有清消費用補助 + 復養貸款。詳細金額每年更新。',
+              en: '2. <strong>Suspected ASF / HPAI → MOA cull compensation</strong>: post-cull per-head payment approx <br>(a) Pig NT$ 1,800-6,000/head (weight-based);<br>(b) Layer NT$ 200-400/bird;<br>(c) Broiler NT$ 100-200/bird.<br>Also: disinfection cost coverage + restock loan. Exact amounts updated annually.' },
+            { zh: '3. <strong>復養前必經 4 週空場 + 監測</strong>：<br>(a) 徹底消毒（防疫員檢核）；<br>(b) 空場至少 30 天（ASF 需 60-90 天）；<br>(c) 哨兵動物（少量新入場觀察 2 週）；<br>(d) 通過重新申請「畜牧場登記」。急復養 = 二次爆發率高。',
+              en: '3. <strong>Restocking requires 4wk empty + monitoring</strong>: <br>(a) Full disinfection (inspector-verified);<br>(b) Empty ≥ 30 days (ASF needs 60-90);<br>(c) Sentinel animals (small intro group watched 2 wk);<br>(d) Re-file livestock farm registration. Rushed restocking = re-outbreak risk.' },
+            { zh: '4. <strong>平時預防 3 支柱</strong>：<br>(a) 生物安全：訪客管制 + 車輛消毒池 + 換鞋衣進入場區；<br>(b) 飼料源頭 — ASF 主要傳染途徑是「餵廚餘」，改為商業飼料；<br>(c) 疫苗計畫 — 諮詢獸醫，按當年疫情調整（禽流感、豬藍耳、口蹄疫等）。',
+              en: '4. <strong>Prevention: 3 pillars</strong>: <br>(a) Biosecurity: visitor control + vehicle disinfection pit + shoe/clothing change on entry;<br>(b) Feed source — ASF main vector is "kitchen waste"; switch to commercial feed;<br>(c) Vaccination plan — consult vet, adjust yearly (avian flu, PRRS, FMD, etc.).' },
+            { zh: '5. <strong>加入畜牧產銷班 + 保險</strong>：牛豬雞農產銷班有集體防疫方案 + 情報共享。個別農戶投保「畜牧保險」 — 疫情死亡有理賠。保費相對便宜（NT$ 20-100/頭/年）。',
+              en: '5. <strong>Join livestock producer group + insurance</strong>: cattle / pig / chicken producer groups run collective biosecurity + info-sharing. Individual farms can buy "Livestock Insurance" — pays out on disease death. Relatively cheap (NT$ 20-100/head/yr).' }
+          ],
+          checklist: {
+            title: { zh: '疑似疫情處理清單', en: 'Suspected outbreak checklist' },
+            items: [
+              { zh: '<strong>0-1 小時</strong>：停止所有場區移動 + 通報防疫所', en: '<strong>0-1 hour</strong>: stop all movement + report to Animal Disease Control' },
+              { zh: '<strong>1-4 小時</strong>：等防疫員 — 別自行處置死畜或消毒', en: '<strong>1-4 hours</strong>: wait for inspector — don\'t self-handle dead or disinfect' },
+              { zh: '<strong>4-24 小時</strong>：勘查、採樣、初步鑑定', en: '<strong>4-24 hours</strong>: inspection, sampling, initial ID' },
+              { zh: '<strong>1-7 天</strong>：確診 → 撲殺 + 補償金申請', en: '<strong>1-7 days</strong>: confirmed → cull + compensation filed' },
+              { zh: '<strong>2-8 週</strong>：清消 + 空場期', en: '<strong>2-8 weeks</strong>: disinfection + empty period' },
+              { zh: '<strong>8-16 週</strong>：復養評估 + 哨兵動物', en: '<strong>8-16 weeks</strong>: restock assessment + sentinel animals' }
+            ]
+          },
+          pitfalls: {
+            title: { zh: '常見地雷', en: 'Common landmines' },
+            items: [
+              { zh: '<strong>「先觀察看看」</strong> — 24 小時內若擴散 5 倍，補償門檻可能已錯過', en: '<strong>"Let\'s watch it first"</strong> — 24hr later if it 5×\'s, compensation window may already be closed' },
+              { zh: '<strong>自行掩埋死畜</strong> — 違法 + 病原擴散風險，被查獲刑責', en: '<strong>DIY burial of dead animals</strong> — illegal + spreads pathogen; criminal charges if caught' },
+              { zh: '<strong>繼續餵廚餘給豬</strong> — 2018 修法後禁餵未經高溫處理廚餘，違法罰 NT$ 5-30 萬', en: '<strong>Still feeding raw kitchen waste to pigs</strong> — post-2018 illegal without high-temp treatment; NT$ 50-300k fines' },
+              { zh: '<strong>訪客隨意進場</strong> — 商販、獸醫、鄰居鞋底可能帶病原', en: '<strong>Visitors with no biosecurity</strong> — vendors, vets, neighbors\' shoe soles can carry pathogens' },
+              { zh: '<strong>復養太急</strong> — 30 天內復養、二次爆發率極高', en: '<strong>Rushed restocking</strong> — within 30 days = very high re-outbreak rate' }
+            ]
+          },
+          resources: {
+            title: { zh: '緊急通報 + 諮詢資源', en: 'Emergency reporting + resources' },
+            items: [
+              { zh: '<strong>0800-761-590</strong> — 動物防疫免付費通報專線 (24h)', en: '<strong>0800-761-590</strong> — Animal Disease reporting hotline (24h, free)' },
+              { zh: '<strong>各縣動物防疫所</strong> — 平時諮詢窗口', en: '<strong>County Animal Disease Control Office</strong> — daytime consultation' },
+              { zh: '<strong>農業部動植物防疫檢疫署</strong>：<a href="https://www.baphiq.gov.tw/" target="_blank" rel="noopener">baphiq.gov.tw</a>', en: '<strong>MOA BAPHIQ</strong>: <a href="https://www.baphiq.gov.tw/" target="_blank" rel="noopener">baphiq.gov.tw</a>' },
+              { zh: '<strong>畜牧保險（各縣農會）</strong> — 死亡理賠', en: '<strong>Livestock Insurance (county farmers assoc)</strong> — mortality payout' },
+              { zh: '<strong>台灣獸醫師公會全國聯合會</strong> — 找當地執業獸醫', en: '<strong>Taiwan Vet Assoc</strong> — find local practicing vet' }
+            ]
+          },
+          approaches: {
+            title: { zh: '3 種防疫階段策略', en: '3 biosecurity strategies by stage' },
+            items: [
+              { tone: 'easy',
+                tag: { zh: 'A · 平時預防', en: 'A · Peacetime prevention' },
+                fit: (i) => i.cropType === 'livestock' ? 3 : (i.cattle + i.pigs + i.poultry > 0 ? 2 : 0),
+                summary: { zh: '生物安全 + 商業飼料 + 疫苗 — 90% 案例可避免', en: 'Biosecurity + commercial feed + vaccines = 90% outbreaks prevented' },
+                bullets: [
+                  { zh: '訪客管制、車輛消毒池、換鞋換衣區', en: 'Visitor control, vehicle disinfection, shoe/clothing swap' },
+                  { zh: '疫苗按縣獸醫建議年度更新', en: 'Vaccines updated yearly per county vet' },
+                  { zh: '每年 NT$ 20-80k 維護成本', en: 'Maintenance NT$ 20-80k/year' }
+                ],
+                who: { zh: '適合：任何畜牧場，永遠是第一選擇', en: 'For: any livestock farm, always the first choice' } },
+              { tone: 'balanced',
+                tag: { zh: 'B · 疫情爆發時', en: 'B · During an outbreak' },
+                fit: (i) => 3,
+                summary: { zh: '立刻通報 + 停動 + 等防疫員 — 最大化補償', en: 'Report + stop movement + wait for inspector = max compensation' },
+                bullets: [
+                  { zh: '0800-761-590 專線 24 小時內通報', en: '0800-761-590 hotline, report within 24hr' },
+                  { zh: '沒申請 = 沒補償 + 可能被罰', en: 'No filing = no compensation + possible fines' },
+                  { zh: '補償金額 6 萬-數百萬（依規模）', en: 'Compensation NT$60k to NT$ millions (scale-based)' }
+                ],
+                who: { zh: '適合：任何懷疑疫情的當下 — 立刻做', en: 'For: any suspected outbreak, act now' } },
+              { tone: 'bold',
+                tag: { zh: 'C · 集體防疫網絡', en: 'C · Collective biosecurity network' },
+                fit: (i) => (i.cattle + i.pigs + i.poultry > 50) ? 3 : 1,
+                summary: { zh: '產銷班 / 合作社統一防疫 + 情報共享', en: 'Producer-group unified biosecurity + info sharing' },
+                bullets: [
+                  { zh: '共同獸醫、共同疫苗、共同稽核', en: 'Shared vet, shared vaccines, shared audits' },
+                  { zh: '早期預警（隔壁場出事你先知道）', en: 'Early warning (neighbor outbreak → you know first)' },
+                  { zh: '疫情時集體爭取政府支援效果好', en: 'Collective push for government support works better' }
+                ],
+                who: { zh: '適合：中大型畜牧場、產銷班活躍區', en: 'For: mid-large livestock farms, active producer groups' } }
+            ]
+          },
+          links: [
+            { label: { zh: '看氣候風險', en: 'Climate risk' }, href: '#sec-agent' },
+            { label: { zh: '看颱風災後', en: 'Post-typhoon recovery' }, href: '#sec-agent' }
+          ]
+        };
+      }
+    },
+    {
       id: 'fungal_disease',
       keywords: ['霉菌', '白粉病', '銹病', '炭疽病', '露菌病', '腐爛', '病害', 'fungal', 'mildew', 'rust', 'anthracnose', 'blight', 'fungus', 'rot'],
       topic: { zh: '黴菌 / 真菌病害', en: 'Fungal diseases' },
@@ -10451,6 +10545,7 @@ This application supports starting organic-transition certification for ≥1 ha.
     agritourism:         'high',
     fungal_disease:      'high',
     seasonal_planting:   'high',
+    livestock_disease:   'high',
     losing_money:        'high',
     pricing_specific:    'high',
     land_tenure:         'high',
@@ -10491,6 +10586,7 @@ This application supports starting organic-transition certification for ≥1 ha.
     hail_damage:         ['typhoon_recovery', 'climate_risk', 'fruit_pruning'],
     pest_disease:        ['crop_rotation', 'practice_invest', 'find_mentor', 'quarantine_pests'],
     quarantine_pests:    ['pest_disease', 'aphids_pests', 'find_mentor'],
+    livestock_disease:   ['climate_risk', 'typhoon_recovery', 'find_mentor'],
     hiring_labor:        ['burnout', 'succession', 'when_scale', 'foreign_workers'],
     foreign_workers:     ['hiring_labor', 'when_scale', 'tax_accounting'],
     succession:          ['hiring_labor', 'when_scale', 'burnout', 'succession_paperwork'],
@@ -11039,7 +11135,7 @@ This application supports starting organic-transition certification for ≥1 ha.
             'find_mentor', 'succession_paperwork', 'lease_dispute', 'foreign_workers', 'land_conversion_trap',
             'agritourism'] },
     { key: 'agro',   zh: '🌾 田間農藝',                en: '🌾 Field agronomy',
-      ids: ['pest_disease', 'aphids_pests', 'quarantine_pests', 'fungal_disease', 'crop_rotation', 'composting',
+      ids: ['pest_disease', 'aphids_pests', 'quarantine_pests', 'livestock_disease', 'fungal_disease', 'crop_rotation', 'composting',
             'water_mgmt', 'water_rights', 'fertilizer_timing', 'organic_transition', 'pruning',
             'nutrient_deficiency', 'seasonal_planting', 'seed_saving', 'typhoon_recovery', 'hail_damage'] },
     { key: 'method', zh: '🌳 農法 / 方法論',          en: '🌳 Farming methods',
