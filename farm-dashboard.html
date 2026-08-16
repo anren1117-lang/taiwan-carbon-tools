@@ -10278,6 +10278,41 @@ This application supports starting organic-transition certification for ≥1 ha.
             { zh: '6. <strong>每年 12 月做「年度實驗回顧」</strong>— 今年試了幾個？哪些值得擴大？哪些放棄？明年要試什麼？1 小時 = 你的「研發部門」報告。',
               en: '6. <strong>December annual "experiment review"</strong> — how many tried? Which to scale? Which to drop? What to try next year? 1 hr = your "R&D dept" report.' }
           ],
+          approaches: {
+            title: { zh: '3 種實驗策略 — 依風險胃納', en: '3 experiment strategies — by risk appetite' },
+            items: [
+              { tone: 'easy',
+                tag: { zh: 'A · 小規模長期', en: 'A · Small + long' },
+                fit: (i) => i.annualRevenueNT > 0 && i.annualRevenueNT < 1500000 ? 3 : 2,
+                summary: { zh: '每年 1-2 個實驗、5% 面積、每個 6-12 個月', en: '1-2 experiments/yr, 5% area, 6-12mo each' },
+                bullets: [
+                  { zh: '風險最低、學習速度慢但穩', en: 'Lowest risk, slow but steady learning' },
+                  { zh: '10 年後累積 15-20 個「經過驗證的方法」', en: '10 yrs later = 15-20 proven-on-your-farm methods' },
+                  { zh: '不干擾主要生產', en: 'Doesn\'t disrupt main production' }
+                ],
+                who: { zh: '適合：現金緊、初期經營', en: 'For: cash-tight, early stage' } },
+              { tone: 'balanced',
+                tag: { zh: 'B · 中規模並行', en: 'B · Multiple parallel' },
+                fit: (i) => (CLIENT_CONFIG.certifications || []).length >= 1 ? 3 : 2,
+                summary: { zh: '同時跑 3-5 個實驗、10% 面積、季末評估', en: '3-5 experiments parallel, 10% area, seasonal review' },
+                bullets: [
+                  { zh: '學習速度 3-5 倍、風險仍可控', en: 'Learning 3-5×, risk still bounded' },
+                  { zh: '需要細心紀錄避免混淆變數', en: 'Requires careful logging to avoid variable mix' },
+                  { zh: '有農事日誌 [實驗] tag 標記', en: 'Uses activity log [Experiment] tags' }
+                ],
+                who: { zh: '適合：有經驗、想加速演進', en: 'For: experienced, want faster evolution' } },
+              { tone: 'bold',
+                tag: { zh: 'C · 大規模突破嘗試', en: 'C · Big breakthrough attempt' },
+                fit: (i) => (i.annualRevenueNT >= 3000000 && (CLIENT_CONFIG.certifications || []).length >= 2) ? 2 : 0,
+                summary: { zh: '轉 30-50% 面積試新品種或新農法', en: 'Convert 30-50% area to new variety / method' },
+                bullets: [
+                  { zh: '2-3 年才驗證效果', en: '2-3 yrs to validate' },
+                  { zh: '成功 = 農場質變；失敗 = 收入砍半 1 年', en: 'Win = farm transformation; loss = -50% revenue 1yr' },
+                  { zh: '需要現金 buffer + 心理準備', en: 'Requires cash buffer + mental prep' }
+                ],
+                who: { zh: '適合：成熟農場、多元收入、有 buffer', en: 'For: mature farm, diversified income, has buffer' } }
+            ]
+          },
           links: []
         };
       }
