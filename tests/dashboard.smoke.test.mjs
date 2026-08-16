@@ -146,6 +146,33 @@ test('i18n placeholder parity — data-zh-placeholder ↔ data-en-placeholder (c
     `${missing} elements have data-zh-placeholder without data-en-placeholder. First few:\n  ${examples.join('\n  ')}`);
 });
 
+test('Browse-index topic ids all resolve to real KB entries (cycle 80)', () => {
+  // Cycle 79 caught a silent bug: BROWSE_CATEGORIES referenced
+  // 'seasonal_planting' but AGENT_KB had no entry with that id,
+  // so tapping the Browse chip rendered empty. Lock it in.
+  //
+  // Extract every id: from every ids: [...] list inside the
+  // BROWSE_CATEGORIES block, then confirm each has a matching
+  // `id: '...',` line somewhere in the AGENT_KB region.
+  const catBlock = html.match(/const BROWSE_CATEGORIES = \[([\s\S]*?)\];/);
+  assert.ok(catBlock, 'BROWSE_CATEGORIES definition not found');
+  const idsListsRe = /ids:\s*\[([\s\S]*?)\]/g;
+  const referenced = new Set();
+  let m;
+  while ((m = idsListsRe.exec(catBlock[1])) !== null) {
+    const bareIds = m[1].match(/'([a-zA-Z_][a-zA-Z0-9_]*)'/g) || [];
+    for (const bi of bareIds) referenced.add(bi.slice(1, -1));
+  }
+  assert.ok(referenced.size > 40, `expected 40+ browse ids, got ${referenced.size}`);
+  const missing = [];
+  for (const id of referenced) {
+    const idRe = new RegExp(`\\bid:\\s*['"]${id}['"]`);
+    if (!idRe.test(html)) missing.push(id);
+  }
+  assert.equal(missing.length, 0,
+    `Browse ids referenced but not defined in AGENT_KB: ${missing.join(', ')}`);
+});
+
 test('no Chinese-only placeholders on inputs/textareas (cycle 41)', () => {
   // Catches inputs that have a Chinese-only placeholder= without
   // either data-zh-placeholder/data-en-placeholder pair OR a
