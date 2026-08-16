@@ -10154,6 +10154,41 @@ This application supports starting organic-transition certification for ≥1 ha.
               { zh: '<strong>獨立保險經紀人</strong>— 商業險可請農業專長的經紀人比較，不要直接買通路推銷的', en: '<strong>Independent insurance brokers</strong> — for commercial insurance, use brokers with farm expertise instead of channel-pushed sales' }
             ]
           },
+          approaches: {
+            title: { zh: '3 種保險組合 — 依預算與家庭狀況', en: '3 insurance stacks — by budget + family situation' },
+            items: [
+              { tone: 'easy',
+                tag: { zh: 'A · 最低保障', en: 'A · Minimum viable' },
+                fit: (i) => i.annualRevenueNT > 0 && i.annualRevenueNT < 800000 ? 3 : 1,
+                summary: { zh: '農保 + 農職保 — 年費 NT$ 3-5k', en: 'Farmer + occupational — NT$ 3-5k/yr' },
+                bullets: [
+                  { zh: '農保：醫療 + 老農津貼 + 喪葬', en: 'Farmer ins: medical + senior allowance + funeral' },
+                  { zh: '農職保：意外傷殘 / 死亡最高 NT$ 240 萬', en: 'Occupational: accident disability / death up to NT$ 2.4M' },
+                  { zh: '沒到這個門檻 = 意外一次歸零', en: 'Below this floor = one accident wipes you out' }
+                ],
+                who: { zh: '適合：所有農民 — 這是絕對底線', en: 'For: every farmer — absolute minimum' } },
+              { tone: 'balanced',
+                tag: { zh: 'B · 全家庭保障', en: 'B · Family protection stack' },
+                fit: (i) => i.annualRevenueNT >= 800000 && i.annualRevenueNT < 3000000 ? 3 : 2,
+                summary: { zh: 'A + 商業意外 + 醫療險 — 年費 NT$ 20-50k', en: 'A + commercial accident + medical — NT$ 20-50k/yr' },
+                bullets: [
+                  { zh: '商業意外險保額 NT$ 500-1000 萬', en: 'Commercial accident up to NT$ 5-10M' },
+                  { zh: '重大疾病醫療補足農健保不夠的', en: 'Major illness coverage supplements NHI gaps' },
+                  { zh: '35 歲前買最划算，越晚保費越貴', en: 'Buy before 35 for best rates; premiums rise with age' }
+                ],
+                who: { zh: '適合：主要收入者 + 有子女', en: 'For: primary earner + has children' } },
+              { tone: 'bold',
+                tag: { zh: 'C · 完整資產保護', en: 'C · Full asset protection' },
+                fit: (i) => i.annualRevenueNT >= 3000000 ? 3 : 0,
+                summary: { zh: 'B + 農作物保險 + 商業壽險 + 火險 — 年費 NT$ 50-80k', en: 'B + crop insurance + life + fire — NT$ 50-80k/yr' },
+                bullets: [
+                  { zh: '農作物保險（政府補助 50-80%）', en: 'Crop insurance (50-80% government-subsidized)' },
+                  { zh: '商業壽險 = 家人有現金流傳承', en: 'Commercial life = family gets cash-flow transition' },
+                  { zh: '火險 = 農舍 / 溫室 / 倉庫毀損', en: 'Fire = house / greenhouse / warehouse loss' }
+                ],
+                who: { zh: '適合：年營收 300 萬+、多資產', en: 'For: revenue NT$3M+, asset-heavy' } }
+            ]
+          },
           links: []
         };
       }
