@@ -10151,6 +10151,41 @@ This application supports starting organic-transition certification for ≥1 ha.
             { zh: '6. <strong>不要自卑也不要過度行銷</strong>— 真誠就是品牌力。過度包裝會被識破。讓你的「過程證據」+「真實人格」+「持續實踐」自己變成品牌。',
               en: '6. <strong>Neither inferiority nor over-marketing</strong> — authenticity IS the brand. Over-packaging gets detected. Let "process evidence" + "real personality" + "consistent practice" become the brand on their own.' }
           ],
+          approaches: {
+            title: { zh: '3 種品牌路徑 — 依你想被記得的方式', en: '3 brand paths — by how you want to be remembered' },
+            items: [
+              { tone: 'easy',
+                tag: { zh: 'A · 專業技術達人', en: 'A · Technical specialist' },
+                fit: (i) => (CLIENT_CONFIG.certifications || []).length >= 2 ? 3 : 1,
+                summary: { zh: '「AWD 節水稻米專家」— 單一技術深化', en: '"AWD water-mgmt rice expert" — deep single-technique' },
+                bullets: [
+                  { zh: '3 年做到區域第一 = 客戶找上門', en: '3 yrs to regional #1 = customers seek you out' },
+                  { zh: '演講 / 參訪邀約帶來額外收入', en: 'Talks / farm visits = extra income' },
+                  { zh: '需要：真的持續投入該技術', en: 'Need: real continued investment in the technique' }
+                ],
+                who: { zh: '適合：認證齊全、想長期深耕', en: 'For: certs in place, long-term specialist' } },
+              { tone: 'balanced',
+                tag: { zh: 'B · 故事型 returner', en: 'B · Story-based returner' },
+                fit: (i) => i.annualRevenueNT >= 500000 && i.annualRevenueNT < 2000000 ? 3 : 2,
+                summary: { zh: '「都市人回鄉的第 3 年」— 過程 = 內容', en: '"Year 3 of a city-to-farm return" — process = content' },
+                bullets: [
+                  { zh: '成長歷程本身就是內容', en: 'Growth journey itself is the content' },
+                  { zh: '每週 1 篇真實田間貼文 → 3 年累積讀者', en: 'Weekly authentic post → 3yr audience compound' },
+                  { zh: '客戶連結情感 = 高單價 + 高忠誠', en: 'Customer emotional bond = high price + high loyalty' }
+                ],
+                who: { zh: '適合：轉業農夫、會寫、有時間', en: 'For: career-change farmers, can write, time available' } },
+              { tone: 'collab',
+                tag: { zh: 'C · 產銷班聯合品牌', en: 'C · Producer-group brand' },
+                fit: (i) => i.farmSize >= 3 && (i.cropType === 'rice' || i.cropType === 'fruit') ? 2 : 0,
+                summary: { zh: '合作社品牌 + 個人為子品牌', en: 'Co-op brand + you as sub-brand' },
+                bullets: [
+                  { zh: '不用自己花錢做行銷', en: 'No solo marketing spend' },
+                  { zh: '個人品牌認知度較弱 — trade-off', en: 'Weaker individual recognition — trade-off' },
+                  { zh: '規模效益：進入連鎖通路', en: 'Scale benefit: enter chain channels' }
+                ],
+                who: { zh: '適合：不擅個人品牌、想借助集體', en: 'For: not into solo branding, leverage collective' } }
+            ]
+          },
           links: [
             { label: { zh: '看買家提案單', en: 'Buyer pitch sheet' }, href: 'farm-pitch.html', external: true }
           ]
