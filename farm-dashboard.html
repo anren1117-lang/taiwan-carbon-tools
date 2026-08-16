@@ -10420,9 +10420,53 @@ This application supports starting organic-transition certification for ≥1 ha.
             { zh: '8. <strong>承認你需要時間恢復</strong> — 心理上 / 體力上。不要 6 個月內就強迫自己「比之前更努力」。穩住步調慢慢來才是復原。',
               en: '8. <strong>Acknowledge you need time to recover</strong> — emotionally + physically. Don\'t force "even harder than before" within 6 months. Steady pace = real recovery.' }
           ],
+          approaches: {
+            title: { zh: '3 種復原策略 — 依損失規模', en: '3 recovery strategies — by loss magnitude' },
+            items: [
+              { tone: 'easy',
+                tag: { zh: 'A · 局部損失 (< 30%)', en: 'A · Partial loss (< 30%)' },
+                fit: (i) => 2,
+                summary: { zh: '快速止血 + 保險理賠 + 明年原計畫', en: 'Fast stop-bleed + insurance + original plan next year' },
+                bullets: [
+                  { zh: '48 小時內通報 + 保險理賠', en: 'Report + insurance within 48hr' },
+                  { zh: '短季替代作物補現金流', en: 'Short-cycle substitute crops for cash flow' },
+                  { zh: '3-6 個月可回到常軌', en: '3-6 months to return to normal' }
+                ],
+                who: { zh: '適合：多數颱風 / 局部病害', en: 'For: most typhoons / partial disease' } },
+              { tone: 'balanced',
+                tag: { zh: 'B · 重大損失 (30-70%)', en: 'B · Major loss (30-70%)' },
+                fit: (i) => 3,
+                summary: { zh: '疊補助 + 貸款 + 縮小規模一年', en: 'Stack aid + loan + downsize for one year' },
+                bullets: [
+                  { zh: '疊：災害救助 + 保險 + 復耕 + 貸款', en: 'Stack: disaster aid + insurance + replant + loan' },
+                  { zh: '暫縮 50% 面積，減少壓力 + 現金消耗', en: 'Temp downsize 50%, reduces stress + cash burn' },
+                  { zh: '6-12 個月才能重回產能', en: '6-12mo to return to production capacity' }
+                ],
+                who: { zh: '適合：颱風全園、大面積病害', en: 'For: orchard-wide typhoon, large-area disease' } },
+              { tone: 'bold',
+                tag: { zh: 'C · 全損 / 農場歸零', en: 'C · Total loss / farm reset' },
+                fit: (i) => 1,
+                summary: { zh: '暫停 + 深度檢討 + 重新規劃', en: 'Pause + deep review + replan from scratch' },
+                bullets: [
+                  { zh: '短期打工補家用 + 心理復原', en: 'Short-term off-farm work + mental recovery' },
+                  { zh: '花 3-6 個月做「大復盤」— 這農場還要繼續嗎？', en: '3-6mo "big review" — should the farm continue?' },
+                  { zh: '有時「不重來」也是正確答案', en: 'Sometimes "don\'t restart" is the right answer' }
+                ],
+                who: { zh: '適合：連續重大災害、身心崩盤', en: 'For: repeated disasters, physical + mental collapse' } }
+            ]
+          },
+          resources: {
+            title: { zh: '心理支援專線', en: 'Mental health hotlines' },
+            items: [
+              { zh: '<strong>1925</strong> 衛福部安心專線（24h 免費）', en: '<strong>1925</strong> MOHW Mental Health Hotline (24h free)' },
+              { zh: '<strong>1980</strong> 張老師（情緒支持）', en: '<strong>1980</strong> Teacher Chang (emotional support)' },
+              { zh: '<strong>1995</strong> 生命線（嚴重時）', en: '<strong>1995</strong> Lifeline (severe crisis)' }
+            ]
+          },
           links: [
             { label: { zh: '看補助清單', en: 'Subsidies + disaster aid' }, href: '#sec-income' },
-            { label: { zh: '看保險答案', en: 'Insurance answer' }, href: '#sec-agent' }
+            { label: { zh: '看保險答案', en: 'Insurance answer' }, href: '#sec-agent' },
+            { label: { zh: '看颱風災後', en: 'Post-typhoon recovery' }, href: '#sec-agent' }
           ]
         };
       }
