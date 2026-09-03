@@ -10124,6 +10124,41 @@ This application supports starting organic-transition certification for ≥1 ha.
               { zh: '<strong>正式諮商</strong>：張老師 1980（24h）、衛福部安心專線 1925 — 嚴重時找專業協助', en: '<strong>Formal counseling</strong>: Teacher Chang 1980 (24hr), MOHW mental health 1925 — for serious times' }
             ]
           },
+          approaches: {
+            title: { zh: '3 種連結建立路徑', en: '3 connection-building paths' },
+            items: [
+              { tone: 'easy',
+                tag: { zh: 'A · 線上為主', en: 'A · Online-primary' },
+                fit: (i) => i.farmSize < 1 || i.annualRevenueNT < 800000 ? 3 : 2,
+                summary: { zh: 'FB / LINE 社團 — 不出門的低成本連結', en: 'FB / LINE groups — low-cost, no travel needed' },
+                bullets: [
+                  { zh: '每天 15 分鐘瀏覽 + 每週 1 則發問', en: '15min daily browse + 1 weekly question' },
+                  { zh: '3 個月後有 5-10 個「認得你」的同行', en: '3mo later: 5-10 peers who recognize you' },
+                  { zh: '不需要交通、時間彈性', en: 'No travel, time-flexible' }
+                ],
+                who: { zh: '適合：偏鄉、忙碌、內向', en: 'For: remote area, busy, introverted' } },
+              { tone: 'balanced',
+                tag: { zh: 'B · 月度實體聚會', en: 'B · Monthly in-person' },
+                fit: (i) => 3,
+                summary: { zh: '每月 1 次產銷班 / 青農協會 / 市集', en: 'Monthly producer group / young farmer / market' },
+                bullets: [
+                  { zh: '深度勝過線上 100 次貼文', en: 'Depth beats 100 online posts' },
+                  { zh: '4 小時車程也值得去', en: 'Worth a 4hr drive occasionally' },
+                  { zh: '6 個月建立 2-3 個「打電話對象」', en: '6mo → 2-3 people you\'d call for advice' }
+                ],
+                who: { zh: '適合：所有農夫，長期經營必備', en: 'For: every farmer, long-term essential' } },
+              { tone: 'collab',
+                tag: { zh: 'C · 混工 / 互助小圈', en: 'C · Work-swap / mutual aid circle' },
+                fit: (i) => i.farmSize >= 1 && i.farmSize < 5 ? 3 : 1,
+                summary: { zh: '3-5 位鄰近農友 — 勞力 + 情感雙互助', en: '3-5 neighboring farmers — labor + emotional support' },
+                bullets: [
+                  { zh: '收穫 / 整地 / 節慶 一起做', en: 'Harvest / tillage / holidays done together' },
+                  { zh: '「共同流汗」= 最深的連結', en: '"Sweating together" = deepest connection' },
+                  { zh: '需要主動起頭找人', en: 'Requires you to initiate' }
+                ],
+                who: { zh: '適合：有鄰近農友、願意主動', en: 'For: neighboring farmers exist, willing to initiate' } }
+            ]
+          },
           links: []
         };
       }
