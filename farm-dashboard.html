@@ -9913,6 +9913,41 @@ This application supports starting organic-transition certification for ≥1 ha.
             { zh: '5. <strong>選擇邏輯</strong>— 看「現金壓力 vs 溢價野心」三角形：高現金壓力 → 慣行 + 部分友善；中等 → 友善 + 培養客群；低現金壓力 + 高溢價野心 → 有機轉型。沒有「正確答案」，只有「適合你的階段」。',
               en: '5. <strong>Choice logic</strong> — assess "cash pressure vs premium ambition" triangle: high cash pressure → conventional + partial friendly; medium → friendly + build customer base; low cash + high ambition → organic transition. No "right answer", only "right for your stage".' }
           ],
+          approaches: {
+            title: { zh: '3 種級別選擇 — 依現金與階段', en: '3 tier choices — by cash + stage' },
+            items: [
+              { tone: 'easy',
+                tag: { zh: 'A · 慣行 + 部分友善', en: 'A · Conventional + partial friendly' },
+                fit: (i) => i.annualRevenueNT > 0 && i.annualRevenueNT < 1000000 ? 3 : 1,
+                summary: { zh: '主流通路 + 逐步減量 — 現金穩定', en: 'Mainstream channels + gradual reduction — stable cash' },
+                bullets: [
+                  { zh: '無額外認證費、產量穩定', en: 'No extra cert fee, yield stable' },
+                  { zh: '同時試 1 塊田友善做法看效果', en: 'Meanwhile trial 1 plot with friendly practices' },
+                  { zh: '客群限拍賣 / 學校 / 一般通路', en: 'Channels limited to wholesale / school / generic' }
+                ],
+                who: { zh: '適合：新農、現金緊、還在測試', en: 'For: new farmer, cash-tight, still testing' } },
+              { tone: 'balanced',
+                tag: { zh: 'B · 友善耕作登錄', en: 'B · Friendly Farming registered' },
+                fit: (i) => (CLIENT_CONFIG.certifications || []).length >= 1 ? 3 : 2,
+                summary: { zh: '免費登錄 + NT$30k/ha 補助 + 中溢價通路', en: 'Free registration + NT$30k/ha subsidy + mid-premium channels' },
+                bullets: [
+                  { zh: '自我承諾、無第三方驗證、無轉型期', en: 'Self-commitment, no 3rd-party verification, no transition period' },
+                  { zh: '打開主婦聯盟、里仁、CSA', en: 'Opens Homemakers Union, Leezen, CSA channels' },
+                  { zh: '2-3 年後可考慮進有機轉型', en: 'After 2-3 yrs can consider organic transition' }
+                ],
+                who: { zh: '適合：多數農場的中間路線', en: 'For: most farms, the middle path' } },
+              { tone: 'bold',
+                tag: { zh: 'C · 有機驗證', en: 'C · Organic certified' },
+                fit: (i) => (CLIENT_CONFIG.certifications || []).length >= 2 && i.annualRevenueNT >= 1500000 ? 2 : 0,
+                summary: { zh: '第三方驗證 — 高溢價 + 出口潛力', en: '3rd-party verified — high premium + export potential' },
+                bullets: [
+                  { zh: '年費 NT$ 6-25k + 2 年轉型期', en: 'Annual fee NT$ 6-25k + 2yr transition' },
+                  { zh: '初期產量 -20-40%、價格 +100-200%', en: 'Initial yield -20-40%, price +100-200%' },
+                  { zh: '需要：1.5x 年支出的現金緩衝', en: 'Need: 1.5× annual expense cash buffer' }
+                ],
+                who: { zh: '適合：認證齊全 + 年營收 150 萬+', en: 'For: certified + revenue NT$1.5M+' } }
+            ]
+          },
           links: [
             { label: { zh: '看認證階梯', en: 'See cert ladder' }, href: '#sec-survival' },
             { label: { zh: '看補助清單', en: 'See subsidies' }, href: '#sec-income' }
@@ -10896,6 +10931,7 @@ This application supports starting organic-transition certification for ≥1 ha.
     seasonal_planting:   'high',
     livestock_disease:   'high',
     food_safety:         'high',
+    farming_methods_compare: 'high',
     losing_money:        'high',
     pricing_specific:    'high',
     land_tenure:         'high',
