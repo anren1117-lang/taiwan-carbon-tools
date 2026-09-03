@@ -6960,6 +6960,100 @@ This application supports starting organic-transition certification for ≥1 ha.
       }
     },
     {
+      id: 'worker_retention',
+      keywords: ['留住員工', '員工流動', '離職', '請人不來', '員工太快跑', '員工待不住', 'retention', 'staff turnover', 'employee retention', 'quit', 'keep workers'],
+      topic: { zh: '員工留任 / 減少流動', en: 'Worker retention / reduce turnover' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '請一個人比留一個人便宜 5 倍 — 前 6 個月是關鍵', en: 'Losing a worker costs 5× hiring one — first 6 months are the key' },
+          situation: { zh: '台灣農場員工流動率年 30-60% 常態。訓練 1 個新人耗 3-6 個月 + 老員工帶新人的時間 + 犯錯損失 = 每次離職隱形成本 NT$ 50-200k。多數農場「以為薪水低留不住人」，實際上薪水只是 40%，其他 60% 是「工作結構 + 尊重感 + 成長機會」。管理跨文化團隊（本地 + 移工）需要更多結構。',
+                       en: 'Taiwan farm employee turnover is routinely 30-60%/yr. Training 1 new hire = 3-6mo + old staff time + mistake losses = hidden cost NT$50-200k per departure. Most farms think "low pay = can\'t retain" but pay is only 40%; the other 60% is "work structure + respect + growth opportunity". Managing cross-cultural teams (local + migrant) needs more structure.' },
+          actions: [
+            { zh: '1. <strong>入職前 30 天 = 決定 80% 留任</strong>：<br>Day 1：完整場區介紹 + 安全訓練 + 認識所有人；<br>Week 1：明確的日程 + 一個「導師」老員工；<br>Month 1：正式一對一評估 + 給明確反饋。做得爛 = 30 天內就跑。',
+              en: '1. <strong>First 30 days determines 80% of retention</strong>:<br>Day 1: full farm tour + safety training + meet everyone;<br>Week 1: clear schedule + assigned "mentor" senior staff;<br>Month 1: formal 1:1 review + clear feedback. Done poorly = they leave in 30 days.' },
+            { zh: '2. <strong>薪資結構 — 有成長路徑</strong>：起薪 + 3 / 6 / 12 個月加薪節點 + 年終獎金。「你薪水永遠一樣」= 半年後跑掉。跟本地基本薪資（現在 NT$ 28,590）比要高 5-15%。',
+              en: '2. <strong>Wage structure — with growth path</strong>: base + raises at 3/6/12 months + year-end bonus. "Your pay stays flat" = they leave in 6 months. Pay 5-15% above local minimum (currently NT$ 28,590).' },
+            { zh: '3. <strong>住宿品質 = 直接影響留任率</strong>：不是「有地方睡」，是「你自己想住的品質」。冷氣、熱水、廚房、乾淨廁所、私人空間、Wi-Fi 都要。省住宿費 NT$ 100k = 每年多 2 個人流動 = 損失 NT$ 400k。',
+              en: '3. <strong>Housing quality = direct retention</strong>: not "a place to sleep" but "quality YOU would live in". AC, hot water, kitchen, clean toilet, private space, Wi-Fi required. Saving NT$100k on housing = 2 extra departures/yr = NT$400k lost.' },
+            { zh: '4. <strong>週會 30 分鐘 + 個別月會</strong>：本週工作、下週計畫、遇到的問題、有沒有累。每月一對一 15 分鐘，讓員工「被看到」。這個習慣 = 減少 50% 流動率。',
+              en: '4. <strong>Weekly 30-min meeting + monthly 1:1</strong>: this week\'s work, next week\'s plan, problems, tiredness. Monthly 15-min 1:1 makes employees feel "seen". This habit alone = 50% turnover reduction.' },
+            { zh: '5. <strong>跨文化管理 — 學基本語言 + 尊重文化</strong>：對越南 / 印尼 / 泰國員工學 20 個基本詞、尊重宗教飲食、齋戒月調班、重要節日給予休假。做對 = 留任 3-5 年；做爛 = 半年跑掉甚至向 1955 檢舉。',
+              en: '5. <strong>Cross-cultural mgmt — basic language + cultural respect</strong>: 20 basic words in Vietnamese / Indonesian / Thai, respect religious diet, adjust for Ramadan, holiday leave. Done right = 3-5yr retention; done wrong = leave in 6 months, may file 1955 complaint.' },
+            { zh: '6. <strong>離職面談 — 不是「祝你好運」</strong>：真誠問「為什麼離開？下次怎麼可以更好？」多數人會給誠實答案。這些答案 = 你下次雇用時避免同樣錯誤。',
+              en: '6. <strong>Exit interview — not "good luck"</strong>: honestly ask "why leave? how could we do better?". Most people give honest answers. Those answers = you avoid the same mistakes next hire.' }
+          ],
+          checklist: {
+            title: { zh: '新員工入職 30 天清單', en: 'New hire 30-day checklist' },
+            items: [
+              { zh: '<strong>Day 1</strong>：場區導覽 + 安全訓練 + 介紹所有同事', en: '<strong>Day 1</strong>: farm tour + safety training + intro to all coworkers' },
+              { zh: '<strong>Week 1</strong>：住宿品質確認 + 導師老員工分配 + 每日日程明確', en: '<strong>Week 1</strong>: housing quality confirmed + mentor senior assigned + daily schedule clear' },
+              { zh: '<strong>Week 2</strong>：第一次非正式反饋（10 分鐘：進度、有沒有問題）', en: '<strong>Week 2</strong>: first informal check-in (10min: progress, issues)' },
+              { zh: '<strong>Week 3</strong>：邀請參加農友聚會 / 社交活動 —「你屬於這裡」', en: '<strong>Week 3</strong>: invite to farmer gathering / social event — "you belong here"' },
+              { zh: '<strong>Month 1</strong>：正式一對一 + 首次加薪評估（即使小幅）', en: '<strong>Month 1</strong>: formal 1:1 + first raise consideration (even small)' }
+            ]
+          },
+          pitfalls: {
+            title: { zh: '常見地雷', en: 'Common landmines' },
+            items: [
+              { zh: '<strong>「新人就是要吃苦」</strong> — 頭 30 天讓人做最累的活 = 一個月內就跑', en: '<strong>"Newbies should suffer"</strong> — hardest work in first 30 days = they leave in a month' },
+              { zh: '<strong>薪水永遠一樣</strong> — 「反正你也不會要求」= 半年後跑到出更高價的隔壁場', en: '<strong>Flat pay forever</strong> — "they won\'t ask anyway" → 6 months later they move to a higher-paying neighbor farm' },
+              { zh: '<strong>住宿是廢棄農具間</strong> — 給員工看你自己不願意住的地方 = 尊嚴受損 = 一定跑', en: '<strong>Housing is a disused tool shed</strong> — giving workers a place you wouldn\'t live yourself = dignity damage = guaranteed departure' },
+              { zh: '<strong>沒週會就是「有事再說」</strong> — 員工不知你怎麼想 → 猜測 → 不安 → 離職', en: '<strong>No weekly meeting, "we talk when needed"</strong> — workers don\'t know your thinking → guess → insecurity → leave' },
+              { zh: '<strong>移工當「便宜勞力」</strong> — 沒學語言、沒理解宗教、加班強迫 = 1955 檢舉 + 禁申請 3-5 年', en: '<strong>Treating migrants as "cheap labor"</strong> — no language, no religion understanding, forced overtime = 1955 complaint + 3-5yr application ban' }
+            ]
+          },
+          approaches: {
+            title: { zh: '3 種留任策略 — 依規模', en: '3 retention strategies — by scale' },
+            items: [
+              { tone: 'easy',
+                tag: { zh: 'A · 1-2 人的家庭氛圍', en: 'A · 1-2 people family vibe' },
+                fit: (i) => i.annualRevenueNT > 0 && i.annualRevenueNT < 2000000 ? 3 : 1,
+                summary: { zh: '像家人相處 + 一起吃飯 + 尊重個人時間', en: 'Family-style + share meals + respect personal time' },
+                bullets: [
+                  { zh: '不需要正式制度 — 信任 + 尊重是全部', en: 'No formal system needed — trust + respect is everything' },
+                  { zh: '起薪高於市場 5%、加薪清楚', en: '5% above-market pay, clear raise path' },
+                  { zh: '節慶送禮 / 給假 = 忠誠核心' , en: 'Holiday gifts / leave = loyalty core' }
+                ],
+                who: { zh: '適合：小規模、1-2 位員工', en: 'For: small scale, 1-2 employees' } },
+              { tone: 'balanced',
+                tag: { zh: 'B · 3-8 人的結構化', en: 'B · 3-8 people structured' },
+                fit: (i) => i.annualRevenueNT >= 2000000 && i.annualRevenueNT < 8000000 ? 3 : 1,
+                summary: { zh: '週會 + 月一對一 + 明確加薪節點', en: 'Weekly meeting + monthly 1:1 + clear raise milestones' },
+                bullets: [
+                  { zh: '書面 SOP + 導師制 + 30 天入職計畫', en: 'Written SOP + mentor + 30-day onboarding plan' },
+                  { zh: '有跨文化員工需要語言 + 文化學習', en: 'Cross-cultural staff → language + culture learning' },
+                  { zh: '30-60% 年流動率降到 10-20%', en: '30-60% turnover drops to 10-20%' }
+                ],
+                who: { zh: '適合：3-8 員工、開始需要制度', en: 'For: 3-8 employees, structure starts to matter' } },
+              { tone: 'bold',
+                tag: { zh: 'C · 8+ 人的正式管理', en: 'C · 8+ people formal HR' },
+                fit: (i) => i.annualRevenueNT >= 8000000 ? 3 : 0,
+                summary: { zh: '專職人事 + 完整制度 + 職涯路徑', en: 'Dedicated HR + full system + career path' },
+                bullets: [
+                  { zh: '需要專職 HR（NT$ 40-60k/月）', en: 'Needs dedicated HR (NT$ 40-60k/mo)' },
+                  { zh: '員工可看到「3 年後升到什麼位置」', en: 'Employees see "where I\'ll be in 3 years"' },
+                  { zh: '流動率可降至 < 10%', en: 'Turnover can drop below 10%' }
+                ],
+                who: { zh: '適合：年營收 800 萬+、規模化農場', en: 'For: revenue NT$8M+, at-scale farms' } }
+            ]
+          },
+          resources: {
+            title: { zh: '相關資源', en: 'Relevant resources' },
+            items: [
+              { zh: '<strong>1955 移工諮詢申訴專線</strong>：勞資糾紛雙方都可用', en: '<strong>1955 Migrant Worker Consultation Hotline</strong> — for both sides of disputes' },
+              { zh: '<strong>台灣國際勞工協會 (TIWA)</strong> — 移工權益 + 雇主諮詢', en: '<strong>Taiwan International Workers Assoc (TIWA)</strong> — migrant rights + employer consultation' },
+              { zh: '<strong>各縣勞工處</strong> — 勞資糾紛調解 (免費)', en: '<strong>County Labor Bureau</strong> — free labor dispute mediation' },
+              { zh: '<strong>青農協會人力管理培訓</strong> — 農業專屬的管理課程', en: '<strong>Young Farmer Assoc HR training</strong> — ag-specific management courses' }
+            ]
+          },
+          links: [
+            { label: { zh: '看農業移工', en: 'Foreign farm workers' }, href: '#sec-agent' },
+            { label: { zh: '看人力 / 雇工', en: 'Labor / hiring' }, href: '#sec-agent' }
+          ]
+        };
+      }
+    },
+    {
       id: 'succession',
       keywords: ['接班', '傳承', '繼承', '下一代', '小孩', '兒子', '女兒', '家族', '退休', 'succession', 'inherit', 'next generation', 'son', 'daughter', 'retire', 'family farm'],
       topic: { zh: '農場接班 / 傳承', en: 'Farm succession' },
@@ -10932,6 +11026,7 @@ This application supports starting organic-transition certification for ≥1 ha.
     livestock_disease:   'high',
     food_safety:         'high',
     farming_methods_compare: 'high',
+    worker_retention:    'high',
     losing_money:        'high',
     pricing_specific:    'high',
     land_tenure:         'high',
@@ -10973,7 +11068,8 @@ This application supports starting organic-transition certification for ≥1 ha.
     pest_disease:        ['crop_rotation', 'practice_invest', 'find_mentor', 'quarantine_pests'],
     quarantine_pests:    ['pest_disease', 'aphids_pests', 'find_mentor'],
     livestock_disease:   ['climate_risk', 'typhoon_recovery', 'find_mentor'],
-    hiring_labor:        ['burnout', 'succession', 'when_scale', 'foreign_workers'],
+    hiring_labor:        ['burnout', 'succession', 'when_scale', 'foreign_workers', 'worker_retention'],
+    worker_retention:    ['hiring_labor', 'foreign_workers', 'family_balance'],
     foreign_workers:     ['hiring_labor', 'when_scale', 'tax_accounting'],
     succession:          ['hiring_labor', 'when_scale', 'burnout', 'succession_paperwork'],
     succession_paperwork:['succession', 'tax_accounting', 'land_tenure'],
@@ -11519,7 +11615,7 @@ This application supports starting organic-transition certification for ≥1 ha.
             'pitch_buyer', 'pricing_specific', 'goal_setting', 'climate_risk', 'cert_question',
             'soil_test', 'what_to_do_now', 'hiring_labor', 'succession', 'marketing_social',
             'farmers_market', 'storage_coldchain', 'packaging_rules', 'food_safety', 'tax_accounting', 'land_tenure', 'when_scale',
-            'find_mentor', 'succession_paperwork', 'lease_dispute', 'foreign_workers', 'land_conversion_trap',
+            'find_mentor', 'succession_paperwork', 'lease_dispute', 'foreign_workers', 'worker_retention', 'land_conversion_trap',
             'agritourism'] },
     { key: 'agro',   zh: '🌾 田間農藝',                en: '🌾 Field agronomy',
       ids: ['pest_disease', 'aphids_pests', 'quarantine_pests', 'livestock_disease', 'fungal_disease', 'crop_rotation', 'composting',
