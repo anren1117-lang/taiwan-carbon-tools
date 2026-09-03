@@ -9973,6 +9973,41 @@ This application supports starting organic-transition certification for ≥1 ha.
               { zh: '<strong>PDC 課程 (72 小時)</strong>— NT$ 25,000-40,000，國際認證樸門設計師執照', en: '<strong>PDC course (72 hrs)</strong> — NT$ 25,000-40,000, internationally-recognized Permaculture Design Certificate' }
             ]
           },
+          approaches: {
+            title: { zh: '3 種樸門切入路徑', en: '3 permaculture entry paths' },
+            items: [
+              { tone: 'easy',
+                tag: { zh: 'A · 分區設計小規模', en: 'A · Zone design (small scale)' },
+                fit: (i) => i.farmSize < 1.5 ? 3 : 2,
+                summary: { zh: '不變作物種類，先重新安排位置', en: 'Same crops, just rearrange positions' },
+                bullets: [
+                  { zh: 'Zone 1-2 廚房菜園挪近住家', en: 'Zone 1-2 kitchen garden moved close to home' },
+                  { zh: '不用重投資，只調整動線', en: 'No new investment, just workflow adjustment' },
+                  { zh: '走路時間降 30%+', en: 'Walking time drops 30%+' }
+                ],
+                who: { zh: '適合：任何規模、想省時', en: 'For: any scale, want time efficiency' } },
+              { tone: 'balanced',
+                tag: { zh: 'B · 食物森林建置', en: 'B · Food forest' },
+                fit: (i) => i.cropType === 'fruit' || i.cropType === 'mixed' ? 3 : 1,
+                summary: { zh: '3-5 年建置 7 層生態果園', en: '3-5yr to build 7-layer eco-orchard' },
+                bullets: [
+                  { zh: '大喬木 → 灌木 → 草本 → 根莖 → 攀爬 → 覆蓋', en: 'Canopy → shrub → herb → root → vine → ground cover' },
+                  { zh: '5 年後 = 自我維持、產量分散全年', en: '5yr later = self-maintaining, year-round harvest' },
+                  { zh: '需要空間、耐心、初期高投入', en: 'Needs space, patience, high upfront investment' }
+                ],
+                who: { zh: '適合：果農 / 混合、長期經營', en: 'For: fruit / mixed, long-term' } },
+              { tone: 'bold',
+                tag: { zh: 'C · PDC 認證設計師', en: 'C · PDC certified designer' },
+                fit: (i) => i.annualRevenueNT >= 1500000 && (CLIENT_CONFIG.certifications || []).length >= 1 ? 2 : 0,
+                summary: { zh: '受訓 72 小時 + 完整重新設計農場', en: '72hr training + full farm redesign' },
+                bullets: [
+                  { zh: '訓練費 NT$ 25-40k', en: 'Training NT$ 25-40k' },
+                  { zh: '可為其他農場做諮詢設計服務', en: 'Can offer design consulting to other farms' },
+                  { zh: '徹底改變思考框架', en: 'Complete mental framework shift' }
+                ],
+                who: { zh: '適合：想成為專業設計師 / 培訓者', en: 'For: aspiring pro designer / trainer' } }
+            ]
+          },
           links: []
         };
       }
