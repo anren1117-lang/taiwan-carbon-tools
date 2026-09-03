@@ -7415,6 +7415,101 @@ This application supports starting organic-transition certification for ≥1 ha.
       }
     },
     {
+      id: 'food_safety',
+      keywords: ['食品安全', '食安法', '食品標示', '過敏原', '有效期限', '產品檢驗', 'haccp', 'iso 22000', '追溯', 'food safety', 'labeling', 'allergen', 'expiration', 'traceability', 'certification'],
+      topic: { zh: '食品安全 / 加工品法規', en: 'Food safety / processed product regulations' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '賣加工品 = 食品業 = 6 項法規責任 — 沒登記罰 6-30 萬', en: 'Selling processed = food business = 6 legal responsibilities — no registration = NT$60-300k fines' },
+          situation: { zh: '許多小農以為「醃漬、果醬、酵素、乾燥品」都是「農產」— 錯。<strong>只要有加工過程（加熱、發酵、脫水、混合），就是「食品業」</strong>，受食品安全衛生管理法管。近年地方衛生局稽查越來越嚴，違規案罰 6-30 萬 + 產品下架 + 商譽損失。做對從第一批開始，比事後補救便宜 10 倍。',
+                       en: 'Many small farms think "pickles, jam, ferments, dried" are all "agricultural products" — wrong. <strong>Any processing (heat, ferment, dehydrate, mix) = "food business"</strong>, subject to Food Safety Act. County health inspection has tightened; violations get NT$60-300k fines + product pulled + brand damage. Doing it right from batch #1 is 10× cheaper than retroactive fixes.' },
+          actions: [
+            { zh: '1. <strong>登記類別確認</strong>：<br>(a) 家庭工坊（自家消費 / 贈送）— 不需登記，但也<strong>不能販售</strong>；<br>(b) 食品業登記（月營收 < NT$ 5 萬）— 至地方衛生局；<br>(c) 食品工廠登記（月營收 > NT$ 5 萬 或量產）— 至工業局；<br>(d) 特殊：飲料、水產、乳製品有加嚴規定。',
+              en: '1. <strong>Confirm your registration category</strong>:<br>(a) Home workshop (own use / gifts) — no registration but <strong>cannot sell</strong>;<br>(b) Food business (< NT$50k/mo revenue) — file at county Health Bureau;<br>(c) Food factory (> NT$50k/mo or mass-produced) — file at Industrial Development Bureau;<br>(d) Special: beverages, seafood, dairy face stricter rules.' },
+            { zh: '2. <strong>強制標示 6 項</strong>：品名、內容物、淨重、廠商名稱地址、有效期限、成分（含過敏原）。缺一項罰 NT$ 3-15 萬。「過敏原」是最常漏的 — 蝦蟹、蛋、奶、麥、堅果、含亞硫酸鹽都要標示。',
+              en: '2. <strong>6 mandatory labels</strong>: product name, contents, net weight, manufacturer name+address, expiration, ingredients (incl. allergens). Missing any = NT$30-150k fine. Allergens most missed — shellfish, egg, milk, wheat, nuts, sulfites all require declaration.' },
+            { zh: '3. <strong>有效期限測試 — 別憑感覺</strong>：找食品實驗室做加速穩定性測試（NT$ 5-20k / 品項）。「感覺一年沒問題」= 出問題就是刑事責任。實驗數據 = 你的護身符。',
+              en: '3. <strong>Expiration test — don\'t guess</strong>: send to food lab for accelerated stability testing (NT$5-20k/product). "Feels fine for a year" = criminal liability if something goes wrong. Lab data = your shield.' },
+            { zh: '4. <strong>製程紀錄 + 每批留樣</strong>：每一批寫下製作日、原料來源、溫度時序、包裝日。留 3 個樣本冷藏至少 3 個月，出事時可回查。',
+              en: '4. <strong>Process log + per-batch retention samples</strong>: for each batch record production date, ingredient sources, time/temp, packaging date. Keep 3 samples refrigerated 3+ months for post-issue investigation.' },
+            { zh: '5. <strong>年度：投商業產品責任險</strong>。年費 NT$ 5-15k，保額 NT$ 100-500 萬。如果客戶食物中毒或標示錯導致傷害，這是你唯一的財務救命符。',
+              en: '5. <strong>Annual: get commercial product liability insurance</strong>. NT$5-15k/yr, coverage NT$1-5M. If a customer gets sick or a mislabel causes harm, this is your only financial lifeline.' },
+            { zh: '6. <strong>2 年內考慮 HACCP / ISO 22000</strong>：規模夠時（月營收 > NT$ 20 萬）+ 想進超市 / 連鎖通路 = 這個是門檻。輔導費 NT$ 100-300k，但通路溢價可回收。',
+              en: '6. <strong>Within 2 yrs consider HACCP / ISO 22000</strong>: at scale (> NT$200k/mo) + want supermarkets / chains = this is the gate. Consulting NT$100-300k, but channel premium pays back.' }
+          ],
+          checklist: {
+            title: { zh: '第一批出貨前的清單', en: 'Before first shipment checklist' },
+            items: [
+              { zh: '<strong>食品業登記完成</strong>：地方衛生局公文核可', en: '<strong>Food business registration complete</strong>: written approval from county Health Bureau' },
+              { zh: '<strong>6 項強制標示</strong>已在包裝上（尤其過敏原）', en: '<strong>6 mandatory labels</strong> on packaging (esp. allergens)' },
+              { zh: '<strong>有效期限有實驗數據</strong>支撐（不是拍腦袋）', en: '<strong>Expiration backed by lab data</strong> (not guessed)' },
+              { zh: '<strong>製程紀錄表格</strong>準備好每批填寫', en: '<strong>Process log template</strong> ready for each batch' },
+              { zh: '<strong>留樣冰箱</strong>：獨立空間放 3 個月留樣', en: '<strong>Retention sample fridge</strong>: separate space for 3-month samples' },
+              { zh: '<strong>產品責任險</strong>已投保', en: '<strong>Product liability insurance</strong> in place' }
+            ]
+          },
+          pitfalls: {
+            title: { zh: '常見地雷', en: 'Common landmines' },
+            items: [
+              { zh: '<strong>「自家做的沒關係」</strong> — 販售就是食品業，家庭工坊只能自用', en: '<strong>"Home-made is fine"</strong> — selling = food business; home workshop = own use only' },
+              { zh: '<strong>過敏原漏標</strong> — 每項罰 NT$ 3-15 萬，多次違規累加', en: '<strong>Missing allergen labels</strong> — NT$30-150k per item, compounds with repeats' },
+              { zh: '<strong>「保存期限我自己算」</strong> — 沒實驗數據出事就是刑責', en: '<strong>"I calculated shelf life myself"</strong> — no lab data = criminal liability if incident' },
+              { zh: '<strong>沒留樣</strong> — 客戶投訴時無法舉證產品當時狀態', en: '<strong>No retention samples</strong> — cannot prove product state when complaint arrives' },
+              { zh: '<strong>不投產品責任險</strong> — 一次食物中毒可能是 NT$ 500k-2M 賠償', en: '<strong>Skipping product liability insurance</strong> — one poisoning incident = NT$500k-2M compensation' }
+            ]
+          },
+          resources: {
+            title: { zh: '相關單位', en: 'Relevant agencies' },
+            items: [
+              { zh: '<strong>各縣衛生局</strong> — 食品業登記 + 稽查諮詢', en: '<strong>County Health Bureau</strong> — food business registration + inspection consultation' },
+              { zh: '<strong>衛福部食品藥物管理署</strong>：<a href="https://www.fda.gov.tw/" target="_blank" rel="noopener">fda.gov.tw</a>（法規查詢）', en: '<strong>MOHW Food and Drug Administration</strong>: <a href="https://www.fda.gov.tw/" target="_blank" rel="noopener">fda.gov.tw</a> (regulations)' },
+              { zh: '<strong>食品所 (FIRDI)</strong>：<a href="https://www.firdi.org.tw/" target="_blank" rel="noopener">firdi.org.tw</a>（穩定性測試 + HACCP 輔導）', en: '<strong>Food Industry R&D Institute</strong>: <a href="https://www.firdi.org.tw/" target="_blank" rel="noopener">firdi.org.tw</a> (stability testing + HACCP consulting)' },
+              { zh: '<strong>SGS / TFDA 認可實驗室</strong> — 過敏原檢測、微生物、化學殘留', en: '<strong>SGS / TFDA-accredited labs</strong> — allergen + microbial + chemical residue testing' },
+              { zh: '<strong>各縣農會加工輔導</strong> — 通常有課程 + 補助', en: '<strong>County farmers assoc processing consultation</strong> — usually offers classes + subsidies' }
+            ]
+          },
+          approaches: {
+            title: { zh: '3 種加工經營路徑', en: '3 processed-product operation paths' },
+            items: [
+              { tone: 'easy',
+                tag: { zh: 'A · 家庭工坊自用', en: 'A · Home workshop (own use only)' },
+                fit: (i) => i.annualRevenueNT > 0 && i.annualRevenueNT < 500000 ? 3 : 1,
+                summary: { zh: '不販售 — 自家消費 / 送禮 / 品牌試驗', en: 'No selling — own consumption / gifts / brand test' },
+                bullets: [
+                  { zh: '無需食品業登記', en: 'No food business registration' },
+                  { zh: '練手 + 找出招牌配方', en: 'Practice + find signature recipes' },
+                  { zh: '賣的一刻起就違法', en: 'The moment you sell = illegal' }
+                ],
+                who: { zh: '適合：剛起步、練習階段', en: 'For: starting out, learning phase' } },
+              { tone: 'balanced',
+                tag: { zh: 'B · 小規模合法販售', en: 'B · Small legal seller' },
+                fit: (i) => i.annualRevenueNT >= 500000 && i.annualRevenueNT < 3000000 ? 3 : 2,
+                summary: { zh: '食品業登記 + 6 項標示 + 責任險 — 月營收 < NT$ 5 萬', en: 'Food business registration + labels + liability insurance, < NT$50k/mo' },
+                bullets: [
+                  { zh: '一次投資 NT$ 20-50k（設備 + 檢驗 + 標示）', en: 'One-time NT$ 20-50k (equipment + testing + labels)' },
+                  { zh: '可上農夫市集、CSA、直供餐廳', en: 'Can sell at farmers markets, CSA, chef-direct' },
+                  { zh: '不能上超市 / 連鎖 (量太大 = 需食品工廠)', en: 'Not for supermarkets / chains (volume = food factory required)' }
+                ],
+                who: { zh: '適合：想小規模販售加工品', en: 'For: small-scale processed product sales' } },
+              { tone: 'bold',
+                tag: { zh: 'C · 食品工廠 + HACCP', en: 'C · Food factory + HACCP' },
+                fit: (i) => i.annualRevenueNT >= 3000000 ? 2 : 0,
+                summary: { zh: '完整合規 — 進超市 / 電商 / 出口', en: 'Full compliance — supermarkets / e-commerce / export' },
+                bullets: [
+                  { zh: '建置 NT$ 500k-2M（廠房 + HACCP 顧問）', en: 'Build NT$ 500k-2M (facility + HACCP consulting)' },
+                  { zh: '通路溢價可回收 2-3 年', en: 'Channel premium pays back in 2-3 yrs' },
+                  { zh: '需要專職品管 + 製程紀錄員', en: 'Needs dedicated QA + process log staff' }
+                ],
+                who: { zh: '適合：年營收 300 萬+、想大規模', en: 'For: NT$3M+ revenue, want scale' } }
+            ]
+          },
+          links: [
+            { label: { zh: '看包裝 / 法規', en: 'Packaging / regulations' }, href: '#sec-agent' }
+          ]
+        };
+      }
+    },
+    {
       id: 'tax_accounting',
       keywords: ['稅', '報稅', '所得稅', '營業稅', '記帳', '會計', '發票', 'tax', 'accounting', 'income tax', 'bookkeeping', 'invoice', 'receipt'],
       topic: { zh: '稅 / 記帳', en: 'Tax / accounting' },
@@ -10800,6 +10895,7 @@ This application supports starting organic-transition certification for ≥1 ha.
     fungal_disease:      'high',
     seasonal_planting:   'high',
     livestock_disease:   'high',
+    food_safety:         'high',
     losing_money:        'high',
     pricing_specific:    'high',
     land_tenure:         'high',
@@ -10850,7 +10946,8 @@ This application supports starting organic-transition certification for ≥1 ha.
     storage_coldchain:   ['find_buyers', 'subsidies_available', 'cert_question'],
     crop_rotation:       ['pest_disease', 'practice_invest', 'soil_test', 'seasonal_planting'],
     seasonal_planting:   ['crop_rotation', 'pest_disease', 'fungal_disease'],
-    packaging_rules:     ['how_diversify', 'find_buyers', 'tax_accounting'],
+    packaging_rules:     ['how_diversify', 'find_buyers', 'tax_accounting', 'food_safety'],
+    food_safety:         ['packaging_rules', 'tax_accounting', 'storage_coldchain'],
     tax_accounting:      ['packaging_rules', 'how_diversify', 'goal_setting'],
     burnout:             ['hiring_labor', 'when_scale', 'find_mentor'],
     land_tenure:         ['when_scale', 'succession', 'soil_test', 'lease_dispute'],
@@ -11385,7 +11482,7 @@ This application supports starting organic-transition certification for ≥1 ha.
             'how_diversify', 'practice_invest', 'losing_money', 'reduce_cost', 'input_cost_spike', 'compare_peers',
             'pitch_buyer', 'pricing_specific', 'goal_setting', 'climate_risk', 'cert_question',
             'soil_test', 'what_to_do_now', 'hiring_labor', 'succession', 'marketing_social',
-            'farmers_market', 'storage_coldchain', 'packaging_rules', 'tax_accounting', 'land_tenure', 'when_scale',
+            'farmers_market', 'storage_coldchain', 'packaging_rules', 'food_safety', 'tax_accounting', 'land_tenure', 'when_scale',
             'find_mentor', 'succession_paperwork', 'lease_dispute', 'foreign_workers', 'land_conversion_trap',
             'agritourism'] },
     { key: 'agro',   zh: '🌾 田間農藝',                en: '🌾 Field agronomy',
