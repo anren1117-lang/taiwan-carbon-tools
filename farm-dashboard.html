@@ -7279,6 +7279,112 @@ This application supports starting organic-transition certification for ≥1 ha.
       }
     },
     {
+      id: 'ecommerce_platforms',
+      keywords: ['蝦皮', 'shopee', 'pchome', 'momo', 'yahoo', '線上開店', '網購', '電商', '網路銷售', '直播', 'line store', 'ecommerce', 'online shop', 'live selling'],
+      topic: { zh: '電商 / 網路銷售', en: 'E-commerce / online sales' },
+      answer(inp, r) {
+        return {
+          headline: { zh: '電商是通路不是行銷 — 選 1 個平台深耕勝過 5 個都上架', en: 'E-commerce is a channel, not marketing — 1 platform deep beats 5 shallow' },
+          situation: { zh: '台灣主要電商平台：蝦皮（最多客流、抽 5-8%）、PChome / momo（大平台但門檻高）、LINE Store（LINE 內建、抽 5-6%）、farm-direct 小平台（i3Fresh、上下游）。多數農夫錯誤：同時上 5 個平台 = 5 個都做半調子。<strong>選 1 個主打，累積評價 + SEO 後再擴</strong>。冷鏈物流 + 客服 + 訂單處理是隱形成本，占營收 20-30%。',
+                       en: 'Taiwan main platforms: Shopee (most traffic, 5-8% commission), PChome / momo (big but high bar), LINE Store (built-in LINE, 5-6%), farm-direct niches (i3Fresh, Newsmarket). Common mistake: list on 5 platforms = 5 half-baked stores. <strong>Pick 1 primary, build reviews + SEO, then expand</strong>. Cold-chain logistics + CS + order processing = hidden 20-30% of revenue.' },
+          actions: [
+            { zh: '1. <strong>先確定成本結構</strong>：<br>(a) 平台抽成 5-10%；<br>(b) 冷鏈物流 NT$ 150-250 / 單（買家或你負擔）；<br>(c) 包材 NT$ 20-50 / 單；<br>(d) 客服時間（每單約 15-30 分鐘）；<br>(e) 退貨率 3-8%。<strong>每張訂單真實毛利 = 售價 - 這些 - 產品成本</strong>。多數農夫低估後才發現「電商都在做慈善」。',
+              en: '1. <strong>Model the cost structure first</strong>:<br>(a) Platform commission 5-10%;<br>(b) Cold-chain logistics NT$ 150-250/order (buyer or you covers);<br>(c) Packaging NT$ 20-50/order;<br>(d) CS time (~15-30 min/order);<br>(e) Return rate 3-8%.<br><strong>Real margin per order = price - these - product cost</strong>. Many discover after starting that "e-commerce was charity work".' },
+            { zh: '2. <strong>選 1 個主平台深耕 6-12 個月</strong>：<br>Shopee — 流量最多但競價激烈、客層價格敏感；<br>momo / PChome — 高單價、要保證下限出貨量；<br>LINE Store — 現有客群直接轉換、抽成低；<br>i3Fresh / 上下游 — 農產專門、審核嚴、客層願付溢價；<br>Coupang — 高流量但物流嚴、退貨風險大。<br><strong>依你的價格帶 + 客群選</strong>。',
+              en: '2. <strong>Pick 1 platform, invest 6-12 months</strong>:<br>Shopee — highest traffic but fierce price competition, price-sensitive buyers;<br>momo / PChome — higher price, requires minimum shipment;<br>LINE Store — convert your existing customers, low commission;<br>i3Fresh / Newsmarket — ag-focused, strict review, premium-paying;<br>Coupang — high traffic but strict logistics, high return risk.<br><strong>Choose by your price range + customer profile</strong>.' },
+            { zh: '3. <strong>商品頁 6 項必備</strong>：<br>(a) 5 張以上照片（產品、包裝、農場、你本人）；<br>(b) 30 秒短影片；<br>(c) 明確保存方式 + 有效期限；<br>(d) 過敏原標示（法規要求）；<br>(e) 明確出貨規則（幾天出貨、冷鏈方式）；<br>(f) 「農場故事」段落。有故事 = 溢價 20-40%。',
+              en: '3. <strong>Product page essentials (6)</strong>:<br>(a) 5+ photos (product, packaging, farm, yourself);<br>(b) 30-sec video;<br>(c) Clear storage instructions + expiration;<br>(d) Allergen labels (legally required);<br>(e) Clear shipping rules (days to ship, cold-chain method);<br>(f) "Farm story" section. Story = 20-40% price premium.' },
+            { zh: '4. <strong>前 30 筆訂單策略性做</strong>：<br>(a) 家人朋友先下單 → 5 星好評 + 詳細評論；<br>(b) 標「新上架 8 折」限量促銷 → 加速首波訂單；<br>(c) 每張訂單附「請幫忙留評論 → 送小禮物」小卡；<br>(d) 前 30 筆 100% 完美處理（快出貨、貼心包裝、感謝訊息）。有 30 筆好評的商店 = SEO 排名 vs 沒評論的差 3-5 倍。',
+              en: '4. <strong>Play the first 30 orders strategically</strong>:<br>(a) Family + friends order first → 5-star reviews + detailed comments;<br>(b) Tag "new listing 20% off" limited promo → accelerate first wave;<br>(c) Include "please review → free gift" note in each order;<br>(d) Perfect execution on first 30 (fast ship, thoughtful packaging, thank-you note). 30-review store SEO rank vs no-reviews = 3-5× visibility.' },
+            { zh: '5. <strong>不做即時直播就少一半流量</strong>：Shopee Live / LINE Live 是台灣電商殺手鐧。每週 1 次 30 分鐘直播（田間現場、料理示範、Q&A）= 觸及率 5-10 倍靜態商品頁。不會架設備？先用手機 + 支架起步。',
+              en: '5. <strong>Skip live-streaming = lose half the traffic</strong>. Shopee Live / LINE Live are Taiwan e-commerce killers. Weekly 30-min stream (farm-floor, cooking demo, Q&A) = 5-10× reach vs static product pages. No gear? Start with phone + tripod.' },
+            { zh: '6. <strong>年度目標「單店月營收 NT$ 30k+」— 沒到這個就砍</strong>：3-6 個月試營後看數字。低於 30k 且沒成長趨勢 = 換平台 / 換品項 / 或收攤。永遠不到 30k = 不適合電商，回歸線下更好。',
+              en: '6. <strong>Annual target: single store NT$ 30k+/mo — below that, cut it</strong>. After 3-6mo trial, look at data. Below NT$30k with no growth = switch platform / product / or close. Perpetually below 30k = e-commerce not your fit, back to offline is better.' }
+          ],
+          checklist: {
+            title: { zh: '開店前確認清單', en: 'Pre-launch checklist' },
+            items: [
+              { zh: '<strong>成本模型算清楚</strong>：每單真實毛利 ≥ NT$ 100', en: '<strong>Cost model calculated</strong>: real margin per order ≥ NT$ 100' },
+              { zh: '<strong>食品業登記</strong>（如賣加工品）', en: '<strong>Food business registration</strong> (if selling processed products)' },
+              { zh: '<strong>冷鏈物流合約</strong>：宅配通 / 黑貓 / 順豐擇一', en: '<strong>Cold-chain logistics contract</strong>: pick one of Hsinchu / Kuroneko / SF' },
+              { zh: '<strong>包材準備</strong>：50 組起跳（不要 10 組買 5 次）', en: '<strong>Packaging stocked</strong>: 50-pack start (don\'t buy 10 five times)' },
+              { zh: '<strong>客服時間安排</strong>：每天固定 1-2 小時回應', en: '<strong>Customer service hours</strong>: fixed 1-2 hr daily for replies' },
+              { zh: '<strong>退貨處理流程</strong>：3-8% 退貨率是常態', en: '<strong>Return processing flow</strong>: 3-8% return rate is normal' }
+            ]
+          },
+          pitfalls: {
+            title: { zh: '常見地雷', en: 'Common landmines' },
+            items: [
+              { zh: '<strong>「多平台上架多曝光」</strong> — 5 個都做半調子 = 5 個都失敗', en: '<strong>"More platforms = more visibility"</strong> — 5 half-baked stores = 5 failures' },
+              { zh: '<strong>低估物流成本</strong> — 冷鏈 NT$ 200/單 遠超一般認知', en: '<strong>Underestimating logistics</strong> — cold chain NT$ 200/order is far above generic expectation' },
+              { zh: '<strong>沒做直播</strong> — 靜態商品頁在 2025 電商生態已很難搶量', en: '<strong>Skipping live streaming</strong> — static pages struggle for volume in 2025+ Taiwan ecosystem' },
+              { zh: '<strong>負評不回應</strong> — 客戶看你怎麼處理負評判斷買不買', en: '<strong>Ignoring negative reviews</strong> — customers watch your response to decide if they buy' },
+              { zh: '<strong>不算自己的客服時間</strong> — 電商賺的 30% 隱形被吃掉在回訊息 + 處理退貨', en: '<strong>Not counting your CS time</strong> — 30% of e-commerce "profit" quietly eaten by replies + returns' }
+            ]
+          },
+          resources: {
+            title: { zh: '相關資源', en: 'Relevant resources' },
+            items: [
+              { zh: '<strong>Shopee 台灣賣家中心</strong>：<a href="https://seller.shopee.tw/" target="_blank" rel="noopener">seller.shopee.tw</a>', en: '<strong>Shopee TW Seller Center</strong>: <a href="https://seller.shopee.tw/" target="_blank" rel="noopener">seller.shopee.tw</a>' },
+              { zh: '<strong>i3Fresh 食尚生活</strong>：農產專門電商 (審核較嚴 = 客層品質高)', en: '<strong>i3Fresh</strong>: ag-specialized e-commerce (stricter review = higher-quality customers)' },
+              { zh: '<strong>上下游新聞市集</strong>：友善農產專屬平台', en: '<strong>Newsmarket</strong>: friendly-farm-only platform' },
+              { zh: '<strong>LINE Store 小店家</strong>：搭配 LINE OA 現有客群', en: '<strong>LINE Store</strong>: pairs with your existing LINE OA followers' },
+              { zh: '<strong>宅配通冷藏 / 黑貓探險隊 / 順豐（冷藏）</strong>：3 家主要冷鏈物流', en: '<strong>Hsinchu Cold Chain / Kuroneko / SF (chilled)</strong>: 3 main cold-chain logistics' }
+            ]
+          },
+          approaches: {
+            title: { zh: '4 種電商策略 — 依你想投入的規模', en: '4 e-commerce strategies — by commitment scale' },
+            items: [
+              { tone: 'easy',
+                tag: { zh: 'A · LINE OA + 手動', en: 'A · LINE OA + manual' },
+                fit: (i) => i.annualRevenueNT > 0 && i.annualRevenueNT < 800000 ? 3 : 2,
+                summary: { zh: '既有客群 LINE 群直接訂單 — 抽成 0%', en: 'Direct orders via existing LINE group — 0% commission' },
+                bullets: [
+                  { zh: '每週一則本週可訂購', en: 'Weekly "what\'s available" post' },
+                  { zh: '手動確認訂單 + 匯款 + 出貨', en: 'Manual order confirm + bank transfer + ship' },
+                  { zh: '零學習門檻、關係最深', en: 'Zero learning curve, deepest relationships' }
+                ],
+                who: { zh: '適合：CSA / 熟客為主', en: 'For: CSA / established customer base' } },
+              { tone: 'balanced',
+                tag: { zh: 'B · Shopee 深耕', en: 'B · Shopee focus' },
+                fit: (i) => i.annualRevenueNT >= 800000 && i.annualRevenueNT < 3000000 ? 3 : 1,
+                summary: { zh: '單一平台深耕 6-12 個月 + 每週直播', en: 'Single platform 6-12mo + weekly live streaming' },
+                bullets: [
+                  { zh: '前 30 筆訂單策略性建評價', en: 'First 30 orders strategically build reviews' },
+                  { zh: '每週 30 分鐘直播 = 觸及率 5-10x', en: 'Weekly 30-min live = 5-10× reach' },
+                  { zh: '6 個月後可穩定 NT$ 30-80k/月', en: '6mo → stable NT$ 30-80k/month' }
+                ],
+                who: { zh: '適合：有故事、有時間、想擴大客群', en: 'For: story-rich, has time, want customer growth' } },
+              { tone: 'bold',
+                tag: { zh: 'C · 專屬農產平台', en: 'C · Ag-specialized platform' },
+                fit: (i) => (CLIENT_CONFIG.certifications || []).length >= 2 ? 3 : 1,
+                summary: { zh: 'i3Fresh / 上下游 — 高溢價客層', en: 'i3Fresh / Newsmarket — premium-paying customers' },
+                bullets: [
+                  { zh: '審核較嚴 = 客層品質高', en: 'Stricter review = higher customer quality' },
+                  { zh: '通路溢價 30-50%', en: 'Channel premium 30-50%' },
+                  { zh: '流量比 Shopee 少但轉換率高', en: 'Less traffic than Shopee but higher conversion' }
+                ],
+                who: { zh: '適合：有機 / 友善認證 / 精品定位', en: 'For: organic / friendly cert / premium positioning' } },
+              { tone: 'collab',
+                tag: { zh: 'D · 合作社共同平台', en: 'D · Co-op shared platform' },
+                fit: (i) => i.farmSize >= 3 ? 2 : 0,
+                summary: { zh: '產銷班統一開店 + 分工 — 個農分攤成本', en: 'Producer group runs shared store + splits cost' },
+                bullets: [
+                  { zh: '客服 / 物流 / 拍照集中處理', en: 'CS / logistics / photography centralized' },
+                  { zh: '個農省 60% 電商經營時間', en: 'Individual farms save 60% e-commerce time' },
+                  { zh: '需要：合作社有人負責平台運營', en: 'Need: co-op has dedicated platform operator' }
+                ],
+                who: { zh: '適合：合作社活躍區、大面積', en: 'For: active co-op region, large area' } }
+            ]
+          },
+          links: [
+            { label: { zh: '看社群行銷', en: 'Social media marketing' }, href: '#sec-agent' },
+            { label: { zh: '看儲存 / 冷鏈', en: 'Storage / cold chain' }, href: '#sec-agent' }
+          ]
+        };
+      }
+    },
+    {
       id: 'storage_coldchain',
       keywords: ['儲存', '保存', '冷藏', '冷鏈', '倉庫', '冰箱', '凍藏', 'storage', 'cold chain', 'refrigerator', 'preservation', 'shelf life'],
       topic: { zh: '儲存 / 冷鏈', en: 'Storage / cold chain' },
@@ -11027,6 +11133,7 @@ This application supports starting organic-transition certification for ≥1 ha.
     food_safety:         'high',
     farming_methods_compare: 'high',
     worker_retention:    'high',
+    ecommerce_platforms: 'high',
     losing_money:        'high',
     pricing_specific:    'high',
     land_tenure:         'high',
@@ -11073,7 +11180,8 @@ This application supports starting organic-transition certification for ≥1 ha.
     foreign_workers:     ['hiring_labor', 'when_scale', 'tax_accounting'],
     succession:          ['hiring_labor', 'when_scale', 'burnout', 'succession_paperwork'],
     succession_paperwork:['succession', 'tax_accounting', 'land_tenure'],
-    marketing_social:    ['pitch_buyer', 'find_buyers', 'how_diversify', 'farmers_market'],
+    marketing_social:    ['pitch_buyer', 'find_buyers', 'how_diversify', 'farmers_market', 'ecommerce_platforms'],
+    ecommerce_platforms: ['marketing_social', 'farmers_market', 'storage_coldchain'],
     farmers_market:      ['marketing_social', 'find_buyers', 'pitch_buyer'],
     storage_coldchain:   ['find_buyers', 'subsidies_available', 'cert_question'],
     crop_rotation:       ['pest_disease', 'practice_invest', 'soil_test', 'seasonal_planting'],
@@ -11614,7 +11722,7 @@ This application supports starting organic-transition certification for ≥1 ha.
             'how_diversify', 'practice_invest', 'losing_money', 'reduce_cost', 'input_cost_spike', 'compare_peers',
             'pitch_buyer', 'pricing_specific', 'goal_setting', 'climate_risk', 'cert_question',
             'soil_test', 'what_to_do_now', 'hiring_labor', 'succession', 'marketing_social',
-            'farmers_market', 'storage_coldchain', 'packaging_rules', 'food_safety', 'tax_accounting', 'land_tenure', 'when_scale',
+            'farmers_market', 'ecommerce_platforms', 'storage_coldchain', 'packaging_rules', 'food_safety', 'tax_accounting', 'land_tenure', 'when_scale',
             'find_mentor', 'succession_paperwork', 'lease_dispute', 'foreign_workers', 'worker_retention', 'land_conversion_trap',
             'agritourism'] },
     { key: 'agro',   zh: '🌾 田間農藝',                en: '🌾 Field agronomy',
@@ -16591,7 +16699,7 @@ Applicant: ${ownerName} (signature)
   <div class="trust-footer-meta">
     <div class="trust-footer-version">
       <span data-zh="儀表板版本" data-en="Dashboard version">儀表板版本</span>
-      <code id="trustFooterVersion">v3.5 · 2026-08-16 · 97 KB topics (39 with fit-scored approaches) · 125 tests · offline PWA · auto-update</code>
+      <code id="trustFooterVersion">v4.0 · 2026-09-03 · 100 KB topics (42 with fit-scored approaches) · 125 tests · offline PWA · auto-update</code>
     </div>
     <div data-zh="製作者 · An-Ren Ho (何安仁)" data-en="Built by An-Ren Ho">製作者 · An-Ren Ho (何安仁)</div>
   </div>
